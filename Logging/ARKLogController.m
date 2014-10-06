@@ -10,11 +10,9 @@
 #import "ARKLogController_Testing.h"
 
 #import "ARKAardvarkLog.h"
-#import "ARKEmailBugReporter.h"
 
 
 NSString *const ARKLogsFileName = @"ARKLogs";
-NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 
 @interface ARKLogController ()
@@ -22,9 +20,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 @property (nonatomic, strong, readwrite) NSMutableArray *logs;
 @property (nonatomic, strong, readonly) NSOperationQueue *loggingQueue;
 @property (nonatomic, assign, readwrite) UIBackgroundTaskIdentifier persistLogsBackgroundTaskIdentifier;
-
-@property (nonatomic, strong, readwrite) UILongPressGestureRecognizer *screenshotGestureRecognizer;
-@property (nonatomic, strong, readwrite) UIView *whiteScreen;
 
 @end
 
@@ -91,46 +86,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - CAAnimationDelegate
-
-- (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished;
-{
-    [self.whiteScreen removeFromSuperview];
-    self.whiteScreen = nil;
-    
-    [self.bugReporter composeBugReportWithLogs:self.allLogs];
-}
-
 #pragma mark - Public Methods
-
-- (void)installScreenshotGestureRecognizer;
-{
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        NSAssert(self.bugReporter != nil, @"Bug reporter must not be nil when installing the screenshot gesture recognizer!");
-        
-        // First, uninstall an existing gesture recognizer.
-        [self uninstallScreenshotGestureRecognizer];
-        
-        self.screenshotGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressDetected:)];
-        self.screenshotGestureRecognizer.cancelsTouchesInView = NO;
-        self.screenshotGestureRecognizer.numberOfTouchesRequired = 2;
-        [[[UIApplication sharedApplication] keyWindow] addGestureRecognizer:self.screenshotGestureRecognizer];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidBecomeKeyNotification:) name:UIWindowDidBecomeKeyNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidResignKeyNotification:) name:UIWindowDidResignKeyNotification object:nil];
-    }];
-}
-
-- (void)uninstallScreenshotGestureRecognizer;
-{
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [self.screenshotGestureRecognizer.view removeGestureRecognizer:self.screenshotGestureRecognizer];
-        self.screenshotGestureRecognizer = nil;
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidBecomeKeyNotification object:nil];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidResignKeyNotification object:nil];
-    }];
-}
 
 - (void)appendLog:(ARKAardvarkLog *)log;
 {
@@ -171,41 +127,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 }
 
 #pragma mark - Private Methods
-
-- (void)_longPressDetected:(UILongPressGestureRecognizer *)longPressRecognizer;
-{
-    if (longPressRecognizer == self.screenshotGestureRecognizer && longPressRecognizer.state == UIGestureRecognizerStateBegan && self.whiteScreen == nil) {
-        // Take a screenshot.
-        ARKLogScreenshot();
-        
-        // Flash the screen to simulate a screenshot being taken.
-        self.whiteScreen = [[UIView alloc] initWithFrame:self.screenshotGestureRecognizer.view.frame];
-        self.whiteScreen.layer.opacity = 0.0f;
-        self.whiteScreen.layer.backgroundColor = [[UIColor whiteColor] CGColor];
-        [self.screenshotGestureRecognizer.view addSubview:self.whiteScreen];
-        
-        CAKeyframeAnimation *screenFlash = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
-        screenFlash.duration = 0.8;
-        screenFlash.values = @[@0.0, @0.8, @1.0, @0.9, @0.8, @0.7, @0.6, @0.5, @0.4, @0.3, @0.2, @0.1, @0.0];
-        screenFlash.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-        screenFlash.delegate = self;
-        
-        // Start the screen flash animation. Once this is done we'll fire up the bug reporter.
-        [self.whiteScreen.layer addAnimation:screenFlash forKey:ARKScreenshotFlashAnimationKey];
-    }
-}
-
-- (void)_windowDidBecomeKeyNotification:(NSNotification *)notification;
-{
-    UIWindow *window = [[notification object] isKindOfClass:[UIWindow class]] ? (UIWindow *)[notification object] : nil;
-    [window addGestureRecognizer:self.screenshotGestureRecognizer];
-}
-
-- (void)_windowDidResignKeyNotification:(NSNotification *)notification;
-{
-    UIWindow *window = [[notification object] isKindOfClass:[UIWindow class]] ? (UIWindow *)[notification object] : nil;
-    [window removeGestureRecognizer:self.screenshotGestureRecognizer];
-}
 
 - (void)_applicationDidEnterBackgroundNotification:(NSNotification *)notification;
 {

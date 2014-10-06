@@ -25,12 +25,15 @@ OBJC_EXTERN void ARKTypeLog(ARKLogType type, NSString *format, ...) NS_FORMAT_FU
 OBJC_EXTERN void ARKLogScreenshot();
 
 
-@class ARKEmailBugReporter;
+@protocol ARKBugReporter;
 
 
 @interface Aardvark : NSObject
 
+/// Sets up bug reporting with a ARKEmailBugReporter. Bug reports can be filed by pressing and holding with two fingers. Bug reports are sent over email to recipientAddress.
 + (void)setupBugReportingWithRecipientEmailAddress:(NSString *)recipientAddress;
-+ (void)setupBugReportingWithReporter:(ARKEmailBugReporter *)bugReporter;
+
+/// Sets up bug reporting with the passed in bug reporter.
++ (void)setupBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
 
 @end

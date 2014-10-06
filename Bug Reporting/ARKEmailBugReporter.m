@@ -10,7 +10,11 @@
 
 #import "ARKAardvarkLog.h"
 #import "ARKDefaultLogFormatter.h"
+#import "ARKLogController.h"
 #import "ARKLogFormatter.h"
+
+
+NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 
 @interface ARKInvisibleView : UIView
@@ -20,6 +24,9 @@
 @interface ARKEmailBugReporter () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) id strongSelf;
+
+@property (nonatomic, strong, readwrite) UILongPressGestureRecognizer *screenshotGestureRecognizer;
+@property (nonatomic, strong, readwrite) UIView *whiteScreen;
 
 @property (nonatomic, strong) MFMailComposeViewController *mailComposeViewController;
 @property (nonatomic, strong) UIWindow *emailComposeWindow;
@@ -62,6 +69,47 @@
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
     
     return self;
+}
+
+#pragma mark - ARKBugReporter
+
+// Installs a two-finger long press gesture recognizer. When the gesture recognizer is triggered, a screenshot is taken and the bugReporter is told to compose a bug report.
+- (void)enableBugReporting;
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        // First, uninstall an existing gesture recognizer.
+        [self disableBugReporting];
+        
+        self.screenshotGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressDetected:)];
+        self.screenshotGestureRecognizer.cancelsTouchesInView = NO;
+        self.screenshotGestureRecognizer.numberOfTouchesRequired = 2;
+        [[[UIApplication sharedApplication] keyWindow] addGestureRecognizer:self.screenshotGestureRecognizer];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidBecomeKeyNotification:) name:UIWindowDidBecomeKeyNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidResignKeyNotification:) name:UIWindowDidResignKeyNotification object:nil];
+    }];
+}
+
+// Uninstalls the two-finger long press gesture recognizer.
+- (void)disableBugReporting;
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        [self.screenshotGestureRecognizer.view removeGestureRecognizer:self.screenshotGestureRecognizer];
+        self.screenshotGestureRecognizer = nil;
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidBecomeKeyNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidResignKeyNotification object:nil];
+    }];
+}
+
+#pragma mark - CAAnimationDelegate
+
+- (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished;
+{
+    [self.whiteScreen removeFromSuperview];
+    self.whiteScreen = nil;
+    
+    [self composeBugReportWithLogs:[ARKLogController sharedInstance].allLogs];
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate
@@ -131,6 +179,41 @@
 }
 
 #pragma mark - Properties
+
+- (void)_longPressDetected:(UILongPressGestureRecognizer *)longPressRecognizer;
+{
+    if (longPressRecognizer == self.screenshotGestureRecognizer && longPressRecognizer.state == UIGestureRecognizerStateBegan && self.whiteScreen == nil) {
+        // Take a screenshot.
+        ARKLogScreenshot();
+        
+        // Flash the screen to simulate a screenshot being taken.
+        self.whiteScreen = [[UIView alloc] initWithFrame:self.screenshotGestureRecognizer.view.frame];
+        self.whiteScreen.layer.opacity = 0.0f;
+        self.whiteScreen.layer.backgroundColor = [[UIColor whiteColor] CGColor];
+        [self.screenshotGestureRecognizer.view addSubview:self.whiteScreen];
+        
+        CAKeyframeAnimation *screenFlash = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
+        screenFlash.duration = 0.8;
+        screenFlash.values = @[@0.0, @0.8, @1.0, @0.9, @0.8, @0.7, @0.6, @0.5, @0.4, @0.3, @0.2, @0.1, @0.0];
+        screenFlash.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        screenFlash.delegate = self;
+        
+        // Start the screen flash animation. Once this is done we'll fire up the bug reporter.
+        [self.whiteScreen.layer addAnimation:screenFlash forKey:ARKScreenshotFlashAnimationKey];
+    }
+}
+
+- (void)_windowDidBecomeKeyNotification:(NSNotification *)notification;
+{
+    UIWindow *window = [[notification object] isKindOfClass:[UIWindow class]] ? (UIWindow *)[notification object] : nil;
+    [window addGestureRecognizer:self.screenshotGestureRecognizer];
+}
+
+- (void)_windowDidResignKeyNotification:(NSNotification *)notification;
+{
+    UIWindow *window = [[notification object] isKindOfClass:[UIWindow class]] ? (UIWindow *)[notification object] : nil;
+    [window removeGestureRecognizer:self.screenshotGestureRecognizer];
+}
 
 - (UIWindow *)emailComposeWindow;
 {

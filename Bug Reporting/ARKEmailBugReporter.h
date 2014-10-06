@@ -8,10 +8,14 @@
 
 #import <MessageUI/MessageUI.h>
 
+#import "ARKBugReporter.h"
+
+
 @protocol ARKLogFormatter;
 
 
-@interface ARKEmailBugReporter : NSObject
+/// Allows the user to trigger bug reports by making a two-finger press and hold gesture. Logs are sent out via email.
+@interface ARKEmailBugReporter : NSObject <ARKBugReporter>
 
 /// The email address to which bug reports will be sent. Must be set before composeBugReportWithLogs: is called.
 @property (nonatomic, copy, readwrite) NSString *bugReportRecipientEmailAddress;

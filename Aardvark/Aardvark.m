@@ -68,11 +68,9 @@ void ARKLogScreenshot()
     [self setupBugReportingWithReporter:bugReporter];
 }
 
-+ (void)setupBugReportingWithReporter:(ARKEmailBugReporter *)bugReporter;
++ (void)setupBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
 {
-    [ARKLogController sharedInstance].bugReporter = bugReporter;
-    [[ARKLogController sharedInstance] installScreenshotGestureRecognizer];
-
+    [bugReporter enableBugReporting];
 }
 
 @end
