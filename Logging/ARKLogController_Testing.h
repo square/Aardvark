@@ -16,4 +16,3 @@
 - (NSArray *)_trimedLogsToPersist_inLoggingQueue;
 
 @end
-
