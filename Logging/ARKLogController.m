@@ -71,8 +71,7 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
     _loggingQueue = [NSOperationQueue new];
     _loggingQueue.maxConcurrentOperationCount = 1;
     
-    if ([_loggingQueue respondsToSelector:@selector(setQualityOfService:)]) {
-        // iOS 8 API
+    if ([_loggingQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
         _loggingQueue.qualityOfService = NSQualityOfServiceBackground;
     }
     
