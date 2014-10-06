@@ -98,6 +98,40 @@
     XCTAssertEqualObjects(formattedSingleLog.firstObject, [self.logFormatter.separatorLogPrefix stringByAppendingString:@"\n"]);
 }
 
+- (void)testFormattedLogsAsData;
+{
+    ARKLog(@"Test Log 1");
+    ARKLog(@"Test Log 2");
+    ARKLog(@"Test Log 3");
+    
+    NSData *formattedLogData = [self.logFormatter formattedLogsAsData:[ARKLogController sharedInstance].allLogs];
+    NSString *formattedLogs = [self.logFormatter formattedLogsAsPlainText:[ARKLogController sharedInstance].allLogs];
+    
+    XCTAssertEqualObjects([[NSString alloc] initWithData:formattedLogData encoding:NSUTF8StringEncoding], formattedLogs);
+}
+
+- (void)testRecentErrorLogs;
+{
+    ARKLogController *logController = [ARKLogController sharedInstance];
+    
+    NSMutableArray *numbers = [NSMutableArray new];
+    for (int i = 0; i < logController.maximumLogCount; i++) {
+        [numbers addObject:@(i)];
+    }
+    
+    // Concurrently add all of the logs.
+    [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
+        ARKTypeLog(ARKLogTypeError, @"%@", number);
+    }];
+    
+    const NSUInteger numberOfRecentErrorLogs = 5;
+    NSString *recentErrorLogs = [self.logFormatter recentErrorLogsAsPlainText:logController.allLogs count:numberOfRecentErrorLogs];
+    
+    XCTAssertEqual([recentErrorLogs componentsSeparatedByString:@"\n"].count, numberOfRecentErrorLogs + 1);
+}
+
+#pragma mark - Performance Tests
+
 - (void)testLogFormattingPerformance;
 {
     ARKLogController *logController = [ARKLogController sharedInstance];

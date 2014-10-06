@@ -64,7 +64,7 @@
         if(log.type == ARKLogTypeError) {
             [recentErrorLogs appendFormat:@"%@\n", log];
             
-            if(++failuresFound > errorLogsToInclude) {
+            if(++failuresFound >= errorLogsToInclude) {
                 break;
             }
         }
