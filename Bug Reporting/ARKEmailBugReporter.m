@@ -73,7 +73,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 #pragma mark - ARKBugReporter
 
-// Installs a two-finger long press gesture recognizer. When the gesture recognizer is triggered, a screenshot is taken and the bugReporter is told to compose a bug report.
 - (void)enableBugReporting;
 {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
@@ -90,7 +89,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     }];
 }
 
-// Uninstalls the two-finger long press gesture recognizer.
 - (void)disableBugReporting;
 {
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
