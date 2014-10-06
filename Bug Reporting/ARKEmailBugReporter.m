@@ -23,8 +23,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @interface ARKEmailBugReporter () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, strong) id strongSelf;
-
 @property (nonatomic, strong, readwrite) UILongPressGestureRecognizer *screenshotGestureRecognizer;
 @property (nonatomic, strong, readwrite) UIView *whiteScreen;
 
@@ -168,9 +166,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                 [[UIApplication sharedApplication] openURL:composeEmailURL];
             }
         }
-    } else {
-        // User canceled JIRA composition. We don't need to hold on to ourselves anymore.
-        self.strongSelf = nil;
     }
 }
 
@@ -253,7 +248,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     bugTitleTextField.returnKeyType = UIReturnKeyDone;
     
     [bugTitleCaptureAlert show];
-    self.strongSelf = self;
 }
 
 - (void)_showEmailComposeWindow;
@@ -276,7 +270,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     self.emailComposeWindow = nil;
     
     [self.mailComposeViewController endAppearanceTransition];
-    self.strongSelf = nil;
+    self.logs = nil;
 }
 
 - (NSURL *)_emailURLWithRecipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText;
