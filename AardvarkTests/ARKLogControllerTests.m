@@ -37,7 +37,7 @@
     NSUInteger expectedInternalLogCount = logController.maximumLogCount + (numberOfLogsToEnter % logController.maximumLogCount);
     
     NSMutableArray *numbers = [NSMutableArray new];
-    for (int i = 0; i < (expectedInternalLogCount + logController.maximumLogCount); i++) {
+    for (NSUInteger i  = 0; i < (expectedInternalLogCount + logController.maximumLogCount); i++) {
         [numbers addObject:@(i)];
     }
     
@@ -60,13 +60,32 @@
 - (void)testClearLogs;
 {
     // Fill in some logs.
-    for (int i = 0; i < [ARKLogController sharedInstance].maximumLogCountToPersist; i++) {
+    for (NSUInteger i  = 0; i < [ARKLogController sharedInstance].maximumLogCount; i++) {
         ARKLog(@"Log %@", @(i));
     }
     
     [[ARKLogController sharedInstance] clearLocalLogs];
     
     XCTAssertTrue([ARKLogController sharedInstance].allLogs.count == 0, @"Local logs have count of %@ after clearing!", @([ARKLogController sharedInstance].allLogs.count));
+}
+
+- (void)testPersistLogs;
+{
+    ARKLogController *logController = [ARKLogController sharedInstance];
+    
+    // Fill in some logs.
+    NSUInteger numberOfLogsToEnter = logController.maximumLogCount + 10;
+    for (NSUInteger i  = 0; i < numberOfLogsToEnter; i++) {
+        ARKLog(@"Log %@", @(i));
+    }
+    
+    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    
+    NSArray *logsToPerist = [logController _trimedLogsToPersist_inLoggingQueue];
+    XCTAssertEqual(logsToPerist.count, logController.maximumLogCountToPersist);
+    
+    [logController _persistLogs_inLoggingQueue];
+    XCTAssertEqual(logController.logs.count, numberOfLogsToEnter, @"Persisting logs should not have affected internal log count");
 }
 
 #pragma mark - Test Performance
@@ -76,7 +95,7 @@
     ARKLogController *logController = [ARKLogController sharedInstance];
 
     NSMutableArray *numbers = [NSMutableArray new];
-    for (int i = 0; i < 3 * logController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < 3 * logController.maximumLogCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -95,7 +114,7 @@
     ARKLogController *logController = [ARKLogController sharedInstance];
     
     NSMutableArray *numbers = [NSMutableArray new];
-    for (int i = 0; i < 3 * logController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < 3 * logController.maximumLogCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -114,7 +133,7 @@
     ARKLogController *logController = [ARKLogController sharedInstance];
     
     NSMutableArray *numbers = [NSMutableArray new];
-    for (int i = 0; i < 3 * logController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < 3 * logController.maximumLogCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -138,7 +157,7 @@
     ARKLogController *logController = [ARKLogController sharedInstance];
     
     NSMutableArray *numbers = [NSMutableArray new];
-    for (int i = 0; i < logController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < logController.maximumLogCount; i++) {
         [numbers addObject:@(i)];
     }
     

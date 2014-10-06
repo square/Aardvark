@@ -13,7 +13,7 @@
 
 - (void)_persistLogs_inLoggingQueue;
 - (void)_trimLogs_inLoggingQueue;
-- (void)_trimLogsForPersisting_inLoggingQueue;
+- (NSArray *)_trimedLogsToPersist_inLoggingQueue;
 
 @end
 

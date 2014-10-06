@@ -165,15 +165,14 @@ NSString *const ARKLogsFileName = @"ARKLogs";
 
 - (void)_persistLogs_inLoggingQueue;
 {
-    // Trim and perist logs when the app is backgrounded.
-    [self _trimLogsForPersisting_inLoggingQueue];
-    
+    // Perist trimmed logs when the app is backgrounded.
+    NSArray *logsToPersist = [self _trimedLogsToPersist_inLoggingQueue];
     NSString *filePath = [self _pathToPersistedLogs];
     
-    if (self.logs.count == 0) {
+    if (logsToPersist.count == 0) {
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:NULL];
     } else {
-        [[NSFileManager defaultManager] createFileAtPath:filePath contents:[NSKeyedArchiver archivedDataWithRootObject:[self.logs copy]] attributes:nil];
+        [[NSFileManager defaultManager] createFileAtPath:filePath contents:[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] attributes:nil];
     }
 }
 
@@ -185,12 +184,16 @@ NSString *const ARKLogsFileName = @"ARKLogs";
     }
 }
 
-- (void)_trimLogsForPersisting_inLoggingQueue;
+- (NSArray *)_trimedLogsToPersist_inLoggingQueue;
 {
     NSUInteger numberOfLogs = self.logs.count;
     if (numberOfLogs > self.maximumLogCountToPersist) {
-        [self.logs removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogCountToPersist)];
+        NSMutableArray *logsToPersist = [self.logs mutableCopy];
+        [logsToPersist removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogCountToPersist)];
+        return [logsToPersist copy];
     }
+    
+    return [self.logs copy];
 }
 
 @end
