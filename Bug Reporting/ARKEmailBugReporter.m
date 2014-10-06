@@ -9,6 +9,8 @@
 #import "ARKEmailBugReporter.h"
 
 #import "ARKAardvarkLog.h"
+#import "ARKDefaultLogFormatter.h"
+#import "ARKLogFormatter.h"
 
 
 @interface ARKEmailBugReporter () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
@@ -52,6 +54,7 @@
                            \n\
                            System version: %@\n", [[UIDevice currentDevice] systemVersion]];
     
+    _logFormatter = [ARKDefaultLogFormatter new];
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
     
     return self;
@@ -79,17 +82,17 @@
             [self.mailComposeViewController setToRecipients:@[self.bugReportRecipientEmailAddress]];
             [self.mailComposeViewController setSubject:bugTitle];
             
-            NSString *emailBody = [NSString stringWithFormat:@"%@\n%@", self.prefilledEmailBody, [ARKAardvarkLog recentErrorLogsAsPlainText:self.logs count:3]];
+            NSString *emailBody = [NSString stringWithFormat:@"%@\n%@", self.prefilledEmailBody, [self.logFormatter recentErrorLogsAsPlainText:self.logs count:3]];
             
             [self.mailComposeViewController setMessageBody:emailBody isHTML:NO];
-            [self.mailComposeViewController addAttachmentData:[ARKAardvarkLog mostRecentImageAsPNG:self.logs] mimeType:@"image/png" fileName:@"screenshot.png"];
-            [self.mailComposeViewController addAttachmentData:[ARKAardvarkLog formattedLogsAsData:self.logs] mimeType:@"text/plain" fileName:@"logs.txt"];
+            [self.mailComposeViewController addAttachmentData:[self.logFormatter mostRecentImageAsPNG:self.logs] mimeType:@"image/png" fileName:@"screenshot.png"];
+            [self.mailComposeViewController addAttachmentData:[self.logFormatter formattedLogsAsData:self.logs] mimeType:@"text/plain" fileName:@"logs.txt"];
             
             self.mailComposeViewController.mailComposeDelegate = self;
             
             [self _showEmailComposeWindow];
         } else {
-            NSString *emailBody = [NSString stringWithFormat:@"%@\n%@", self.prefilledEmailBody, [ARKAardvarkLog recentErrorLogsAsPlainText:self.logs count:15]];
+            NSString *emailBody = [NSString stringWithFormat:@"%@\n%@", self.prefilledEmailBody, [self.logFormatter recentErrorLogsAsPlainText:self.logs count:15]];
             
             NSURL *composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:bugTitle body:emailBody];
             if (composeEmailURL != nil) {

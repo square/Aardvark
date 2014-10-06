@@ -95,18 +95,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - UIActivityItemSource
-
-- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController;
-{
-    return [ARKAardvarkLog formattedLogs:self.allLogs];
-}
-
-- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType;
-{
-    return [ARKAardvarkLog formattedLogs:self.allLogs];
-}
-
 #pragma mark - CAAnimationDelegate
 
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished;

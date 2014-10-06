@@ -8,6 +8,8 @@
 
 #import <MessageUI/MessageUI.h>
 
+@protocol ARKLogFormatter;
+
 
 @interface ARKEmailBugReporter : NSObject
 
@@ -16,6 +18,9 @@
 
 /// The email body that will be presented to the user when they compose a report.
 @property (nonatomic, copy, readwrite) NSString *prefilledEmailBody;
+
+/// The formatter used to prepare the log for entry into an email.
+@property (nonatomic, copy, readwrite) id <ARKLogFormatter> logFormatter;
 
 /// The window level for the email composer on iOS 7 or later. Defaults to UIWindowLevelStatusBar + 3.0.
 @property (nonatomic, assign, readwrite) UIWindowLevel emailComposeWindowLevel;

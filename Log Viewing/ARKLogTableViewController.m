@@ -10,6 +10,7 @@
 
 #import "ARKAardvarkLog.h"
 #import "ARKIndividualLogViewController.h"
+#import "ARKDefaultLogFormatter.h"
 #import "ARKLogController.h"
 #import "ARKScreenshotViewController.h"
 #import "UIActivityViewController+ARKAdditions.h"
@@ -26,6 +27,18 @@
 @implementation ARKLogTableViewController
 
 #pragma mark - Initialization
+
+- (instancetype)init;
+{
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+    
+    _logFormatter = [ARKDefaultLogFormatter new];
+    
+    return self;
+}
 
 - (void)dealloc;
 {
@@ -213,7 +226,7 @@
 
 - (IBAction)_openActivitySheet:(id)sender;
 {
-    NSArray *formattedLogs = [ARKAardvarkLog formattedLogs:self.logs];
+    NSArray *formattedLogs = [self.logFormatter formattedLogs:self.logs];
     UIActivityViewController *activityViewController = [UIActivityViewController newAardvarkActivityViewControllerWithItems:formattedLogs];
     [self presentViewController:activityViewController animated:YES completion:^{
         NSLog(@"Aardvark logs:\n%@", formattedLogs);

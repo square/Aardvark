@@ -10,7 +10,7 @@
 @class ARKEmailBugReporter;
 
 
-@interface ARKLogController : NSObject <UIActivityItemSource>
+@interface ARKLogController : NSObject
 
 + (instancetype)sharedInstance;
 

@@ -12,6 +12,8 @@
 - (NSOperationQueue *)loggingQueue;
 
 - (void)_persistLogs_inLoggingQueue;
+- (void)_trimLogs_inLoggingQueue;
+- (void)_trimLogsForPersisting_inLoggingQueue;
 
 @end
 
