@@ -13,6 +13,10 @@
 #import "ARKLogFormatter.h"
 
 
+@interface ARKInvisibleView : UIView
+@end
+
+
 @interface ARKEmailBugReporter () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) id strongSelf;
@@ -116,6 +120,12 @@
 {
     NSAssert(self.bugReportRecipientEmailAddress.length > 0, @"Canot compose a bug report without a recipient email address!");
     
+    /*
+     iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
+     Transfer first responder to an invisble view when a debug screenshot is captured to make bug filing itself bug-free.
+     */
+    [self _stealFirstResponder];
+    
     self.logs = logs;
     [self _showBugTitleCaptureAlert];
 }
@@ -137,6 +147,15 @@
 }
 
 #pragma mark - Private Methods
+
+- (void)_stealFirstResponder;
+{
+    ARKInvisibleView *invisibleView = [ARKInvisibleView new];
+    invisibleView.layer.opacity = 0.0;
+    [[UIApplication sharedApplication].keyWindow addSubview:invisibleView];
+    [invisibleView becomeFirstResponder];
+    [invisibleView removeFromSuperview];
+}
 
 - (void)_showBugTitleCaptureAlert;
 {
@@ -208,5 +227,15 @@
     return [[UIApplication sharedApplication] canOpenURL:URL] ? URL : nil;
 }
 
+
+@end
+
+
+@implementation ARKInvisibleView
+
+- (BOOL)canBecomeFirstResponder;
+{
+    return YES;
+}
 
 @end

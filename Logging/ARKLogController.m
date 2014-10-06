@@ -17,10 +17,6 @@ NSString *const ARKLogsFileName = @"ARKLogs";
 NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 
-@interface ARKInvisibleView : UIView
-@end
-
-
 @interface ARKLogController ()
 
 @property (nonatomic, strong, readwrite) NSMutableArray *logs;
@@ -99,12 +95,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished;
 {
-    /*
-     iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
-     Transfer first responder to an invisble view when a debug screenshot is captured to make bug filing itself bug-free.
-     */
-    [self _stealFirstResponder];
-    
     [self.whiteScreen removeFromSuperview];
     self.whiteScreen = nil;
     
@@ -280,25 +270,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     if (numberOfLogs > self.maximumLogCountToPersist) {
         [self.logs removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogCountToPersist)];
     }
-}
-
-- (void)_stealFirstResponder;
-{
-    ARKInvisibleView *invisibleView = [ARKInvisibleView new];
-    invisibleView.layer.opacity = 0.0;
-    [self.screenshotGestureRecognizer.view addSubview:invisibleView];
-    [invisibleView becomeFirstResponder];
-    [invisibleView removeFromSuperview];
-}
-
-@end
-
-
-@implementation ARKInvisibleView
-
-- (BOOL)canBecomeFirstResponder;
-{
-    return YES;
 }
 
 @end
