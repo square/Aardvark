@@ -102,6 +102,20 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     }];
 }
 
+- (void)composeBugReportWithLogs:(NSArray *)logs;
+{
+    NSAssert(self.bugReportRecipientEmailAddress.length > 0, @"Canot compose a bug report without a recipient email address!");
+    
+    /*
+     iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
+     Transfer first responder to an invisble view when a debug screenshot is captured to make bug filing itself bug-free.
+     */
+    [self _stealFirstResponder];
+    
+    self.logs = logs;
+    [self _showBugTitleCaptureAlert];
+}
+
 #pragma mark - CAAnimationDelegate
 
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished;
@@ -160,22 +174,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView;
 {
     return [alertView textFieldAtIndex:0].text.length > 0;
-}
-
-#pragma mark - Public Methods
-
-- (void)composeBugReportWithLogs:(NSArray *)logs;
-{
-    NSAssert(self.bugReportRecipientEmailAddress.length > 0, @"Canot compose a bug report without a recipient email address!");
-    
-    /*
-     iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
-     Transfer first responder to an invisble view when a debug screenshot is captured to make bug filing itself bug-free.
-     */
-    [self _stealFirstResponder];
-    
-    self.logs = logs;
-    [self _showBugTitleCaptureAlert];
 }
 
 #pragma mark - Properties

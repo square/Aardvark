@@ -14,4 +14,7 @@
 /// Removes the user's ability to file a bug.
 - (void)disableBugReporting;
 
+/// Kicks off composition of a bug report.
+- (void)composeBugReportWithLogs:(NSArray *)logs;
+
 @end

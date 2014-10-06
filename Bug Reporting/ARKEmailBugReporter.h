@@ -13,7 +13,6 @@
 
 @protocol ARKLogFormatter;
 
-
 /// Allows the user to trigger bug reports by making a two-finger press and hold gesture. Logs are sent out via email.
 @interface ARKEmailBugReporter : NSObject <ARKBugReporter>
 
@@ -28,7 +27,5 @@
 
 /// The window level for the email composer on iOS 7 or later. Defaults to UIWindowLevelStatusBar + 3.0.
 @property (nonatomic, assign, readwrite) UIWindowLevel emailComposeWindowLevel;
-
-- (void)composeBugReportWithLogs:(NSArray *)logs;
 
 @end
