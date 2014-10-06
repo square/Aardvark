@@ -70,7 +70,8 @@
         }
     }
     
-    return recentErrorLogs;
+    // Remove the final newline and create an immutable string.
+    return [recentErrorLogs stringByReplacingCharactersInRange:NSMakeRange(recentErrorLogs.length - 1, 1) withString:@""];
 }
 
 - (NSArray *)_formattedLogs:(NSArray *)logs withImages:(BOOL)images;

@@ -127,7 +127,7 @@
     const NSUInteger numberOfRecentErrorLogs = 5;
     NSString *recentErrorLogs = [self.logFormatter recentErrorLogsAsPlainText:logController.allLogs count:numberOfRecentErrorLogs];
     
-    XCTAssertEqual([recentErrorLogs componentsSeparatedByString:@"\n"].count, numberOfRecentErrorLogs + 1);
+    XCTAssertEqual([recentErrorLogs componentsSeparatedByString:@"\n"].count, numberOfRecentErrorLogs);
 }
 
 #pragma mark - Performance Tests
