@@ -12,7 +12,7 @@
 #import "ARKAardvarkLog.h"
 
 
-NSString *const ARKLogsFileName = @"ARKLogs";
+NSString *const ARKLogsFileName = @"ARKLogs.data";
 
 
 @interface ARKLogController ()
