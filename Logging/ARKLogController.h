@@ -17,6 +17,9 @@
 /// The bug reporting object to handle bug reporting. Must be set before installScreenshotGestureRecognizer is called.
 @property (nonatomic, strong, readwrite) ARKEmailBugReporter *bugReporter;
 
+/// The maximum number of logs allLogs should return. Defaults to 2000. Set to 0 to never truncate.
+@property (nonatomic, assign, readwrite) NSUInteger maximumLogCount;
+
 /// The maximum number of logs to persist to disk. Defaults to 500.
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogCountToPersist;
 

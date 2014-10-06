@@ -9,6 +9,7 @@
 #import <XCTest/XCTest.h>
 
 #import "ARKLogController.h"
+#import "ARKLogController_Testing.h"
 
 
 @interface ARKLogControllerTests : XCTestCase
@@ -17,17 +18,48 @@
 
 @implementation ARKLogControllerTests
 
+#pragma mark - Setup
+
 - (void)tearDown;
 {
     [[ARKLogController sharedInstance] clearLocalLogs];
     [super tearDown];
 }
 
-#pragma mark - Clearing Logs Test
+#pragma mark - Test Behavior
+
+- (void)testLogEntry
+{
+    ARKLogController *logController = [ARKLogController sharedInstance];
+    
+    NSUInteger numberOfLogsToEnter = 2 * logController.maximumLogCount + 10;
+    NSUInteger expectedInternalLogCount = logController.maximumLogCount + (numberOfLogsToEnter % logController.maximumLogCount);
+    
+    NSMutableArray *numbers = [NSMutableArray new];
+    for (int i = 0; i < (expectedInternalLogCount + logController.maximumLogCount); i++) {
+        [numbers addObject:@(i)];
+    }
+    
+    // Concurrently add all of the logs.
+    [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
+        ARKLog(@"%@", number);
+    }];
+    
+    // Wait until all logs are entered.
+    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    
+    // Internal log count should be proactively truncated at 2 * maximumLogCount.
+    XCTAssertEqual(logController.logs.count, expectedInternalLogCount, @"Expected internal log count to be proactively truncated to (%@) at 2 * maximumLogCount. Expected internal log count of %@, got %@.", @(logController.maximumLogCount), @(expectedInternalLogCount), @(logController.logs.count));
+    
+    // Exposed log count should never be greater than maximumLogCount.
+    NSArray *allLogs = logController.allLogs;
+    XCTAssertGreaterThanOrEqual(allLogs.count, logController.maximumLogCount, @"Exposed log count (%@) must never exceed maximum log count (%@).", @(allLogs.count), @(logController.maximumLogCount));
+}
 
 - (void)testClearLogs;
 {
-    for (int i = 0; i < 100; i++) {
+    // Fill in some logs.
+    for (int i = 0; i < [ARKLogController sharedInstance].maximumLogCountToPersist; i++) {
         ARKLog(@"Log %@", @(i));
     }
     
@@ -36,20 +68,46 @@
     XCTAssertTrue([ARKLogController sharedInstance].allLogs.count == 0, @"Local logs have count of %@ after clearing!", @([ARKLogController sharedInstance].allLogs.count));
 }
 
-#pragma mark - Synchronization Tests
+#pragma mark - Test Performance
 
-- (void)testSynchronization;
+- (void)testLogEntryPerformance;
 {
-    NSMutableArray *UUIDs = [NSMutableArray new];
-    for (int i = 0; i < 1000; i++) {
-        [UUIDs addObject:[NSUUID UUID]];
+    ARKLogController *logController = [ARKLogController sharedInstance];
+
+    NSMutableArray *numbers = [NSMutableArray new];
+    for (int i = 0; i < 3 * logController.maximumLogCount; i++) {
+        [numbers addObject:@(i)];
     }
     
-    [UUIDs enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSUUID *UUID, NSUInteger idx, BOOL *stop) {
-        ARKLog(@"%@", UUID.UUIDString);
+    [self measureBlock:^{
+        // Concurrently add all of the logs.
+        [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
+            ARKLog(@"%@", number);
+        }];
+        
+        // Trim and format the logs.
+        (void)logController.allLogs;
+    }];
+}
+
+- (void)testLogPersistencePerformance;
+{
+    ARKLogController *logController = [ARKLogController sharedInstance];
+    
+    NSMutableArray *numbers = [NSMutableArray new];
+    for (int i = 0; i < 3 * logController.maximumLogCount; i++) {
+        [numbers addObject:@(i)];
+    }
+    
+    // Concurrently add all of the logs.
+    [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
+        ARKLog(@"%@", number);
     }];
     
-    XCTAssertTrue([ARKLogController sharedInstance].allLogs.count == UUIDs.count, @"Local logs have count of %@ after concurrently adding %@ logs!", @([ARKLogController sharedInstance].allLogs.count), @(UUIDs.count));
+    [self measureBlock:^{
+        // Trim and persist the logs.
+        [logController _persistLogs_inLoggingQueue];
+    }];
 }
 
 @end

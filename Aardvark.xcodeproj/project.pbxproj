@@ -57,6 +57,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EAAB389819E2820000161A54 /* ARKLogController_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKLogController_Testing.h; path = Logging/ARKLogController_Testing.h; sourceTree = "<group>"; };
 		EAD1442119E073FB0065A1FF /* libAardvark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAardvark.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAD1442419E073FB0065A1FF /* Aardvark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aardvark.h; sourceTree = "<group>"; };
 		EAD1442619E073FB0065A1FF /* Aardvark.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Aardvark.m; sourceTree = "<group>"; };
@@ -137,6 +138,7 @@
 				EAD1444719E084C40065A1FF /* ARKAardvarkLog.h */,
 				EAD1444819E084C40065A1FF /* ARKAardvarkLog.m */,
 				EAD1444B19E09EEA0065A1FF /* ARKLogController.h */,
+				EAAB389819E2820000161A54 /* ARKLogController_Testing.h */,
 				EAD1444C19E09EEA0065A1FF /* ARKLogController.m */,
 			);
 			name = Logging;

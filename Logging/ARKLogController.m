@@ -7,6 +7,7 @@
 //
 
 #import "ARKLogController.h"
+#import "ARKLogController_Testing.h"
 
 #import "ARKAardvarkLog.h"
 #import "ARKEmailBugReporter.h"
@@ -66,14 +67,15 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         return nil;
     }
     
+    _maximumLogCount = 2000;
+    _maximumLogCountToPersist = 500;
+    
     NSArray *persistedLogs = [self _persistedLogs];
     if (persistedLogs.count > 0) {
         _logs = [persistedLogs mutableCopy];
     } else {
-        _logs = [NSMutableArray new];
+        _logs = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogCount)];
     }
-    
-    _maximumLogCountToPersist = 500;
     
     _loggingQueue = [NSOperationQueue new];
     _loggingQueue.maxConcurrentOperationCount = 1;
@@ -155,6 +157,12 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (void)appendLog:(ARKAardvarkLog *)log;
 {
     [self.loggingQueue addOperationWithBlock:^{
+        // Don't proactively trim too often.
+        if (self.logs.count >= 2 * self.maximumLogCount) {
+            // We've held on to 2x more logs than we'll ever expose. Trim!
+            [self _trimLogs_inLoggingQueue];
+        }
+        
         [self.logs addObject:log];
     }];
 }
@@ -164,6 +172,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     __block NSArray *logs = nil;
     
     [self.loggingQueue addOperationWithBlock:^{
+        [self _trimLogs_inLoggingQueue];
+        
         logs = [self.logs copy];
     }];
     
@@ -257,7 +267,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (void)_persistLogs_inLoggingQueue;
 {
     // Trim and perist logs when the app is backgrounded.
-    [self _trimLogs_inLoggingQueue];
+    [self _trimLogsForPersisting_inLoggingQueue];
     
     NSString *filePath = [self _pathToPersistedLogs];
     
@@ -269,6 +279,14 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 }
 
 - (void)_trimLogs_inLoggingQueue;
+{
+    NSUInteger numberOfLogs = self.logs.count;
+    if (numberOfLogs > self.maximumLogCount) {
+        [self.logs removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogCount)];
+    }
+}
+
+- (void)_trimLogsForPersisting_inLoggingQueue;
 {
     NSUInteger numberOfLogs = self.logs.count;
     if (numberOfLogs > self.maximumLogCountToPersist) {
