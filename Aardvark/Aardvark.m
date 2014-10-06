@@ -70,7 +70,19 @@ void ARKLogScreenshot()
 
 + (void)setupBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
 {
-    [bugReporter enableBugReporting];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        static id <ARKBugReporter> currentBugReporter = NULL;
+        
+        // Clean up the old bug reporter if it exists.
+        if (currentBugReporter != NULL) {
+            [currentBugReporter disableBugReporting];
+        }
+        
+        // Hold onto the bug reporter.
+        currentBugReporter = bugReporter;
+        
+        [bugReporter enableBugReporting];
+    }];
 }
 
 @end
