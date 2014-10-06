@@ -9,6 +9,7 @@
 @protocol ARKLogFormatter;
 
 
+/// Displays a list of ARKArdvarkLogs in a table.
 @interface ARKLogTableViewController : UITableViewController
 
 /// The formatter used to prepare the logs for the share/activity sheet.
