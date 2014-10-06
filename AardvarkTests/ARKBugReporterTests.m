@@ -17,9 +17,9 @@
 
 @implementation ARKBugReporterTests
 
-#pragma mark - Tests
+#pragma mark - Behavior Tests
 
-- (void)testSetupBugReporter;
+- (void)test_bugReporter_setupReporterRetainedByAardvark;
 {
     ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
     [Aardvark setupBugReportingWithReporter:bugReporter];

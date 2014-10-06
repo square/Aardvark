@@ -33,72 +33,62 @@
 
 - (void)tearDown;
 {
-    [[ARKLogController sharedInstance] clearLocalLogs];
+    [[ARKLogController sharedInstance] clearLogs];
 
     [super tearDown];
 }
 
-#pragma mark - Tests
+#pragma mark - Behavior Tests
 
-- (void)testFormattedLogLength;
+- (void)test_formattedLogs_errorLogLineCount;
 {
     ARKTypeLog(ARKLogTypeError, @"Fake Error Log");
     NSArray *formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
     XCTAssertEqual(formattedSingleLog.count, 2, @"Logging an error should create two lines of formatted logs");
-    
-    [[ARKLogController sharedInstance] clearLocalLogs];
-    
-    ARKTypeLog(ARKLogTypeSeparator, @"Separators Rule");
-    formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
-    XCTAssertEqual(formattedSingleLog.count, 2, @"Logging a separator should create two lines of formatted logs");
-    
-    [[ARKLogController sharedInstance] clearLocalLogs];
+}
 
+- (void)test_formattedLogs_separatorLogLineCount;
+{
+    ARKTypeLog(ARKLogTypeSeparator, @"Separators Rule");
+    NSArray *formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
+    XCTAssertEqual(formattedSingleLog.count, 2, @"Logging a separator should create two lines of formatted logs");
+}
+
+- (void)test_formattedLogs_defaultLogLineCount;
+{
     ARKLog(@"Something Happened");
-    formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
+    NSArray *formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
     XCTAssertEqual(formattedSingleLog.count, 1, @"Logging a default log should create one line of formatted logs");
 }
 
-- (void)testFormattedLogExpectedOutput;
+- (void)test_formattedLogs_errorLogContent;
 {
     NSString *errorLog = @"Fake Error Log";
     ARKTypeLog(ARKLogTypeError, @"%@", errorLog);
     NSArray *formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
+    XCTAssertEqualObjects(formattedSingleLog.firstObject, [self.logFormatter.errorLogPrefix stringByAppendingString:@"\n"]);
     XCTAssertEqualObjects(formattedSingleLog.lastObject, [[[ARKLogController sharedInstance].logs.firstObject description] stringByAppendingString:@"\n"]);
-    
-    [[ARKLogController sharedInstance] clearLocalLogs];
-    
+}
+
+- (void)test_formattedLogs_separatorLogContent;
+{
     NSString *separatorLog = @"Separators Rule";
     ARKTypeLog(ARKLogTypeSeparator, @"%@", separatorLog);
-    formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
+    NSArray *formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
+    XCTAssertEqualObjects(formattedSingleLog.firstObject, [self.logFormatter.separatorLogPrefix stringByAppendingString:@"\n"]);
     XCTAssertEqualObjects(formattedSingleLog.lastObject, [[[ARKLogController sharedInstance].logs.firstObject description] stringByAppendingString:@"\n"]);
-    
-    [[ARKLogController sharedInstance] clearLocalLogs];
-    
+}
+
+- (void)test_formattedLogs_defaultLogContent;
+{
     NSString *log = @"Something Happened";
     ARKLog(@"%@", log);
-    formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
-    XCTAssertEqualObjects(formattedSingleLog.lastObject, [[[ARKLogController sharedInstance].logs.firstObject description] stringByAppendingString:@"\n"]);
-    XCTAssertEqualObjects(formattedSingleLog.firstObject, formattedSingleLog.lastObject);
-}
-
-- (void)testPrefixChangeRespected;
-{
-    self.logFormatter.errorLogPrefix = @"Error";
-    self.logFormatter.separatorLogPrefix = @"New Thing";
-    
-    ARKTypeLog(ARKLogTypeError, @"Fake Error Log");
     NSArray *formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
-    XCTAssertEqualObjects(formattedSingleLog.firstObject, [self.logFormatter.errorLogPrefix stringByAppendingString:@"\n"]);
-    
-    [[ARKLogController sharedInstance] clearLocalLogs];
-    
-    ARKTypeLog(ARKLogTypeSeparator, @"Separators Rule");
-    formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
-    XCTAssertEqualObjects(formattedSingleLog.firstObject, [self.logFormatter.separatorLogPrefix stringByAppendingString:@"\n"]);
+    XCTAssertEqualObjects(formattedSingleLog.lastObject, [[[ARKLogController sharedInstance].logs.firstObject description] stringByAppendingString:@"\n"]);
+    XCTAssertEqual(formattedSingleLog.count, 1);
 }
 
-- (void)testFormattedLogsAsData;
+- (void)test_formattedLogsAsData_formattedLogsAsPlainText_equivalentData;
 {
     ARKLog(@"Test Log 1");
     ARKLog(@"Test Log 2");
@@ -110,7 +100,25 @@
     XCTAssertEqualObjects([[NSString alloc] initWithData:formattedLogData encoding:NSUTF8StringEncoding], formattedLogs);
 }
 
-- (void)testRecentErrorLogs;
+- (void)test_formattedLogs_errorPrefixChangeRespected;
+{
+    self.logFormatter.errorLogPrefix = @"Error";
+    
+    ARKTypeLog(ARKLogTypeError, @"Fake Error Log");
+    NSArray *formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
+    XCTAssertEqualObjects(formattedSingleLog.firstObject, [self.logFormatter.errorLogPrefix stringByAppendingString:@"\n"]);
+}
+
+- (void)test_formattedLogs_separatorPrefixChangeRespected;
+{
+    self.logFormatter.separatorLogPrefix = @"New Thing";
+    
+    ARKTypeLog(ARKLogTypeSeparator, @"Separators Rule");
+    NSArray *formattedSingleLog = [self.logFormatter formattedLogs:[ARKLogController sharedInstance].allLogs];
+    XCTAssertEqualObjects(formattedSingleLog.firstObject, [self.logFormatter.separatorLogPrefix stringByAppendingString:@"\n"]);
+}
+
+- (void)test_recentErrorLogsAsPlainText_countRespected;
 {
     ARKLogController *logController = [ARKLogController sharedInstance];
     
@@ -132,7 +140,7 @@
 
 #pragma mark - Performance Tests
 
-- (void)testLogFormattingPerformance;
+- (void)test_formattedLogs_performance;
 {
     ARKLogController *logController = [ARKLogController sharedInstance];
     

@@ -115,7 +115,7 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
     return logs;
 }
 
-- (void)clearLocalLogs;
+- (void)clearLogs;
 {
     [self.loggingQueue addOperationWithBlock:^{
         [self.logs removeAllObjects];

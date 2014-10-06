@@ -13,6 +13,9 @@
 
 
 @interface ARKLogControllerTests : XCTestCase
+
+@property (nonatomic, weak, readwrite) ARKLogController *logController;
+
 @end
 
 
@@ -20,24 +23,27 @@
 
 #pragma mark - Setup
 
+- (void)setUp;
+{
+    self.logController = [ARKLogController sharedInstance];
+}
+
 - (void)tearDown;
 {
-    [[ARKLogController sharedInstance] clearLocalLogs];
+    [self.logController clearLogs];
     
     [super tearDown];
 }
 
-#pragma mark - Test Behavior
+#pragma mark - Behavior Tests
 
-- (void)testLogEntry
+- (void)test_appendLog_logCountExpected;
 {
-    ARKLogController *logController = [ARKLogController sharedInstance];
-    
-    NSUInteger numberOfLogsToEnter = 2 * logController.maximumLogCount + 10;
-    NSUInteger expectedInternalLogCount = logController.maximumLogCount + (numberOfLogsToEnter % logController.maximumLogCount);
+    NSUInteger numberOfLogsToEnter = 2 * self.logController.maximumLogCount + 10;
+    NSUInteger expectedInternalLogCount = self.logController.maximumLogCount + (numberOfLogsToEnter % self.logController.maximumLogCount);
     
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < (expectedInternalLogCount + logController.maximumLogCount); i++) {
+    for (NSUInteger i  = 0; i < (expectedInternalLogCount + self.logController.maximumLogCount); i++) {
         [numbers addObject:@(i)];
     }
     
@@ -47,55 +53,76 @@
     }];
     
     // Wait until all logs are entered.
-    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    [self.logController.loggingQueue waitUntilAllOperationsAreFinished];
     
     // Internal log count should be proactively truncated at 2 * maximumLogCount.
-    XCTAssertEqual(logController.logs.count, expectedInternalLogCount, @"Expected internal log count to be proactively truncated to (%@) at 2 * maximumLogCount. Expected internal log count of %@, got %@.", @(logController.maximumLogCount), @(expectedInternalLogCount), @(logController.logs.count));
+    XCTAssertEqual(self.logController.logs.count, expectedInternalLogCount, @"Expected internal log count to be proactively truncated to (%@) at 2 * maximumLogCount. Expected internal log count of %@, got %@.", @(self.logController.maximumLogCount), @(expectedInternalLogCount), @(self.logController.logs.count));
     
     // Exposed log count should never be greater than maximumLogCount.
-    NSArray *allLogs = logController.allLogs;
-    XCTAssertGreaterThanOrEqual(allLogs.count, logController.maximumLogCount, @"Exposed log count (%@) must never exceed maximum log count (%@).", @(allLogs.count), @(logController.maximumLogCount));
+    NSArray *allLogs = self.logController.allLogs;
+    XCTAssertGreaterThanOrEqual(allLogs.count, self.logController.maximumLogCount, @"Exposed log count (%@) must never exceed maximum log count (%@).", @(allLogs.count), @(self.logController.maximumLogCount));
 }
 
-- (void)testClearLogs;
+- (void)test_clearLogs_removesAllLogs;
 {
     // Fill in some logs.
-    for (NSUInteger i  = 0; i < [ARKLogController sharedInstance].maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < self.logController.maximumLogCount; i++) {
         ARKLog(@"Log %@", @(i));
     }
     
-    [[ARKLogController sharedInstance] clearLocalLogs];
+    [self.logController clearLogs];
     
-    XCTAssertTrue([ARKLogController sharedInstance].allLogs.count == 0, @"Local logs have count of %@ after clearing!", @([ARKLogController sharedInstance].allLogs.count));
+    XCTAssertTrue(self.logController.logs.count == 0, @"Local logs have count of %@ after clearing!", @(self.logController.logs.count));
+    XCTAssertTrue(self.logController.allLogs.count == 0, @"Local logs have count of %@ after clearing!", @(self.logController.allLogs.count));
 }
 
-- (void)testPersistLogs;
+- (void)test_clearLogs_removesPersistedLogs;
 {
-    ARKLogController *logController = [ARKLogController sharedInstance];
+    XCTAssertNil([self.logController _persistedLogs]);
     
+    ARKLog(@"Log");
+    [self.logController.loggingQueue waitUntilAllOperationsAreFinished];
+    [self.logController _persistLogs_inLoggingQueue];
+    XCTAssertNotNil([self.logController _persistedLogs]);
+    
+    [self.logController clearLogs];
+    XCTAssertNil([self.logController _persistedLogs]);
+}
+
+- (void)test_trimmedLogsToPersistLogs_maximumLogCountToPersistPersisted;
+{
     // Fill in some logs.
-    NSUInteger numberOfLogsToEnter = logController.maximumLogCount + 10;
+    NSUInteger numberOfLogsToEnter = self.logController.maximumLogCount + 10;
     for (NSUInteger i  = 0; i < numberOfLogsToEnter; i++) {
         ARKLog(@"Log %@", @(i));
     }
     
-    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    [self.logController.loggingQueue waitUntilAllOperationsAreFinished];
     
-    NSArray *logsToPerist = [logController _trimedLogsToPersist_inLoggingQueue];
-    XCTAssertEqual(logsToPerist.count, logController.maximumLogCountToPersist);
-    
-    [logController _persistLogs_inLoggingQueue];
-    XCTAssertEqual(logController.logs.count, numberOfLogsToEnter, @"Persisting logs should not have affected internal log count");
+    NSArray *logsToPerist = [self.logController _trimedLogsToPersist_inLoggingQueue];
+    XCTAssertEqual(logsToPerist.count, self.logController.maximumLogCountToPersist);
 }
 
-#pragma mark - Test Performance
-
-- (void)testLogEntryPerformance;
+- (void)test_persistLogs_noSideEffect;
 {
-    ARKLogController *logController = [ARKLogController sharedInstance];
+    // Fill in some logs.
+    NSUInteger numberOfLogsToEnter = self.logController.maximumLogCount + 10;
+    for (NSUInteger i  = 0; i < numberOfLogsToEnter; i++) {
+        ARKLog(@"Log %@", @(i));
+    }
+    
+    [self.logController.loggingQueue waitUntilAllOperationsAreFinished];
+    
+    [self.logController _persistLogs_inLoggingQueue];
+    XCTAssertEqual(self.logController.logs.count, numberOfLogsToEnter, @"Persisting logs should not have affected internal log count");
+}
 
+#pragma mark - Performance Tests
+
+- (void)test_appendLog_performance;
+{
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < 3 * logController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < 3 * self.logController.maximumLogCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -105,16 +132,14 @@
             ARKLog(@"%@", number);
         }];
         
-        [logController.loggingQueue waitUntilAllOperationsAreFinished];
+        [self.logController.loggingQueue waitUntilAllOperationsAreFinished];
     }];
 }
 
-- (void)testLogEntryAndRetreivalPerformance;
+- (void)test_allLogs_performance;
 {
-    ARKLogController *logController = [ARKLogController sharedInstance];
-    
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < 3 * logController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < 3 * self.logController.maximumLogCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -125,15 +150,13 @@
         }];
         
         // Trim and format the logs.
-        (void)logController.allLogs;
+        (void)self.logController.allLogs;
     }];
 }
-- (void)testTruncationPerformance;
+- (void)test_trimLogs_performance;
 {
-    ARKLogController *logController = [ARKLogController sharedInstance];
-    
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < 3 * logController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < 3 * self.logController.maximumLogCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -143,21 +166,19 @@
             ARKLog(@"%@", number);
         }];
         
-        [logController.loggingQueue addOperationWithBlock:^{
+        [self.logController.loggingQueue addOperationWithBlock:^{
             // Trim and persist the logs.
-            [logController _trimLogs_inLoggingQueue];
+            [self.logController _trimLogs_inLoggingQueue];
         }];
         
-        [logController.loggingQueue waitUntilAllOperationsAreFinished];
+        [self.logController.loggingQueue waitUntilAllOperationsAreFinished];
     }];
 }
 
-- (void)testLogPersistencePerformance;
+- (void)test_persistLogs_performance;
 {
-    ARKLogController *logController = [ARKLogController sharedInstance];
-    
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < logController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < self.logController.maximumLogCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -167,12 +188,12 @@
     }];
     
     [self measureBlock:^{
-        [logController.loggingQueue addOperationWithBlock:^{
+        [self.logController.loggingQueue addOperationWithBlock:^{
             // Trim and persist the logs.
-            [logController _persistLogs_inLoggingQueue];
+            [self.logController _persistLogs_inLoggingQueue];
         }];
         
-        [logController.loggingQueue waitUntilAllOperationsAreFinished];
+        [self.logController.loggingQueue waitUntilAllOperationsAreFinished];
     }];
 }
 

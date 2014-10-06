@@ -27,6 +27,6 @@
 - (NSArray *)allLogs;
 
 /// Removes all logs. Blocking call.
-- (void)clearLocalLogs;
+- (void)clearLogs;
 
 @end

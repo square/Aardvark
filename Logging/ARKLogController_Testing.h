@@ -11,6 +11,7 @@
 - (NSMutableArray *)logs;
 - (NSOperationQueue *)loggingQueue;
 
+- (NSArray *)_persistedLogs;
 - (void)_persistLogs_inLoggingQueue;
 - (void)_trimLogs_inLoggingQueue;
 - (NSArray *)_trimedLogsToPersist_inLoggingQueue;

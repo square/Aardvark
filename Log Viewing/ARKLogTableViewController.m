@@ -90,7 +90,7 @@
 - (void)_viewWillAppearForFirstTime:(BOOL)animated;
 {
     UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(_openActivitySheet:)];
-    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(_clearLocalLogs:)];
+    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(_clearLogs:)];
     
     self.navigationItem.rightBarButtonItems = @[shareButton, deleteButton];
     
@@ -102,7 +102,7 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
     if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        [[ARKLogController sharedInstance] clearLocalLogs];
+        [[ARKLogController sharedInstance] clearLogs];
         [self _reloadLogs];
     }
 }
@@ -233,7 +233,7 @@
     }];
 }
 
-- (IBAction)_clearLocalLogs:(id)sender;
+- (IBAction)_clearLogs:(id)sender;
 {
     UIActionSheet *confirmationSheet = [UIActionSheet new];
     confirmationSheet.destructiveButtonIndex = [confirmationSheet addButtonWithTitle:@"Delete All Logs"];
