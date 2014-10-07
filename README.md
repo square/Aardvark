@@ -8,7 +8,7 @@ There are only three steps to get Aardvark logging and bug reporting up and runn
 
 1) Call `[Aardvark enableAardvarkLogging]` to enable logging.
 
-2) Call `[Aardvark enableBugReportingWithEmailAddress:]` once your main window is loaded to enable creating bug reports.
+2) Call `[Aardvark enableBugReportingWithEmailAddress:]` to enable creating bug reports.
 
 3) Replace `NSLog` with `ARKLog`
 
