@@ -70,6 +70,7 @@ void ARKLogScreenshot()
 
 + (void)setupBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
 {
+#if AARDVARK_LOG_ENABLED
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
         static id <ARKBugReporter> currentBugReporter = NULL;
         
@@ -83,6 +84,7 @@ void ARKLogScreenshot()
         
         [bugReporter enableBugReporting];
     }];
+#endif
 }
 
 @end
