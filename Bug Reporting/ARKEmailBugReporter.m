@@ -56,12 +56,12 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         return nil;
     }
     
-    _prefilledEmailBody = [NSString stringWithFormat:@"Reproduction Steps:\n\
-                           1. \n\
-                           2. \n\
-                           3. \n\
-                           \n\
-                           System version: %@\n", [[UIDevice currentDevice] systemVersion]];
+    _prefilledEmailBody = [NSString stringWithFormat:@"Reproduction Steps:\n"
+                           @"1. \n"
+                           @"2. \n"
+                           @"3. \n"
+                           @"\n"
+                           @"System version: %@\n", [[UIDevice currentDevice] systemVersion]];
     
     _logFormatter = [ARKDefaultLogFormatter new];
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
