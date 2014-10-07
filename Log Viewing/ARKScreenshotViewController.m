@@ -93,15 +93,17 @@
 {
     UIActivityViewController *activityViewController = [UIActivityViewController newAardvarkActivityViewControllerWithItems:@[self.imageView.image]];
     
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
     if ([activityViewController respondsToSelector:@selector(completionWithItemsHandler)]) {
         activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
             self.activityViewerPresented = NO;
         };
-    } else {
-        activityViewController.completionHandler = ^(NSString *activityType, BOOL completed){
-            self.activityViewerPresented = NO;
-        };
     }
+#else
+    activityViewController.completionHandler = ^(NSString *activityType, BOOL completed){
+        self.activityViewerPresented = NO;
+    };
+#endif
     
     self.activityViewerPresented = YES;
     [self presentViewController:activityViewController animated:YES completion:NULL];
