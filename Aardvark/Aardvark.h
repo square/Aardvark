@@ -17,7 +17,10 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
 
 
 // Set this define to 0 after importing this header to turn off logging.
-#define AARDVARK_LOG_ENABLED 1
+#define AARDVARK_LOGGING_ENABLED 1
+
+/// Set this define to 1 after importing this header to make ARKLog calls also NSLog.
+#define AARDVARK_NSLOG_ENABLED 0
 
 
 OBJC_EXTERN void ARKLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
