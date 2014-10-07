@@ -20,6 +20,7 @@
 
 @property (nonatomic, copy, readwrite) NSArray *logs;
 @property (nonatomic, assign, readwrite) BOOL viewWillAppearForFirstTimeCalled;
+@property (nonatomic, assign, readwrite) BOOL hasScrolledToBottom;
 
 @end
 
@@ -51,7 +52,10 @@
 {
     [super viewDidLayoutSubviews];
     
-    [self _scrollTableViewToBottomAnimated:NO];
+    if (!self.hasScrolledToBottom) {
+        [self _scrollTableViewToBottomAnimated:NO];
+        self.hasScrolledToBottom = YES;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated;
@@ -93,8 +97,6 @@
     UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(_clearLogs:)];
     
     self.navigationItem.rightBarButtonItems = @[shareButton, deleteButton];
-    
-    [self _scrollTableViewToBottomAnimated:NO];
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -122,28 +124,28 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    static NSString *const sSQDebugLog = @"SQDebugLog";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:sSQDebugLog];
+    static NSString *const ARKLogCellIdentifier = @"ARKLogCell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ARKLogCellIdentifier];
     
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:sSQDebugLog];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ARKLogCellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     NSInteger index = [indexPath row];
     ARKAardvarkLog *currentLog = self.logs[index];
     
-    ARKAardvarkLog *firstPaymentLog = nil;
+    ARKAardvarkLog *firstSeparatorLog = nil;
     for (NSInteger i = index; i >= 0; i--) {
-        firstPaymentLog = self.logs[i];
-        if (firstPaymentLog.type == ARKLogTypeSeparator) {
+        firstSeparatorLog = self.logs[i];
+        if (firstSeparatorLog.type == ARKLogTypeSeparator) {
             break;
         } else {
-            firstPaymentLog = nil;
+            firstSeparatorLog = nil;
         }
     }
     
-    NSTimeInterval delta = firstPaymentLog ? [currentLog.createdAt timeIntervalSinceDate:firstPaymentLog.createdAt] : 0.0;
+    NSTimeInterval delta = firstSeparatorLog ? [currentLog.createdAt timeIntervalSinceDate:firstSeparatorLog.createdAt] : 0.0;
     if (delta > 60.0) {
         cell.textLabel.text = [NSString stringWithFormat:@"+%.fm\t%@", delta / 60.0, currentLog.text];
     } else if (delta > 1.0) {
