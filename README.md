@@ -24,10 +24,6 @@ Push an instance of `ARKLogTableViewController` onto the screen to view your log
 
 If you want ARKLogs to show up in your console, `#define AARDVARK_NSLOG_ENABLED 1` after importing Aardvark.
 
-## Turning Logging Off In App Store Builds
-
-We recommend turning off logging in App Store builds to save CPU cycles and prevent logging PII. To do this, `#define AARDVARK_LOGGING_ENABLED 0` after importing Aardvark in your App Store builds.
-
 ## Contributing
 
 We're glad you're interested in Aardvark, and we'd love to see where you take it.
