@@ -4,17 +4,19 @@ Aardvark is a library that makes it dead simple to create useful bug reports wit
 
 ## Usage
 
-There are only two steps to get Aardvark logging and bug reporting up and running.
+There are only three steps to get Aardvark logging and bug reporting up and running.
 
-1) Call `[Aardvark setupBugReportingWithRecipientEmailAddress:]` with the email you want to receive bug reports once your main window is loaded. 
+1) Call `[Aardvark enableAardvarkLogging]` to enable logging.
 
-2) Replace `NSLog` with `ARKLog`
+2) Call `[Aardvark enableBugReportingWithEmailAddress:]` once your main window is loaded to enable creating bug reports.
+
+3) Replace `NSLog` with `ARKLog`
 
 This will allow users to report a bug by making a two-finger long-press gesture. This gesture triggers a UIAlert asking the user what went wrong. When the user enters this information, an email bug report is generated complete with an attached app screenshot and a text file containing the last 2000 ARKLogs. Screenshots are created and stored within Aardvark and do not require camera roll access.
 
 You can change how many ARKLogs are included in bug reports by changing the value of `maximumLogCount` on your `sharedInstance` of `ARKLogController`.
 
-You can customize how bugs are filed by passing your own `ARKBugReporter` object to `[Aardvark setupBugReportingWithReporter:]`.
+You can customize how bugs are filed by passing your own `ARKBugReporter` object to `[Aardvark enableBugReportingWithReporter:]`.
 
 ## Viewing Logs
 

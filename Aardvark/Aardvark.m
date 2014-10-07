@@ -15,92 +15,120 @@
 
 void ARKLog(NSString *format, ...)
 {
-#if AARDVARK_LOGGING_ENABLED
-    if (format.length > 0) {
-        va_list argList;
-        va_start(argList, format);
-        
-        NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:ARKLogTypeDefault];
-        [[ARKLogController sharedInstance] appendLog:log];
-        
-#if AARDVARK_NSLOG_ENABLED
-        NSLog(@"%@", logText);
-#endif
-        
-        va_end(argList);
+    if ([Aardvark isAardvarkLoggingEnabled]) {
+        if (format.length > 0) {
+            va_list argList;
+            va_start(argList, format);
+            
+            NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+            ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:ARKLogTypeDefault];
+            [[ARKLogController sharedInstance] appendLog:log];
+            
+            if ([Aardvark isAardvarkLoggingToNSLog]) {
+                NSLog(@"%@", logText);
+            }
+            
+            va_end(argList);
+        }
     }
-#endif
 }
 
 void ARKTypeLog(ARKLogType type, NSString *format, ...)
 {
-#if AARDVARK_LOGGING_ENABLED
-    if (format.length > 0) {
-        va_list argList;
-        va_start(argList, format);
-        
-        NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:type];
-        [[ARKLogController sharedInstance] appendLog:log];
-        
-#if AARDVARK_NSLOG_ENABLED
-        NSLog(@"%@", logText);
-#endif
-        
-        va_end(argList);
+    if ([Aardvark isAardvarkLoggingEnabled]) {
+        if (format.length > 0) {
+            va_list argList;
+            va_start(argList, format);
+            
+            NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+            ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:type];
+            [[ARKLogController sharedInstance] appendLog:log];
+            
+            if ([Aardvark isAardvarkLoggingToNSLog]) {
+                NSLog(@"%@", logText);
+            }
+            
+            va_end(argList);
+        }
     }
-#endif
 }
 
 void ARKLogScreenshot()
 {
-#if AARDVARK_LOGGING_ENABLED
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    UIGraphicsBeginImageContext(window.bounds.size);
-    [window.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    NSString *logText = @"📷📱 Screenshot!";
-    ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault];
-    [[ARKLogController sharedInstance] appendLog:log];
-    
-#if AARDVARK_NSLOG_ENABLED
-    NSLog(@"%@", logText);
-#endif
-    
-#endif
+    if ([Aardvark isAardvarkLoggingEnabled]) {
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        UIGraphicsBeginImageContext(window.bounds.size);
+        [window.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        NSString *logText = @"📷📱 Screenshot!";
+        ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault];
+        [[ARKLogController sharedInstance] appendLog:log];
+
+        if ([Aardvark isAardvarkLoggingToNSLog]) {
+            NSLog(@"%@", logText);
+        }
+    }
 }
 
 
 @implementation Aardvark
 
-+ (void)setupBugReportingWithRecipientEmailAddress:(NSString *)recipientAddress;
+static NSNumber *AardvarkLoggingEnabled = NULL;
+static NSNumber *AardvarkLoggingToNSLog = NULL;
+
++ (void)enableAardvarkLogging;
 {
-    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
-    bugReporter.bugReportRecipientEmailAddress = recipientAddress;
-    
-    [self setupBugReportingWithReporter:bugReporter];
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AardvarkLoggingEnabled = @YES;
+    });
 }
 
-+ (void)setupBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
++ (BOOL)isAardvarkLoggingEnabled;
 {
-#if AARDVARK_LOGGING_ENABLED
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        static id <ARKBugReporter> currentBugReporter = NULL;
-        
-        // Clean up the old bug reporter if it exists.
-        if (currentBugReporter != NULL) {
-            [currentBugReporter disableBugReporting];
-        }
-        
-        // Hold onto the bug reporter.
-        currentBugReporter = bugReporter;
-        
-        [bugReporter enableBugReporting];
-    }];
-#endif
+    return [AardvarkLoggingEnabled boolValue];
+}
+
++ (void)enableAardvarkLoggingToNSLog;
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        AardvarkLoggingToNSLog = @YES;
+    });
+}
+
++ (BOOL)isAardvarkLoggingToNSLog;
+{
+    return [AardvarkLoggingToNSLog boolValue];
+}
+
++ (void)enableBugReportingWithEmailAddress:(NSString *)emailAddress;
+{
+    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
+    bugReporter.bugReportRecipientEmailAddress = emailAddress;
+    
+    [self enableBugReportingWithReporter:bugReporter];
+}
+
++ (void)enableBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
+{
+    if ([Aardvark isAardvarkLoggingEnabled]) {
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+            static id <ARKBugReporter> currentBugReporter = NULL;
+            
+            // Clean up the old bug reporter if it exists.
+            if (currentBugReporter != NULL) {
+                [currentBugReporter disableBugReporting];
+            }
+            
+            // Hold onto the bug reporter.
+            currentBugReporter = bugReporter;
+            
+            [bugReporter enableBugReporting];
+        }];
+    }
 }
 
 @end

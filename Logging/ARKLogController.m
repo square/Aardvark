@@ -42,11 +42,11 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
 
 + (instancetype)allocWithZone:(struct _NSZone *)zone;
 {
-#if AARDVARK_LOGGING_ENABLED
-    return [super allocWithZone:zone];
-#else
-    return nil;
-#endif
+    if ([Aardvark isAardvarkLoggingEnabled]) {
+        return [super allocWithZone:zone];
+    } else {
+        return nil;
+    }
 }
 
 #pragma mark - Initialization

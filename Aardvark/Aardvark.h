@@ -16,13 +16,6 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
 };
 
 
-// Set this define to 0 after importing this header to turn off logging.
-#define AARDVARK_LOGGING_ENABLED 1
-
-/// Set this define to 1 after importing this header to make ARKLog calls also NSLog.
-#define AARDVARK_NSLOG_ENABLED 0
-
-
 OBJC_EXTERN void ARKLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 OBJC_EXTERN void ARKTypeLog(ARKLogType type, NSString *format, ...) NS_FORMAT_FUNCTION(2,3);
 OBJC_EXTERN void ARKLogScreenshot();
@@ -33,10 +26,18 @@ OBJC_EXTERN void ARKLogScreenshot();
 
 @interface Aardvark : NSObject
 
-/// Sets up bug reporting with a ARKEmailBugReporter. Bug reports can be filed by pressing and holding with two fingers. Bug reports are sent over email to recipientAddress.
-+ (void)setupBugReportingWithRecipientEmailAddress:(NSString *)recipientAddress;
+/// Enables Aardvark logging.
++ (void)enableAardvarkLogging;
++ (BOOL)isAardvarkLoggingEnabled;
 
-/// Sets up bug reporting with the passed in bug reporter.
-+ (void)setupBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
+/// Make ARKLog also log to NSLog.
++ (void)enableAardvarkLoggingToNSLog;
++ (BOOL)isAardvarkLoggingToNSLog;
+
+/// Enables bug reporting with a ARKEmailBugReporter. Bug reports can be filed by pressing and holding with two fingers. Bug reports are sent over email to emailAddress.
++ (void)enableBugReportingWithEmailAddress:(NSString *)emailAddress;
+
+/// Enables bug reporting with the passed in bug reporter.
++ (void)enableBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
 
 @end
