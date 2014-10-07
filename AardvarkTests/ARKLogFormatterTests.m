@@ -28,6 +28,7 @@
 {
     [super setUp];
     
+    [Aardvark enableAardvarkLogging];
     self.logFormatter = [ARKDefaultLogFormatter new];
 }
 

@@ -17,6 +17,15 @@
 
 @implementation ARKBugReporterTests
 
+#pragma mark - Setup
+
+- (void)setUp;
+{
+    [super setUp];
+    
+    [Aardvark enableAardvarkLogging];
+}
+
 #pragma mark - Behavior Tests
 
 - (void)test_bugReporter_setupReporterRetainedByAardvark;

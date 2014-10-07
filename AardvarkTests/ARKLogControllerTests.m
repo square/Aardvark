@@ -25,6 +25,7 @@
 
 - (void)setUp;
 {
+    [Aardvark enableAardvarkLogging];
     self.logController = [ARKLogController sharedInstance];
 }
 
