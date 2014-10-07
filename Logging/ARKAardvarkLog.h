@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-@interface ARKAardvarkLog : NSObject <NSCopying>
+@interface ARKAardvarkLog : NSObject <NSCopying, NSSecureCoding>
 
 - (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type;
 
