@@ -22,7 +22,7 @@
 - (void)test_bugReporter_setupReporterRetainedByAardvark;
 {
     ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
-    [Aardvark setupBugReportingWithReporter:bugReporter];
+    [Aardvark enableBugReportingWithReporter:bugReporter];
     
     __weak ARKEmailBugReporter *weakBugReporter = bugReporter;
     bugReporter = nil;
