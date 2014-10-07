@@ -22,7 +22,7 @@ You can customize how bugs are filed by passing your own `ARKBugReporter` object
 
 Push an instance of `ARKLogTableViewController` onto the screen to view your logs. Customize the appearance of your logs by setting your own `logFormatter` on the `ARKLogTableViewController` instance.
 
-If you want ARKLogs to show up in your console, `#define AARDVARK_NSLOG_ENABLED 1` after importing Aardvark.
+If you want ARKLogs to show up in your console, call `[Aardvark enableAardvarkLoggingToNSLog]`.
 
 ## Contributing
 
