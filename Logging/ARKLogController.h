@@ -23,6 +23,12 @@
 /// Appends a log to the logging queue. Non-blocking call.
 - (void)appendLog:(ARKAardvarkLog *)log;
 
+/// Retains an object that handles logging.
+- (void)registerGlobalLogger:(id)logger;
+
+/// Releases an object that handles logging.
+- (void)deregisterGlobalLogger:(id)logger;
+
 /// Returns an array of ARKAardvarkLog objects. Blocking call.
 - (NSArray *)allLogs;
 

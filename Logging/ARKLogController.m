@@ -19,6 +19,7 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
 
 @property (nonatomic, strong, readwrite) NSMutableArray *logs;
 @property (nonatomic, strong, readonly) NSOperationQueue *loggingQueue;
+@property (nonatomic, strong, readonly) NSMutableSet *globalLoggers;
 @property (nonatomic, assign, readwrite) UIBackgroundTaskIdentifier persistLogsBackgroundTaskIdentifier;
 
 @end
@@ -77,6 +78,8 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
     }
 #endif
     
+    _globalLoggers = [NSMutableSet new];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationDidEnterBackgroundNotification:) name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
     
     return self;
@@ -100,6 +103,20 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
         
         [self.logs addObject:log];
     }];
+}
+
+- (void)registerGlobalLogger:(id)logger;
+{
+    @synchronized(self) {
+        [self.globalLoggers addObject:logger];
+    }
+}
+
+- (void)deregisterGlobalLogger:(id)logger;
+{
+    @synchronized(self) {
+        [self.globalLoggers removeObject:logger];
+    }
 }
 
 - (NSArray *)allLogs;
