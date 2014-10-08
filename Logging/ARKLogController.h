@@ -7,6 +7,7 @@
 //
 
 @class ARKAardvarkLog;
+@protocol ARKLogger;
 
 
 @interface ARKLogController : NSObject
@@ -20,19 +21,47 @@
 /// The maximum number of logs to persist to disk. Defaults to 500.
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogCountToPersist;
 
-/// Appends a log to the logging queue. Non-blocking call.
-- (void)appendLog:(ARKAardvarkLog *)log;
+/// Appends a log to the logs. Non-blocking call.
+- (void)appendAardvarkLog:(ARKAardvarkLog *)log;
 
 /// Retains an object that handles logging.
-- (void)registerGlobalLogger:(id)logger;
+- (void)addLogger:(id <ARKLogger>)logger;
 
 /// Releases an object that handles logging.
-- (void)deregisterGlobalLogger:(id)logger;
+- (void)removeLogger:(id <ARKLogger>)logger;
 
 /// Returns an array of ARKAardvarkLog objects. Blocking call.
 - (NSArray *)allLogs;
 
 /// Removes all logs. Blocking call.
 - (void)clearLogs;
+
+/// Path to the file on disk that contains peristed logs.
+- (NSString *)pathToPersistedLogs;
+
+@end
+
+
+@interface ARKLogController (ARKLogAdditions)
+
+/// Creates a ARKAardvarkLog with ARKLogTypeDefault and appends it to the logs. Non-blocking call.
+- (void)appendLog:(NSString *)format arguments:(va_list)argList NS_FORMAT_FUNCTION(1,0);
+
+/// Creates a ARKAardvarkLog and appends it to the logs. Non-blocking call.
+- (void)appendLogType:(ARKLogType)type format:(NSString *)format arguments:(va_list)argList NS_FORMAT_FUNCTION(2,0);
+
+/// Creates a ARKAardvarkLog with a screenshot and appends it to the logs. Non-blocking call.
+- (void)appendLogScreenshot;
+
+@end
+
+
+@interface ARKLogController (ARKLoggerAdditions)
+
+/// Creates a ARKAardvarkLog with ARKLogTypeDefault and appends it to the logs. Non-blocking call.
+- (void)appendLog:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
+
+/// Creates a ARKAardvarkLog and appends it to the logs. Non-blocking call.
+- (void)appendLogType:(ARKLogType)type format:(NSString *)format, ... NS_FORMAT_FUNCTION(2,3);
 
 @end

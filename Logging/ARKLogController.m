@@ -10,9 +10,7 @@
 #import "ARKLogController_Testing.h"
 
 #import "ARKAardvarkLog.h"
-
-
-NSString *const ARKLogsFileName = @"ARKLogs.data";
+#import "ARKLogger.h"
 
 
 @interface ARKLogController ()
@@ -92,7 +90,7 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
 
 #pragma mark - Public Methods
 
-- (void)appendLog:(ARKAardvarkLog *)log;
+- (void)appendAardvarkLog:(ARKAardvarkLog *)log;
 {
     [self.loggingQueue addOperationWithBlock:^{
         // Don't proactively trim too often.
@@ -105,14 +103,16 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
     }];
 }
 
-- (void)registerGlobalLogger:(id)logger;
+- (void)addLogger:(id <ARKLogger>)logger;
 {
+    NSAssert([logger conformsToProtocol:@protocol(ARKLogger)], @"Tried to add a logger that does not conform to ARKLogger protocol");
+    
     @synchronized(self) {
         [self.globalLoggers addObject:logger];
     }
 }
 
-- (void)deregisterGlobalLogger:(id)logger;
+- (void)removeLogger:(id <ARKLogger>)logger;
 {
     @synchronized(self) {
         [self.globalLoggers removeObject:logger];
@@ -144,6 +144,14 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
     [self.loggingQueue waitUntilAllOperationsAreFinished];
 }
 
+- (NSString *)pathToPersistedLogs;
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = paths.firstObject;
+    
+    return [applicationSupportDirectory stringByAppendingPathComponent:@"ARKLogControllerLogs.data"];
+}
+
 #pragma mark - Private Methods
 
 - (void)_applicationDidEnterBackgroundNotification:(NSNotification *)notification;
@@ -161,17 +169,10 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
     }];
 }
 
-- (NSString *)_pathToPersistedLogs;
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    
-    return [applicationSupportDirectory stringByAppendingPathComponent:ARKLogsFileName];
-}
 
 - (NSArray *)_persistedLogs;
 {
-    NSString *filePath = [self _pathToPersistedLogs];
+    NSString *filePath = [self pathToPersistedLogs];
     NSData *persistedLogData = [[NSFileManager defaultManager] contentsAtPath:filePath];
     NSArray *persistedLogs = persistedLogData ? [NSKeyedUnarchiver unarchiveObjectWithData:persistedLogData] : nil;
     if ([persistedLogs isKindOfClass:[NSArray class]] && persistedLogs.count > 0) {
@@ -185,7 +186,7 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
 {
     // Perist trimmed logs when the app is backgrounded.
     NSArray *logsToPersist = [self _trimedLogsToPersist_inLoggingQueue];
-    NSString *filePath = [self _pathToPersistedLogs];
+    NSString *filePath = [self pathToPersistedLogs];
     
     if (logsToPersist.count == 0) {
         [[NSFileManager defaultManager] removeItemAtPath:filePath error:NULL];
@@ -212,6 +213,71 @@ NSString *const ARKLogsFileName = @"ARKLogs.data";
     }
     
     return [self.logs copy];
+}
+
+@end
+
+
+@implementation ARKLogController (ARKLogAdditions)
+
+- (void)appendLog:(NSString *)format arguments:(va_list)argList;
+{
+    NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+    ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:ARKLogTypeDefault];
+    [self appendAardvarkLog:log];
+    
+    if ([Aardvark isAardvarkLoggingToNSLog]) {
+        NSLog(@"%@", logText);
+    }
+}
+
+- (void)appendLogType:(ARKLogType)type format:(NSString *)format arguments:(va_list)argList;
+{
+    NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+    ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:type];
+    [self appendAardvarkLog:log];
+    
+    if ([Aardvark isAardvarkLoggingToNSLog]) {
+        NSLog(@"%@", logText);
+    }
+}
+
+- (void)appendLogScreenshot;
+{
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    UIGraphicsBeginImageContext(window.bounds.size);
+    [window.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    NSString *logText = @"📷📱 Screenshot!";
+    ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault];
+    [self appendAardvarkLog:log];
+    
+    if ([Aardvark isAardvarkLoggingToNSLog]) {
+        NSLog(@"%@", logText);
+    }
+}
+
+@end
+
+
+@implementation ARKLogController (ARKLoggerAdditions)
+
+- (void)appendLog:(NSString *)format, ...;
+{
+    va_list argList;
+    va_start(argList, format);
+    [self appendLog:format arguments:argList];
+    va_end(argList);
+}
+
+- (void)appendLogType:(ARKLogType)type format:(NSString *)format, ...;
+{
+    va_list argList;
+    va_start(argList, format);
+    [[ARKLogController sharedInstance] appendLogType:type format:format arguments:argList];
+    va_end(argList);
 }
 
 @end

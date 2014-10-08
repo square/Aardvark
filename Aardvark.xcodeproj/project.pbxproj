@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA491AFB19E5EAAA00762174 /* ARKLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = EA491AF919E5EAAA00762174 /* ARKLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAAB389119E24DC900161A54 /* Aardvark.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1442419E073FB0065A1FF /* Aardvark.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAAB389D19E28D5200161A54 /* ARKDefaultLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB389B19E28D5200161A54 /* ARKDefaultLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAAB389E19E28D5200161A54 /* ARKDefaultLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAB389C19E28D5200161A54 /* ARKDefaultLogFormatter.m */; };
@@ -59,6 +60,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EA491AF919E5EAAA00762174 /* ARKLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogger.h; path = Logging/ARKLogger.h; sourceTree = "<group>"; };
 		EAAB389819E2820000161A54 /* ARKLogController_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKLogController_Testing.h; path = Logging/ARKLogController_Testing.h; sourceTree = "<group>"; };
 		EAAB389B19E28D5200161A54 /* ARKDefaultLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKDefaultLogFormatter.h; path = "Bug Reporting/ARKDefaultLogFormatter.h"; sourceTree = "<group>"; };
 		EAAB389C19E28D5200161A54 /* ARKDefaultLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKDefaultLogFormatter.m; path = "Bug Reporting/ARKDefaultLogFormatter.m"; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				EAD1444B19E09EEA0065A1FF /* ARKLogController.h */,
 				EAAB389819E2820000161A54 /* ARKLogController_Testing.h */,
 				EAD1444C19E09EEA0065A1FF /* ARKLogController.m */,
+				EA491AF919E5EAAA00762174 /* ARKLogger.h */,
 			);
 			name = Logging;
 			sourceTree = "<group>";
@@ -230,6 +233,7 @@
 				EAD1444D19E09EEA0065A1FF /* ARKLogController.h in Headers */,
 				EAAB389D19E28D5200161A54 /* ARKDefaultLogFormatter.h in Headers */,
 				EAD1447119E22E470065A1FF /* ARKIndividualLogViewController.h in Headers */,
+				EA491AFB19E5EAAA00762174 /* ARKLogger.h in Headers */,
 				EAAB38A019E28E9B00161A54 /* ARKLogFormatter.h in Headers */,
 				EAD1444619E0849D0065A1FF /* AardvarkDefines.h in Headers */,
 				EAD1444519E0849D0065A1FF /* Aardvark-Prefix.pch in Headers */,
