@@ -16,7 +16,7 @@
 @property (nonatomic, strong, readonly) UIImageView *imageView;
 @property (nonatomic, strong, readonly) UITapGestureRecognizer *tapGestureRecognizer;
 @property (nonatomic, strong, readonly) NSDate *date;
-@property (nonatomic, assign, readwrite) BOOL activityViewerPresented;
+@property (nonatomic, weak, readwrite) UIActivityViewController *activityViewController;
 
 @end
 
@@ -71,7 +71,7 @@
 
 - (void)_tapDetected:(UITapGestureRecognizer *)tapRecognizer;
 {
-    if (tapRecognizer == self.tapGestureRecognizer && tapRecognizer.state == UIGestureRecognizerStateRecognized && !self.activityViewerPresented) {
+    if (tapRecognizer == self.tapGestureRecognizer && tapRecognizer.state == UIGestureRecognizerStateRecognized && !self.activityViewController) {
         CGPoint where = [tapRecognizer locationInView:self.imageView];
         
         // Make sure the user isn't tapping on the navigation bar.
@@ -92,20 +92,8 @@
 - (IBAction)_openActivitySheet:(id)sender;
 {
     UIActivityViewController *activityViewController = [UIActivityViewController newAardvarkActivityViewControllerWithItems:@[self.imageView.image]];
+    self.activityViewController = activityViewController;
     
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-    if ([activityViewController respondsToSelector:@selector(completionWithItemsHandler)]) {
-        activityViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-            self.activityViewerPresented = NO;
-        };
-    }
-#else
-    activityViewController.completionHandler = ^(NSString *activityType, BOOL completed){
-        self.activityViewerPresented = NO;
-    };
-#endif
-    
-    self.activityViewerPresented = YES;
     [self presentViewController:activityViewController animated:YES completion:NULL];
 }
 
