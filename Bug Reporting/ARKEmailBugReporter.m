@@ -105,7 +105,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)composeBugReportWithLogs:(NSArray *)logs;
 {
-    NSAssert(self.bugReportRecipientEmailAddress.length > 0, @"Canot compose a bug report without a recipient email address!");
+    NSAssert(self.bugReportRecipientEmailAddress.length > 0, @"Attempting to compose a bug report without a recipient email address");
     
     /*
      iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.

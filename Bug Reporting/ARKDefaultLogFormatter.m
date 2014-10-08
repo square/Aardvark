@@ -70,8 +70,12 @@
         }
     }
     
-    // Remove the final newline and create an immutable string.
-    return [recentErrorLogs stringByReplacingCharactersInRange:NSMakeRange(recentErrorLogs.length - 1, 1) withString:@""];
+    if (recentErrorLogs.length > 0) {
+        // Remove the final newline and create an immutable string.
+        return [recentErrorLogs stringByReplacingCharactersInRange:NSMakeRange(recentErrorLogs.length - 1, 1) withString:@""];
+    } else {
+        return nil;
+    }
 }
 
 - (NSArray *)_formattedLogs:(NSArray *)logs withImages:(BOOL)images;

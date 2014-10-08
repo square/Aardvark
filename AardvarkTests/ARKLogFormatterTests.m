@@ -139,6 +139,22 @@
     XCTAssertEqual([recentErrorLogs componentsSeparatedByString:@"\n"].count, numberOfRecentErrorLogs);
 }
 
+- (void)test_recentErrorLogsAsPlainText_returnsNilIfNoErrorLogsPresent;
+{
+    ARKLogController *logController = [ARKLogController sharedInstance];
+    
+    const NSUInteger numberOfRecentErrorLogs = 5;
+    NSString *recentErrorLogs = [self.logFormatter recentErrorLogsAsPlainText:logController.allLogs count:numberOfRecentErrorLogs];
+    
+    XCTAssertEqualObjects(recentErrorLogs, nil);
+    
+    ARKLog(@"This is not an error");
+    
+    recentErrorLogs = [self.logFormatter recentErrorLogsAsPlainText:logController.allLogs count:numberOfRecentErrorLogs];
+    
+    XCTAssertEqualObjects(recentErrorLogs, nil);
+}
+
 #pragma mark - Performance Tests
 
 - (void)test_formattedLogs_performance;
