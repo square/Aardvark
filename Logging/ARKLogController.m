@@ -110,6 +110,7 @@
 - (void)addLogger:(id <ARKLogger>)logger;
 {
     NSAssert([logger conformsToProtocol:@protocol(ARKLogger)], @"Tried to add a logger that does not conform to ARKLogger protocol");
+    NSAssert(logger.logController == self, @"Trying add a logger whose logController does not match");
     
     @synchronized(self) {
         [self.globalLoggers addObject:logger];
