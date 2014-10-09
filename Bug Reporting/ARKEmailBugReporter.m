@@ -78,29 +78,29 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)enableBugReporting;
 {
-    NSAssert([NSThread isMainThread], @"Attempting to enable bug reporting off of the main therad (%@)", [NSThread currentThread]);
-    
-    // First, uninstall an existing gesture recognizer.
-    [self disableBugReporting];
-    
-    self.screenshotGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressDetected:)];
-    self.screenshotGestureRecognizer.cancelsTouchesInView = NO;
-    self.screenshotGestureRecognizer.numberOfTouchesRequired = 2;
-    [[[UIApplication sharedApplication] keyWindow] addGestureRecognizer:self.screenshotGestureRecognizer];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidBecomeKeyNotification:) name:UIWindowDidBecomeKeyNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidResignKeyNotification:) name:UIWindowDidResignKeyNotification object:nil];
+    @synchronized(self) {
+        // First, uninstall an existing gesture recognizer.
+        [self disableBugReporting];
+        
+        self.screenshotGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressDetected:)];
+        self.screenshotGestureRecognizer.cancelsTouchesInView = NO;
+        self.screenshotGestureRecognizer.numberOfTouchesRequired = 2;
+        [[[UIApplication sharedApplication] keyWindow] addGestureRecognizer:self.screenshotGestureRecognizer];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidBecomeKeyNotification:) name:UIWindowDidBecomeKeyNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidResignKeyNotification:) name:UIWindowDidResignKeyNotification object:nil];
+    }
 }
 
 - (void)disableBugReporting;
 {
-    NSAssert([NSThread isMainThread], @"Attempting to enable bug reporting off of the main therad (%@)", [NSThread currentThread]);
-    
-    [self.screenshotGestureRecognizer.view removeGestureRecognizer:self.screenshotGestureRecognizer];
-    self.screenshotGestureRecognizer = nil;
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidBecomeKeyNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidResignKeyNotification object:nil];
+    @synchronized(self) {
+        [self.screenshotGestureRecognizer.view removeGestureRecognizer:self.screenshotGestureRecognizer];
+        self.screenshotGestureRecognizer = nil;
+        
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidBecomeKeyNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidResignKeyNotification object:nil];
+    }
 }
 
 - (void)composeBugReportWithLogs:(NSArray *)logs;

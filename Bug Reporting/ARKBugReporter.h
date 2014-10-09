@@ -8,10 +8,10 @@
 
 @protocol ARKBugReporter <NSObject>
 
-/// Enables the user to report bugs by adding a button or installing a gesture recognizer that allows for bug reporting. Must be called from the main thread.
+/// Enables the user to report bugs by adding a button or installing a gesture recognizer that allows for bug reporting.
 - (void)enableBugReporting;
 
-/// Removes the user's ability to file a bug. Must be called from the main thread.
+/// Removes the user's ability to file a bug.
 - (void)disableBugReporting;
 
 /// Kicks off composition of a bug report.
