@@ -198,6 +198,21 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     }
 }
 
+- (UIWindow *)emailComposeWindow;
+{
+    if (!_emailComposeWindow) {
+        _emailComposeWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        
+        if ([_emailComposeWindow respondsToSelector:@selector(tintColor)] /* iOS 7 or later */) {
+            // The keyboard won't show up on iOS 6 with a high windowLevel, but iOS 7+ will.
+            _emailComposeWindow.windowLevel = self.emailComposeWindowLevel;
+        }
+    }
+    
+    return _emailComposeWindow;
+}
+
+
 #pragma mark - Private Methods
 
 - (void)_longPressDetected:(UILongPressGestureRecognizer *)longPressRecognizer;
@@ -234,22 +249,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     UIWindow *window = [[notification object] isKindOfClass:[UIWindow class]] ? (UIWindow *)[notification object] : nil;
     [window removeGestureRecognizer:self.bugReportingGestureRecognizer];
 }
-
-- (UIWindow *)emailComposeWindow;
-{
-    if (!_emailComposeWindow) {
-        _emailComposeWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        
-        if ([_emailComposeWindow respondsToSelector:@selector(tintColor)] /* iOS 7 or later */) {
-            // The keyboard won't show up on iOS 6 with a high windowLevel, but iOS 7+ will.
-            _emailComposeWindow.windowLevel = self.emailComposeWindowLevel;
-        }
-    }
-    
-    return _emailComposeWindow;
-}
-
-#pragma mark - Private Methods
 
 - (void)_stealFirstResponder;
 {
