@@ -22,6 +22,9 @@
 /// The email body that will be presented to the user when they compose a report.
 @property (nonatomic, copy, readwrite) NSString *prefilledEmailBody;
 
+/// The gesture recognizer used to trigger email bug reports.
+@property (nonatomic, strong, readwrite) UIGestureRecognizer *bugReportingGestureRecognizer;
+
 /// The formatter used to prepare the log for entry into an email.
 @property (nonatomic, copy, readwrite) id <ARKLogFormatter> logFormatter;
 
