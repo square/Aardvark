@@ -60,6 +60,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EA4583FD19E65C3C00E44882 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		EA491AF919E5EAAA00762174 /* ARKLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogger.h; path = Logging/ARKLogger.h; sourceTree = "<group>"; };
 		EAAB389819E2820000161A54 /* ARKLogController_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKLogController_Testing.h; path = Logging/ARKLogController_Testing.h; sourceTree = "<group>"; };
 		EAAB389B19E28D5200161A54 /* ARKDefaultLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKDefaultLogFormatter.h; path = "Bug Reporting/ARKDefaultLogFormatter.h"; sourceTree = "<group>"; };
@@ -123,6 +124,7 @@
 		EAD1441819E073FB0065A1FF = {
 			isa = PBXGroup;
 			children = (
+				EA4583FD19E65C3C00E44882 /* MessageUI.framework */,
 				EAD1442319E073FB0065A1FF /* Aardvark */,
 				EAD1443919E074630065A1FF /* Bug Reporting */,
 				EAD1447719E22F470065A1FF /* Categories */,

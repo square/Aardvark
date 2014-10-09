@@ -91,14 +91,6 @@
     self.title = @"Logs";
 }
 
-- (void)_viewWillAppearForFirstTime:(BOOL)animated;
-{
-    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(_openActivitySheet:)];
-    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(_clearLogs:)];
-    
-    self.navigationItem.rightBarButtonItems = @[shareButton, deleteButton];
-}
-
 #pragma mark - UIActionSheetDelegate
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
@@ -254,6 +246,14 @@
 {
     self.logs = [[ARKLogController sharedInstance] allLogs];
     [self.tableView reloadData];
+}
+
+- (void)_viewWillAppearForFirstTime:(BOOL)animated;
+{
+    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(_openActivitySheet:)];
+    UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(_clearLogs:)];
+    
+    self.navigationItem.rightBarButtonItems = @[shareButton, deleteButton];
 }
 
 - (void)_scrollTableViewToBottomAnimated:(BOOL)animated;

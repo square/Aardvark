@@ -1,0 +1,21 @@
+//
+//  AardvarkSample-Prefix.pch
+//  AardvarkSample
+//
+//  Created by Dan Federman on 10/8/14.
+//  Copyright (c) 2014 Square, Inc. All rights reserved.
+//
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+    #import <Aardvark/Aardvark.h>
+#endif
+    
+#ifdef __cplusplus
+};
+#endif

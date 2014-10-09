@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zxa-eh-PZB">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+    </dependencies>
+    <scenes>
+        <!--Aardvark Sample-->
+        <scene sceneID="SHB-Z8-dG3">
+            <objects>
+                <viewController id="QwD-ZR-IeX" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wFh-87-9Xb"/>
+                        <viewControllerLayoutGuide type="bottom" id="E9r-9n-cl6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="5kJ-Ey-mZ5">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8DI-Cm-Xf7">
+                                <rect key="frame" x="264" y="458" width="71" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="71" id="qX9-qX-lKa"/>
+                                    <constraint firstAttribute="height" constant="30" id="xUg-7R-0vM"/>
+                                </constraints>
+                                <state key="normal" title="View Logs">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="CQ8-Yv-DDo" kind="show" id="92w-ua-RA9"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uhp-Xv-mxi">
+                                <rect key="frame" x="97" y="193" width="407.5" height="215"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="407.5" id="jIA-ym-G8U"/>
+                                </constraints>
+                                <string key="text">See something?
+
+Say something!
+
+Press and hold with two fingers to report a bug.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="8DI-Cm-Xf7" firstAttribute="top" secondItem="uhp-Xv-mxi" secondAttribute="bottom" constant="50" id="HGG-oD-tal"/>
+                            <constraint firstAttribute="centerY" secondItem="uhp-Xv-mxi" secondAttribute="centerY" id="Msf-Bb-GG1"/>
+                            <constraint firstAttribute="centerX" secondItem="8DI-Cm-Xf7" secondAttribute="centerX" constant="0.5" id="PMX-qO-7Jm"/>
+                            <constraint firstAttribute="centerX" secondItem="uhp-Xv-mxi" secondAttribute="centerX" id="Xoe-qk-FOI"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Aardvark Sample" id="yaB-rz-n8U"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IrR-8j-RJ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="788" y="-346"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="QT8-oV-JYh">
+            <objects>
+                <navigationController id="zxa-eh-PZB" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Q4S-Td-8Vq">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="QwD-ZR-IeX" kind="relationship" relationship="rootViewController" id="AfK-qr-5aa"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zi0-wm-pw8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="8" y="-239"/>
+        </scene>
+        <!--Sample Log Table View Controller-->
+        <scene sceneID="edw-7P-jNk">
+            <objects>
+                <tableViewController id="CQ8-Yv-DDo" customClass="SampleLogTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="wiI-Cz-vEh">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="CQ8-Yv-DDo" id="qzS-br-Xqs"/>
+                            <outlet property="delegate" destination="CQ8-Yv-DDo" id="8b2-gn-kZd"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="k2X-mS-6yK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1700" y="-229"/>
+        </scene>
+    </scenes>
+</document>
