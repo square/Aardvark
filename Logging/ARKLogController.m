@@ -99,6 +99,10 @@
             [self _trimLogs_inLoggingQueue];
         }
         
+        if (self.logToNSLog) {
+            NSLog(@"%@", log.text);
+        }
+        
         [self.logs addObject:log];
     }];
 }
@@ -225,10 +229,6 @@
     NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
     ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:ARKLogTypeDefault];
     [self appendAardvarkLog:log];
-    
-    if ([Aardvark isAardvarkLoggingToNSLog]) {
-        NSLog(@"%@", logText);
-    }
 }
 
 - (void)appendLogType:(ARKLogType)type format:(NSString *)format arguments:(va_list)argList;
@@ -236,10 +236,6 @@
     NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
     ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:type];
     [self appendAardvarkLog:log];
-    
-    if ([Aardvark isAardvarkLoggingToNSLog]) {
-        NSLog(@"%@", logText);
-    }
 }
 
 - (void)appendLogScreenshot;
@@ -253,10 +249,6 @@
     NSString *logText = @"📷📱 Screenshot!";
     ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault];
     [self appendAardvarkLog:log];
-    
-    if ([Aardvark isAardvarkLoggingToNSLog]) {
-        NSLog(@"%@", logText);
-    }
 }
 
 @end

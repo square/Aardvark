@@ -21,6 +21,9 @@
 /// The maximum number of logs to persist to disk. Defaults to 500.
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogCountToPersist;
 
+/// Controls whether appendAardvarkLog: also logs to NSLog. Defaults to NO.
+@property (nonatomic, assign, readwrite) BOOL logToNSLog;
+
 /// Appends a log to the logs. Non-blocking call.
 - (void)appendAardvarkLog:(ARKAardvarkLog *)log;
 

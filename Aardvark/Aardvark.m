@@ -40,7 +40,6 @@ void ARKLogScreenshot()
 #pragma mark - Class Methods
 
 static NSNumber *AardvarkLoggingEnabled = NULL;
-static NSNumber *AardvarkLoggingToNSLog = NULL;
 
 + (void)enableAardvarkLogging;
 {
@@ -55,23 +54,19 @@ static NSNumber *AardvarkLoggingToNSLog = NULL;
     return [AardvarkLoggingEnabled boolValue];
 }
 
-+ (void)enableAardvarkLoggingToNSLog;
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        AardvarkLoggingToNSLog = @YES;
-    });
-}
-
-+ (BOOL)isAardvarkLoggingToNSLog;
-{
-    return [AardvarkLoggingToNSLog boolValue];
-}
-
 + (void)enableBugReportingWithEmailAddress:(NSString *)emailAddress;
 {
     ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
     bugReporter.bugReportRecipientEmailAddress = emailAddress;
+    
+    [self enableBugReportingWithReporter:bugReporter];
+}
+
++ (void)enableBugReportingWithEmailAddress:(NSString *)emailAddress prefilledEmailBody:(NSString *)prefilledEmailBody;
+{
+    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
+    bugReporter.bugReportRecipientEmailAddress = emailAddress;
+    bugReporter.prefilledEmailBody = prefilledEmailBody;
     
     [self enableBugReportingWithReporter:bugReporter];
 }

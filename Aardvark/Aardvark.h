@@ -30,12 +30,11 @@ OBJC_EXTERN void ARKLogScreenshot();
 + (void)enableAardvarkLogging;
 + (BOOL)isAardvarkLoggingEnabled;
 
-/// Make ARKLog also log to NSLog.
-+ (void)enableAardvarkLoggingToNSLog;
-+ (BOOL)isAardvarkLoggingToNSLog;
-
 /// Enables bug reporting with a ARKEmailBugReporter. Bug reports can be filed by pressing and holding with two fingers. Bug reports are sent over email to emailAddress.
 + (void)enableBugReportingWithEmailAddress:(NSString *)emailAddress;
+
+/// Enables bug reporting with a ARKEmailBugReporter. Bug reports can be filed by pressing and holding with two fingers. Bug reports are created with default text prefilledEmailBody and are sent over email to emailAddress.
++ (void)enableBugReportingWithEmailAddress:(NSString *)emailAddress prefilledEmailBody:(NSString *)prefilledEmailBody;
 
 /// Enables bug reporting with the passed in bug reporter.
 + (void)enableBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
