@@ -11,7 +11,6 @@
 #import "ARKAardvarkLog.h"
 #import "ARKDefaultLogFormatter.h"
 #import "ARKLogController.h"
-#import "ARKLogFormatter.h"
 
 
 NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
@@ -37,13 +36,21 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 #pragma mark - Class Methods
 
-+ (instancetype)allocWithZone:(struct _NSZone *)zone;
++ (ARKEmailBugReporter *)emailBugReporterWithEmailAddress:(NSString *)emailAddress;
 {
-    if ([Aardvark isAardvarkLoggingEnabled]) {
-        return [super allocWithZone:zone];
-    } else {
-        return nil;
-    }
+    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
+    bugReporter.bugReportRecipientEmailAddress = emailAddress;
+    
+    return bugReporter;
+}
+
++ (ARKEmailBugReporter *)emailBugReporterWithEmailAddress:(NSString *)emailAddress prefilledEmailBody:(NSString *)prefilledEmailBody;
+{
+    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
+    bugReporter.bugReportRecipientEmailAddress = emailAddress;
+    bugReporter.prefilledEmailBody = prefilledEmailBody;
+    
+    return bugReporter;
 }
 
 #pragma mark - Initialization
@@ -62,59 +69,40 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                            @"\n"
                            @"System version: %@\n", [[UIDevice currentDevice] systemVersion]];
     
-    UILongPressGestureRecognizer *bugReportingGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressDetected:)];
-    bugReportingGestureRecognizer.cancelsTouchesInView = NO;
-    bugReportingGestureRecognizer.numberOfTouchesRequired = 2;
-    _bugReportingGestureRecognizer = bugReportingGestureRecognizer;
-    
     _logFormatter = [ARKDefaultLogFormatter new];
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
     
     return self;
 }
 
-- (void)dealloc;
-{
-    [self disableBugReporting];
-}
-
 #pragma mark - ARKBugReporter
-
-- (void)enableBugReporting;
-{
-    @synchronized(self) {
-        // First, uninstall an existing gesture recognizer.
-        [self disableBugReporting];
-        
-        [[[UIApplication sharedApplication] keyWindow] addGestureRecognizer:self.bugReportingGestureRecognizer];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidBecomeKeyNotification:) name:UIWindowDidBecomeKeyNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_windowDidResignKeyNotification:) name:UIWindowDidResignKeyNotification object:nil];
-    }
-}
-
-- (void)disableBugReporting;
-{
-    @synchronized(self) {
-        [self.bugReportingGestureRecognizer.view removeGestureRecognizer:self.bugReportingGestureRecognizer];
-        
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidBecomeKeyNotification object:nil];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UIWindowDidResignKeyNotification object:nil];
-    }
-}
 
 - (void)composeBugReportWithLogs:(NSArray *)logs;
 {
     NSAssert(self.bugReportRecipientEmailAddress.length > 0, @"Attempting to compose a bug report without a recipient email address");
     
-    /*
-     iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
-     Transfer first responder to an invisble view when a debug screenshot is captured to make bug filing itself bug-free.
-     */
-    [self _stealFirstResponder];
-    
-    self.logs = logs;
-    [self _showBugTitleCaptureAlert];
+    if (!self.whiteScreen) {
+        self.logs = logs;
+        
+        // Take a screenshot.
+        ARKLogScreenshot();
+        
+        // Flash the screen to simulate a screenshot being taken.
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        self.whiteScreen = [[UIView alloc] initWithFrame:keyWindow.frame];
+        self.whiteScreen.layer.opacity = 0.0f;
+        self.whiteScreen.layer.backgroundColor = [[UIColor whiteColor] CGColor];
+        [keyWindow addSubview:self.whiteScreen];
+        
+        CAKeyframeAnimation *screenFlash = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
+        screenFlash.duration = 0.8;
+        screenFlash.values = @[@0.0, @0.8, @1.0, @0.9, @0.8, @0.7, @0.6, @0.5, @0.4, @0.3, @0.2, @0.1, @0.0];
+        screenFlash.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        screenFlash.delegate = self;
+        
+        // Start the screen flash animation. Once this is done we'll fire up the bug reporter.
+        [self.whiteScreen.layer addAnimation:screenFlash forKey:ARKScreenshotFlashAnimationKey];
+    }
 }
 
 #pragma mark - CAAnimationDelegate
@@ -124,7 +112,13 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     [self.whiteScreen removeFromSuperview];
     self.whiteScreen = nil;
     
-    [self composeBugReportWithLogs:[ARKLogController sharedInstance].allLogs];
+    /*
+     iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
+     Transfer first responder to an invisble view when a debug screenshot is captured to make bug filing itself bug-free.
+     */
+    [self _stealFirstResponder];
+    
+    [self _showBugTitleCaptureAlert];
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate
@@ -176,28 +170,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 #pragma mark - Properties
 
-- (void)setBugReportingGestureRecognizer:(UIGestureRecognizer *)bugReportingGestureRecognizer;
-{
-    if (bugReportingGestureRecognizer == _bugReportingGestureRecognizer) {
-        return;
-    }
-    
-    BOOL bugReportingEnabled = (_bugReportingGestureRecognizer.view != nil);
-    
-    if (bugReportingEnabled) {
-        // Disable bug reporting with the old gesture recognizer.
-        [self disableBugReporting];
-    }
-    
-    // Set the new gesture recognizer.
-    _bugReportingGestureRecognizer = bugReportingGestureRecognizer;
-    
-    if (bugReportingEnabled) {
-        // Enable bug reporting with the new gesture recognizer.
-        [self enableBugReporting];
-    }
-}
-
 - (UIWindow *)emailComposeWindow;
 {
     if (!_emailComposeWindow) {
@@ -215,40 +187,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 #pragma mark - Private Methods
 
-- (void)_longPressDetected:(UILongPressGestureRecognizer *)longPressRecognizer;
-{
-    if (longPressRecognizer == self.bugReportingGestureRecognizer && longPressRecognizer.state == UIGestureRecognizerStateBegan && self.whiteScreen == nil) {
-        // Take a screenshot.
-        ARKLogScreenshot();
-        
-        // Flash the screen to simulate a screenshot being taken.
-        self.whiteScreen = [[UIView alloc] initWithFrame:self.bugReportingGestureRecognizer.view.frame];
-        self.whiteScreen.layer.opacity = 0.0f;
-        self.whiteScreen.layer.backgroundColor = [[UIColor whiteColor] CGColor];
-        [self.bugReportingGestureRecognizer.view addSubview:self.whiteScreen];
-        
-        CAKeyframeAnimation *screenFlash = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
-        screenFlash.duration = 0.8;
-        screenFlash.values = @[@0.0, @0.8, @1.0, @0.9, @0.8, @0.7, @0.6, @0.5, @0.4, @0.3, @0.2, @0.1, @0.0];
-        screenFlash.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-        screenFlash.delegate = self;
-        
-        // Start the screen flash animation. Once this is done we'll fire up the bug reporter.
-        [self.whiteScreen.layer addAnimation:screenFlash forKey:ARKScreenshotFlashAnimationKey];
-    }
-}
-
-- (void)_windowDidBecomeKeyNotification:(NSNotification *)notification;
-{
-    UIWindow *window = [[notification object] isKindOfClass:[UIWindow class]] ? (UIWindow *)[notification object] : nil;
-    [window addGestureRecognizer:self.bugReportingGestureRecognizer];
-}
-
-- (void)_windowDidResignKeyNotification:(NSNotification *)notification;
-{
-    UIWindow *window = [[notification object] isKindOfClass:[UIWindow class]] ? (UIWindow *)[notification object] : nil;
-    [window removeGestureRecognizer:self.bugReportingGestureRecognizer];
-}
 
 - (void)_stealFirstResponder;
 {

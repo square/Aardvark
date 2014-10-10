@@ -25,8 +25,8 @@
 
 - (void)setUp;
 {
-    [Aardvark enableAardvarkLogging];
-    self.logController = [ARKLogController sharedInstance];
+    [Aardvark enableDefaultLogController];
+    self.logController = [ARKLogController defaultController];
 }
 
 - (void)tearDown;

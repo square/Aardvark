@@ -27,7 +27,7 @@
 
 #pragma mark - Class Methods
 
-+ (instancetype)sharedInstance;
++ (instancetype)defaultController;
 {
     static ARKLogController *ARKDefaultLogController = nil;
     
@@ -37,15 +37,6 @@
     });
     
     return ARKDefaultLogController;
-}
-
-+ (instancetype)allocWithZone:(struct _NSZone *)zone;
-{
-    if ([Aardvark isAardvarkLoggingEnabled]) {
-        return [super allocWithZone:zone];
-    } else {
-        return nil;
-    }
 }
 
 #pragma mark - Initialization
@@ -59,6 +50,10 @@
     
     _maximumLogCount = 2000;
     _maximumLogCountToPersist = 500;
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = paths.firstObject;
+    _pathToPersistedLogs = [[applicationSupportDirectory stringByAppendingPathComponent:@"ARKLogControllerLogs.data"] copy];
     
     NSArray *persistedLogs = [self _persistedLogs];
     if (persistedLogs.count > 0) {
@@ -85,6 +80,12 @@
 
 - (void)dealloc
 {
+    [self.loggingQueue addOperationWithBlock:^{
+        [self _persistLogs_inLoggingQueue];
+    }];
+    
+    [self.loggingQueue waitUntilAllOperationsAreFinished];
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -93,13 +94,17 @@
 - (void)appendAardvarkLog:(ARKAardvarkLog *)log;
 {
     [self.loggingQueue addOperationWithBlock:^{
+        if (!self.loggingEnabled) {
+            return;
+        }
+        
         // Don't proactively trim too often.
         if (self.logs.count >= 2 * self.maximumLogCount) {
             // We've held on to 2x more logs than we'll ever expose. Trim!
             [self _trimLogs_inLoggingQueue];
         }
         
-        if (self.logToNSLog) {
+        if (self.logToConsole) {
             NSLog(@"%@", log.text);
         }
         
@@ -149,12 +154,13 @@
     [self.loggingQueue waitUntilAllOperationsAreFinished];
 }
 
-- (NSString *)pathToPersistedLogs;
+- (void)setPathToPersistedLogs:(NSString *)pathToPersistedLogs;
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    
-    return [applicationSupportDirectory stringByAppendingPathComponent:@"ARKLogControllerLogs.data"];
+    if (![_pathToPersistedLogs isEqualToString:pathToPersistedLogs]) {
+        _pathToPersistedLogs = pathToPersistedLogs;
+        NSArray *persistedLogs = [self _persistedLogs];
+        [self.logs addObjectsFromArray:persistedLogs];
+    }
 }
 
 #pragma mark - Private Methods
@@ -174,11 +180,9 @@
     }];
 }
 
-
 - (NSArray *)_persistedLogs;
 {
-    NSString *filePath = [self pathToPersistedLogs];
-    NSData *persistedLogData = [[NSFileManager defaultManager] contentsAtPath:filePath];
+    NSData *persistedLogData = [[NSFileManager defaultManager] contentsAtPath:self.pathToPersistedLogs];
     NSArray *persistedLogs = persistedLogData ? [NSKeyedUnarchiver unarchiveObjectWithData:persistedLogData] : nil;
     if ([persistedLogs isKindOfClass:[NSArray class]] && persistedLogs.count > 0) {
         return persistedLogs;
@@ -191,12 +195,16 @@
 {
     // Perist trimmed logs when the app is backgrounded.
     NSArray *logsToPersist = [self _trimedLogsToPersist_inLoggingQueue];
-    NSString *filePath = [self pathToPersistedLogs];
+    NSFileManager *defaultManager = [NSFileManager defaultManager];
     
     if (logsToPersist.count == 0) {
-        [[NSFileManager defaultManager] removeItemAtPath:filePath error:NULL];
+        [defaultManager removeItemAtPath:self.pathToPersistedLogs error:NULL];
     } else {
-        [[NSFileManager defaultManager] createFileAtPath:filePath contents:[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] attributes:nil];
+        if ([defaultManager createDirectoryAtPath:[self.pathToPersistedLogs stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL]) {
+            [defaultManager createFileAtPath:self.pathToPersistedLogs contents:[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] attributes:nil];
+        } else {
+            NSLog(@"ERROR! Could not persist logs.");
+        }
     }
 }
 
@@ -227,29 +235,35 @@
 
 - (void)appendLog:(NSString *)format arguments:(va_list)argList;
 {
-    NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-    ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:ARKLogTypeDefault];
-    [self appendAardvarkLog:log];
+    if (self.loggingEnabled) {
+        NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+        ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:ARKLogTypeDefault];
+        [self appendAardvarkLog:log];
+    }
 }
 
 - (void)appendLogType:(ARKLogType)type format:(NSString *)format arguments:(va_list)argList;
 {
-    NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-    ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:type];
-    [self appendAardvarkLog:log];
+    if (self.loggingEnabled) {
+        NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+        ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:type];
+        [self appendAardvarkLog:log];
+    }
 }
 
 - (void)appendLogScreenshot;
 {
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    UIGraphicsBeginImageContext(window.bounds.size);
-    [window.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    NSString *logText = @"📷📱 Screenshot!";
-    ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault];
-    [self appendAardvarkLog:log];
+    if (self.loggingEnabled) {
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        UIGraphicsBeginImageContext(window.bounds.size);
+        [window.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        NSString *logText = @"📷📱 Screenshot!";
+        ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault];
+        [self appendAardvarkLog:log];
+    }
 }
 
 @end
@@ -269,7 +283,7 @@
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogController sharedInstance] appendLogType:type format:format arguments:argList];
+    [[ARKLogController defaultController] appendLogType:type format:format arguments:argList];
     va_end(argList);
 }
 

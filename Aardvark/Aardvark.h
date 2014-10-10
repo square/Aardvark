@@ -26,17 +26,19 @@ OBJC_EXTERN void ARKLogScreenshot();
 
 @interface Aardvark : NSObject
 
-/// Enables Aardvark logging.
-+ (void)enableAardvarkLogging;
-+ (BOOL)isAardvarkLoggingEnabled;
+/// Enables logging to ARKLog.
++ (void)enableDefaultLogController;
 
-/// Enables bug reporting with a ARKEmailBugReporter. Bug reports can be filed by pressing and holding with two fingers. Bug reports are sent over email to emailAddress.
-+ (void)enableBugReportingWithEmailAddress:(NSString *)emailAddress;
+/// Disables logging to ARKLog.
++ (void)disableDefaultLogController;
 
-/// Enables bug reporting with a ARKEmailBugReporter. Bug reports can be filed by pressing and holding with two fingers. Bug reports are created with default text prefilledEmailBody and are sent over email to emailAddress.
-+ (void)enableBugReportingWithEmailAddress:(NSString *)emailAddress prefilledEmailBody:(NSString *)prefilledEmailBody;
+/// Sets up a two finger press-and-hold gesture recognizer to trigger email bug reports that will be sent to emailAddress.
++ (void)addDefaultBugReportingGestureWithBugReportRecipient:(NSString *)emailAddress;
 
-/// Enables bug reporting with the passed in bug reporter.
-+ (void)enableBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
+/// Sets up a two finger press-and-hold gesture recognizer to trigger email bug reports prefilled with prefilledBody that will be sent to emailAddress.
++ (void)addDefaultBugReportingGestureWithBugReportRecipient:(NSString *)emailAddress prefilledBugReportBody:(NSString *)prefilledBody;
+
+/// Creates and returns a gesture recognizer that when trigger will [bugReporter composeBugReportWithLogs:[ARKLogController defaultController]] after taking a screenshot.
++ (UIGestureRecognizer *)addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
 
 @end

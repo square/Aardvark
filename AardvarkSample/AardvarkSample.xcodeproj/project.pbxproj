@@ -16,7 +16,6 @@
 		EA4583E119E6549800E44882 /* AardvarkSampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4583E019E6549800E44882 /* AardvarkSampleTests.m */; };
 		EA4583F819E6553F00E44882 /* SampleLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4583F719E6553F00E44882 /* SampleLogger.m */; };
 		EA4583FC19E65C0D00E44882 /* libAardvark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4583F119E654FF00E44882 /* libAardvark.a */; };
-		EA45840219E65C7A00E44882 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4583FF19E65C5000E44882 /* MessageUI.framework */; };
 		EA45840619E6651A00E44882 /* SampleLogTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA45840519E6651A00E44882 /* SampleLogTableViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -80,7 +79,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA4583FC19E65C0D00E44882 /* libAardvark.a in Frameworks */,
-				EA45840219E65C7A00E44882 /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

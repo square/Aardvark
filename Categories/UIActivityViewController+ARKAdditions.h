@@ -9,6 +9,6 @@
 @interface UIActivityViewController (ARKAdditions)
 
 /// Creates an activity sheet that allows for sharing via AirDrop, email, copying to the pasteboard and printing.
-+ (instancetype)newAardvarkActivityViewControllerWithItems:(NSArray *)items;
++ (instancetype)ARK_newAardvarkActivityViewControllerWithItems:(NSArray *)items;
 
 @end

@@ -18,15 +18,6 @@
     return YES;
 }
 
-+ (instancetype)allocWithZone:(struct _NSZone *)zone;
-{
-    if ([Aardvark isAardvarkLoggingEnabled]) {
-        return [super allocWithZone:zone];
-    } else {
-        return nil;
-    }
-}
-
 #pragma mark - Initialization
 
 - (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type;

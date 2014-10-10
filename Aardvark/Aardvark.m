@@ -11,13 +11,14 @@
 #import "ARKAardvarkLog.h"
 #import "ARKEmailBugReporter.h"
 #import "ARKLogController.h"
+#import "UIApplication+ARKAdditions.h"
 
 
 void ARKLog(NSString *format, ...)
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogController sharedInstance] appendLog:format arguments:argList];
+    [[ARKLogController defaultController] appendLog:format arguments:argList];
     va_end(argList);
 }
 
@@ -25,13 +26,13 @@ void ARKTypeLog(ARKLogType type, NSString *format, ...)
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogController sharedInstance] appendLogType:type format:format arguments:argList];
+    [[ARKLogController defaultController] appendLogType:type format:format arguments:argList];
     va_end(argList);
 }
 
 void ARKLogScreenshot()
 {
-    [[ARKLogController sharedInstance] appendLogScreenshot];
+    [[ARKLogController defaultController] appendLogScreenshot];
 }
 
 
@@ -39,55 +40,33 @@ void ARKLogScreenshot()
 
 #pragma mark - Class Methods
 
-static NSNumber *AardvarkLoggingEnabled = NULL;
-
-+ (void)enableAardvarkLogging;
++ (void)enableDefaultLogController;
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        AardvarkLoggingEnabled = @YES;
-    });
+    [ARKLogController defaultController].loggingEnabled = YES;
 }
 
-+ (BOOL)isAardvarkLoggingEnabled;
++ (void)disableDefaultLogController;
 {
-    return [AardvarkLoggingEnabled boolValue];
+    [ARKLogController defaultController].loggingEnabled = NO;
 }
 
-+ (void)enableBugReportingWithEmailAddress:(NSString *)emailAddress;
++ (void)addDefaultBugReportingGestureWithBugReportRecipient:(NSString *)emailAddress;
 {
-    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
-    bugReporter.bugReportRecipientEmailAddress = emailAddress;
+    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter emailBugReporterWithEmailAddress:emailAddress];
+    [[UIApplication sharedApplication] ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:bugReporter];
+}
+
++ (void)addDefaultBugReportingGestureWithBugReportRecipient:(NSString *)emailAddress prefilledBugReportBody:(NSString *)prefilledBody;
+{
+    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter emailBugReporterWithEmailAddress:emailAddress prefilledEmailBody:prefilledBody];
+    [[UIApplication sharedApplication] ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:bugReporter];
+}
+
++ (UIGestureRecognizer *)addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
+{
+    NSAssert([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addBugReporter:withTriggeringGestureRecognizerOfClass:)], @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
     
-    [self enableBugReportingWithReporter:bugReporter];
-}
-
-+ (void)enableBugReportingWithEmailAddress:(NSString *)emailAddress prefilledEmailBody:(NSString *)prefilledEmailBody;
-{
-    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
-    bugReporter.bugReportRecipientEmailAddress = emailAddress;
-    bugReporter.prefilledEmailBody = prefilledEmailBody;
-    
-    [self enableBugReportingWithReporter:bugReporter];
-}
-
-+ (void)enableBugReportingWithReporter:(id <ARKBugReporter>)bugReporter;
-{
-    if ([Aardvark isAardvarkLoggingEnabled]) {
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            static id <ARKBugReporter> currentBugReporter = NULL;
-            
-            // Clean up the old bug reporter if it exists.
-            if (currentBugReporter != NULL) {
-                [currentBugReporter disableBugReporting];
-            }
-            
-            // Hold onto the bug reporter.
-            currentBugReporter = bugReporter;
-            
-            [bugReporter enableBugReporting];
-        }];
-    }
+    return [[UIApplication sharedApplication] ARK_addBugReporter:bugReporter withTriggeringGestureRecognizerOfClass:gestureRecognizerClass];
 }
 
 @end

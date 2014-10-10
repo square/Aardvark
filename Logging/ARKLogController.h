@@ -12,8 +12,14 @@
 
 @interface ARKLogController : NSObject
 
+///// Allocates the default controller.
+//+ (void)setupDefaultController;
+
 /// Returns a shared instance of the log controller.
-+ (instancetype)sharedInstance;
++ (instancetype)defaultController;
+
+/// Enables logging. Defaults to NO. Turning off logging does not guarantee that logging on different threads will immediately cease. Property is atomic to support multithreaded logging.
+@property (atomic, assign, readwrite) BOOL loggingEnabled;
 
 /// The maximum number of logs allLogs should return. Defaults to 2000. Set to 0 to never truncate.
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogCount;
@@ -21,8 +27,11 @@
 /// The maximum number of logs to persist to disk. Defaults to 500.
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogCountToPersist;
 
+/// Path to the file on disk that contains peristed logs.
+@property (nonatomic, copy, readwrite) NSString *pathToPersistedLogs;
+
 /// Controls whether appendAardvarkLog: also logs to NSLog. Defaults to NO.
-@property (nonatomic, assign, readwrite) BOOL logToNSLog;
+@property (nonatomic, assign, readwrite) BOOL logToConsole;
 
 /// Appends a log to the logs. Non-blocking call.
 - (void)appendAardvarkLog:(ARKAardvarkLog *)log;
@@ -38,9 +47,6 @@
 
 /// Removes all logs. Blocking call.
 - (void)clearLogs;
-
-/// Path to the file on disk that contains peristed logs.
-- (NSString *)pathToPersistedLogs;
 
 @end
 

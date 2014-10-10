@@ -96,7 +96,7 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
     if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        [[ARKLogController sharedInstance] clearLogs];
+        [[ARKLogController defaultController] clearLogs];
         [self _reloadLogs];
     }
 }
@@ -221,7 +221,7 @@
 - (IBAction)_openActivitySheet:(id)sender;
 {
     NSArray *formattedLogs = [self.logFormatter formattedLogs:self.logs];
-    UIActivityViewController *activityViewController = [UIActivityViewController newAardvarkActivityViewControllerWithItems:formattedLogs];
+    UIActivityViewController *activityViewController = [UIActivityViewController ARK_newAardvarkActivityViewControllerWithItems:formattedLogs];
     [self presentViewController:activityViewController animated:YES completion:^{
         NSLog(@"Aardvark logs:\n%@", formattedLogs);
     }];
@@ -244,7 +244,7 @@
 
 - (void)_reloadLogs;
 {
-    self.logs = [[ARKLogController sharedInstance] allLogs];
+    self.logs = [[ARKLogController defaultController] allLogs];
     [self.tableView reloadData];
 }
 
