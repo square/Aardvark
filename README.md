@@ -6,23 +6,23 @@ Aardvark is a library that makes it dead simple to create useful bug reports wit
 
 There are only three steps to get Aardvark logging and bug reporting up and running.
 
-1) Call `[Aardvark enableAardvarkLogging]` to enable logging.
+1) Call `[Aardvark enableDefaultLogController]` to enable logging.
 
-2) Call `[Aardvark enableBugReportingWithEmailAddress:]` to enable creating bug reports.
+2) Call `[Aardvark addDefaultBugReportingGestureWithBugReportRecipient:]` to enable creating bug reports.
 
 3) Replace `NSLog` with `ARKLog`
 
 This will allow users to report a bug by making a two-finger long-press gesture. This gesture triggers a UIAlert asking the user what went wrong. When the user enters this information, an email bug report is generated complete with an attached app screenshot and a text file containing the last 2000 ARKLogs. Screenshots are created and stored within Aardvark and do not require camera roll access.
 
-You can change how many ARKLogs are included in bug reports by changing the value of `maximumLogCount` on your `sharedInstance` of `ARKLogController`.
+You can change how many ARKLogs are included in bug reports by changing the value of `maximumLogCount` on your `defaultController` of `ARKLogController`.
 
-You can customize how bugs are filed by passing your own `ARKBugReporter` object to `[Aardvark enableBugReportingWithReporter:]`.
+You can customize both how bugs reports are triggered and how they are filed by passing your own `ARKBugReporter` object to `[Aardvark addBugReporter:withTriggeringGestureRecognizerOfClass:]`.
 
 ## Viewing Logs
 
 Push an instance of `ARKLogTableViewController` onto the screen to view your logs. Customize the appearance of your logs by setting your own `logFormatter` on the `ARKLogTableViewController` instance.
 
-If you want ARKLogs to show up in your console, `[ARKLogController sharedInstance].logToNSLog = YES;`.
+If you want ARKLogs to show up in your console, `[ARKLogController defaultController].logToNSLog = YES;`.
 
 ## Contributing
 
