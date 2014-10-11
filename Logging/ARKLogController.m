@@ -168,7 +168,10 @@
     if (![_persistedLogsFilePath isEqualToString:persistedLogsFilePath]) {
         _persistedLogsFilePath = persistedLogsFilePath;
         NSArray *persistedLogs = [self _persistedLogs];
-        [self.logMessages addObjectsFromArray:persistedLogs];
+        
+        [self.loggingQueue addOperationWithBlock:^{
+            [self.logMessages addObjectsFromArray:persistedLogs];
+        }];
     }
 }
 
