@@ -90,9 +90,9 @@
         return;
     }
     
-    NSArray *allLogs = [ARKLogController defaultController].allLogs;
+    NSArray *allLogMessages = [ARKLogController defaultController].allLogMessages;
     for (id <ARKBugReporter> bugReporter in bugReporters) {
-        [bugReporter composeBugReportWithLogs:allLogs];
+        [bugReporter composeBugReportWithLogMessages:allLogMessages];
     }
 }
 

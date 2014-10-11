@@ -6,10 +6,11 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
+#import <Aardvark/ARKBugReporter.h>
 #import <MessageUI/MessageUI.h>
 
-#import "ARKBugReporter.h"
-#import "ARKLogFormatter.h"
+
+@protocol ARKLogFormatter;
 
 
 /// Allows the user to trigger bug reports by making a two-finger press and hold gesture. Logs are sent out via email.

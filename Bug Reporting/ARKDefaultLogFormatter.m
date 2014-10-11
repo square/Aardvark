@@ -8,7 +8,7 @@
 
 #import "ARKDefaultLogFormatter.h"
 
-#import "ARKAardvarkLog.h"
+#import "ARKLogMessage.h"
 
 
 @implementation ARKDefaultLogFormatter
@@ -30,24 +30,24 @@
 
 #pragma mark - ARKLogFormatter
 
-- (NSArray *)formattedLogs:(NSArray *)logs;
+- (NSArray *)formattedLogMessages:(NSArray *)logMessages;
 {
-    return [self _formattedLogs:logs withImages:YES];
+    return [self _formattedLogMessages:logMessages withImages:YES];
 }
 
-- (NSString *)formattedLogsAsPlainText:(NSArray *)logs;
+- (NSString *)formattedLogMessagesAsPlainText:(NSArray *)logMessages;
 {
-    return [[self _formattedLogs:logs withImages:NO] componentsJoinedByString:@"\n"];
+    return [[self _formattedLogMessages:logMessages withImages:NO] componentsJoinedByString:@"\n"];
 }
 
-- (NSData *)formattedLogsAsData:(NSArray *)logs;
+- (NSData *)formattedLogMessagesAsData:(NSArray *)logMessages;
 {
-    return [[self formattedLogsAsPlainText:logs] dataUsingEncoding:NSUTF8StringEncoding];
+    return [[self formattedLogMessagesAsPlainText:logMessages] dataUsingEncoding:NSUTF8StringEncoding];
 }
 
 - (NSData *)mostRecentImageAsPNG:(NSArray *)logs;
 {
-    for (ARKAardvarkLog *log in [logs reverseObjectEnumerator]) {
+    for (ARKLogMessage *log in [logs reverseObjectEnumerator]) {
         if (log.image != nil) {
             return UIImagePNGRepresentation(log.image);
         }
@@ -56,11 +56,11 @@
     return nil;
 }
 
-- (NSString *)recentErrorLogsAsPlainText:(NSArray *)logs count:(NSUInteger)errorLogsToInclude;
+- (NSString *)recentErrorLogMessagesAsPlainText:(NSArray *)logMessages count:(NSUInteger)errorLogsToInclude;
 {
     NSMutableString *recentErrorLogs = [NSMutableString new];
     NSUInteger failuresFound = 0;
-    for (ARKAardvarkLog *log in [logs reverseObjectEnumerator]) {
+    for (ARKLogMessage *log in [logMessages reverseObjectEnumerator]) {
         if(log.type == ARKLogTypeError) {
             [recentErrorLogs appendFormat:@"%@\n", log];
             
@@ -78,11 +78,11 @@
     }
 }
 
-- (NSArray *)_formattedLogs:(NSArray *)logs withImages:(BOOL)images;
+- (NSArray *)_formattedLogMessages:(NSArray *)logMessages withImages:(BOOL)images;
 {
     NSMutableArray *combinedLogs = [[NSMutableArray alloc] init];
     
-    for (ARKAardvarkLog *log in logs) {
+    for (ARKLogMessage *log in logMessages) {
         switch (log.type) {
             case ARKLogTypeSeparator:
                 [combinedLogs addObject:[NSString stringWithFormat:@"%@\n", self.separatorLogPrefix]];

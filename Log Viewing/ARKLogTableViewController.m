@@ -8,17 +8,17 @@
 
 #import "ARKLogTableViewController.h"
 
-#import "ARKAardvarkLog.h"
 #import "ARKIndividualLogViewController.h"
 #import "ARKDefaultLogFormatter.h"
 #import "ARKLogController.h"
+#import "ARKLogMessage.h"
 #import "ARKScreenshotViewController.h"
 #import "UIActivityViewController+ARKAdditions.h"
 
 
 @interface ARKLogTableViewController () <UIActionSheetDelegate>
 
-@property (nonatomic, copy, readwrite) NSArray *logs;
+@property (nonatomic, copy, readwrite) NSArray *logMessages;
 @property (nonatomic, assign, readwrite) BOOL viewWillAppearForFirstTimeCalled;
 @property (nonatomic, assign, readwrite) BOOL hasScrolledToBottom;
 
@@ -111,7 +111,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex;
 {
     NSAssert(sectionIndex == 0, 0, @"There is only one section index!");
-    return self.logs.count;
+    return self.logMessages.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -125,11 +125,11 @@
     }
     
     NSInteger index = [indexPath row];
-    ARKAardvarkLog *currentLog = self.logs[index];
+    ARKLogMessage *currentLog = self.logMessages[index];
     
-    ARKAardvarkLog *firstSeparatorLog = nil;
+    ARKLogMessage *firstSeparatorLog = nil;
     for (NSInteger i = index; i >= 0; i--) {
-        firstSeparatorLog = self.logs[i];
+        firstSeparatorLog = self.logMessages[i];
         if (firstSeparatorLog.type == ARKLogTypeSeparator) {
             break;
         } else {
@@ -203,7 +203,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    ARKAardvarkLog *log = self.logs[[indexPath row]];
+    ARKLogMessage *log = self.logMessages[[indexPath row]];
     if (log.image != nil) {
         ARKScreenshotViewController *screenshotViewer = [[ARKScreenshotViewController alloc] initWithImage:log.image date:log.createdAt];
         
@@ -220,10 +220,10 @@
 
 - (IBAction)_openActivitySheet:(id)sender;
 {
-    NSArray *formattedLogs = [self.logFormatter formattedLogs:self.logs];
-    UIActivityViewController *activityViewController = [UIActivityViewController ARK_newAardvarkActivityViewControllerWithItems:formattedLogs];
+    NSArray *formattedLogMessages = [self.logFormatter formattedLogMessages:self.logMessages];
+    UIActivityViewController *activityViewController = [UIActivityViewController ARK_newAardvarkActivityViewControllerWithItems:formattedLogMessages];
     [self presentViewController:activityViewController animated:YES completion:^{
-        NSLog(@"Aardvark logs:\n%@", formattedLogs);
+        NSLog(@"Aardvark logs:\n%@", formattedLogMessages);
     }];
 }
 
@@ -244,7 +244,7 @@
 
 - (void)_reloadLogs;
 {
-    self.logs = [[ARKLogController defaultController] allLogs];
+    self.logMessages = [[ARKLogController defaultController] allLogMessages];
     [self.tableView reloadData];
 }
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-#import "ARKLogController.h"
+@class ARKLogController;
 
 
 @protocol ARKLogger <NSObject>

@@ -1,12 +1,12 @@
 //
-//  ARKAardvarkLog.h
+//  ARKLogMessage.h
 //  Aardvark
 //
 //  Created by Dan Federman on 10/4/14.
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-@interface ARKAardvarkLog : NSObject <NSCopying, NSSecureCoding>
+@interface ARKLogMessage : NSObject <NSCopying, NSSecureCoding>
 
 - (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type;
 

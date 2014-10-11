@@ -11,18 +11,18 @@
 @required
 
 /// Returns an array of NSStrings that represent the logs.
-- (NSArray *)formattedLogs:(NSArray *)logs;
+- (NSArray *)formattedLogMessages:(NSArray *)logMessages;
 
-/// Returns formattedLogs as plain text, stripping out images.
-- (NSString *)formattedLogsAsPlainText:(NSArray *)logs;
+/// Returns formattedLogMessages as plain text, stripping out images.
+- (NSString *)formattedLogMessagesAsPlainText:(NSArray *)logMessages;
 
-/// Returns formattedLogsAsPlainText as NSData.
-- (NSData *)formattedLogsAsData:(NSArray *)logs;
+/// Returns formattedLogMessagesAsPlainText as NSData.
+- (NSData *)formattedLogMessagesAsData:(NSArray *)logMessages;
 
 /// Returns the most recent image in a log as a PNG.
-- (NSData *)mostRecentImageAsPNG:(NSArray *)logs;
+- (NSData *)mostRecentImageAsPNG:(NSArray *)logMessages;
 
 /// Returns errorLogsToInclude recent error logs as a NSString.
-- (NSString *)recentErrorLogsAsPlainText:(NSArray *)logs count:(NSUInteger)errorLogsToInclude;
+- (NSString *)recentErrorLogMessagesAsPlainText:(NSArray *)logMessages count:(NSUInteger)errorLogsToInclude;
 
 @end

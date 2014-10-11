@@ -8,7 +8,7 @@
 
 @interface ARKLogController (Private)
 
-- (NSMutableArray *)logs;
+- (NSMutableArray *)logMessages;
 - (NSOperationQueue *)loggingQueue;
 
 - (NSArray *)_persistedLogs;

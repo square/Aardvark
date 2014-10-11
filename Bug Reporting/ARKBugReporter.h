@@ -8,7 +8,7 @@
 
 @protocol ARKBugReporter <NSObject>
 
-/// Kicks off composition of a bug report.
-- (void)composeBugReportWithLogs:(NSArray *)logs;
+/// Kicks off composition of a bug report. logMessages is an array of ARKLogMessages.
+- (void)composeBugReportWithLogMessages:(NSArray *)logMessages;
 
 @end

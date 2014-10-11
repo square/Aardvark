@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-#import "ARKBugReporter.h"
+@protocol ARKBugReporter;
 
 
 @interface UIApplication (ARKAdditions)

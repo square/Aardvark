@@ -17,14 +17,14 @@
 		EAAB389E19E28D5200161A54 /* ARKDefaultLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAB389C19E28D5200161A54 /* ARKDefaultLogFormatter.m */; };
 		EAAB38A019E28E9B00161A54 /* ARKLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB389F19E28DEB00161A54 /* ARKLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAAB38A419E2929C00161A54 /* ARKLogFormatterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAB38A319E2929C00161A54 /* ARKLogFormatterTests.m */; };
-		EAAB38A919E317D000161A54 /* ARKAardvarkLog.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444719E084C40065A1FF /* ARKAardvarkLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAAB38A919E317D000161A54 /* ARKLogMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444719E084C40065A1FF /* ARKLogMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAAB38AA19E3180B00161A54 /* ARKBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB38A519E298ED00161A54 /* ARKBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAAB38AC19E318C700161A54 /* Aardvark-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444319E0849D0065A1FF /* Aardvark-Prefix.pch */; };
 		EAAB38AD19E3191D00161A54 /* libAardvark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD1442119E073FB0065A1FF /* libAardvark.a */; };
 		EAD1442719E073FB0065A1FF /* Aardvark.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1442619E073FB0065A1FF /* Aardvark.m */; };
 		EAD1444519E0849D0065A1FF /* Aardvark-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444319E0849D0065A1FF /* Aardvark-Prefix.pch */; };
 		EAD1444619E0849D0065A1FF /* AardvarkDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444419E0849D0065A1FF /* AardvarkDefines.h */; };
-		EAD1444A19E084C40065A1FF /* ARKAardvarkLog.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1444819E084C40065A1FF /* ARKAardvarkLog.m */; };
+		EAD1444A19E084C40065A1FF /* ARKLogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1444819E084C40065A1FF /* ARKLogMessage.m */; };
 		EAD1444D19E09EEA0065A1FF /* ARKLogController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444B19E09EEA0065A1FF /* ARKLogController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAD1444E19E09EEA0065A1FF /* ARKLogController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1444C19E09EEA0065A1FF /* ARKLogController.m */; };
 		EAD1445419E201C70065A1FF /* ARKLogControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1445319E201C70065A1FF /* ARKLogControllerTests.m */; };
@@ -80,8 +80,8 @@
 		EAD1442F19E073FB0065A1FF /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Tests-Info.plist"; path = "AardvarkTests/Tests-Info.plist"; sourceTree = "<group>"; };
 		EAD1444319E0849D0065A1FF /* Aardvark-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Aardvark-Prefix.pch"; path = "Other/Aardvark-Prefix.pch"; sourceTree = "<group>"; };
 		EAD1444419E0849D0065A1FF /* AardvarkDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AardvarkDefines.h; path = Other/AardvarkDefines.h; sourceTree = "<group>"; };
-		EAD1444719E084C40065A1FF /* ARKAardvarkLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKAardvarkLog.h; path = Logging/ARKAardvarkLog.h; sourceTree = "<group>"; };
-		EAD1444819E084C40065A1FF /* ARKAardvarkLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKAardvarkLog.m; path = Logging/ARKAardvarkLog.m; sourceTree = "<group>"; };
+		EAD1444719E084C40065A1FF /* ARKLogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogMessage.h; path = Logging/ARKLogMessage.h; sourceTree = "<group>"; };
+		EAD1444819E084C40065A1FF /* ARKLogMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogMessage.m; path = Logging/ARKLogMessage.m; sourceTree = "<group>"; };
 		EAD1444B19E09EEA0065A1FF /* ARKLogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogController.h; path = Logging/ARKLogController.h; sourceTree = "<group>"; };
 		EAD1444C19E09EEA0065A1FF /* ARKLogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogController.m; path = Logging/ARKLogController.m; sourceTree = "<group>"; };
 		EAD1445319E201C70065A1FF /* ARKLogControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogControllerTests.m; path = AardvarkTests/ARKLogControllerTests.m; sourceTree = "<group>"; };
@@ -162,12 +162,12 @@
 			isa = PBXGroup;
 			children = (
 				EAD1446219E21FB50065A1FF /* Tests */,
-				EAD1444719E084C40065A1FF /* ARKAardvarkLog.h */,
-				EAD1444819E084C40065A1FF /* ARKAardvarkLog.m */,
 				EAD1444B19E09EEA0065A1FF /* ARKLogController.h */,
 				EAAB389819E2820000161A54 /* ARKLogController_Testing.h */,
 				EAD1444C19E09EEA0065A1FF /* ARKLogController.m */,
 				EA491AF919E5EAAA00762174 /* ARKLogger.h */,
+				EAD1444719E084C40065A1FF /* ARKLogMessage.h */,
+				EAD1444819E084C40065A1FF /* ARKLogMessage.m */,
 			);
 			name = Logging;
 			sourceTree = "<group>";
@@ -237,7 +237,7 @@
 			files = (
 				EAAB389119E24DC900161A54 /* Aardvark.h in Headers */,
 				EAD1445F19E211250065A1FF /* ARKEmailBugReporter.h in Headers */,
-				EAAB38A919E317D000161A54 /* ARKAardvarkLog.h in Headers */,
+				EAAB38A919E317D000161A54 /* ARKLogMessage.h in Headers */,
 				EAD1447E19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.h in Headers */,
 				EAD1444D19E09EEA0065A1FF /* ARKLogController.h in Headers */,
 				EAAB389D19E28D5200161A54 /* ARKDefaultLogFormatter.h in Headers */,
@@ -354,7 +354,7 @@
 			files = (
 				EAD1442719E073FB0065A1FF /* Aardvark.m in Sources */,
 				EAD1444E19E09EEA0065A1FF /* ARKLogController.m in Sources */,
-				EAD1444A19E084C40065A1FF /* ARKAardvarkLog.m in Sources */,
+				EAD1444A19E084C40065A1FF /* ARKLogMessage.m in Sources */,
 				EAD1446019E211250065A1FF /* ARKEmailBugReporter.m in Sources */,
 				EAAB389E19E28D5200161A54 /* ARKDefaultLogFormatter.m in Sources */,
 				EAD1447F19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.m in Sources */,

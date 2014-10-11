@@ -9,13 +9,13 @@
 #import "ARKLogController.h"
 #import "ARKLogController_Testing.h"
 
-#import "ARKAardvarkLog.h"
 #import "ARKLogger.h"
+#import "ARKLogMessage.h"
 
 
 @interface ARKLogController ()
 
-@property (nonatomic, strong, readwrite) NSMutableArray *logs;
+@property (nonatomic, strong, readwrite) NSMutableArray *logMessages;
 @property (nonatomic, strong, readonly) NSOperationQueue *loggingQueue;
 @property (nonatomic, strong, readonly) NSMutableSet *globalLoggers;
 @property (nonatomic, assign, readwrite) UIBackgroundTaskIdentifier persistLogsBackgroundTaskIdentifier;
@@ -33,13 +33,34 @@
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        ARKDefaultLogController = [[self class] new];
+        ARKDefaultLogController = [[[self class] alloc] initDefaultController];
     });
     
     return ARKDefaultLogController;
 }
 
 #pragma mark - Initialization
+
+- (instancetype)initDefaultController;
+{
+    self = [self init];
+    if (!self) {
+        return nil;
+    }
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = paths.firstObject;
+    _pathToPersistedLogs = [[applicationSupportDirectory stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"] copy];
+    
+    NSArray *persistedLogs = [self _persistedLogs];
+    if (persistedLogs.count > 0) {
+        _logMessages = [persistedLogs mutableCopy];
+    } else {
+        _logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogCount)];
+    }
+    
+    return self;
+}
 
 - (instancetype)init;
 {
@@ -51,16 +72,7 @@
     _maximumLogCount = 2000;
     _maximumLogCountToPersist = 500;
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    _pathToPersistedLogs = [[applicationSupportDirectory stringByAppendingPathComponent:@"ARKLogControllerLogs.data"] copy];
-    
-    NSArray *persistedLogs = [self _persistedLogs];
-    if (persistedLogs.count > 0) {
-        _logs = [persistedLogs mutableCopy];
-    } else {
-        _logs = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogCount)];
-    }
+    _logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogCount)];
     
     _loggingQueue = [NSOperationQueue new];
     _loggingQueue.maxConcurrentOperationCount = 1;
@@ -78,20 +90,17 @@
     return self;
 }
 
-- (void)dealloc
+- (void)dealloc;
 {
-    [self.loggingQueue addOperationWithBlock:^{
-        [self _persistLogs_inLoggingQueue];
-    }];
-    
-    [self.loggingQueue waitUntilAllOperationsAreFinished];
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+    // We're guaranteed that no one is logging to us since we're in dealloc. Persist the logs on whatever thread we're on.
+    [self _persistLogs_inLoggingQueue];
 }
 
 #pragma mark - Public Methods
 
-- (void)appendAardvarkLog:(ARKAardvarkLog *)log;
+- (void)appendLogMessage:(ARKLogMessage *)log;
 {
     [self.loggingQueue addOperationWithBlock:^{
         if (!self.loggingEnabled) {
@@ -99,7 +108,7 @@
         }
         
         // Don't proactively trim too often.
-        if (self.logs.count >= 2 * self.maximumLogCount) {
+        if (self.logMessages.count >= 2 * self.maximumLogCount) {
             // We've held on to 2x more logs than we'll ever expose. Trim!
             [self _trimLogs_inLoggingQueue];
         }
@@ -108,7 +117,7 @@
             NSLog(@"%@", log.text);
         }
         
-        [self.logs addObject:log];
+        [self.logMessages addObject:log];
     }];
 }
 
@@ -129,25 +138,25 @@
     }
 }
 
-- (NSArray *)allLogs;
+- (NSArray *)allLogMessages;
 {
-    __block NSArray *logs = nil;
+    __block NSArray *logMessages = nil;
     
     [self.loggingQueue addOperationWithBlock:^{
         [self _trimLogs_inLoggingQueue];
         
-        logs = [self.logs copy];
+        logMessages = [self.logMessages copy];
     }];
     
     [self.loggingQueue waitUntilAllOperationsAreFinished];
     
-    return logs;
+    return logMessages;
 }
 
 - (void)clearLogs;
 {
     [self.loggingQueue addOperationWithBlock:^{
-        [self.logs removeAllObjects];
+        [self.logMessages removeAllObjects];
         [self _persistLogs_inLoggingQueue];
     }];
     
@@ -159,7 +168,7 @@
     if (![_pathToPersistedLogs isEqualToString:pathToPersistedLogs]) {
         _pathToPersistedLogs = pathToPersistedLogs;
         NSArray *persistedLogs = [self _persistedLogs];
-        [self.logs addObjectsFromArray:persistedLogs];
+        [self.logMessages addObjectsFromArray:persistedLogs];
     }
 }
 
@@ -210,22 +219,22 @@
 
 - (void)_trimLogs_inLoggingQueue;
 {
-    NSUInteger numberOfLogs = self.logs.count;
+    NSUInteger numberOfLogs = self.logMessages.count;
     if (numberOfLogs > self.maximumLogCount) {
-        [self.logs removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogCount)];
+        [self.logMessages removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogCount)];
     }
 }
 
 - (NSArray *)_trimedLogsToPersist_inLoggingQueue;
 {
-    NSUInteger numberOfLogs = self.logs.count;
+    NSUInteger numberOfLogs = self.logMessages.count;
     if (numberOfLogs > self.maximumLogCountToPersist) {
-        NSMutableArray *logsToPersist = [self.logs mutableCopy];
+        NSMutableArray *logsToPersist = [self.logMessages mutableCopy];
         [logsToPersist removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogCountToPersist)];
         return [logsToPersist copy];
     }
     
-    return [self.logs copy];
+    return [self.logMessages copy];
 }
 
 @end
@@ -237,8 +246,8 @@
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:ARKLogTypeDefault];
-        [self appendAardvarkLog:log];
+        ARKLogMessage *log = [[ARKLogMessage alloc] initWithText:logText image:nil type:ARKLogTypeDefault];
+        [self appendLogMessage:log];
     }
 }
 
@@ -246,8 +255,8 @@
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:nil type:type];
-        [self appendAardvarkLog:log];
+        ARKLogMessage *log = [[ARKLogMessage alloc] initWithText:logText image:nil type:type];
+        [self appendLogMessage:log];
     }
 }
 
@@ -261,8 +270,8 @@
         UIGraphicsEndImageContext();
         
         NSString *logText = @"📷📱 Screenshot!";
-        ARKAardvarkLog *log = [[ARKAardvarkLog alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault];
-        [self appendAardvarkLog:log];
+        ARKLogMessage *log = [[ARKLogMessage alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault];
+        [self appendLogMessage:log];
     }
 }
 
