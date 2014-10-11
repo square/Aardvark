@@ -14,6 +14,7 @@ extern "C" {
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
     #import <Aardvark/Aardvark.h>
+    #import <Aardvark/ARKLogController.h>
 #endif
     
 #ifdef __cplusplus
