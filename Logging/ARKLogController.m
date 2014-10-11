@@ -50,7 +50,7 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    _persistedLogsFilePath = [[applicationSupportDirectory stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"] copy];
+    _persistedLogsFilePath = [[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"] copy];
     
     NSArray *persistedLogs = [self _persistedLogs];
     if (persistedLogs.count > 0) {
@@ -209,9 +209,12 @@
     if (logsToPersist.count == 0) {
         [defaultManager removeItemAtPath:self.persistedLogsFilePath error:NULL];
     } else {
+        BOOL persistedLogs = NO;
         if ([defaultManager createDirectoryAtPath:[self.persistedLogsFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL]) {
-            [defaultManager createFileAtPath:self.persistedLogsFilePath contents:[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] attributes:nil];
-        } else {
+            persistedLogs = [defaultManager createFileAtPath:self.persistedLogsFilePath contents:[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] attributes:nil];
+        }
+        
+        if (!persistedLogs) {
             NSLog(@"ERROR! Could not persist logs.");
         }
     }
