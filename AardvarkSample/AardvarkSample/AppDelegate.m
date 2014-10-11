@@ -40,7 +40,7 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    defaultLogController.pathToPersistedLogs = [applicationSupportDirectory stringByAppendingPathComponent:@"SampleAardvarkLogs.data"];
+    defaultLogController.persistedLogsFilePath = [applicationSupportDirectory stringByAppendingPathComponent:@"SampleAardvarkLogs.data"];
 }
 
 @end

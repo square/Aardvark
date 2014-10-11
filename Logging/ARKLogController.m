@@ -50,7 +50,7 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    _pathToPersistedLogs = [[applicationSupportDirectory stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"] copy];
+    _persistedLogsFilePath = [[applicationSupportDirectory stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"] copy];
     
     NSArray *persistedLogs = [self _persistedLogs];
     if (persistedLogs.count > 0) {
@@ -163,10 +163,10 @@
     [self.loggingQueue waitUntilAllOperationsAreFinished];
 }
 
-- (void)setPathToPersistedLogs:(NSString *)pathToPersistedLogs;
+- (void)setPersistedLogsFilePath:(NSString *)persistedLogsFilePath;
 {
-    if (![_pathToPersistedLogs isEqualToString:pathToPersistedLogs]) {
-        _pathToPersistedLogs = pathToPersistedLogs;
+    if (![_persistedLogsFilePath isEqualToString:persistedLogsFilePath]) {
+        _persistedLogsFilePath = persistedLogsFilePath;
         NSArray *persistedLogs = [self _persistedLogs];
         [self.logMessages addObjectsFromArray:persistedLogs];
     }
@@ -191,7 +191,7 @@
 
 - (NSArray *)_persistedLogs;
 {
-    NSData *persistedLogData = [[NSFileManager defaultManager] contentsAtPath:self.pathToPersistedLogs];
+    NSData *persistedLogData = [[NSFileManager defaultManager] contentsAtPath:self.persistedLogsFilePath];
     NSArray *persistedLogs = persistedLogData ? [NSKeyedUnarchiver unarchiveObjectWithData:persistedLogData] : nil;
     if ([persistedLogs isKindOfClass:[NSArray class]] && persistedLogs.count > 0) {
         return persistedLogs;
@@ -207,10 +207,10 @@
     NSFileManager *defaultManager = [NSFileManager defaultManager];
     
     if (logsToPersist.count == 0) {
-        [defaultManager removeItemAtPath:self.pathToPersistedLogs error:NULL];
+        [defaultManager removeItemAtPath:self.persistedLogsFilePath error:NULL];
     } else {
-        if ([defaultManager createDirectoryAtPath:[self.pathToPersistedLogs stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL]) {
-            [defaultManager createFileAtPath:self.pathToPersistedLogs contents:[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] attributes:nil];
+        if ([defaultManager createDirectoryAtPath:[self.persistedLogsFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL]) {
+            [defaultManager createFileAtPath:self.persistedLogsFilePath contents:[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] attributes:nil];
         } else {
             NSLog(@"ERROR! Could not persist logs.");
         }

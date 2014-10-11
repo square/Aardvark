@@ -25,7 +25,7 @@
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogCountToPersist;
 
 /// Path to the file on disk that contains peristed logs. Defaults to nil for all controllers except defaultController.
-@property (nonatomic, copy, readwrite) NSString *pathToPersistedLogs;
+@property (nonatomic, copy, readwrite) NSString *persistedLogsFilePath;
 
 /// Controls whether appendLogMessage: also logs to NSLog. Defaults to NO.
 @property (nonatomic, assign, readwrite) BOOL logToConsole;

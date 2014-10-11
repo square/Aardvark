@@ -40,12 +40,12 @@
 
 - (void)test_initDefaultController_setsPersistencePath;
 {
-    XCTAssertGreaterThan(self.defaultLogController.pathToPersistedLogs.length, 0);
+    XCTAssertGreaterThan(self.defaultLogController.persistedLogsFilePath.length, 0);
 }
 
 - (void)test_init_doesNotSetPersistencePath;
 {
-    XCTAssertEqual([ARKLogController new].pathToPersistedLogs.length, 0);
+    XCTAssertEqual([ARKLogController new].persistedLogsFilePath.length, 0);
 }
 
 - (void)test_loggingEnabled_loggingInitiallyDisabled;
@@ -154,7 +154,7 @@
     XCTAssertEqual(self.defaultLogController.logMessages.count, numberOfLogsToEnter, @"Persisting logs should not have affected internal log count");
 }
 
-- (void)test_setPathToPersistedLogs_appendsLogsInPersistedObjects;
+- (void)test_setpersistedLogsFilePath_appendsLogsInPersistedObjects;
 {
     ARKLogController *logController = [ARKLogController new];
     logController.loggingEnabled = YES;
@@ -162,9 +162,9 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
     NSString *persistenceTestLogsPath = [applicationSupportDirectory stringByAppendingPathComponent:@"ARKPersistenceTestLogControllerLogs.data"];
-    NSString *testPeristedLogMessageText = @"setPathToPersistedLogs: test log";
+    NSString *testPeristedLogMessageText = @"setpersistedLogsFilePath: test log";
     
-    logController.pathToPersistedLogs = persistenceTestLogsPath;
+    logController.persistedLogsFilePath = persistenceTestLogsPath;
     
     [logController appendLog:@"%@", testPeristedLogMessageText];
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
@@ -176,9 +176,9 @@
     ARKLogController *persistenceTestLogController = [ARKLogController new];
     XCTAssertEqual(persistenceTestLogController.logMessages.count, 0);
     
-    persistenceTestLogController.pathToPersistedLogs = persistenceTestLogsPath;
-    XCTAssertEqualObjects([persistenceTestLogController.logMessages.lastObject text], testPeristedLogMessageText, @"Setting pathToPersistedLogs did not load logs.");
-    XCTAssertEqualObjects(persistenceTestLogController.logMessages.firstObject, persistenceTestLogController.logMessages.lastObject, @"Setting pathToPersistedLogs did not load logs.");
+    persistenceTestLogController.persistedLogsFilePath = persistenceTestLogsPath;
+    XCTAssertEqualObjects([persistenceTestLogController.logMessages.lastObject text], testPeristedLogMessageText, @"Setting persistedLogsFilePath did not load logs.");
+    XCTAssertEqualObjects(persistenceTestLogController.logMessages.firstObject, persistenceTestLogController.logMessages.lastObject, @"Setting persistedLogsFilePath did not load logs.");
     
     [logController clearLogs];
     [persistenceTestLogController clearLogs];
@@ -192,7 +192,7 @@
     
     ARKLogController *logController = [ARKLogController new];
     logController.loggingEnabled = YES;
-    logController.pathToPersistedLogs = persistenceTestLogsPath;
+    logController.persistedLogsFilePath = persistenceTestLogsPath;
     
     NSMutableArray *numbers = [NSMutableArray new];
     for (NSUInteger i  = 0; i < logController.maximumLogCountToPersist; i++) {
@@ -220,15 +220,15 @@
     @autoreleasepool {
         // Create a new log controller.
         logController = [ARKLogController new];
-        logController.pathToPersistedLogs = persistenceTestLogsPath;
+        logController.persistedLogsFilePath = persistenceTestLogsPath;
         
         // Delete the persisted logs.
-        [[NSFileManager defaultManager] removeItemAtPath:logController.pathToPersistedLogs error:NULL];
+        [[NSFileManager defaultManager] removeItemAtPath:logController.persistedLogsFilePath error:NULL];
         
         // Ensure deleting the persisted logs removed all logs.
         persistenceCheckLogController = [ARKLogController new];
-        persistenceCheckLogController.pathToPersistedLogs = persistenceTestLogsPath;
-        XCTAssertEqual(persistenceCheckLogController.allLogMessages.count, 0, @"Removing file at pathToPersistedLogs did not remove logs!");
+        persistenceCheckLogController.persistedLogsFilePath = persistenceTestLogsPath;
+        XCTAssertEqual(persistenceCheckLogController.allLogMessages.count, 0, @"Removing file at persistedLogsFilePath did not remove logs!");
         
         weakLogController = logController;
         XCTAssertEqual(logController.allLogMessages.count, logMessageCount, @"New log controller did not initialize itself with logs from the previous controller!");
@@ -244,7 +244,7 @@
     
     // Create a new log controller
     logController = [ARKLogController new];
-    logController.pathToPersistedLogs = persistenceTestLogsPath;
+    logController.persistedLogsFilePath = persistenceTestLogsPath;
     
     XCTAssertEqual(logController.allLogMessages.count, logMessageCount, @"Logs did not persist in dealloc.");
     
