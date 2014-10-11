@@ -85,7 +85,7 @@
     
     _globalLoggers = [NSMutableSet new];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationDidEnterBackgroundNotification:) name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActiveNotification:) name:UIApplicationWillResignActiveNotification object:[UIApplication sharedApplication]];
     
     return self;
 }
@@ -174,7 +174,7 @@
 
 #pragma mark - Private Methods
 
-- (void)_applicationDidEnterBackgroundNotification:(NSNotification *)notification;
+- (void)_applicationWillResignActiveNotification:(NSNotification *)notification;
 {
     self.persistLogsBackgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         [[UIApplication sharedApplication] endBackgroundTask:self.persistLogsBackgroundTaskIdentifier];
