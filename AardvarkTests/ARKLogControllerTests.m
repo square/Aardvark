@@ -94,6 +94,52 @@
     XCTAssertEqual(logController.logMessageClass, [ARKLogMessageTestSubclass class], @"Setting logMessageClass a second time succeeded");
 }
 
+- (void)test_addLogBlockWithKey_logsToLogBlock;
+{
+    NSMutableArray *logBlockTest = [NSMutableArray new];
+    
+    [self.defaultLogController addLogBlock:^(NSString *logText) {
+        [logBlockTest addObject:logText];
+    } withKey:logBlockTest];
+    
+    XCTAssertEqual(logBlockTest.count, 0);
+    
+    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
+        ARKLog(@"Log %@", @(i));
+    }
+    
+    [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
+    [self.defaultLogController.logMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
+        XCTAssertEqualObjects(logMessage.text, logBlockTest[idx]);
+    }];
+    
+    [self.defaultLogController removeLogBlockWithKey:logBlockTest];
+}
+
+- (void)test_removeLobBlockWithKey_removesLobBlock;
+{
+    NSMutableArray *logBlockTest = [NSMutableArray new];
+    
+    [self.defaultLogController addLogBlock:^(NSString *logText) {
+        [logBlockTest addObject:logText];
+    } withKey:logBlockTest];
+    [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
+    
+    XCTAssertEqual(self.defaultLogController.logBlocks.allValues.count, 1);
+    
+    [self.defaultLogController removeLogBlockWithKey:logBlockTest];
+    [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
+    
+    XCTAssertEqual(self.defaultLogController.logBlocks.allValues.count, 0);
+    
+    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
+        ARKLog(@"Log %@", @(i));
+    }
+    
+    [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
+    XCTAssertEqual(logBlockTest.count, 0);
+}
+
 - (void)test_appendLog_logTrimming;
 {
     NSUInteger numberOfLogsToEnter = 2 * self.defaultLogController.maximumLogCount + 10;

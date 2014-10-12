@@ -15,7 +15,8 @@
 
 @interface ARKLogController ()
 
-@property (nonatomic, strong, readwrite) NSMutableArray *logMessages;
+@property (nonatomic, strong, readonly) NSMutableArray *logMessages;
+@property (nonatomic, strong, readonly) NSMutableDictionary *logBlocks;
 @property (nonatomic, strong, readonly) NSOperationQueue *loggingQueue;
 @property (nonatomic, strong, readonly) NSMutableSet *globalLoggers;
 @property (nonatomic, assign, readwrite) UIBackgroundTaskIdentifier persistLogsBackgroundTaskIdentifier;
@@ -58,6 +59,8 @@
     } else {
         _logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogCount)];
     }
+    
+    _logBlocks = [NSMutableDictionary new];
     
     return self;
 }
@@ -125,6 +128,23 @@
 
 #pragma mark - Public Methods
 
+- (void)addLogBlock:(ARKLogBlock)logBlock withKey:(id)logBlockKey;
+{
+    NSAssert(logBlock, @"Can not add NULL logBlock");
+    NSAssert(logBlockKey, @"Can not add logBlock with nil key");
+    
+    [self.loggingQueue addOperationWithBlock:^{
+        self.logBlocks[logBlockKey] = logBlock;
+    }];
+}
+
+- (void)removeLogBlockWithKey:(id)logBlockKey;
+{
+    [self.loggingQueue addOperationWithBlock:^{
+        [self.logBlocks removeObjectForKey:logBlockKey];
+    }];
+}
+
 - (void)appendLogMessage:(ARKLogMessage *)logMessage;
 {
     [self.loggingQueue addOperationWithBlock:^{
@@ -140,6 +160,10 @@
         
         if (self.logToConsole) {
             NSLog(@"%@", logMessage.text);
+        }
+        
+        for (ARKLogBlock logBlock in self.logBlocks.allValues) {
+            logBlock(logMessage.text);
         }
         
         [self.logMessages addObject:logMessage];
