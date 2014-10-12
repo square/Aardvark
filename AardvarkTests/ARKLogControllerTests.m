@@ -197,7 +197,8 @@
     XCTAssertEqual(persistenceTestLogController.logMessages.count, 0);
     
     persistenceTestLogController.persistedLogsFilePath = persistenceTestLogsPath;
-    XCTAssertEqualObjects([persistenceTestLogController.logMessages.lastObject text], testPeristedLogMessageText, @"Setting persistedLogsFilePath did not load logs.");
+    [persistenceTestLogController.loggingQueue waitUntilAllOperationsAreFinished];
+    XCTAssertEqualObjects([persistenceTestLogController.allLogMessages.lastObject text], testPeristedLogMessageText, @"Setting persistedLogsFilePath did not load logs.");
     XCTAssertEqualObjects(persistenceTestLogController.logMessages.firstObject, persistenceTestLogController.logMessages.lastObject, @"Setting persistedLogsFilePath did not load logs.");
     
     [logController clearLogs];

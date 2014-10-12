@@ -29,7 +29,7 @@
 {
     [super setUp];
     
-    self.defaultLogController = self.defaultLogController;
+    self.defaultLogController = [ARKLogController defaultController];
     self.defaultLogController.loggingEnabled = YES;
     
     self.logFormatter = [ARKDefaultLogFormatter new];
