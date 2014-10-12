@@ -48,6 +48,8 @@
         return nil;
     }
     
+    _logMessageClass = [ARKLogMessage class];
+    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
     _persistedLogsFilePath = [[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"] copy];
@@ -98,9 +100,33 @@
     [self _persistLogs_inLoggingQueue];
 }
 
+#pragma mark - Properties
+
+- (void)setLogMessageClass:(Class)logMessageClass;
+{
+    NSAssert([logMessageClass isSubclassOfClass:[ARKLogMessage class]], @"Attempting to set a logMessageClass that is not a subclass of ARKLogMessage!");
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _logMessageClass = logMessageClass;
+    });
+}
+
+- (void)setPersistedLogsFilePath:(NSString *)persistedLogsFilePath;
+{
+    if (![_persistedLogsFilePath isEqualToString:persistedLogsFilePath]) {
+        _persistedLogsFilePath = persistedLogsFilePath;
+        NSArray *persistedLogs = [self _persistedLogs];
+        
+        [self.loggingQueue addOperationWithBlock:^{
+            [self.logMessages addObjectsFromArray:persistedLogs];
+        }];
+    }
+}
+
 #pragma mark - Public Methods
 
-- (void)appendLogMessage:(ARKLogMessage *)log;
+- (void)appendLogMessage:(ARKLogMessage *)logMessage;
 {
     [self.loggingQueue addOperationWithBlock:^{
         if (!self.loggingEnabled) {
@@ -114,10 +140,10 @@
         }
         
         if (self.logToConsole) {
-            NSLog(@"%@", log.text);
+            NSLog(@"%@", logMessage.text);
         }
         
-        [self.logMessages addObject:log];
+        [self.logMessages addObject:logMessage];
     }];
 }
 
@@ -161,18 +187,6 @@
     }];
     
     [self.loggingQueue waitUntilAllOperationsAreFinished];
-}
-
-- (void)setPersistedLogsFilePath:(NSString *)persistedLogsFilePath;
-{
-    if (![_persistedLogsFilePath isEqualToString:persistedLogsFilePath]) {
-        _persistedLogsFilePath = persistedLogsFilePath;
-        NSArray *persistedLogs = [self _persistedLogs];
-        
-        [self.loggingQueue addOperationWithBlock:^{
-            [self.logMessages addObjectsFromArray:persistedLogs];
-        }];
-    }
 }
 
 #pragma mark - Private Methods
@@ -252,8 +266,8 @@
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKLogMessage *log = [[ARKLogMessage alloc] initWithText:logText image:nil type:ARKLogTypeDefault];
-        [self appendLogMessage:log];
+        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:logText image:nil type:ARKLogTypeDefault];
+        [self appendLogMessage:logMessage];
     }
 }
 
@@ -261,8 +275,8 @@
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKLogMessage *log = [[ARKLogMessage alloc] initWithText:logText image:nil type:type];
-        [self appendLogMessage:log];
+        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:logText image:nil type:type];
+        [self appendLogMessage:logMessage];
     }
 }
 
@@ -276,7 +290,7 @@
         UIGraphicsEndImageContext();
         
         NSString *logText = @"📷📱 Screenshot!";
-        ARKLogMessage *log = [[ARKLogMessage alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault];
+        ARKLogMessage *log = [[self.logMessageClass alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault];
         [self appendLogMessage:log];
     }
 }

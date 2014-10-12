@@ -18,6 +18,9 @@
 /// Enables logging. Defaults to NO. Turning off logging does not guarantee that logging on different threads will immediately cease. Property is atomic to support multithreaded logging.
 @property (atomic, assign, readwrite) BOOL loggingEnabled;
 
+/// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage. To ensure thread safety, this property can only be set once after initialization.
+@property (nonatomic, assign, readwrite) Class logMessageClass;
+
 /// The maximum number of logs allLogMessages should return. Defaults to 2000. Set to 0 to never truncate.
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogCount;
 

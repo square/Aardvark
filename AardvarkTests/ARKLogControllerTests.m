@@ -10,12 +10,20 @@
 
 #import "ARKLogController.h"
 #import "ARKLogController_Testing.h"
+#import "ARKLogMessage.h"
 
 
 @interface ARKLogControllerTests : XCTestCase
 
 @property (nonatomic, weak, readwrite) ARKLogController *defaultLogController;
 
+@end
+
+
+@interface ARKLogMessageTestSubclass : ARKLogMessage
+@end
+
+@implementation ARKLogMessageTestSubclass
 @end
 
 
@@ -72,6 +80,18 @@
     ARKLog(@"Logging Disabled");
     
     XCTAssertEqual(self.defaultLogController.allLogMessages.count, 0, @"Log appended with logging disabled!");
+}
+
+- (void)test_setLogMessageClass_onlySetOnce;
+{
+    ARKLogController *logController = [ARKLogController new];
+    logController.logMessageClass = [ARKLogMessageTestSubclass class];
+    
+    XCTAssertEqual(logController.logMessageClass, [ARKLogMessageTestSubclass class], @"Setting logMessageClass failed");
+    
+    logController.logMessageClass = [ARKLogMessage class];
+    
+    XCTAssertEqual(logController.logMessageClass, [ARKLogMessageTestSubclass class], @"Setting logMessageClass a second time succeeded");
 }
 
 - (void)test_appendLog_logTrimming;
@@ -154,7 +174,7 @@
     XCTAssertEqual(self.defaultLogController.logMessages.count, numberOfLogsToEnter, @"Persisting logs should not have affected internal log count");
 }
 
-- (void)test_setpersistedLogsFilePath_appendsLogsInPersistedObjects;
+- (void)test_setPersistedLogsFilePath_appendsLogsInPersistedObjects;
 {
     ARKLogController *logController = [ARKLogController new];
     logController.loggingEnabled = YES;
