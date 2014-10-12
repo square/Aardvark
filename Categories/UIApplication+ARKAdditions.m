@@ -34,11 +34,6 @@
 
 - (UIGestureRecognizer *)ARK_addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
 {
-    return [self ARK_addBugReporters:@[bugReporter] withTriggeringGestureRecognizerOfClass:gestureRecognizerClass];
-}
-
-- (UIGestureRecognizer *)ARK_addBugReporters:(NSArray *)bugReporters withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
-{
     UIGestureRecognizer *bugReportingGestureRecognizer = [self _ARK_newBugReportingGestureRecognizerWithClass:gestureRecognizerClass];
     [self.keyWindow addGestureRecognizer:bugReportingGestureRecognizer];
     
@@ -46,10 +41,8 @@
         self.ARK_bugReporterToGestureRecognizerMap = [NSMapTable strongToStrongObjectsMapTable];
     }
     
-    for (id <ARKBugReporter> bugReporter in bugReporters) {
-        NSAssert([bugReporter conformsToProtocol:@protocol(ARKBugReporter)], @"Attempting to trigger bug reports with an object that does not conform to ARKBugReporter.");
-        [self.ARK_bugReporterToGestureRecognizerMap setObject:bugReportingGestureRecognizer forKey:bugReporter];
-    }
+    NSAssert([bugReporter conformsToProtocol:@protocol(ARKBugReporter)], @"Attempting to trigger bug reports with an object that does not conform to ARKBugReporter.");
+    [self.ARK_bugReporterToGestureRecognizerMap setObject:bugReportingGestureRecognizer forKey:bugReporter];
     
     if (![self ARK_isObservingKeyWindowNotifications]) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_ARK_windowDidBecomeKeyNotification:) name:UIWindowDidBecomeKeyNotification object:nil];
@@ -58,7 +51,6 @@
     }
     
     return bugReportingGestureRecognizer;
-
 }
 
 - (void)ARK_removeBugReporter:(id <ARKBugReporter>)bugReporter;

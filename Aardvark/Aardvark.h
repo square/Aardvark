@@ -42,7 +42,4 @@ OBJC_EXTERN void ARKLogScreenshot();
 /// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReportWithLogs:[ARKLogController defaultController]] after taking a screenshot.
 + (UIGestureRecognizer *)addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
 
-/// Convenience method to add multiple bug reporters to a single gesture recognizer. bugReports must be an array of id <ARKBugReporter> objects.
-+ (UIGestureRecognizer *)addBugReporters:(NSArray *)bugReporters withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
-
 @end
