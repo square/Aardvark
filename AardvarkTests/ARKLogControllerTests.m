@@ -100,7 +100,7 @@
     
     [self.defaultLogController addLogBlock:^(NSString *logText) {
         [logBlockTest addObject:logText];
-    } withKey:logBlockTest];
+    } withKey:@"lobBlockTest"];
     
     XCTAssertEqual(logBlockTest.count, 0);
     
@@ -113,7 +113,7 @@
         XCTAssertEqualObjects(logMessage.text, logBlockTest[idx]);
     }];
     
-    [self.defaultLogController removeLogBlockWithKey:logBlockTest];
+    [self.defaultLogController removeLogBlockWithKey:@"lobBlockTest"];
 }
 
 - (void)test_removeLobBlockWithKey_removesLobBlock;
@@ -122,12 +122,12 @@
     
     [self.defaultLogController addLogBlock:^(NSString *logText) {
         [logBlockTest addObject:logText];
-    } withKey:logBlockTest];
+    } withKey:@"lobBlockTest"];
     [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
     
     XCTAssertEqual(self.defaultLogController.logBlocks.allValues.count, 1);
     
-    [self.defaultLogController removeLogBlockWithKey:logBlockTest];
+    [self.defaultLogController removeLogBlockWithKey:@"lobBlockTest"];
     [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
     
     XCTAssertEqual(self.defaultLogController.logBlocks.allValues.count, 0);

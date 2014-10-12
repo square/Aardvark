@@ -128,7 +128,7 @@
 
 #pragma mark - Public Methods
 
-- (void)addLogBlock:(ARKLogBlock)logBlock withKey:(id)logBlockKey;
+- (void)addLogBlock:(ARKLogBlock)logBlock withKey:(id <NSCopying>)logBlockKey;
 {
     NSAssert(logBlock, @"Can not add NULL logBlock");
     NSAssert(logBlockKey, @"Can not add logBlock with nil key");
@@ -138,7 +138,7 @@
     }];
 }
 
-- (void)removeLogBlockWithKey:(id)logBlockKey;
+- (void)removeLogBlockWithKey:(id <NSCopying>)logBlockKey;
 {
     [self.loggingQueue addOperationWithBlock:^{
         [self.logBlocks removeObjectForKey:logBlockKey];

@@ -40,10 +40,10 @@ typedef void (^ARKLogBlock)(NSString *logText);
 @property (nonatomic, assign, readwrite) BOOL logToConsole;
 
 /// Adds a log block. Log blocks are executed on the logging queue every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc).
-- (void)addLogBlock:(ARKLogBlock)logBlock withKey:(id)logBlockKey;
+- (void)addLogBlock:(ARKLogBlock)logBlock withKey:(id <NSCopying>)logBlockKey;
 
 /// Removes a log block.
-- (void)removeLogBlockWithKey:(id)logBlock;
+- (void)removeLogBlockWithKey:(id <NSCopying>)logBlock;
 
 /// Appends a log to the logs. Non-blocking call.
 - (void)appendLogMessage:(ARKLogMessage *)logMessage;
