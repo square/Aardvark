@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8DI-Cm-Xf7">
-                                <rect key="frame" x="216" y="458" width="167" height="30"/>
+                                <rect key="frame" x="216" y="400" width="167" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="xUg-7R-0vM"/>
                                     <constraint firstAttribute="width" constant="167" id="yx0-Le-Lwk"/>
@@ -30,21 +30,19 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uhp-Xv-mxi">
-                                <rect key="frame" x="97" y="193" width="407.5" height="215"/>
+                                <rect key="frame" x="149.5" y="149.5" width="300" height="200.5"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="407.5" id="jIA-ym-G8U"/>
+                                    <constraint firstAttribute="width" constant="300" id="jIA-ym-G8U"/>
                                 </constraints>
-                                <string key="text">See something?
+                                <string key="text">See something? Say something!
 
-Say something!
-
-Press and hold with two fingers to report a bug.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+Press and hold with two fingers to compose a bug.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4fO-Rt-3uO">
-                                <rect key="frame" x="250" y="508" width="101" height="30"/>
+                                <rect key="frame" x="250" y="450" width="101" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="5Sk-Uu-iM7"/>
                                     <constraint firstAttribute="width" constant="101" id="tFs-vV-mIN"/>
@@ -60,7 +58,7 @@ Press and hold with two fingers to report a bug.</string>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="8DI-Cm-Xf7" firstAttribute="top" secondItem="uhp-Xv-mxi" secondAttribute="bottom" constant="50" id="HGG-oD-tal"/>
-                            <constraint firstAttribute="centerY" secondItem="uhp-Xv-mxi" secondAttribute="centerY" id="Msf-Bb-GG1"/>
+                            <constraint firstAttribute="centerY" secondItem="uhp-Xv-mxi" secondAttribute="centerY" constant="50" id="Msf-Bb-GG1"/>
                             <constraint firstAttribute="centerX" secondItem="8DI-Cm-Xf7" secondAttribute="centerX" constant="0.5" id="PMX-qO-7Jm"/>
                             <constraint firstItem="4fO-Rt-3uO" firstAttribute="top" secondItem="8DI-Cm-Xf7" secondAttribute="bottom" constant="20" id="Xhl-C7-FdB"/>
                             <constraint firstAttribute="centerX" secondItem="uhp-Xv-mxi" secondAttribute="centerX" id="Xoe-qk-FOI"/>
