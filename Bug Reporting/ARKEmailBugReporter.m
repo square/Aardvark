@@ -229,6 +229,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (void)addLogControllersLogMessagesToFutureBugReports:(NSArray *)logControllers;
 {
     for (ARKLogController *logController in logControllers) {
+        NSAssert([logController isKindOfClass:[ARKLogController class]], @"Can not add an instance that is not an ARKLogController to future bug reports.");
         [self addLogControllerLogMessagesToFutureBugReports:logController];
     }
 }
