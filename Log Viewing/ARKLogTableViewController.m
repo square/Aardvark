@@ -29,16 +29,23 @@
 
 #pragma mark - Initialization
 
-- (instancetype)init;
+- (instancetype)initWithLogController:(ARKLogController *)logController logFormatter:(id <ARKLogFormatter>)logFormatter;
 {
     self = [super init];
     if (!self) {
         return nil;
     }
     
-    _logFormatter = [ARKDefaultLogFormatter new];
+    _logController = logController;
+    _logFormatter = logFormatter;
     
     return self;
+    
+}
+
+- (instancetype)init;
+{
+    return [self initWithLogController:[ARKLogController defaultController] logFormatter:[ARKDefaultLogFormatter new]];
 }
 
 - (void)dealloc;
@@ -96,7 +103,7 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
     if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        [[ARKLogController defaultController] clearLogs];
+        [self.logController clearLogs];
         [self _reloadLogs];
     }
 }
@@ -244,7 +251,7 @@
 
 - (void)_reloadLogs;
 {
-    self.logMessages = [[ARKLogController defaultController] allLogMessages];
+    self.logMessages = [self.logController allLogMessages];
     [self.tableView reloadData];
 }
 

@@ -22,7 +22,7 @@
 
 - (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type;
 {
-    self = [self init];
+    self = [super init];
     if (!self) {
         return nil;
     }

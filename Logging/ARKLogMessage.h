@@ -8,7 +8,7 @@
 
 @interface ARKLogMessage : NSObject <NSCopying, NSSecureCoding>
 
-- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type;
+- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type __attribute__((objc_designated_initializer));
 
 @property (nonatomic, copy, readonly) NSDate *createdAt;
 @property (nonatomic, copy, readonly) NSString *text;
