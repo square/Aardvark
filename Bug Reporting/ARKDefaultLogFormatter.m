@@ -37,7 +37,7 @@
 
 - (NSString *)formattedLogMessagesAsPlainText:(NSArray *)logMessages;
 {
-    return [[self _formattedLogMessages:logMessages withImages:NO] componentsJoinedByString:@"\n"];
+    return [[self _formattedLogMessages:logMessages withImages:NO] componentsJoinedByString:@""];
 }
 
 - (NSData *)formattedLogMessagesAsData:(NSArray *)logMessages;
