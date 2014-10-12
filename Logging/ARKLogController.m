@@ -298,7 +298,7 @@
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogController defaultController] appendLogType:type format:format arguments:argList];
+    [self appendLogType:type format:format arguments:argList];
     va_end(argList);
 }
 
