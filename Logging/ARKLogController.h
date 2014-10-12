@@ -21,6 +21,9 @@
 /// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage. To ensure thread safety, this property can only be set once after initialization.
 @property (nonatomic, assign, readwrite) Class logMessageClass;
 
+/// Convenience property that allows bug reporters to prefix logs with the name of the controller they came from. Defaults to nil.
+@property (nonatomic, copy, readwrite) NSString *name;
+
 /// The maximum number of logs allLogMessages should return. Defaults to 2000. Set to 0 to never truncate.
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogCount;
 

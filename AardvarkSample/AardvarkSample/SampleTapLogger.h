@@ -6,8 +6,11 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Aardvark/ARKLogger.h>
 
-@interface SampleTapLogger : NSObject
+
+@interface SampleTapLogger : NSObject <ARKLogger>
+
+- (instancetype)initWithView:(UIView *)view logController:(ARKLogController *)logController;
 
 @end

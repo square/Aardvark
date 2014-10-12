@@ -70,7 +70,7 @@
         }
     }
     
-    if (recentErrorLogs.length > 0) {
+    if (recentErrorLogs.length) {
         // Remove the final newline and create an immutable string.
         return [recentErrorLogs stringByReplacingCharactersInRange:NSMakeRange(recentErrorLogs.length - 1, 1) withString:@""];
     } else {

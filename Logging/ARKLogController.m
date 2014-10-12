@@ -48,8 +48,6 @@
         return nil;
     }
     
-    _logMessageClass = [ARKLogMessage class];
-    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
     _persistedLogsFilePath = [[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"] copy];
@@ -71,6 +69,7 @@
         return nil;
     }
     
+    _logMessageClass = [ARKLogMessage class];
     _maximumLogCount = 2000;
     _maximumLogCountToPersist = 500;
     

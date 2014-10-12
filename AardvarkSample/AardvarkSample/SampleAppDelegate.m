@@ -1,25 +1,28 @@
 //
-//  AppDelegate.m
+//  SampleAppDelegate.m
 //  AardvarkSample
 //
 //  Created by Dan Federman on 10/8/14.
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-#import "AppDelegate.h"
+#import "SampleAppDelegate.h"
 
-#import "SampleLogger.h"
+#import "SampleUIApplicationNotificationListenerLogger.h"
 
 
-@implementation AppDelegate
+@implementation SampleAppDelegate
 
 #pragma mark - UIApplicationDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 {
+    // These two lines are all you'll need to get started.
     [Aardvark enableDefaultLogController];
-    [Aardvark addDefaultBugReportingGestureWithBugReportRecipient:@"fake-email@aardvarkbugreporting.src"];
-    [self _setupAdvancedLoggingOptions];
+    self.bugReporter = [Aardvark addDefaultBugReportingGestureWithBugReportRecipient:@"fake-email@aardvarkbugreporting.src"];
+    
+    // Some examples of fancier logging.
+    [self _setupUIApplicationEventLoggingOnDefaultController];
     
     ARKTypeLog(ARKLogTypeSeparator, @"Hello World");
     
@@ -33,14 +36,9 @@
 
 #pragma mark - Private Methods
 
-- (void)_setupAdvancedLoggingOptions;
+- (void)_setupUIApplicationEventLoggingOnDefaultController;
 {
-    ARKLogController *defaultLogController = [ARKLogController defaultController];
-    [defaultLogController addLogger:[[SampleLogger alloc] initWithLogController:[ARKLogController defaultController]]];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    defaultLogController.persistedLogsFilePath = [applicationSupportDirectory stringByAppendingPathComponent:@"SampleAardvarkLogs.data"];
+    [[ARKLogController defaultController] addLogger:[[SampleUIApplicationNotificationListenerLogger alloc] initWithLogController:[ARKLogController defaultController]]];
 }
 
 @end

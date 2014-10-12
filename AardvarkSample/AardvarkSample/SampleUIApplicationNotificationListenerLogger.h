@@ -1,5 +1,5 @@
 //
-//  SampleLogger.h
+//  SampleUIApplicationNotificationListenerLogger.h
 //  AardvarkSample
 //
 //  Created by Dan Federman on 10/8/14.
@@ -9,7 +9,7 @@
 #import <Aardvark/ARKLogger.h>
 
 
-@interface SampleLogger : NSObject <ARKLogger>
+@interface SampleUIApplicationNotificationListenerLogger : NSObject <ARKLogger>
 
 - (instancetype)initWithLogController:(ARKLogController *)logController;
 

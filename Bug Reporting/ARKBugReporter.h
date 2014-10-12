@@ -6,9 +6,12 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
+@class ARKLogController;
+
+
 @protocol ARKBugReporter <NSObject>
 
-/// Kicks off composition of a bug report. logMessages is an array of ARKLogMessages.
-- (void)composeBugReportWithLogMessages:(NSArray *)logMessages;
+/// Called when the user has triggered the creation of a bug report.
+- (void)composeBugReport;
 
 @end

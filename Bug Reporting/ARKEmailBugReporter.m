@@ -27,7 +27,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 @property (nonatomic, strong) MFMailComposeViewController *mailComposeViewController;
 @property (nonatomic, strong) UIWindow *emailComposeWindow;
 
-@property (nonatomic, copy) NSArray *logMessages;
+@property (nonatomic, copy) NSMutableSet *logControllers;
 
 @end
 
@@ -70,20 +70,23 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                            @"System version: %@\n", [[UIDevice currentDevice] systemVersion]];
     
     _logFormatter = [ARKDefaultLogFormatter new];
+    _numberOfRecentErrorLogsToIncludeInNativeClientBugReports = 3;
+    _numberOfRecentErrorLogsToIncludeInThirdPartyClientBugReports = 15;
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
+    
+    _logControllers = [NSMutableSet new];
     
     return self;
 }
 
 #pragma mark - ARKBugReporter
 
-- (void)composeBugReportWithLogMessages:(NSArray *)logMessages;
+- (void)composeBugReport;
 {
-    NSAssert(self.bugReportRecipientEmailAddress.length > 0, @"Attempting to compose a bug report without a recipient email address");
+    NSAssert(self.bugReportRecipientEmailAddress.length, @"Attempting to compose a bug report without a recipient email address.");
+    NSAssert(self.logControllers.count > 0, @"Attempting to compose a bug report without logs.");
     
     if (!self.whiteScreen) {
-        self.logMessages = logMessages;
-        
         // Take a screenshot.
         ARKLogScreenshot();
         
@@ -143,17 +146,49 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             [self.mailComposeViewController setToRecipients:@[self.bugReportRecipientEmailAddress]];
             [self.mailComposeViewController setSubject:bugTitle];
             
-            NSString *emailBody = [NSString stringWithFormat:@"%@\n%@", self.prefilledEmailBody, [self.logFormatter recentErrorLogMessagesAsPlainText:self.logMessages count:3]];
+            NSMutableString *emailBody = [NSMutableString stringWithFormat:@"%@\n", self.prefilledEmailBody];
+            
+            for (NSValue *logControllerValue in self.logControllers) {
+                ARKLogController *logController = logControllerValue.nonretainedObjectValue;
+                NSArray *logMessages = logController.allLogMessages;
+                
+                NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingString:@".png"];
+                NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for plaintext logs") stringByAppendingString:@".txt"];
+                if (logController.name.length) {
+                    [emailBody appendFormat:@"%@:\n", logController.name];
+                    screenshotFileName = [logController.name stringByAppendingFormat:@"_%@", screenshotFileName];
+                    logsFileName = [logController.name stringByAppendingFormat:@"_%@", logsFileName];
+                }
+                
+                NSString *recentErrorLogs = [self.logFormatter recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInNativeClientBugReports];
+                if (recentErrorLogs.length) {
+                    [emailBody appendFormat:@"%@\n", recentErrorLogs];
+                }
+                
+                NSData *mostRecentImage = [self.logFormatter mostRecentImageAsPNG:logMessages];
+                if (mostRecentImage.length) {
+                    [self.mailComposeViewController addAttachmentData:[self.logFormatter mostRecentImageAsPNG:logMessages] mimeType:@"image/png" fileName:screenshotFileName];
+                }
+                
+                NSData *formattedLogs = [self.logFormatter formattedLogMessagesAsData:logMessages];
+                if (formattedLogs.length) {
+                    [self.mailComposeViewController addAttachmentData:[self.logFormatter formattedLogMessagesAsData:logMessages] mimeType:@"text/plain" fileName:logsFileName];
+                }
+            }
             
             [self.mailComposeViewController setMessageBody:emailBody isHTML:NO];
-            [self.mailComposeViewController addAttachmentData:[self.logFormatter mostRecentImageAsPNG:self.logMessages] mimeType:@"image/png" fileName:@"screenshot.png"];
-            [self.mailComposeViewController addAttachmentData:[self.logFormatter formattedLogMessagesAsData:self.logMessages] mimeType:@"text/plain" fileName:@"logs.txt"];
             
             self.mailComposeViewController.mailComposeDelegate = self;
             
             [self _showEmailComposeWindow];
         } else {
-            NSString *emailBody = [NSString stringWithFormat:@"%@\n%@", self.prefilledEmailBody, [self.logFormatter recentErrorLogMessagesAsPlainText:self.logMessages count:15]];
+            NSMutableString *emailBody = [NSMutableString new];
+            for (NSValue *logControllerValue in self.logControllers) {
+                ARKLogController *logController = logControllerValue.nonretainedObjectValue;
+                NSArray *logMessages = logController.allLogMessages;
+                
+                [emailBody appendFormat:@"%@\n%@\n", self.prefilledEmailBody, [self.logFormatter recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInThirdPartyClientBugReports]];
+            }
             
             NSURL *composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:bugTitle body:emailBody];
             if (composeEmailURL != nil) {
@@ -184,6 +219,31 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     return _emailComposeWindow;
 }
 
+#pragma mark - Public Methods
+
+- (void)addLogControllerLogMessagesToFutureBugReports:(ARKLogController *)logController;
+{
+    [self.logControllers addObject:[NSValue valueWithNonretainedObject:logController]];
+}
+
+- (void)addLogControllersLogMessagesToFutureBugReports:(NSArray *)logControllers;
+{
+    for (ARKLogController *logController in logControllers) {
+        [self addLogControllerLogMessagesToFutureBugReports:logController];
+    }
+}
+
+- (void)removeLogControllerLogMessagesFromFutureBugReports:(ARKLogController *)logController;
+{
+    [self.logControllers removeObject:[NSValue valueWithNonretainedObject:logController]];
+}
+
+- (void)removeLogControllersLogMessagesFromFutureBugReports:(NSArray *)logControllers;
+{
+    for (ARKLogController *logController in logControllers) {
+        [self removeLogControllerLogMessagesFromFutureBugReports:logController];
+    }
+}
 
 #pragma mark - Private Methods
 
@@ -231,7 +291,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     self.emailComposeWindow = nil;
     
     [self.mailComposeViewController endAppearanceTransition];
-    self.logMessages = nil;
 }
 
 - (NSURL *)_emailURLWithRecipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText;

@@ -50,20 +50,28 @@ void ARKLogScreenshot()
     [ARKLogController defaultController].loggingEnabled = NO;
 }
 
-+ (void)addDefaultBugReportingGestureWithBugReportRecipient:(NSString *)emailAddress;
++ (id <ARKBugReporter>)addDefaultBugReportingGestureWithBugReportRecipient:(NSString *)emailAddress;
 {
     NSAssert([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:)], @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
     
     ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter emailBugReporterWithEmailAddress:emailAddress];
+    [bugReporter addLogControllerLogMessagesToFutureBugReports:[ARKLogController defaultController]];
+    
     [[UIApplication sharedApplication] ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:bugReporter];
+    
+    return bugReporter;
 }
 
-+ (void)addDefaultBugReportingGestureWithBugReportRecipient:(NSString *)emailAddress prefilledBugReportBody:(NSString *)prefilledBody;
++ (id <ARKBugReporter>)addDefaultBugReportingGestureWithBugReportRecipient:(NSString *)emailAddress prefilledBugReportBody:(NSString *)prefilledBody;
 {
     NSAssert([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:)], @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
     
     ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter emailBugReporterWithEmailAddress:emailAddress prefilledEmailBody:prefilledBody];
+    [bugReporter addLogControllerLogMessagesToFutureBugReports:[ARKLogController defaultController]];
+    
     [[UIApplication sharedApplication] ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:bugReporter];
+    
+    return bugReporter;
 }
 
 + (UIGestureRecognizer *)addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
@@ -71,6 +79,13 @@ void ARKLogScreenshot()
     NSAssert([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addBugReporter:withTriggeringGestureRecognizerOfClass:)], @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
     
     return [[UIApplication sharedApplication] ARK_addBugReporter:bugReporter withTriggeringGestureRecognizerOfClass:gestureRecognizerClass];
+}
+
++ (UIGestureRecognizer *)addBugReporters:(NSArray *)bugReporters withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
+{
+    NSAssert([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addBugReporters:withTriggeringGestureRecognizerOfClass:)], @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
+    
+    return [[UIApplication sharedApplication] ARK_addBugReporters:bugReporters withTriggeringGestureRecognizerOfClass:gestureRecognizerClass];
 }
 
 @end

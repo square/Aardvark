@@ -10,6 +10,7 @@
 #import <MessageUI/MessageUI.h>
 
 
+@class ARKLogController;
 @protocol ARKLogFormatter;
 
 
@@ -31,7 +32,25 @@
 /// The formatter used to prepare the log for entry into an email. Defaults to a vanilla instance of ARKDefaultLogFormatter.
 @property (nonatomic, copy, readwrite) id <ARKLogFormatter> logFormatter;
 
+/// Controls the number of recent error logs per log controller to include in the email body of a bug report composed with the default mail client. Defaults to 3.
+@property (nonatomic, assign, readwrite) NSUInteger numberOfRecentErrorLogsToIncludeInNativeClientBugReports;
+
+/// Controls the number of recent error logs per log controller to include in the email body of a bug report composed with third party mail clients (e.g. Gmail or Sparrow). Defaults to 15.
+@property (nonatomic, assign, readwrite) NSUInteger numberOfRecentErrorLogsToIncludeInThirdPartyClientBugReports;
+
 /// The window level for the email composer on iOS 7 or later. Defaults to UIWindowLevelStatusBar + 3.0.
 @property (nonatomic, assign, readwrite) UIWindowLevel emailComposeWindowLevel;
+
+/// Bug reports composed after calling this method will include logs from logController. The bug reporter holds a weak reference to logController.
+- (void)addLogControllerLogMessagesToFutureBugReports:(ARKLogController *)logController;
+
+/// Convenience method to add multiple log controllers. Parameter is an array of log controller objects.
+- (void)addLogControllersLogMessagesToFutureBugReports:(NSArray *)logControllers;
+
+/// Bug reports composed after calling this method will not include logs from logController.
+- (void)removeLogControllerLogMessagesFromFutureBugReports:(ARKLogController *)logController;
+
+/// Convenience method to remove multiple log controllers. Parameter is an array of log controller objects.
+- (void)removeLogControllersLogMessagesFromFutureBugReports:(NSArray *)logControllers;
 
 @end
