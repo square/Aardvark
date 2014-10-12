@@ -32,7 +32,7 @@
 {
     [self.tapRecognizer.view removeGestureRecognizer:self.tapRecognizer];
     
-    [super viewDidAppear:animated];
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - Private Methods
