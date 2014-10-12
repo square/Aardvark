@@ -30,6 +30,8 @@
 {
     [super viewDidLoad];
     
+    ARKLog(@"%s", __PRETTY_FUNCTION__);
+    
     self.tapLogController = [ARKLogController new];
     self.tapLogController.loggingEnabled = YES;
     self.tapLogController.name = @"Taps";
@@ -43,16 +45,25 @@
     [((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter addLogControllerLogMessagesToFutureBugReports:self.tapLogController];
 }
 
+- (void)viewDidDisappear:(BOOL)animated;
+{
+    ARKLog(@"%s", __PRETTY_FUNCTION__);
+    
+    [super viewDidDisappear:animated];
+}
+
 #pragma mark - Actions
 
 - (IBAction)viewARKLogMessages:(id)sender;
 {
+    ARKLog(@"%s", __PRETTY_FUNCTION__);
     ARKLogTableViewController *defaultLogsViewController = [ARKLogTableViewController new];
     [self.navigationController pushViewController:defaultLogsViewController animated:YES];
 }
 
 - (IBAction)viewTapLogs:(id)sender;
 {
+    ARKLog(@"%s", __PRETTY_FUNCTION__);
     ARKLogTableViewController *tapLogsViewController = [[ARKLogTableViewController alloc] initWithLogController:self.tapLogController logFormatter:[ARKDefaultLogFormatter new]];
     [self.navigationController pushViewController:tapLogsViewController animated:YES];
 }
