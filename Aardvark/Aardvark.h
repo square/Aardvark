@@ -21,9 +21,15 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
 @class ARKLogController;
 
 
+/// Appends a log with type default to the default log controller.
 OBJC_EXTERN void ARKLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
+
+/// Logs a log with customized logs and flags to the default log controller.
 OBJC_EXTERN void ARKTypeLog(ARKLogType type, NSUInteger flags, NSString *format, ...) NS_FORMAT_FUNCTION(3,4);
+
+/// Logs a screenshot to the default log controller.
 OBJC_EXTERN void ARKLogScreenshot();
+
 
 @interface Aardvark : NSObject
 
