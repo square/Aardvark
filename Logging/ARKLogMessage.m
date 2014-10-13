@@ -20,7 +20,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type;
+- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type flags:(NSUInteger)flags;
 {
     self = [super init];
     if (!self) {
@@ -30,6 +30,7 @@
     _text = [text copy];
     _image = image;
     _type = type;
+    _flags = flags;
     _createdAt = [NSDate date];
     
     return self;
@@ -48,6 +49,7 @@
     _text = [aDecoder decodeObjectOfClass:[NSString class] forKey:ARKSelfKeyPath(text)];
     _image = [aDecoder decodeObjectOfClass:[UIImage class] forKey:ARKSelfKeyPath(image)];
     _type = (ARKLogType)[[aDecoder decodeObjectOfClass:[NSNumber class] forKey:ARKSelfKeyPath(type)] unsignedIntegerValue];
+    _flags = (NSUInteger)[[aDecoder decodeObjectOfClass:[NSNumber class] forKey:ARKSelfKeyPath(flags)] unsignedIntegerValue];
     _createdAt = [aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(createdAt)];
     
     return self;
@@ -58,6 +60,7 @@
     [aCoder encodeObject:self.text forKey:ARKSelfKeyPath(text)];
     [aCoder encodeObject:self.image forKey:ARKSelfKeyPath(image)];
     [aCoder encodeObject:@(self.type) forKey:ARKSelfKeyPath(type)];
+    [aCoder encodeObject:@(self.flags) forKey:ARKSelfKeyPath(flags)];
     [aCoder encodeObject:self.createdAt forKey:ARKSelfKeyPath(createdAt)];
 }
 

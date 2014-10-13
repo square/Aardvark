@@ -98,8 +98,8 @@
 {
     NSMutableArray *logBlockTest = [NSMutableArray new];
     
-    [self.defaultLogController addLogBlock:^(NSString *logText) {
-        [logBlockTest addObject:logText];
+    [self.defaultLogController addLogBlock:^(NSUInteger flags, NSString *text) {
+        [logBlockTest addObject:text];
     } withKey:@"lobBlockTest"];
     
     XCTAssertEqual(logBlockTest.count, 0);
@@ -120,8 +120,8 @@
 {
     NSMutableArray *logBlockTest = [NSMutableArray new];
     
-    [self.defaultLogController addLogBlock:^(NSString *logText) {
-        [logBlockTest addObject:logText];
+    [self.defaultLogController addLogBlock:^(NSUInteger flags, NSString *text) {
+        [logBlockTest addObject:text];
     } withKey:@"lobBlockTest"];
     [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
     

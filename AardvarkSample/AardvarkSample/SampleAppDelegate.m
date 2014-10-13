@@ -24,14 +24,14 @@
     // Some examples of fancier logging.
     [self _setupUIApplicationEventLoggingOnDefaultController];
     
-    ARKTypeLog(ARKLogTypeSeparator, @"Hello World");
+    ARKTypeLog(ARKLogTypeSeparator, 0, @"Hello World");
     
     return YES;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application;
 {
-    ARKTypeLog(ARKLogTypeError, @"Exiting Sample App");
+    ARKTypeLog(ARKLogTypeError, 0, @"Exiting Sample App");
 }
 
 #pragma mark - Private Methods
