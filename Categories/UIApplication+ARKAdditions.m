@@ -37,10 +37,6 @@
     UIGestureRecognizer *bugReportingGestureRecognizer = [self _ARK_newBugReportingGestureRecognizerWithClass:gestureRecognizerClass];
     [self.keyWindow addGestureRecognizer:bugReportingGestureRecognizer];
     
-    if (!self.ARK_bugReporterToGestureRecognizerMap) {
-        self.ARK_bugReporterToGestureRecognizerMap = [NSMapTable strongToStrongObjectsMapTable];
-    }
-    
     NSAssert([bugReporter conformsToProtocol:@protocol(ARKBugReporter)], @"Attempting to trigger bug reports with an object that does not conform to ARKBugReporter.");
     [self.ARK_bugReporterToGestureRecognizerMap setObject:bugReportingGestureRecognizer forKey:bugReporter];
     
@@ -124,7 +120,14 @@
 
 - (NSMapTable *)ARK_bugReporterToGestureRecognizerMap;
 {
-    return objc_getAssociatedObject(self, @selector(ARK_bugReporterToGestureRecognizerMap));
+    NSMapTable *bugReporterToGestureRecognizerMap = objc_getAssociatedObject(self, @selector(ARK_bugReporterToGestureRecognizerMap));
+    
+    if (!bugReporterToGestureRecognizerMap) {
+        bugReporterToGestureRecognizerMap = [NSMapTable strongToStrongObjectsMapTable];
+        self.ARK_bugReporterToGestureRecognizerMap = bugReporterToGestureRecognizerMap;
+    }
+    
+    return bugReporterToGestureRecognizerMap;
 }
 
 - (void)setARK_bugReporterToGestureRecognizerMap:(NSMapTable *)ARK_bugReporterToGestureRecognizerMap
