@@ -22,11 +22,11 @@ void ARKLog(NSString *format, ...)
     va_end(argList);
 }
 
-void ARKTypeLog(ARKLogType type, NSUInteger flags, NSString *format, ...)
+void ARKTypeLog(ARKLogType type, NSDictionary *userInfo, NSString *format, ...)
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogController defaultController] appendLogType:type flags:flags format:format arguments:argList];
+    [[ARKLogController defaultController] appendLogType:type userInfo:userInfo format:format arguments:argList];
     va_end(argList);
 }
 

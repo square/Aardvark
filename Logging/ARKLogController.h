@@ -10,7 +10,7 @@
 @class ARKLogMessage;
 
 
-typedef void (^ARKLogBlock)(NSUInteger flags, NSString *text);
+typedef void (^ARKLogBlock)(NSString *text, NSDictionary *userInfo);
 
 
 @interface ARKLogController : NSObject
@@ -69,7 +69,7 @@ typedef void (^ARKLogBlock)(NSUInteger flags, NSString *text);
 - (void)appendLog:(NSString *)format arguments:(va_list)argList;
 
 /// Creates a ARKLogMessage and appends it to the logs. Non-blocking call.
-- (void)appendLogType:(ARKLogType)type flags:(NSUInteger)flags format:(NSString *)format arguments:(va_list)argList;
+- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 
 /// Creates a ARKLogMessage with a screenshot and appends it to the logs. Non-blocking call.
 - (void)appendLogScreenshot;
@@ -83,6 +83,6 @@ typedef void (^ARKLogBlock)(NSUInteger flags, NSString *text);
 - (void)appendLog:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
 
 /// Creates a ARKLogMessage and appends it to the logs. Non-blocking call.
-- (void)appendLogType:(ARKLogType)type flags:(NSUInteger)flags format:(NSString *)format, ... NS_FORMAT_FUNCTION(3,4);
+- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ... NS_FORMAT_FUNCTION(3,4);
 
 @end

@@ -25,7 +25,7 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
 OBJC_EXTERN void ARKLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 
 /// Logs a log with customized logs and flags to the default log controller.
-OBJC_EXTERN void ARKTypeLog(ARKLogType type, NSUInteger flags, NSString *format, ...) NS_FORMAT_FUNCTION(3,4);
+OBJC_EXTERN void ARKTypeLog(ARKLogType type, NSDictionary *userInfo, NSString *format, ...) NS_FORMAT_FUNCTION(3,4);
 
 /// Logs a screenshot to the default log controller.
 OBJC_EXTERN void ARKLogScreenshot();

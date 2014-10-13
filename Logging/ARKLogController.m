@@ -163,7 +163,7 @@
         }
         
         for (ARKLogBlock logBlock in self.logBlocks.allValues) {
-            logBlock(logMessage.flags, logMessage.text);
+            logBlock(logMessage.text, logMessage.userInfo);
         }
         
         [self.logMessages addObject:logMessage];
@@ -289,16 +289,16 @@
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:logText image:nil type:ARKLogTypeDefault flags:0];
+        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:logText image:nil type:ARKLogTypeDefault userInfo:nil];
         [self appendLogMessage:logMessage];
     }
 }
 
-- (void)appendLogType:(ARKLogType)type flags:(NSUInteger)flags format:(NSString *)format arguments:(va_list)argList;
+- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:logText image:nil type:type flags:0];
+        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:logText image:nil type:type userInfo:nil];
         [self appendLogMessage:logMessage];
     }
 }
@@ -313,7 +313,7 @@
         UIGraphicsEndImageContext();
         
         NSString *logText = @"📷📱 Screenshot!";
-        ARKLogMessage *log = [[self.logMessageClass alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault flags:0];
+        ARKLogMessage *log = [[self.logMessageClass alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
         [self appendLogMessage:log];
     }
 }
@@ -331,11 +331,11 @@
     va_end(argList);
 }
 
-- (void)appendLogType:(ARKLogType)type flags:(NSUInteger)flags format:(NSString *)format, ...;
+- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ...;
 {
     va_list argList;
     va_start(argList, format);
-    [self appendLogType:type flags:flags format:format arguments:argList];
+    [self appendLogType:type userInfo:userInfo format:format arguments:argList];
     va_end(argList);
 }
 

@@ -98,7 +98,7 @@
 {
     NSMutableArray *logBlockTest = [NSMutableArray new];
     
-    [self.defaultLogController addLogBlock:^(NSUInteger flags, NSString *text) {
+    [self.defaultLogController addLogBlock:^(NSString *text, NSDictionary *userInfo) {
         [logBlockTest addObject:text];
     } withKey:@"lobBlockTest"];
     
@@ -120,7 +120,7 @@
 {
     NSMutableArray *logBlockTest = [NSMutableArray new];
     
-    [self.defaultLogController addLogBlock:^(NSUInteger flags, NSString *text) {
+    [self.defaultLogController addLogBlock:^(NSString *text, NSDictionary *userInfo) {
         [logBlockTest addObject:text];
     } withKey:@"lobBlockTest"];
     [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
