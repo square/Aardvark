@@ -40,7 +40,6 @@
 - (void)dealloc;
 {
     [_tapRecognizer.view removeGestureRecognizer:_tapRecognizer];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Private Methods

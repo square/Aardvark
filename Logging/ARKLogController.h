@@ -19,7 +19,7 @@ typedef void (^ARKLogBlock)(NSUInteger flags, NSString *text);
 + (instancetype)defaultController;
 
 /// Enables logging. Defaults to NO. Turning off logging does not guarantee that logging on different threads will immediately cease. Property is atomic to support multithreaded logging.
-@property (atomic, assign, readwrite) BOOL loggingEnabled;
+@property (atomic, assign, readwrite, getter=isLoggingEnabled) BOOL loggingEnabled;
 
 /// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage. To ensure thread safety, this property can only be set once after initialization.
 @property (nonatomic, assign, readwrite) Class logMessageClass;
