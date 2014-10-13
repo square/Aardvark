@@ -18,6 +18,7 @@
 @interface SampleViewController ()
 
 @property (nonatomic, readwrite, strong) ARKLogController *tapLogController;
+@property (nonatomic, readwrite, strong) SampleTapLogger *tapLogger;
 
 @end
 
@@ -30,8 +31,6 @@
 {
     [super viewDidLoad];
     
-    ARKLog(@"%s", __PRETTY_FUNCTION__);
-    
     self.tapLogController = [ARKLogController new];
     self.tapLogController.loggingEnabled = YES;
     self.tapLogController.name = @"Taps";
@@ -39,15 +38,26 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
     self.tapLogController.persistedLogsFilePath = [applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"];
-
-    [self.tapLogController addLogger:[[SampleTapLogger alloc] initWithView:self.view logController:self.tapLogController]];
+    
+    self.tapLogger = [[SampleTapLogger alloc] initWithView:self.view logController:self.tapLogController];
     
     [((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter addLogControllerLogMessagesToFutureBugReports:self.tapLogController];
+}
+
+- (void)viewDidAppear:(BOOL)animated;
+{
+    ARKLog(@"%s", __PRETTY_FUNCTION__);
+    
+    [self.tapLogController addLogger:self.tapLogger];
+    
+    [super viewDidAppear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated;
 {
     ARKLog(@"%s", __PRETTY_FUNCTION__);
+    
+    [self.tapLogController removeLogger:self.tapLogger];
     
     [super viewDidDisappear:animated];
 }
