@@ -27,7 +27,7 @@ typedef void (^ARKLogBlock)(NSString *text, NSDictionary *userInfo);
 /// Convenience property that allows bug reporters to prefix logs with the name of the controller they came from. Defaults to nil.
 @property (nonatomic, copy, readwrite) NSString *name;
 
-/// The maximum number of logs allLogMessages should return. Defaults to 2000. Set to 0 to never truncate.
+/// The maximum number of logs allLogMessages should return. Defaults to 2000. Set to 0 to not store logs in memory (but still execute log block callbacks).
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogCount;
 
 /// The maximum number of logs to persist to disk. Defaults to 500.

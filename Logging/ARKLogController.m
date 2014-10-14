@@ -15,7 +15,7 @@
 
 @interface ARKLogController ()
 
-@property (nonatomic, strong, readonly) NSMutableArray *logMessages;
+@property (nonatomic, strong, readwrite) NSMutableArray *logMessages;
 @property (nonatomic, strong, readonly) NSMutableDictionary *logBlocks;
 @property (nonatomic, strong, readonly) NSOperationQueue *loggingQueue;
 @property (nonatomic, strong, readonly) NSMutableSet *globalLoggers;
@@ -53,12 +53,8 @@
     NSString *applicationSupportDirectory = paths.firstObject;
     _persistedLogsFilePath = [[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"] copy];
     
-    NSArray *persistedLogs = [self _persistedLogs];
-    if (persistedLogs.count > 0) {
-        _logMessages = [persistedLogs mutableCopy];
-    } else {
-        _logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogCount)];
-    }
+    // Initialize logMessages. This can be done on this thread since we are still inside of init.
+    [self _initializeLogMessages_inLoggingQueue];
     
     _logBlocks = [NSMutableDictionary new];
     
@@ -114,6 +110,23 @@
     });
 }
 
+- (void)setMaximumLogCount:(NSUInteger)maximumLogCount;
+{
+    if (_maximumLogCount == maximumLogCount) {
+        return;
+    }
+    
+    _maximumLogCount = maximumLogCount;
+    
+    [self.loggingQueue addOperationWithBlock:^{
+        if (maximumLogCount == 0) {
+            self.logMessages = nil;
+        } else if (self.logMessages == nil) {
+            [self _initializeLogMessages_inLoggingQueue];
+        }
+    }];
+}
+
 - (void)setPersistedLogsFilePath:(NSString *)persistedLogsFilePath;
 {
     if (![_persistedLogsFilePath isEqualToString:persistedLogsFilePath]) {
@@ -153,7 +166,7 @@
         }
         
         // Don't proactively trim too often.
-        if (self.logMessages.count >= 2 * self.maximumLogCount) {
+        if (self.maximumLogCount > 0 && self.logMessages.count >= 2 * self.maximumLogCount) {
             // We've held on to 2x more logs than we'll ever expose. Trim!
             [self _trimLogs_inLoggingQueue];
         }
@@ -238,6 +251,21 @@
     }
     
     return nil;
+}
+
+- (void)_initializeLogMessages_inLoggingQueue;
+{
+    NSArray *persistedLogs = [self _persistedLogs];
+    if (persistedLogs.count > 0) {
+        if (persistedLogs.count > self.maximumLogCount) {
+            NSUInteger numberOfLogsToTrim = persistedLogs.count - self.maximumLogCount;
+            self.logMessages = [[persistedLogs subarrayWithRange:NSMakeRange(numberOfLogsToTrim, self.maximumLogCount)] mutableCopy];
+        } else {
+            self.logMessages = [persistedLogs mutableCopy];
+        }
+    } else {
+        self.logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogCount)];
+    }
 }
 
 - (void)_persistLogs_inLoggingQueue;

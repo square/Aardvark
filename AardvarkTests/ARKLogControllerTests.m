@@ -94,6 +94,53 @@
     XCTAssertEqual(logController.logMessageClass, [ARKLogMessageTestSubclass class], @"Setting logMessageClass a second time succeeded");
 }
 
+- (void)test_setMaximumLogCount_settingToZeroDestroysLogMessageArray;
+{
+    ARKLogController *logController = [ARKLogController new];
+    XCTAssertNotNil(logController.logMessages);
+    
+    logController.maximumLogCount = 0;
+    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    XCTAssertNil(logController.logMessages);
+}
+
+- (void)test_setMaximumLogCount_settingToZeroThenNonZeroRessurectsLogMessageArray;
+{
+    ARKLogController *logController = [ARKLogController new];
+    XCTAssertNotNil(logController.logMessages);
+    
+    logController.maximumLogCount = 0;
+    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    XCTAssertNil(logController.logMessages);
+    
+    logController.maximumLogCount = 5;
+    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    XCTAssertNotNil(logController.logMessages);
+}
+
+- (void)_test_setMaximumLogCount_settingToZeroStillCallsLogBlocks;
+{
+    ARKLogController *logController = [ARKLogController new];
+    logController.maximumLogCount = 0;
+    
+    NSMutableArray *logBlockTest = [NSMutableArray new];
+    [logController addLogBlock:^(NSString *text, NSDictionary *userInfo) {
+        [logBlockTest addObject:text];
+    } withKey:@"lobBlockTest"];
+    
+    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
+        [logController appendLog:@"Log %@", @(i)];
+    }
+    
+    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    XCTAssertGreaterThan(logController.logMessages.count, 0);
+    [logController.logMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
+        XCTAssertEqualObjects(logMessage.text, logBlockTest[idx]);
+    }];
+    
+    [logController removeLogBlockWithKey:@"lobBlockTest"];
+}
+
 - (void)test_addLogBlockWithKey_logsToLogBlock;
 {
     NSMutableArray *logBlockTest = [NSMutableArray new];
@@ -109,6 +156,7 @@
     }
     
     [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
+    XCTAssertGreaterThan(self.defaultLogController.logMessages.count, 0);
     [self.defaultLogController.logMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
         XCTAssertEqualObjects(logMessage.text, logBlockTest[idx]);
     }];
@@ -316,6 +364,32 @@
     XCTAssertEqual(logController.allLogMessages.count, logMessageCount, @"Logs did not persist in dealloc.");
     
     [logController clearLogs];
+}
+
+- (void)test_initializeLogMessages_ressurectsAtMostMaximumLogCount;
+{
+    ARKLogController *logController = [ARKLogController new];
+    logController.loggingEnabled = YES;
+    logController.maximumLogCount = 10;
+    for (int i = 0; i < logController.maximumLogCount; i++) {
+        [logController appendLog:@"%@", @(i)];
+    }
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = paths.firstObject;
+    NSString *persistenceTestLogsPath = [applicationSupportDirectory stringByAppendingPathComponent:@"ARKPersistenceTestLogControllerLogs.data"];
+    logController.persistedLogsFilePath = persistenceTestLogsPath;
+    
+    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    [logController _persistLogs_inLoggingQueue];
+    
+    logController.maximumLogCount = 0;
+    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    XCTAssertNil(logController.logMessages);
+    
+    logController.maximumLogCount = 5;
+    [logController.loggingQueue waitUntilAllOperationsAreFinished];
+    XCTAssertEqual(logController.logMessages.count, logController.maximumLogCount);
 }
 
 #pragma mark - Performance Tests
