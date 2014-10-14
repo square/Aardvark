@@ -326,7 +326,7 @@
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:logText image:nil type:type userInfo:nil];
+        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:logText image:nil type:type userInfo:userInfo];
         [self appendLogMessage:logMessage];
     }
 }
