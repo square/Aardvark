@@ -398,6 +398,8 @@
     logController.maximumLogCount = 5;
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
     XCTAssertEqual(logController.logMessages.count, logController.maximumLogCount);
+    
+    [logController clearLogs];
 }
 
 #pragma mark - Performance Tests
