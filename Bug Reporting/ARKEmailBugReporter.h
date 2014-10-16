@@ -41,16 +41,4 @@
 /// The window level for the email composer on iOS 7 or later. Defaults to UIWindowLevelStatusBar + 3.0.
 @property (nonatomic, assign, readwrite) UIWindowLevel emailComposeWindowLevel;
 
-/// Bug reports composed after calling this method will include logs from logController. The bug reporter holds a weak reference to logController.
-- (void)addLogControllerLogMessagesToFutureBugReports:(ARKLogController *)logController;
-
-/// Convenience method to add multiple log controllers. Parameter is an array of log controller objects.
-- (void)addLogControllersLogMessagesToFutureBugReports:(NSArray *)logControllers;
-
-/// Bug reports composed after calling this method will not include logs from logController.
-- (void)removeLogControllerLogMessagesFromFutureBugReports:(ARKLogController *)logController;
-
-/// Convenience method to remove multiple log controllers. Parameter is an array of log controller objects.
-- (void)removeLogControllersLogMessagesFromFutureBugReports:(NSArray *)logControllers;
-
 @end

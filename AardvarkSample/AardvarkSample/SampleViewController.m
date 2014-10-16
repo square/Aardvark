@@ -41,7 +41,7 @@
     
     self.tapLogger = [[SampleTapLogger alloc] initWithView:self.view logController:self.tapLogController];
     
-    [((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter addLogControllerLogMessagesToFutureBugReports:self.tapLogController];
+    [((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter addLogController:self.tapLogController];
 }
 
 - (void)viewDidAppear:(BOOL)animated;

@@ -108,6 +108,19 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     }
 }
 
+- (void)addLogController:(ARKLogController *)logController;
+{
+    NSAssert(self.mailComposeViewController == nil, @"Can not add a log controller while a bug is being composed.");
+    
+    [self.logControllers addObject:[NSValue valueWithNonretainedObject:logController]];
+}
+- (void)removeLogController:(ARKLogController *)logController;
+{
+    NSAssert(self.mailComposeViewController == nil, @"Can not add a remove a controller while a bug is being composed.");
+    
+    [self.logControllers removeObject:[NSValue valueWithNonretainedObject:logController]];
+}
+
 #pragma mark - CAAnimationDelegate
 
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished;
@@ -217,33 +230,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     }
     
     return _emailComposeWindow;
-}
-
-#pragma mark - Public Methods
-
-- (void)addLogControllerLogMessagesToFutureBugReports:(ARKLogController *)logController;
-{
-    [self.logControllers addObject:[NSValue valueWithNonretainedObject:logController]];
-}
-
-- (void)addLogControllersLogMessagesToFutureBugReports:(NSArray *)logControllers;
-{
-    for (ARKLogController *logController in logControllers) {
-        NSAssert([logController isKindOfClass:[ARKLogController class]], @"Can not add an instance that is not an ARKLogController to future bug reports.");
-        [self addLogControllerLogMessagesToFutureBugReports:logController];
-    }
-}
-
-- (void)removeLogControllerLogMessagesFromFutureBugReports:(ARKLogController *)logController;
-{
-    [self.logControllers removeObject:[NSValue valueWithNonretainedObject:logController]];
-}
-
-- (void)removeLogControllersLogMessagesFromFutureBugReports:(NSArray *)logControllers;
-{
-    for (ARKLogController *logController in logControllers) {
-        [self removeLogControllerLogMessagesFromFutureBugReports:logController];
-    }
 }
 
 #pragma mark - Private Methods

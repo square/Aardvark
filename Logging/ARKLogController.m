@@ -157,33 +157,6 @@
     }];
 }
 
-- (void)appendLogMessageWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
-{
-    [self.loggingQueue addOperationWithBlock:^{
-        if (!self.loggingEnabled) {
-            return;
-        }
-        
-        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
-        
-        // Don't proactively trim too often.
-        if (self.maximumLogCount > 0 && self.logMessages.count >= 2 * self.maximumLogCount) {
-            // We've held on to 2x more logs than we'll ever expose. Trim!
-            [self _trimLogs_inLoggingQueue];
-        }
-        
-        if (self.logsToConsole) {
-            NSLog(@"%@", logMessage.text);
-        }
-        
-        for (ARKLogBlock logBlock in self.logBlocks.allValues) {
-            logBlock(logMessage.text, logMessage.userInfo);
-        }
-        
-        [self.logMessages addObject:logMessage];
-    }];
-}
-
 - (void)addLogger:(id <ARKLogger>)logger;
 {
     NSAssert([logger conformsToProtocol:@protocol(ARKLogger)], @"Tried to add a logger that does not conform to ARKLogger protocol");
@@ -314,20 +287,63 @@
 
 @implementation ARKLogController (ARKLogAdditions)
 
-- (void)appendLog:(NSString *)format arguments:(va_list)argList;
+- (void)appendLogWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 {
-    if (self.loggingEnabled) {
-        NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        [self appendLogMessageWithText:logText image:nil type:ARKLogTypeDefault userInfo:nil];
-    }
+    [self.loggingQueue addOperationWithBlock:^{
+        if (!self.loggingEnabled) {
+            return;
+        }
+        
+        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
+        
+        // Don't proactively trim too often.
+        if (self.maximumLogCount > 0 && self.logMessages.count >= 2 * self.maximumLogCount) {
+            // We've held on to 2x more logs than we'll ever expose. Trim!
+            [self _trimLogs_inLoggingQueue];
+        }
+        
+        if (self.logsToConsole) {
+            NSLog(@"%@", logMessage.text);
+        }
+        
+        for (ARKLogBlock logBlock in self.logBlocks.allValues) {
+            logBlock(logMessage.text, logMessage.userInfo);
+        }
+        
+        [self.logMessages addObject:logMessage];
+    }];
 }
 
 - (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        [self appendLogMessageWithText:logText image:nil type:type userInfo:userInfo];
+        [self appendLogWithText:logText image:nil type:type userInfo:userInfo];
     }
+}
+
+- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ...;
+{
+    va_list argList;
+    va_start(argList, format);
+    [self appendLogType:type userInfo:userInfo format:format arguments:argList];
+    va_end(argList);
+}
+
+- (void)appendLog:(NSString *)format arguments:(va_list)argList;
+{
+    if (self.loggingEnabled) {
+        NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+        [self appendLogWithText:logText image:nil type:ARKLogTypeDefault userInfo:nil];
+    }
+}
+
+- (void)appendLog:(NSString *)format, ...;
+{
+    va_list argList;
+    va_start(argList, format);
+    [self appendLog:format arguments:argList];
+    va_end(argList);
 }
 
 - (void)appendLogScreenshot;
@@ -340,29 +356,8 @@
         UIGraphicsEndImageContext();
         
         NSString *logText = @"📷📱 Screenshot!";
-        [self appendLogMessageWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
+        [self appendLogWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
     }
-}
-
-@end
-
-
-@implementation ARKLogController (ARKLoggerAdditions)
-
-- (void)appendLog:(NSString *)format, ...;
-{
-    va_list argList;
-    va_start(argList, format);
-    [self appendLog:format arguments:argList];
-    va_end(argList);
-}
-
-- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ...;
-{
-    va_list argList;
-    va_start(argList, format);
-    [self appendLogType:type userInfo:userInfo format:format arguments:argList];
-    va_end(argList);
 }
 
 @end

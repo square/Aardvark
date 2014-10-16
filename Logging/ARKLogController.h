@@ -45,9 +45,6 @@ typedef void (^ARKLogBlock)(NSString *text, NSDictionary *userInfo);
 /// Removes a log block.
 - (void)removeLogBlockWithKey:(id <NSCopying>)logBlock;
 
-/// Appends a log to the logs. Non-blocking call.
-- (void)appendLogMessageWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
-
 /// Retains an object that handles logging.
 - (void)addLogger:(id <ARKLogger>)logger;
 
@@ -63,26 +60,25 @@ typedef void (^ARKLogBlock)(NSString *text, NSDictionary *userInfo);
 @end
 
 
-@interface ARKLogController (ARKLogAdditions)
+@interface ARKLogController (LoggingAdditions)
 
-/// Creates a ARKLogMessage with ARKLogTypeDefault and appends it to the logs. Non-blocking call.
-- (void)appendLog:(NSString *)format arguments:(va_list)argList;
+/// Creates a log message and appends a log message to the logs. Non-blocking call.
+- (void)appendLogWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 
-/// Creates a ARKLogMessage and appends it to the logs. Non-blocking call.
+/// Creates a log message and appends it to the logs. Non-blocking call.
 - (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 
-/// Creates a ARKLogMessage with a screenshot and appends it to the logs. Non-blocking call.
+/// Creates a log message and appends it to the logs. Non-blocking call.
+- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ... NS_FORMAT_FUNCTION(3,4);
+
+/// Creates a log message with ARKLogTypeDefault and appends it to the logs. Non-blocking call.
+- (void)appendLog:(NSString *)format arguments:(va_list)argList;
+
+/// Creates a log message with ARKLogTypeDefault and appends it to the logs. Non-blocking call.
+- (void)appendLog:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
+
+/// Creates a log message with a screenshot and appends it to the logs. Non-blocking call.
 - (void)appendLogScreenshot;
 
 @end
 
-
-@interface ARKLogController (ARKLoggerAdditions)
-
-/// Creates a ARKLogMessage with ARKLogTypeDefault and appends it to the logs. Non-blocking call.
-- (void)appendLog:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
-
-/// Creates a ARKLogMessage and appends it to the logs. Non-blocking call.
-- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ... NS_FORMAT_FUNCTION(3,4);
-
-@end
