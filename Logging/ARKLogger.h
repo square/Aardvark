@@ -12,6 +12,6 @@
 @protocol ARKLogger <NSObject>
 
 /// The log controller to which the logger will log. Weak reference prevents retain cycle.
-@property (nonatomic, weak, readwrite) ARKLogController *logController;
+@property (nonatomic, weak, readonly) ARKLogController *logController;
 
 @end
