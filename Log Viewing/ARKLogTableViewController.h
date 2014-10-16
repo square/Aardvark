@@ -15,7 +15,7 @@
 
 - (instancetype)initWithLogController:(ARKLogController *)logController logFormatter:(id <ARKLogFormatter>)logFormatter __attribute__((objc_designated_initializer));
 
-/// The log controller that acts as the data source for the table.
+/// The log controller that provides the data for the table.
 @property (nonatomic, strong, readonly) ARKLogController *logController;
 
 /// The formatter used to prepare the logs for the share/activity sheet.

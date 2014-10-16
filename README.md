@@ -16,7 +16,7 @@ This will allow users to report a bug by making a two-finger long-press gesture.
 
 You can change how many ARKLogs are included in bug reports by changing the value of `maximumLogCount` on your `defaultController` of `ARKLogController`.
 
-You can customize both how bugs reports are triggered and how they are filed by passing your own `ARKBugReporter` object to `[Aardvark addBugReporter:withTriggeringGestureRecognizerOfClass:]`.
+You can customize both how bug reports are triggered and how they are filed by passing your own `ARKBugReporter` object to `[Aardvark addBugReporter:withTriggeringGestureRecognizerOfClass:]`.
 
 You can easily log to third party services by adding `ARKLogBlock`s to a ARKLogController. Example: `[[ARKLogController defaultController] addLogBlock:^(NSString *text, NSDictionary *userInfo) { CLSLog(@"%@", logText); } withKey:@"Crashlytics"];`
 
