@@ -31,7 +31,7 @@
     _image = image;
     _type = type;
     _userInfo = [userInfo copy];
-    _createdAt = [NSDate date];
+    _creationDate = [NSDate date];
     
     return self;
 }
@@ -49,7 +49,7 @@
     _text = [aDecoder decodeObjectOfClass:[NSString class] forKey:ARKSelfKeyPath(text)];
     _image = [aDecoder decodeObjectOfClass:[UIImage class] forKey:ARKSelfKeyPath(image)];
     _type = (ARKLogType)[[aDecoder decodeObjectOfClass:[NSNumber class] forKey:ARKSelfKeyPath(type)] unsignedIntegerValue];
-    _createdAt = [aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(createdAt)];
+    _creationDate = [aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(creationDate)];
     
     return self;
 }
@@ -59,7 +59,7 @@
     [aCoder encodeObject:self.text forKey:ARKSelfKeyPath(text)];
     [aCoder encodeObject:self.image forKey:ARKSelfKeyPath(image)];
     [aCoder encodeObject:@(self.type) forKey:ARKSelfKeyPath(type)];
-    [aCoder encodeObject:self.createdAt forKey:ARKSelfKeyPath(createdAt)];
+    [aCoder encodeObject:self.creationDate forKey:ARKSelfKeyPath(creationDate)];
 }
 
 #pragma mark - NSCopying
@@ -74,7 +74,7 @@
 
 - (NSString *)description;
 {
-    NSString *dateString = [NSDateFormatter localizedStringFromDate:self.createdAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterMediumStyle];
+    NSString *dateString = [NSDateFormatter localizedStringFromDate:self.creationDate dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterMediumStyle];
     return [NSString stringWithFormat:@"[%@] %@", dateString, self.text];
 }
 

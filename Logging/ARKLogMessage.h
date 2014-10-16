@@ -10,7 +10,7 @@
 
 - (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo __attribute__((objc_designated_initializer));
 
-@property (nonatomic, copy, readonly) NSDate *createdAt;
+@property (nonatomic, copy, readonly) NSDate *creationDate;
 @property (nonatomic, copy, readonly) NSString *text;
 @property (nonatomic, strong, readonly) UIImage *image;
 @property (nonatomic, assign, readonly) ARKLogType type;

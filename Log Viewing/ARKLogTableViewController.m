@@ -144,7 +144,7 @@
         }
     }
     
-    NSTimeInterval delta = firstSeparatorLog ? [currentLog.createdAt timeIntervalSinceDate:firstSeparatorLog.createdAt] : 0.0;
+    NSTimeInterval delta = firstSeparatorLog ? [currentLog.creationDate timeIntervalSinceDate:firstSeparatorLog.creationDate] : 0.0;
     if (delta > 60.0) {
         cell.textLabel.text = [NSString stringWithFormat:@"+%.fm\t%@", delta / 60.0, currentLog.text];
     } else if (delta > 1.0) {
@@ -165,18 +165,18 @@
             });
             
             NSCalendarUnit dayComponents = (NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay);
-            NSDateComponents *logDateComponents = [calendar components:dayComponents fromDate:currentLog.createdAt];
+            NSDateComponents *logDateComponents = [calendar components:dayComponents fromDate:currentLog.creationDate];
             NSDateComponents *todayDateComponents = [calendar components:dayComponents fromDate:[NSDate date]];
 
             if ([logDateComponents isEqual:todayDateComponents]) {
                 // Log was created today.
                 cell.textLabel.text = [NSString stringWithFormat:@"%@ -- %@",
                                        currentLog.text,
-                                       [NSDateFormatter localizedStringFromDate:currentLog.createdAt dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterMediumStyle]];
+                                       [NSDateFormatter localizedStringFromDate:currentLog.creationDate dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterMediumStyle]];
             } else {
                 cell.textLabel.text = [NSString stringWithFormat:@"%@ -- %@",
                                        currentLog.text,
-                                       [NSDateFormatter localizedStringFromDate:currentLog.createdAt dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle]];
+                                       [NSDateFormatter localizedStringFromDate:currentLog.creationDate dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle]];
             }
             
             textColor = [UIColor whiteColor];
@@ -212,12 +212,12 @@
 {
     ARKLogMessage *log = self.logMessages[[indexPath row]];
     if (log.image != nil) {
-        ARKScreenshotViewController *screenshotViewer = [[ARKScreenshotViewController alloc] initWithImage:log.image date:log.createdAt];
+        ARKScreenshotViewController *screenshotViewer = [[ARKScreenshotViewController alloc] initWithImage:log.image date:log.creationDate];
         
         [self.navigationController pushViewController:screenshotViewer animated:YES];
     } else {
         ARKIndividualLogViewController *individualLogViewer = [ARKIndividualLogViewController new];
-        individualLogViewer.text = [NSString stringWithFormat:@"%@\n%@", log.createdAt, log.text];
+        individualLogViewer.text = [NSString stringWithFormat:@"%@\n%@", log.creationDate, log.text];
         
         [self.navigationController pushViewController:individualLogViewer animated:YES];
     }
