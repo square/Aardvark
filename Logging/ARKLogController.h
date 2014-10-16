@@ -37,7 +37,7 @@ typedef void (^ARKLogBlock)(NSString *text, NSDictionary *userInfo);
 @property (nonatomic, copy, readwrite) NSString *persistedLogsFilePath;
 
 /// Controls whether appending logs also outputs to NSLog. Defaults to NO.
-@property (nonatomic, assign, readwrite) BOOL logToConsole;
+@property (nonatomic, assign, readwrite) BOOL logsToConsole;
 
 /// Adds a log block. Log blocks are executed on the logging queue every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc).
 - (void)addLogBlock:(ARKLogBlock)logBlock withKey:(id <NSCopying>)logBlockKey;

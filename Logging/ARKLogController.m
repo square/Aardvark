@@ -172,7 +172,7 @@
             [self _trimLogs_inLoggingQueue];
         }
         
-        if (self.logToConsole) {
+        if (self.logsToConsole) {
             NSLog(@"%@", logMessage.text);
         }
         
