@@ -18,7 +18,7 @@ You can change how many ARKLogs are included in bug reports by changing the valu
 
 You can customize both how bug reports are triggered and how they are filed by passing your own `ARKBugReporter` object to `[Aardvark addBugReporter:withTriggeringGestureRecognizerOfClass:]`.
 
-You can easily log to third party services by adding `ARKLogBlock`s to a ARKLogController. Example: `[[ARKLogController defaultController] addLogBlock:^(NSString *text, NSDictionary *userInfo) { CLSLog(@"%@", logText); } withKey:@"Crashlytics"];`
+You can easily log to third party services by adding `ARKLogHandler`s to a ARKLogController. SampleCrashlyticsLogHandler is an example of a ARKLogHandler that logs events to Crashlytics.
 
 ## Viewing Logs
 
