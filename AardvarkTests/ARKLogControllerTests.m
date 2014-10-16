@@ -82,16 +82,24 @@
     XCTAssertEqual(self.defaultLogController.allLogMessages.count, 0, @"Log appended with logging disabled!");
 }
 
-- (void)test_setLogMessageClass_onlySetOnce;
+- (void)test_setLogMessageClass_appendedLogsAreCorrectClass;
 {
     ARKLogController *logController = [ARKLogController new];
+    logController.loggingEnabled = YES;
+    
+    [logController appendLog:@"This log should be an ARKLogMessage"];
+    
+    XCTAssertEqual(logController.allLogMessages.count, 1);
+    XCTAssertEqual([logController.allLogMessages.firstObject class], [ARKLogMessage class]);
+    
+    [logController clearLogs];
+    XCTAssertEqual(logController.allLogMessages.count, 0);
+    
     logController.logMessageClass = [ARKLogMessageTestSubclass class];
+    [logController appendLog:@"This log should be an ARKLogMessageTestSubclass"];
     
-    XCTAssertEqual(logController.logMessageClass, [ARKLogMessageTestSubclass class], @"Setting logMessageClass failed");
-    
-    logController.logMessageClass = [ARKLogMessage class];
-    
-    XCTAssertEqual(logController.logMessageClass, [ARKLogMessageTestSubclass class], @"Setting logMessageClass a second time succeeded");
+    XCTAssertEqual(logController.allLogMessages.count, 1);
+    XCTAssertEqual([logController.allLogMessages.firstObject class], [ARKLogMessageTestSubclass class]);
 }
 
 - (void)test_setMaximumLogCount_settingToZeroDestroysLogMessageArray;

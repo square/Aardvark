@@ -21,7 +21,7 @@ typedef void (^ARKLogBlock)(NSString *text, NSDictionary *userInfo);
 /// Enables logging. Defaults to NO. Turning off logging does not guarantee that logging on different threads will immediately cease. Property is atomic to support multithreaded logging.
 @property (atomic, assign, readwrite, getter=isLoggingEnabled) BOOL loggingEnabled;
 
-/// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage. To ensure thread safety, this property can only be set once after initialization.
+/// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage.
 @property (nonatomic, assign, readwrite) Class logMessageClass;
 
 /// Convenience property that allows bug reporters to prefix logs with the name of the controller they came from. Defaults to nil.
@@ -36,7 +36,7 @@ typedef void (^ARKLogBlock)(NSString *text, NSDictionary *userInfo);
 /// Path to the file on disk that contains peristed logs. Defaults to nil for all controllers except defaultController.
 @property (nonatomic, copy, readwrite) NSString *persistedLogsFilePath;
 
-/// Controls whether appendLogMessage: also logs to NSLog. Defaults to NO.
+/// Controls whether appending logs also outputs to NSLog. Defaults to NO.
 @property (nonatomic, assign, readwrite) BOOL logToConsole;
 
 /// Adds a log block. Log blocks are executed on the logging queue every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc).
@@ -46,7 +46,7 @@ typedef void (^ARKLogBlock)(NSString *text, NSDictionary *userInfo);
 - (void)removeLogBlockWithKey:(id <NSCopying>)logBlock;
 
 /// Appends a log to the logs. Non-blocking call.
-- (void)appendLogMessage:(ARKLogMessage *)logMessage;
+- (void)appendLogMessageWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 
 /// Retains an object that handles logging.
 - (void)addLogger:(id <ARKLogger>)logger;

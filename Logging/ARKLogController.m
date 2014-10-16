@@ -104,10 +104,9 @@
 {
     NSAssert([logMessageClass isSubclassOfClass:[ARKLogMessage class]], @"Attempting to set a logMessageClass that is not a subclass of ARKLogMessage!");
     
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    [self.loggingQueue addOperationWithBlock:^{
         _logMessageClass = logMessageClass;
-    });
+    }];
 }
 
 - (void)setMaximumLogCount:(NSUInteger)maximumLogCount;
@@ -158,12 +157,14 @@
     }];
 }
 
-- (void)appendLogMessage:(ARKLogMessage *)logMessage;
+- (void)appendLogMessageWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 {
     [self.loggingQueue addOperationWithBlock:^{
         if (!self.loggingEnabled) {
             return;
         }
+        
+        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
         
         // Don't proactively trim too often.
         if (self.maximumLogCount > 0 && self.logMessages.count >= 2 * self.maximumLogCount) {
@@ -317,8 +318,7 @@
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:logText image:nil type:ARKLogTypeDefault userInfo:nil];
-        [self appendLogMessage:logMessage];
+        [self appendLogMessageWithText:logText image:nil type:ARKLogTypeDefault userInfo:nil];
     }
 }
 
@@ -326,8 +326,7 @@
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:logText image:nil type:type userInfo:userInfo];
-        [self appendLogMessage:logMessage];
+        [self appendLogMessageWithText:logText image:nil type:type userInfo:userInfo];
     }
 }
 
@@ -341,8 +340,7 @@
         UIGraphicsEndImageContext();
         
         NSString *logText = @"📷📱 Screenshot!";
-        ARKLogMessage *log = [[self.logMessageClass alloc] initWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
-        [self appendLogMessage:log];
+        [self appendLogMessageWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
     }
 }
 
