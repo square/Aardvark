@@ -130,7 +130,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     ARKLogController *logController = [ARKLogController new];
     XCTAssertNotNil(logController.logMessages);
     
-    logController.maximumLogCount = 0;
+    logController.maximumLogMessageCount = 0;
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
     XCTAssertNil(logController.logMessages);
 }
@@ -140,11 +140,11 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     ARKLogController *logController = [ARKLogController new];
     XCTAssertNotNil(logController.logMessages);
     
-    logController.maximumLogCount = 0;
+    logController.maximumLogMessageCount = 0;
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
     XCTAssertNil(logController.logMessages);
     
-    logController.maximumLogCount = 5;
+    logController.maximumLogMessageCount = 5;
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
     XCTAssertNotNil(logController.logMessages);
 }
@@ -152,7 +152,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 - (void)_test_setMaximumLogCount_settingToZeroStillCallsLogHandlers;
 {
     ARKLogController *logController = [ARKLogController new];
-    logController.maximumLogCount = 0;
+    logController.maximumLogMessageCount = 0;
     logController.loggingEnabled = YES;
     
     NSMutableArray *logHandlerTest = [NSMutableArray new];
@@ -162,7 +162,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     };
     [logController addLogHandler:testLogHandler];
     
-    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogMessageCount; i++) {
         [logController appendLog:@"Log %@", @(i)];
     }
     
@@ -184,7 +184,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     
     XCTAssertEqual(logHandlerTest.count, 0);
     
-    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogMessageCount; i++) {
         ARKLog(@"Log %@", @(i));
     }
     
@@ -215,7 +215,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     
     XCTAssertEqual(self.defaultLogController.logHandlers.count, 0);
     
-    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogMessageCount; i++) {
         ARKLog(@"Log %@", @(i));
     }
     
@@ -225,11 +225,11 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 
 - (void)test_appendLog_logTrimming;
 {
-    NSUInteger numberOfLogsToEnter = 2 * self.defaultLogController.maximumLogCount + 10;
-    NSUInteger expectedInternalLogCount = self.defaultLogController.maximumLogCount + (numberOfLogsToEnter % self.defaultLogController.maximumLogCount);
+    NSUInteger numberOfLogsToEnter = 2 * self.defaultLogController.maximumLogMessageCount + 10;
+    NSUInteger expectedInternalLogCount = self.defaultLogController.maximumLogMessageCount + (numberOfLogsToEnter % self.defaultLogController.maximumLogMessageCount);
     
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < (expectedInternalLogCount + self.defaultLogController.maximumLogCount); i++) {
+    for (NSUInteger i  = 0; i < (expectedInternalLogCount + self.defaultLogController.maximumLogMessageCount); i++) {
         [numbers addObject:@(i)];
     }
     
@@ -246,13 +246,13 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     
     // Exposed log count should never be greater than maximumLogCount.
     NSArray *allLogMessages = self.defaultLogController.allLogMessages;
-    XCTAssertGreaterThanOrEqual(allLogMessages.count, self.defaultLogController.maximumLogCount, @"Exposed log count (%@) must never exceed maximum log count (%@).", @(allLogMessages.count), @(self.defaultLogController.maximumLogCount));
+    XCTAssertGreaterThanOrEqual(allLogMessages.count, self.defaultLogController.maximumLogMessageCount, @"Exposed log count (%@) must never exceed maximum log count (%@).", @(allLogMessages.count), @(self.defaultLogController.maximumLogCount));
 }
 
 - (void)test_clearLogs_removesAllLogMessages;
 {
     // Fill in some logs.
-    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogMessageCount; i++) {
         ARKLog(@"Log %@", @(i));
     }
     
@@ -278,7 +278,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 - (void)test_trimmedLogsToPersistLogs_maximumLogCountToPersistPersisted;
 {
     // Fill in some logs.
-    NSUInteger numberOfLogsToEnter = self.defaultLogController.maximumLogCount + 10;
+    NSUInteger numberOfLogsToEnter = self.defaultLogController.maximumLogMessageCount + 10;
     for (NSUInteger i  = 0; i < numberOfLogsToEnter; i++) {
         ARKLog(@"Log %@", @(i));
     }
@@ -292,7 +292,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 - (void)test_persistLogs_noSideEffect;
 {
     // Fill in some logs.
-    NSUInteger numberOfLogsToEnter = self.defaultLogController.maximumLogCount + 10;
+    NSUInteger numberOfLogsToEnter = self.defaultLogController.maximumLogMessageCount + 10;
     for (NSUInteger i  = 0; i < numberOfLogsToEnter; i++) {
         ARKLog(@"Log %@", @(i));
     }
@@ -405,8 +405,8 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 {
     ARKLogController *logController = [ARKLogController new];
     logController.loggingEnabled = YES;
-    logController.maximumLogCount = 10;
-    for (int i = 0; i < logController.maximumLogCount; i++) {
+    logController.maximumLogMessageCount = 10;
+    for (int i = 0; i < logController.maximumLogMessageCount; i++) {
         [logController appendLog:@"%@", @(i)];
     }
     
@@ -418,13 +418,13 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
     [logController _persistLogs_inLoggingQueue];
     
-    logController.maximumLogCount = 0;
+    logController.maximumLogMessageCount = 0;
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
     XCTAssertNil(logController.logMessages);
     
-    logController.maximumLogCount = 5;
+    logController.maximumLogMessageCount = 5;
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
-    XCTAssertEqual(logController.logMessages.count, logController.maximumLogCount);
+    XCTAssertEqual(logController.logMessages.count, logController.maximumLogMessageCount);
     
     [logController clearLogs];
 }
@@ -434,7 +434,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 - (void)test_appendLog_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < 3 * self.defaultLogController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < 3 * self.defaultLogController.maximumLogMessageCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -451,7 +451,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 - (void)test_allLogMessages_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < 3 * self.defaultLogController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < 3 * self.defaultLogController.maximumLogMessageCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -468,7 +468,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 - (void)test_trimLogs_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < 3 * self.defaultLogController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < 3 * self.defaultLogController.maximumLogMessageCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -490,7 +490,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 - (void)test_persistLogs_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
+    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogMessageCount; i++) {
         [numbers addObject:@(i)];
     }
     

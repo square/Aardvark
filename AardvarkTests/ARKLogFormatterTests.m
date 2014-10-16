@@ -125,7 +125,7 @@
 - (void)test_recentErrorLogMessagesAsPlainText_countRespected;
 {
     NSMutableArray *numbers = [NSMutableArray new];
-    for (int i = 0; i < self.defaultLogController.maximumLogCount; i++) {
+    for (int i = 0; i < self.defaultLogController.maximumLogMessageCount; i++) {
         [numbers addObject:@(i)];
     }
     
@@ -159,7 +159,7 @@
 - (void)test_formattedLogMessages_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
-    for (int i = 0; i < self.defaultLogController.maximumLogCount; i++) {
+    for (int i = 0; i < self.defaultLogController.maximumLogMessageCount; i++) {
         [numbers addObject:@(i)];
     }
     

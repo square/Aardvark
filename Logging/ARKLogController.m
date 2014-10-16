@@ -66,10 +66,10 @@
     }
     
     _logMessageClass = [ARKLogMessage class];
-    _maximumLogCount = 2000;
+    _maximumLogMessageCount = 2000;
     _maximumLogCountToPersist = 500;
     
-    _logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogCount)];
+    _logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogMessageCount)];
     
     _loggingQueue = [NSOperationQueue new];
     _loggingQueue.maxConcurrentOperationCount = 1;
@@ -106,13 +106,13 @@
     }];
 }
 
-- (void)setMaximumLogCount:(NSUInteger)maximumLogCount;
+- (void)setMaximumLogMessageCount:(NSUInteger)maximumLogCount;
 {
-    if (_maximumLogCount == maximumLogCount) {
+    if (_maximumLogMessageCount == maximumLogCount) {
         return;
     }
     
-    _maximumLogCount = maximumLogCount;
+    _maximumLogMessageCount = maximumLogCount;
     
     [self.loggingQueue addOperationWithBlock:^{
         if (maximumLogCount == 0) {
@@ -210,14 +210,14 @@
 {
     NSArray *persistedLogs = [self _persistedLogs];
     if (persistedLogs.count > 0) {
-        if (persistedLogs.count > self.maximumLogCount) {
-            NSUInteger numberOfLogsToTrim = persistedLogs.count - self.maximumLogCount;
-            self.logMessages = [[persistedLogs subarrayWithRange:NSMakeRange(numberOfLogsToTrim, self.maximumLogCount)] mutableCopy];
+        if (persistedLogs.count > self.maximumLogMessageCount) {
+            NSUInteger numberOfLogsToTrim = persistedLogs.count - self.maximumLogMessageCount;
+            self.logMessages = [[persistedLogs subarrayWithRange:NSMakeRange(numberOfLogsToTrim, self.maximumLogMessageCount)] mutableCopy];
         } else {
             self.logMessages = [persistedLogs mutableCopy];
         }
     } else {
-        self.logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogCount)];
+        self.logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogMessageCount)];
     }
 }
 
@@ -244,8 +244,8 @@
 - (void)_trimLogs_inLoggingQueue;
 {
     NSUInteger numberOfLogs = self.logMessages.count;
-    if (numberOfLogs > self.maximumLogCount) {
-        [self.logMessages removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogCount)];
+    if (numberOfLogs > self.maximumLogMessageCount) {
+        [self.logMessages removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogMessageCount)];
     }
 }
 
@@ -274,7 +274,7 @@
         }
         
         // Don't proactively trim too often.
-        if (self.maximumLogCount > 0 && self.logMessages.count >= 2 * self.maximumLogCount) {
+        if (self.maximumLogMessageCount > 0 && self.logMessages.count >= 2 * self.maximumLogMessageCount) {
             // We've held on to 2x more logs than we'll ever expose. Trim!
             [self _trimLogs_inLoggingQueue];
         }
