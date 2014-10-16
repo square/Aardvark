@@ -70,8 +70,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                            @"System version: %@\n", [[UIDevice currentDevice] systemVersion]];
     
     _logFormatter = [ARKDefaultLogFormatter new];
-    _numberOfRecentErrorLogsToIncludeInNativeClientBugReports = 3;
-    _numberOfRecentErrorLogsToIncludeInThirdPartyClientBugReports = 15;
+    _numberOfRecentErrorLogsToIncludeInBugReportBodyWhenAttachmentsAreAvailable = 3;
+    _numberOfRecentErrorLogsToIncludeInBugReportBodyWhenAttachmentsAreUnavailable = 15;
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
     
     _logControllers = [NSMutableSet new];
@@ -173,7 +173,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                     logsFileName = [logController.name stringByAppendingFormat:@"_%@", logsFileName];
                 }
                 
-                NSString *recentErrorLogs = [self.logFormatter recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInNativeClientBugReports];
+                NSString *recentErrorLogs = [self.logFormatter recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInBugReportBodyWhenAttachmentsAreAvailable];
                 if (recentErrorLogs.length) {
                     [emailBody appendFormat:@"%@\n", recentErrorLogs];
                 }
@@ -200,7 +200,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                 ARKLogController *logController = logControllerValue.nonretainedObjectValue;
                 NSArray *logMessages = logController.allLogMessages;
                 
-                [emailBody appendFormat:@"%@\n%@\n", self.prefilledEmailBody, [self.logFormatter recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInThirdPartyClientBugReports]];
+                [emailBody appendFormat:@"%@\n%@\n", self.prefilledEmailBody, [self.logFormatter recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInBugReportBodyWhenAttachmentsAreUnavailable]];
             }
             
             NSURL *composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:bugTitle body:emailBody];
