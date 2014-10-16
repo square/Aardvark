@@ -152,8 +152,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                 ARKLogController *logController = logControllerValue.nonretainedObjectValue;
                 NSArray *logMessages = logController.allLogMessages;
                 
-                NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingString:@".png"];
-                NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for plaintext logs") stringByAppendingString:@".txt"];
+                NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
+                NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for plaintext logs") stringByAppendingPathExtension:@"txt"];
                 if (logController.name.length) {
                     [emailBody appendFormat:@"%@:\n", logController.name];
                     screenshotFileName = [logController.name stringByAppendingFormat:@"_%@", screenshotFileName];
