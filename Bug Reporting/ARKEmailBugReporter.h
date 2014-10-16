@@ -33,10 +33,10 @@
 @property (nonatomic, copy, readwrite) id <ARKLogFormatter> logFormatter;
 
 /// Controls the number of recent error logs per log controller to include in the email body of a bug report composed in a mail client that allows attachments. Defaults to 3.
-@property (nonatomic, assign, readwrite) NSUInteger numberOfRecentErrorLogsToIncludeInBugReportBodyWhenAttachmentsAreAvailable;
+@property (nonatomic, assign, readwrite) NSUInteger numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable;
 
 /// Controls the number of recent error logs per log controller to include in the email body of a bug report composed in a mail client that does not allow attachments. Defaults to 15.
-@property (nonatomic, assign, readwrite) NSUInteger numberOfRecentErrorLogsToIncludeInBugReportBodyWhenAttachmentsAreUnavailable;
+@property (nonatomic, assign, readwrite) NSUInteger numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable;
 
 /// The window level for the email composer on iOS 7 or later. Defaults to UIWindowLevelStatusBar + 3.0.
 @property (nonatomic, assign, readwrite) UIWindowLevel emailComposeWindowLevel;
