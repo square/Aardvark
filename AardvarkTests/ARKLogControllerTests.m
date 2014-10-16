@@ -10,12 +10,35 @@
 
 #import "ARKLogController.h"
 #import "ARKLogController_Testing.h"
+#import "ARKLogHandler.h"
 #import "ARKLogMessage.h"
 
 
 @interface ARKLogControllerTests : XCTestCase
 
 @property (nonatomic, weak, readwrite) ARKLogController *defaultLogController;
+
+@end
+
+
+typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage *logMessage);
+
+
+@interface ARKTestLogHandler : NSObject <ARKLogHandler>
+
+@property (nonatomic, copy, readwrite) LogHandlingBlock logHandlingBlock;
+
+@end
+
+
+@implementation ARKTestLogHandler
+
+- (void)logController:(ARKLogController *)logController didAppendLogMessage:(ARKLogMessage *)logMessage;
+{
+    if (self.logHandlingBlock) {
+        self.logHandlingBlock(logController, logMessage);
+    }
+}
 
 @end
 
@@ -126,15 +149,18 @@
     XCTAssertNotNil(logController.logMessages);
 }
 
-- (void)_test_setMaximumLogCount_settingToZeroStillCallsLogBlocks;
+- (void)_test_setMaximumLogCount_settingToZeroStillCallsLogHandlers;
 {
     ARKLogController *logController = [ARKLogController new];
     logController.maximumLogCount = 0;
+    logController.loggingEnabled = YES;
     
-    NSMutableArray *logBlockTest = [NSMutableArray new];
-    [logController addLogBlock:^(NSString *text, NSDictionary *userInfo) {
-        [logBlockTest addObject:text];
-    } withKey:@"lobBlockTest"];
+    NSMutableArray *logHandlerTest = [NSMutableArray new];
+    ARKTestLogHandler *testLogHandler = [ARKTestLogHandler new];
+    testLogHandler.logHandlingBlock = ^(ARKLogController *logController, ARKLogMessage *logMessage) {
+        [logHandlerTest addObject:logMessage];
+    };
+    [logController addLogHandler:testLogHandler];
     
     for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
         [logController appendLog:@"Log %@", @(i)];
@@ -143,21 +169,20 @@
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
     XCTAssertGreaterThan(logController.logMessages.count, 0);
     [logController.logMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
-        XCTAssertEqualObjects(logMessage.text, logBlockTest[idx]);
+        XCTAssertEqualObjects(logMessage, logHandlerTest[idx]);
     }];
-    
-    [logController removeLogBlockWithKey:@"lobBlockTest"];
 }
 
-- (void)test_addLogBlockWithKey_logsToLogBlock;
+- (void)test_addLogHandler_notifiesLogHandlerOnAppendLog;
 {
-    NSMutableArray *logBlockTest = [NSMutableArray new];
+    NSMutableArray *logHandlerTest = [NSMutableArray new];
+    ARKTestLogHandler *testLogHandler = [ARKTestLogHandler new];
+    testLogHandler.logHandlingBlock = ^(ARKLogController *logController, ARKLogMessage *logMessage) {
+        [logHandlerTest addObject:logMessage];
+    };
+    [self.defaultLogController addLogHandler:testLogHandler];
     
-    [self.defaultLogController addLogBlock:^(NSString *text, NSDictionary *userInfo) {
-        [logBlockTest addObject:text];
-    } withKey:@"lobBlockTest"];
-    
-    XCTAssertEqual(logBlockTest.count, 0);
+    XCTAssertEqual(logHandlerTest.count, 0);
     
     for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
         ARKLog(@"Log %@", @(i));
@@ -166,34 +191,36 @@
     [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
     XCTAssertGreaterThan(self.defaultLogController.logMessages.count, 0);
     [self.defaultLogController.logMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
-        XCTAssertEqualObjects(logMessage.text, logBlockTest[idx]);
+        XCTAssertEqualObjects(logMessage, logHandlerTest[idx]);
     }];
     
-    [self.defaultLogController removeLogBlockWithKey:@"lobBlockTest"];
+    [self.defaultLogController removeLogHandler:testLogHandler];
 }
 
-- (void)test_removeLobBlockWithKey_removesLobBlock;
+- (void)test_removeLobHandler_removesLogHandler;
 {
-    NSMutableArray *logBlockTest = [NSMutableArray new];
+    NSMutableArray *logHandlerTest = [NSMutableArray new];
+    ARKTestLogHandler *testLogHandler = [ARKTestLogHandler new];
+    testLogHandler.logHandlingBlock = ^(ARKLogController *logController, ARKLogMessage *logMessage) {
+        [logHandlerTest addObject:logMessage];
+    };
     
-    [self.defaultLogController addLogBlock:^(NSString *text, NSDictionary *userInfo) {
-        [logBlockTest addObject:text];
-    } withKey:@"lobBlockTest"];
+    [self.defaultLogController addLogHandler:testLogHandler];
     [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
     
-    XCTAssertEqual(self.defaultLogController.logBlocks.allValues.count, 1);
+    XCTAssertEqual(self.defaultLogController.logHandlers.count, 1);
     
-    [self.defaultLogController removeLogBlockWithKey:@"lobBlockTest"];
+    [self.defaultLogController removeLogHandler:testLogHandler];
     [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
     
-    XCTAssertEqual(self.defaultLogController.logBlocks.allValues.count, 0);
+    XCTAssertEqual(self.defaultLogController.logHandlers.count, 0);
     
     for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogCount; i++) {
         ARKLog(@"Log %@", @(i));
     }
     
     [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
-    XCTAssertEqual(logBlockTest.count, 0);
+    XCTAssertEqual(logHandlerTest.count, 0);
 }
 
 - (void)test_appendLog_logTrimming;

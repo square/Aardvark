@@ -11,14 +11,13 @@
 #import <Aardvark/ARKLogTableViewController.h>
 
 #import "SampleAppDelegate.h"
-#import "SampleTapLogger.h"
 #import "SampleViewController.h"
 
 
 @interface SampleViewController ()
 
 @property (nonatomic, readwrite, strong) ARKLogController *tapLogController;
-@property (nonatomic, readwrite, strong) SampleTapLogger *tapLogger;
+@property (nonatomic, strong, readwrite) UITapGestureRecognizer *tapRecognizer;
 
 @end
 
@@ -39,8 +38,6 @@
     NSString *applicationSupportDirectory = paths.firstObject;
     self.tapLogController.persistedLogsFilePath = [applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"];
     
-    self.tapLogger = [[SampleTapLogger alloc] initWithView:self.view logController:self.tapLogController];
-    
     [((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter addLogController:self.tapLogController];
 }
 
@@ -48,7 +45,8 @@
 {
     ARKLog(@"%s", __PRETTY_FUNCTION__);
     
-    [self.tapLogController addLogger:self.tapLogger];
+    self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_tapDetected:)];
+    [self.view addGestureRecognizer:self.tapRecognizer];
     
     [super viewDidAppear:animated];
 }
@@ -57,7 +55,8 @@
 {
     ARKLog(@"%s", __PRETTY_FUNCTION__);
     
-    [self.tapLogController removeLogger:self.tapLogger];
+    [self.tapRecognizer.view removeGestureRecognizer:self.tapRecognizer];
+    self.tapRecognizer = nil;
     
     [super viewDidDisappear:animated];
 }
@@ -76,6 +75,16 @@
     ARKLog(@"%s", __PRETTY_FUNCTION__);
     ARKLogTableViewController *tapLogsViewController = [[ARKLogTableViewController alloc] initWithLogController:self.tapLogController logFormatter:[ARKDefaultLogFormatter new]];
     [self.navigationController pushViewController:tapLogsViewController animated:YES];
+}
+
+#pragma mark - Private Methods
+
+- (void)_tapDetected:(UITapGestureRecognizer *)tapRecognizer;
+{
+    if (tapRecognizer == self.tapRecognizer && tapRecognizer.state == UIGestureRecognizerStateEnded) {
+        // Log directly to the tap log controller rather than using ARKLog, which logs to the default log controller.
+        [self.tapLogController appendLog:@"Tapped %@", NSStringFromCGPoint([tapRecognizer locationInView:nil])];
+    }
 }
 
 @end

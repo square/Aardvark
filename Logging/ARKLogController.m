@@ -9,16 +9,15 @@
 #import "ARKLogController.h"
 #import "ARKLogController_Testing.h"
 
-#import "ARKLogger.h"
+#import "ARKLogHandler.h"
 #import "ARKLogMessage.h"
 
 
 @interface ARKLogController ()
 
 @property (nonatomic, strong, readwrite) NSMutableArray *logMessages;
-@property (nonatomic, strong, readonly) NSMutableDictionary *logBlocks;
 @property (nonatomic, strong, readonly) NSOperationQueue *loggingQueue;
-@property (nonatomic, strong, readonly) NSMutableSet *globalLoggers;
+@property (nonatomic, strong, readonly) NSMutableSet *logHandlers;
 @property (nonatomic, assign, readwrite) UIBackgroundTaskIdentifier persistLogsBackgroundTaskIdentifier;
 
 @end
@@ -56,8 +55,6 @@
     // Initialize logMessages. This can be done on this thread since we are still inside of init.
     [self _initializeLogMessages_inLoggingQueue];
     
-    _logBlocks = [NSMutableDictionary new];
-    
     return self;
 }
 
@@ -83,7 +80,7 @@
     }
 #endif
     
-    _globalLoggers = [NSMutableSet new];
+    _logHandlers = [NSMutableSet new];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActiveNotification:) name:UIApplicationWillResignActiveNotification object:[UIApplication sharedApplication]];
     
@@ -140,38 +137,20 @@
 
 #pragma mark - Public Methods
 
-- (void)addLogBlock:(ARKLogBlock)logBlock withKey:(id <NSCopying>)logBlockKey;
+- (void)addLogHandler:(id <ARKLogHandler>)logHandler;
 {
-    NSAssert(logBlock, @"Can not add NULL logBlock");
-    NSAssert(logBlockKey, @"Can not add logBlock with nil key");
+    NSAssert([logHandler conformsToProtocol:@protocol(ARKLogHandler)], @"Tried to add a log handler that does not conform to ARKLogHandler protocol");
     
     [self.loggingQueue addOperationWithBlock:^{
-        self.logBlocks[logBlockKey] = logBlock;
+        [self.logHandlers addObject:logHandler];
     }];
 }
 
-- (void)removeLogBlockWithKey:(id <NSCopying>)logBlockKey;
+- (void)removeLogHandler:(id <ARKLogHandler>)logHandler;
 {
     [self.loggingQueue addOperationWithBlock:^{
-        [self.logBlocks removeObjectForKey:logBlockKey];
+        [self.logHandlers removeObject:logHandler];
     }];
-}
-
-- (void)addLogger:(id <ARKLogger>)logger;
-{
-    NSAssert([logger conformsToProtocol:@protocol(ARKLogger)], @"Tried to add a logger that does not conform to ARKLogger protocol");
-    NSAssert(logger.logController == self, @"Trying add a logger whose logController does not match");
-    
-    @synchronized(self) {
-        [self.globalLoggers addObject:logger];
-    }
-}
-
-- (void)removeLogger:(id <ARKLogger>)logger;
-{
-    @synchronized(self) {
-        [self.globalLoggers removeObject:logger];
-    }
 }
 
 - (NSArray *)allLogMessages;
@@ -294,20 +273,20 @@
             return;
         }
         
-        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
-        
         // Don't proactively trim too often.
         if (self.maximumLogCount > 0 && self.logMessages.count >= 2 * self.maximumLogCount) {
             // We've held on to 2x more logs than we'll ever expose. Trim!
             [self _trimLogs_inLoggingQueue];
         }
         
+        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
+        
         if (self.logsToConsole) {
             NSLog(@"%@", logMessage.text);
         }
         
-        for (ARKLogBlock logBlock in self.logBlocks.allValues) {
-            logBlock(logMessage.text, logMessage.userInfo);
+        for (id <ARKLogHandler> logHandler in self.logHandlers) {
+            [logHandler logController:self didAppendLogMessage:logMessage];
         }
         
         [self.logMessages addObject:logMessage];

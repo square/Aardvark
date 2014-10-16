@@ -8,8 +8,6 @@
 
 #import "SampleAppDelegate.h"
 
-#import "SampleUIApplicationNotificationListenerLogger.h"
-
 
 @implementation SampleAppDelegate
 
@@ -21,24 +19,24 @@
     [Aardvark enableDefaultLogController];
     self.bugReporter = [Aardvark addDefaultBugReportingGestureWithBugReportRecipient:@"fake-email@aardvarkbugreporting.src"];
     
-    // Some examples of fancier logging.
-    [self _setupUIApplicationEventLoggingOnDefaultController];
-    
     ARKTypeLog(ARKLogTypeSeparator, nil, @"Hello World");
     
     return YES;
 }
 
+- (void)applicationWillEnterForeground:(UIApplication *)application;
+{
+    ARKLog(@"Application Will Enter Foreground");
+}
+
+- (void)applicationDidEnterBackground:(NSNotification *)notification;
+{
+    ARKLog(@"Application Did Enter Background");
+}
+
 - (void)applicationWillTerminate:(UIApplication *)application;
 {
     ARKTypeLog(ARKLogTypeError, nil, @"Exiting Sample App");
-}
-
-#pragma mark - Private Methods
-
-- (void)_setupUIApplicationEventLoggingOnDefaultController;
-{
-    [[ARKLogController defaultController] addLogger:[[SampleUIApplicationNotificationListenerLogger alloc] initWithLogController:[ARKLogController defaultController]]];
 }
 
 @end

@@ -6,11 +6,8 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-@protocol ARKLogger;
+@protocol ARKLogHandler;
 @class ARKLogMessage;
-
-
-typedef void (^ARKLogBlock)(NSString *text, NSDictionary *userInfo);
 
 
 @interface ARKLogController : NSObject
@@ -39,17 +36,11 @@ typedef void (^ARKLogBlock)(NSString *text, NSDictionary *userInfo);
 /// Controls whether appending logs also outputs to NSLog. Defaults to NO.
 @property (nonatomic, assign, readwrite) BOOL logsToConsole;
 
-/// Adds a log block. Log blocks are executed on the logging queue every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc).
-- (void)addLogBlock:(ARKLogBlock)logBlock withKey:(id <NSCopying>)logBlockKey;
-
-/// Removes a log block.
-- (void)removeLogBlockWithKey:(id <NSCopying>)logBlock;
-
-/// Retains an object that handles logging.
-- (void)addLogger:(id <ARKLogger>)logger;
+/// Retains an object that handles logging. Log handlers are sent logController:didAppendLogMessage: every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc).
+- (void)addLogHandler:(id <ARKLogHandler>)logHandler;
 
 /// Releases an object that handles logging.
-- (void)removeLogger:(id <ARKLogger>)logger;
+- (void)removeLogHandler:(id <ARKLogHandler>)logHandler;
 
 /// Returns an array of ARKLogMessage objects. Blocking call.
 - (NSArray *)allLogMessages;
