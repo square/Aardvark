@@ -38,7 +38,8 @@
     NSString *applicationSupportDirectory = paths.firstObject;
     self.tapLogController.persistedLogsFilePath = [applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"];
     
-    [((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter addLogController:self.tapLogController];
+    ARKEmailBugReporter *bugReporter = ((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter;
+    [bugReporter addLogController:self.tapLogController];
 }
 
 - (void)viewDidAppear:(BOOL)animated;
