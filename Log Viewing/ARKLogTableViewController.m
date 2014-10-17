@@ -36,8 +36,17 @@
         return nil;
     }
     
-    _logController = logController;
-    _logFormatter = logFormatter;
+    if (logController) {
+        _logController = logController;
+    } else {
+        _logController = [ARKLogController defaultController];
+    }
+    
+    if (logFormatter) {
+        _logFormatter = logFormatter;
+    } else {
+        _logFormatter = [ARKDefaultLogFormatter new];
+    }
     
     return self;
     
