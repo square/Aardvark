@@ -49,7 +49,6 @@
     }
     
     return self;
-    
 }
 
 - (instancetype)init;

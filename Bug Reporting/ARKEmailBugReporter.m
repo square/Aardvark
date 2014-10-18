@@ -36,8 +36,17 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 #pragma mark - Initialization
 
+- (instancetype)init;
+{
+    // This call will throw. Forces use of the designated initializer.
+    return [self initWithEmailAddress:nil logController:nil];
+}
+
 - (instancetype)initWithEmailAddress:(NSString *)emailAddress logController:(ARKLogController *)logController;
 {
+    NSAssert(emailAddress.length, @"Must provide a valid email address to designated initializer %s", __PRETTY_FUNCTION__);
+    NSAssert(logController, @"Must provide a log controller to designated initializer %s", __PRETTY_FUNCTION__);
+    
     self = [super init];
     if (!self) {
         return nil;

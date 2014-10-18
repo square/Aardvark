@@ -22,7 +22,7 @@
 
 - (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 {
-    self = [super init];
+    self = [self init];
     if (!self) {
         return nil;
     }
@@ -35,7 +35,6 @@
     
     return self;
 }
-
 
 #pragma mark - NSCoding
 
