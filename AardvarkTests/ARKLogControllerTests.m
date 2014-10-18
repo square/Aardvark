@@ -242,11 +242,11 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
     
     // Internal log count should be proactively truncated at 2 * maximumLogCount.
-    XCTAssertEqual(self.defaultLogController.logMessages.count, expectedInternalLogCount, @"Expected internal log count to be proactively truncated to (%@) at 2 * maximumLogCount. Expected internal log count of %@, got %@.", @(self.defaultLogController.maximumLogCount), @(expectedInternalLogCount), @(self.defaultLogController.logMessages.count));
+    XCTAssertEqual(self.defaultLogController.logMessages.count, expectedInternalLogCount, @"Expected internal log count to be proactively truncated to (%@) at 2 * maximumLogCount. Expected internal log count of %@, got %@.", @(self.defaultLogController.maximumLogMessageCount), @(expectedInternalLogCount), @(self.defaultLogController.logMessages.count));
     
     // Exposed log count should never be greater than maximumLogCount.
     NSArray *allLogMessages = self.defaultLogController.allLogMessages;
-    XCTAssertGreaterThanOrEqual(allLogMessages.count, self.defaultLogController.maximumLogMessageCount, @"Exposed log count (%@) must never exceed maximum log count (%@).", @(allLogMessages.count), @(self.defaultLogController.maximumLogCount));
+    XCTAssertGreaterThanOrEqual(allLogMessages.count, self.defaultLogController.maximumLogMessageCount, @"Exposed log count (%@) must never exceed maximum log count (%@).", @(allLogMessages.count), @(self.defaultLogController.maximumLogMessageCount));
 }
 
 - (void)test_clearLogs_removesAllLogMessages;
