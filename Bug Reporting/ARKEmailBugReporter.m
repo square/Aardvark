@@ -34,33 +34,16 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @implementation ARKEmailBugReporter
 
-#pragma mark - Class Methods
-
-+ (ARKEmailBugReporter *)emailBugReporterWithEmailAddress:(NSString *)emailAddress;
-{
-    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
-    bugReporter.bugReportRecipientEmailAddress = emailAddress;
-    
-    return bugReporter;
-}
-
-+ (ARKEmailBugReporter *)emailBugReporterWithEmailAddress:(NSString *)emailAddress prefilledEmailBody:(NSString *)prefilledEmailBody;
-{
-    ARKEmailBugReporter *bugReporter = [ARKEmailBugReporter new];
-    bugReporter.bugReportRecipientEmailAddress = emailAddress;
-    bugReporter.prefilledEmailBody = prefilledEmailBody;
-    
-    return bugReporter;
-}
-
 #pragma mark - Initialization
 
-- (instancetype)init;
+- (instancetype)initWithEmailAddress:(NSString *)emailAddress logController:(ARKLogController *)logController;
 {
     self = [super init];
     if (!self) {
         return nil;
     }
+    
+    _bugReportRecipientEmailAddress = [emailAddress copy];
     
     _prefilledEmailBody = [NSString stringWithFormat:@"Reproduction Steps:\n"
                            @"1. \n"
@@ -75,6 +58,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
     
     _logControllers = [NSMutableSet new];
+    [self addLogController:logController];
     
     return self;
 }

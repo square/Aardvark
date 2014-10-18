@@ -19,7 +19,7 @@
 {
     // These two lines are all you'll need to get started.
     [Aardvark enableDefaultLogController];
-    self.bugReporter = [Aardvark addDefaultBugReportingGestureWithBugReportRecipient:@"fake-email@aardvarkbugreporting.src"];
+    self.bugReporter = [Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:@"fake-email@aardvarkbugreporting.src"];
     
     // Log all ARKLog messages to Crashlytics to help debug crashes.
     [[ARKLogController defaultController] addLogHandler:[SampleCrashlyticsLogHandler new]];

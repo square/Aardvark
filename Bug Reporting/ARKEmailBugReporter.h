@@ -17,11 +17,7 @@
 /// Allows the user to trigger bug reports by making a two-finger press and hold gesture. Logs are sent out via email.
 @interface ARKEmailBugReporter : NSObject <ARKBugReporter>
 
-/// Convenience method to create a bug reporter with an email address.
-+ (instancetype)emailBugReporterWithEmailAddress:(NSString *)emailAddress;
-
-/// Convenience method to create a bug reporter with an email address and custom prefilledEmailBody.
-+ (instancetype)emailBugReporterWithEmailAddress:(NSString *)emailAddress prefilledEmailBody:(NSString *)prefilledEmailBody;
+- (instancetype)initWithEmailAddress:(NSString *)emailAddress logController:(ARKLogController *)logController __attribute__((objc_designated_initializer));
 
 /// The email address to which bug reports will be sent. Must be set before composeBugReportWithLogs: is called.
 @property (nonatomic, copy, readwrite) NSString *bugReportRecipientEmailAddress;
