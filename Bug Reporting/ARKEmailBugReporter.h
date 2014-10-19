@@ -14,7 +14,7 @@
 @protocol ARKLogFormatter;
 
 
-/// Allows the user to trigger bug reports by making a two-finger press and hold gesture. Logs are sent out via email.
+/// Composes a bug report that is sent via email.
 @interface ARKEmailBugReporter : NSObject <ARKBugReporter>
 
 - (instancetype)initWithEmailAddress:(NSString *)emailAddress logController:(ARKLogController *)logController __attribute__((objc_designated_initializer));
