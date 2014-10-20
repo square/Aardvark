@@ -17,7 +17,7 @@
 /// Composes a bug report that is sent via email.
 @interface ARKEmailBugReporter : NSObject <ARKBugReporter>
 
-- (instancetype)initWithEmailAddress:(NSString *)emailAddress logController:(ARKLogController *)logController __attribute__((objc_designated_initializer));
+- (instancetype)initWithEmailAddress:(NSString *)emailAddress logController:(ARKLogController *)logController;
 
 /// The email address to which bug reports will be sent. Must be set before composeBugReportWithLogs: is called.
 @property (nonatomic, copy, readonly) NSString *bugReportRecipientEmailAddress;
