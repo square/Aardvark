@@ -118,6 +118,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EAA6F80119F5933700FF20A8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EA4583FD19E65C3C00E44882 /* MessageUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EAAB38A219E2928500161A54 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,13 +137,13 @@
 		EAD1441819E073FB0065A1FF = {
 			isa = PBXGroup;
 			children = (
-				EA4583FD19E65C3C00E44882 /* MessageUI.framework */,
 				EAD1442319E073FB0065A1FF /* Aardvark */,
 				EAD1443919E074630065A1FF /* Bug Reporting */,
 				EAD1447719E22F470065A1FF /* Categories */,
 				EAD1446119E21F9D0065A1FF /* Log Viewing */,
 				EAD1443819E074570065A1FF /* Logging */,
 				EAD1444219E0848B0065A1FF /* Other */,
+				EAA6F80119F5933700FF20A8 /* Frameworks */,
 				EAD1442219E073FB0065A1FF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -420,7 +428,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -456,7 +464,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
