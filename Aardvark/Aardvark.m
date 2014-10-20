@@ -50,7 +50,7 @@ void ARKLogScreenshot()
     [ARKLogController defaultController].loggingEnabled = NO;
 }
 
-+ (id <ARKBugReporter>)addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:(NSString *)emailAddress;
++ (ARKEmailBugReporter *)addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:(NSString *)emailAddress;
 {
     NSAssert([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:)], @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
     
