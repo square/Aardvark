@@ -83,7 +83,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 {
     ARKLogController *logController = [ARKLogController new];
     
-    [logController appendLog:@"Logging Disabled"];
+    [logController appendLogWithFormat:@"Logging Disabled"];
     
     XCTAssertEqual(logController.allLogMessages.count, 0, @"Log appended with logging not yet enabled!");
 }
@@ -110,7 +110,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     ARKLogController *logController = [ARKLogController new];
     logController.loggingEnabled = YES;
     
-    [logController appendLog:@"This log should be an ARKLogMessage"];
+    [logController appendLogWithFormat:@"This log should be an ARKLogMessage"];
     
     XCTAssertEqual(logController.allLogMessages.count, 1);
     XCTAssertEqual([logController.allLogMessages.firstObject class], [ARKLogMessage class]);
@@ -119,7 +119,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     XCTAssertEqual(logController.allLogMessages.count, 0);
     
     logController.logMessageClass = [ARKLogMessageTestSubclass class];
-    [logController appendLog:@"This log should be an ARKLogMessageTestSubclass"];
+    [logController appendLogWithFormat:@"This log should be an ARKLogMessageTestSubclass"];
     
     XCTAssertEqual(logController.allLogMessages.count, 1);
     XCTAssertEqual([logController.allLogMessages.firstObject class], [ARKLogMessageTestSubclass class]);
@@ -163,7 +163,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     [logController addLogHandler:testLogHandler];
     
     for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogMessageCount; i++) {
-        [logController appendLog:@"Log %@", @(i)];
+        [logController appendLogWithFormat:@"Log %@", @(i)];
     }
     
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
@@ -315,7 +315,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     
     logController.persistedLogsFilePath = persistenceTestLogsPath;
     
-    [logController appendLog:@"%@", testPeristedLogMessageText];
+    [logController appendLogWithFormat:@"%@", testPeristedLogMessageText];
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
     [logController _persistLogs_inLoggingQueue];
     
@@ -351,7 +351,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     
     // Concurrently add all of the logs.
     [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
-        [logController appendLog:@"%@", number];
+        [logController appendLogWithFormat:@"%@", number];
     }];
     
     // Get the log count.
@@ -407,7 +407,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     logController.loggingEnabled = YES;
     logController.maximumLogMessageCount = 10;
     for (int i = 0; i < logController.maximumLogMessageCount; i++) {
-        [logController appendLog:@"%@", @(i)];
+        [logController appendLogWithFormat:@"%@", @(i)];
     }
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);

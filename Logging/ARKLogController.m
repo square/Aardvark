@@ -179,7 +179,7 @@
     }];
 }
 
-- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
+- (void)appendLogWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
@@ -187,15 +187,15 @@
     }
 }
 
-- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ...;
+- (void)appendLogWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ...;
 {
     va_list argList;
     va_start(argList, format);
-    [self appendLogType:type userInfo:userInfo format:format arguments:argList];
+    [self appendLogWithType:type userInfo:userInfo format:format arguments:argList];
     va_end(argList);
 }
 
-- (void)appendLog:(NSString *)format arguments:(va_list)argList;
+- (void)appendLogWithFormat:(NSString *)format arguments:(va_list)argList;
 {
     if (self.loggingEnabled) {
         NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
@@ -203,11 +203,11 @@
     }
 }
 
-- (void)appendLog:(NSString *)format, ...;
+- (void)appendLogWithFormat:(NSString *)format, ...;
 {
     va_list argList;
     va_start(argList, format);
-    [self appendLog:format arguments:argList];
+    [self appendLogWithFormat:format arguments:argList];
     va_end(argList);
 }
 

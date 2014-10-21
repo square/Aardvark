@@ -84,7 +84,7 @@
 {
     if (tapRecognizer == self.tapRecognizer && tapRecognizer.state == UIGestureRecognizerStateEnded) {
         // Log directly to the tap log controller rather than using ARKLog, which logs to the default log controller.
-        [self.tapLogController appendLog:@"Tapped %@", NSStringFromCGPoint([tapRecognizer locationInView:nil])];
+        [self.tapLogController appendLogWithFormat:@"Tapped %@", NSStringFromCGPoint([tapRecognizer locationInView:nil])];
     }
 }
 

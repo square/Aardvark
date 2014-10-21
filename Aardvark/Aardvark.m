@@ -18,7 +18,7 @@ void ARKLog(NSString *format, ...)
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogController defaultController] appendLog:format arguments:argList];
+    [[ARKLogController defaultController] appendLogWithFormat:format arguments:argList];
     va_end(argList);
 }
 
@@ -26,7 +26,7 @@ void ARKTypeLog(ARKLogType type, NSDictionary *userInfo, NSString *format, ...)
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogController defaultController] appendLogType:type userInfo:userInfo format:format arguments:argList];
+    [[ARKLogController defaultController] appendLogWithType:type userInfo:userInfo format:format arguments:argList];
     va_end(argList);
 }
 

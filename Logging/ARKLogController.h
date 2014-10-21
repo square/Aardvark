@@ -49,16 +49,16 @@
 - (void)appendLogWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 
 /// Creates a log message and appends it to the logs. Non-blocking call.
-- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
+- (void)appendLogWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 
 /// Creates a log message and appends it to the logs. Non-blocking call.
-- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ... NS_FORMAT_FUNCTION(3,4);
+- (void)appendLogWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ... NS_FORMAT_FUNCTION(3,4);
 
 /// Creates a log message with ARKLogTypeDefault and appends it to the logs. Non-blocking call.
-- (void)appendLog:(NSString *)format arguments:(va_list)argList;
+- (void)appendLogWithFormat:(NSString *)format arguments:(va_list)argList;
 
 /// Creates a log message with ARKLogTypeDefault and appends it to the logs. Non-blocking call.
-- (void)appendLog:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
+- (void)appendLogWithFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
 
 /// Creates a log message with a screenshot and appends it to the logs. Non-blocking call.
 - (void)appendScreenshotLog;
