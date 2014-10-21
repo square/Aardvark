@@ -8,12 +8,21 @@
 
 #import "ARKIndividualLogViewController.h"
 
+#import "ARKLogMessage.h"
+
+@interface ARKIndividualLogViewController ()
+
+@property (nonatomic, strong, readonly) UITextView *textView;
+@property (nonatomic, copy, readwrite) NSString *text;
+
+@end
+
 
 @implementation ARKIndividualLogViewController
 
 #pragma mark - Initialization
 
-- (instancetype)init;
+- (instancetype)initWithLogMessage:(ARKLogMessage *)logMessage;
 {
     self = [super init];
     if (!self) {
@@ -21,6 +30,7 @@
     }
     
     _textView = [[UITextView alloc] initWithFrame:CGRectZero];
+    _text = [NSString stringWithFormat:@"%@\n%@", logMessage.creationDate, logMessage.text];
     
     return self;
 }

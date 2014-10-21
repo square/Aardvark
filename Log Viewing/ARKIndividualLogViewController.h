@@ -6,9 +6,11 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
+@class ARKLogMessage;
+
+
 @interface ARKIndividualLogViewController : UIViewController
 
-@property (nonatomic, strong, readonly) UITextView *textView;
-@property (nonatomic, copy, readwrite) NSString *text;
+- (instancetype)initWithLogMessage:(ARKLogMessage *)logMessage;
 
 @end

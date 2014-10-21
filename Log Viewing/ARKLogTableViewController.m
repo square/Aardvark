@@ -36,17 +36,8 @@
         return nil;
     }
     
-    if (logController) {
-        _logController = logController;
-    } else {
-        _logController = [ARKLogController defaultController];
-    }
-    
-    if (logFormatter) {
-        _logFormatter = logFormatter;
-    } else {
-        _logFormatter = [ARKDefaultLogFormatter new];
-    }
+    _logController = logController;
+    _logFormatter = logFormatter;
     
     return self;
 }
@@ -218,14 +209,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    ARKLogMessage *log = self.logMessages[[indexPath row]];
-    if (log.image != nil) {
-        ARKScreenshotViewController *screenshotViewer = [[ARKScreenshotViewController alloc] initWithImage:log.image date:log.creationDate];
+    ARKLogMessage *logMessage = self.logMessages[[indexPath row]];
+    if (logMessage.image != nil) {
+        ARKScreenshotViewController *screenshotViewer = [[ARKScreenshotViewController alloc] initWithLogMessage:logMessage];
         
         [self.navigationController pushViewController:screenshotViewer animated:YES];
     } else {
-        ARKIndividualLogViewController *individualLogViewer = [ARKIndividualLogViewController new];
-        individualLogViewer.text = [NSString stringWithFormat:@"%@\n%@", log.creationDate, log.text];
+        ARKIndividualLogViewController *individualLogViewer = [[ARKIndividualLogViewController alloc] initWithLogMessage:logMessage];
         
         [self.navigationController pushViewController:individualLogViewer animated:YES];
     }

@@ -13,7 +13,7 @@
 /// Displays a list of ARKArdvarkLogs in a table.
 @interface ARKLogTableViewController : UITableViewController
 
-- (instancetype)initWithLogController:(ARKLogController *)logController logFormatter:(id <ARKLogFormatter>)logFormatter __attribute__((objc_designated_initializer));
+- (instancetype)initWithLogController:(ARKLogController *)logController logFormatter:(id <ARKLogFormatter>)logFormatter;
 
 /// The log controller that provides the data for the table.
 @property (nonatomic, strong, readonly) ARKLogController *logController;

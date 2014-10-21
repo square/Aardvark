@@ -8,6 +8,7 @@
 
 #import "ARKScreenshotViewController.h"
 
+#import "ARKLogMessage.h"
 #import "UIActivityViewController+ARKAdditions.h"
 
 
@@ -25,15 +26,15 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithImage:(UIImage *)screenshot date:(NSDate *)date;
+- (instancetype)initWithLogMessage:(ARKLogMessage *)logMessage;
 {
     self = [super init];
     if (!self) {
         return nil;
     }
     
-    _imageView = [[UIImageView alloc] initWithImage:screenshot];
-    _date = date;
+    _imageView = [[UIImageView alloc] initWithImage:logMessage.image];
+    _date = logMessage.creationDate;
     _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_tapDetected:)];
     _tapGestureRecognizer.cancelsTouchesInView = NO;
     
