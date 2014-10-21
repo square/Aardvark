@@ -138,8 +138,6 @@
         firstSeparatorLog = self.logMessages[i];
         if (firstSeparatorLog.type == ARKLogTypeSeparator) {
             break;
-        } else {
-            firstSeparatorLog = nil;
         }
     }
     
