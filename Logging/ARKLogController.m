@@ -231,25 +231,20 @@
 {
     __block NSArray *logMessages = nil;
     
-    [self.loggingQueue addOperationWithBlock:^{
+    [self _performBlockInLoggingQueueAndWaitUntilFinished:^{
         [self _trimLogs_inLoggingQueue];
-        
         logMessages = [self.logMessages copy];
     }];
-    
-    [self.loggingQueue waitUntilAllOperationsAreFinished];
     
     return logMessages;
 }
 
 - (void)clearLogs;
 {
-    [self.loggingQueue addOperationWithBlock:^{
+    [self _performBlockInLoggingQueueAndWaitUntilFinished:^{
         [self.logMessages removeAllObjects];
         [self _persistLogs_inLoggingQueue];
     }];
-    
-    [self.loggingQueue waitUntilAllOperationsAreFinished];
 }
 
 #pragma mark - Private Methods
@@ -267,6 +262,12 @@
             [[UIApplication sharedApplication] endBackgroundTask:self.persistLogsBackgroundTaskIdentifier];
         });
     }];
+}
+
+- (void)_performBlockInLoggingQueueAndWaitUntilFinished:(dispatch_block_t)block;
+{
+    NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:block];
+    [self.loggingQueue addOperations:@[blockOperation] waitUntilFinished:YES];
 }
 
 - (void)_appendLogMessage_inLoggingQueue:(ARKLogMessage *)logMessage;
