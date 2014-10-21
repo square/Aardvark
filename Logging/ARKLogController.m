@@ -317,7 +317,7 @@
 - (void)_persistLogs_inLoggingQueue;
 {
     // Perist trimmed logs when the app is backgrounded.
-    NSArray *logsToPersist = [self _trimedLogsToPersist_inLoggingQueue];
+    NSArray *logsToPersist = [self _trimmedLogsToPersist_inLoggingQueue];
     NSFileManager *defaultManager = [NSFileManager defaultManager];
     
     if (logsToPersist.count == 0) {
@@ -342,7 +342,7 @@
     }
 }
 
-- (NSArray *)_trimedLogsToPersist_inLoggingQueue;
+- (NSArray *)_trimmedLogsToPersist_inLoggingQueue;
 {
     NSUInteger numberOfLogs = self.logMessages.count;
     if (numberOfLogs > self.maximumLogCountToPersist) {
