@@ -30,78 +30,24 @@
 
 #pragma mark - ARKLogFormatter
 
-- (NSArray *)formattedLogMessagesWithImages:(NSArray *)logMessages;
+- (NSString *)formattedLogMessage:(ARKLogMessage *)logMessage;
 {
-    return [self _formattedLogMessages:logMessages withImages:YES];
-}
-
-- (NSString *)formattedLogMessagesAsPlainText:(NSArray *)logMessages;
-{
-    return [[self _formattedLogMessages:logMessages withImages:NO] componentsJoinedByString:@""];
-}
-
-- (NSData *)formattedLogMessagesAsData:(NSArray *)logMessages;
-{
-    return [[self formattedLogMessagesAsPlainText:logMessages] dataUsingEncoding:NSUTF8StringEncoding];
-}
-
-- (NSData *)mostRecentImageAsPNG:(NSArray *)logs;
-{
-    for (ARKLogMessage *log in [logs reverseObjectEnumerator]) {
-        if (log.image != nil) {
-            return UIImagePNGRepresentation(log.image);
-        }
+    NSMutableString *formattedLogMessage = [NSMutableString new];
+    
+    switch (logMessage.type) {
+        case ARKLogTypeSeparator:
+            [formattedLogMessage appendFormat:@"%@\n", self.separatorLogPrefix];
+            break;
+        case ARKLogTypeError:
+            [formattedLogMessage appendFormat:@"%@\n", self.errorLogPrefix];
+            break;
+        default:
+            break;
     }
     
-    return nil;
-}
-
-- (NSString *)recentErrorLogMessagesAsPlainText:(NSArray *)logMessages count:(NSUInteger)errorLogsToInclude;
-{
-    NSMutableString *recentErrorLogs = [NSMutableString new];
-    NSUInteger failuresFound = 0;
-    for (ARKLogMessage *log in [logMessages reverseObjectEnumerator]) {
-        if(log.type == ARKLogTypeError) {
-            [recentErrorLogs appendFormat:@"%@\n", log];
-            
-            if(++failuresFound >= errorLogsToInclude) {
-                break;
-            }
-        }
-    }
+    [formattedLogMessage appendFormat:@"%@", logMessage];
     
-    if (recentErrorLogs.length) {
-        // Remove the final newline and create an immutable string.
-        return [recentErrorLogs stringByReplacingCharactersInRange:NSMakeRange(recentErrorLogs.length - 1, 1) withString:@""];
-    } else {
-        return nil;
-    }
-}
-
-- (NSArray *)_formattedLogMessages:(NSArray *)logMessages withImages:(BOOL)images;
-{
-    NSMutableArray *combinedLogs = [[NSMutableArray alloc] init];
-    
-    for (ARKLogMessage *log in logMessages) {
-        switch (log.type) {
-            case ARKLogTypeSeparator:
-                [combinedLogs addObject:[NSString stringWithFormat:@"%@\n", self.separatorLogPrefix]];
-                break;
-            case ARKLogTypeError:
-                [combinedLogs addObject:[NSString stringWithFormat:@"%@\n", self.errorLogPrefix]];
-                break;
-            default:
-                break;
-        }
-        
-        if (images && log.image != nil) {
-            [combinedLogs addObject:log.image];
-        } else {
-            [combinedLogs addObject:[NSString stringWithFormat:@"%@\n", log]];
-        }
-    }
-    
-    return combinedLogs;
+    return [formattedLogMessage copy];
 }
 
 @end

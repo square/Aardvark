@@ -42,16 +42,8 @@
 /// Releases an object that handles logging.
 - (void)removeLogHandler:(id <ARKLogHandler>)logHandler;
 
-/// Returns an array of ARKLogMessage objects. Blocking call.
-- (NSArray *)allLogMessages;
-
-/// Removes all logs. Blocking call.
-- (void)clearLogs;
-
-@end
-
-
-@interface ARKLogController (LoggingAdditions)
+/// Appends a log message to the logs. Non-blocking call.
+- (void)appendLogMessage:(ARKLogMessage *)logMessage;
 
 /// Creates a log message and appends a log message to the logs. Non-blocking call.
 - (void)appendLogWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
@@ -71,5 +63,10 @@
 /// Creates a log message with a screenshot and appends it to the logs. Non-blocking call.
 - (void)appendLogScreenshot;
 
-@end
+/// Returns an array of ARKLogMessage objects. Blocking call.
+- (NSArray *)allLogMessages;
 
+/// Removes all logs. Blocking call.
+- (void)clearLogs;
+
+@end

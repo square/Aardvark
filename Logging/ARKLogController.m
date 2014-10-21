@@ -135,7 +135,7 @@
     }
 }
 
-#pragma mark - Public Methods
+#pragma mark - Public Methods - Log Handlers
 
 - (void)addLogHandler:(id <ARKLogHandler>)logHandler;
 {
@@ -152,6 +152,80 @@
         [self.logHandlers removeObject:logHandler];
     }];
 }
+
+#pragma mark - Public Methods - Appending Logs
+
+- (void)appendLogMessage:(ARKLogMessage *)logMessage;
+{
+    [self.loggingQueue addOperationWithBlock:^{
+        if (!self.loggingEnabled) {
+            return;
+        }
+        
+        [self _appendLogMessage_inLoggingQueue:logMessage];
+    }];
+}
+
+- (void)appendLogWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
+{
+    [self.loggingQueue addOperationWithBlock:^{
+        if (!self.loggingEnabled) {
+            return;
+        }
+        
+        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
+        
+        [self _appendLogMessage_inLoggingQueue:logMessage];
+    }];
+}
+
+- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
+{
+    if (self.loggingEnabled) {
+        NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+        [self appendLogWithText:logText image:nil type:type userInfo:userInfo];
+    }
+}
+
+- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ...;
+{
+    va_list argList;
+    va_start(argList, format);
+    [self appendLogType:type userInfo:userInfo format:format arguments:argList];
+    va_end(argList);
+}
+
+- (void)appendLog:(NSString *)format arguments:(va_list)argList;
+{
+    if (self.loggingEnabled) {
+        NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+        [self appendLogWithText:logText image:nil type:ARKLogTypeDefault userInfo:nil];
+    }
+}
+
+- (void)appendLog:(NSString *)format, ...;
+{
+    va_list argList;
+    va_start(argList, format);
+    [self appendLog:format arguments:argList];
+    va_end(argList);
+}
+
+- (void)appendLogScreenshot;
+{
+    if (self.loggingEnabled) {
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        UIGraphicsBeginImageContext(window.bounds.size);
+        [window.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        NSString *logText = @"📷📱 Screenshot!";
+        [self appendLogWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
+    }
+}
+
+#pragma mark - Public Methods - Accessing and Clearing Logs
 
 - (NSArray *)allLogMessages;
 {
@@ -193,6 +267,25 @@
             [[UIApplication sharedApplication] endBackgroundTask:self.persistLogsBackgroundTaskIdentifier];
         });
     }];
+}
+
+- (void)_appendLogMessage_inLoggingQueue:(ARKLogMessage *)logMessage;
+{
+    // Don't proactively trim too often.
+    if (self.maximumLogMessageCount > 0 && self.logMessages.count >= 2 * self.maximumLogMessageCount) {
+        // We've held on to 2x more logs than we'll ever expose. Trim!
+        [self _trimLogs_inLoggingQueue];
+    }
+    
+    if (self.logsToConsole) {
+        NSLog(@"%@", logMessage.text);
+    }
+    
+    for (id <ARKLogHandler> logHandler in self.logHandlers) {
+        [logHandler logController:self didAppendLogMessage:logMessage];
+    }
+    
+    [self.logMessages addObject:logMessage];
 }
 
 - (NSArray *)_persistedLogs;
@@ -259,84 +352,6 @@
     }
     
     return [self.logMessages copy];
-}
-
-@end
-
-
-@implementation ARKLogController (ARKLogAdditions)
-
-- (void)appendLogWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
-{
-    [self.loggingQueue addOperationWithBlock:^{
-        if (!self.loggingEnabled) {
-            return;
-        }
-        
-        // Don't proactively trim too often.
-        if (self.maximumLogMessageCount > 0 && self.logMessages.count >= 2 * self.maximumLogMessageCount) {
-            // We've held on to 2x more logs than we'll ever expose. Trim!
-            [self _trimLogs_inLoggingQueue];
-        }
-        
-        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
-        
-        if (self.logsToConsole) {
-            NSLog(@"%@", logMessage.text);
-        }
-        
-        for (id <ARKLogHandler> logHandler in self.logHandlers) {
-            [logHandler logController:self didAppendLogMessage:logMessage];
-        }
-        
-        [self.logMessages addObject:logMessage];
-    }];
-}
-
-- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
-{
-    if (self.loggingEnabled) {
-        NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        [self appendLogWithText:logText image:nil type:type userInfo:userInfo];
-    }
-}
-
-- (void)appendLogType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ...;
-{
-    va_list argList;
-    va_start(argList, format);
-    [self appendLogType:type userInfo:userInfo format:format arguments:argList];
-    va_end(argList);
-}
-
-- (void)appendLog:(NSString *)format arguments:(va_list)argList;
-{
-    if (self.loggingEnabled) {
-        NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-        [self appendLogWithText:logText image:nil type:ARKLogTypeDefault userInfo:nil];
-    }
-}
-
-- (void)appendLog:(NSString *)format, ...;
-{
-    va_list argList;
-    va_start(argList, format);
-    [self appendLog:format arguments:argList];
-    va_end(argList);
-}
-
-- (void)appendLogScreenshot;
-{
-    if (self.loggingEnabled) {
-        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-        UIGraphicsBeginImageContext(window.bounds.size);
-        [window.layer renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        NSString *logText = @"📷📱 Screenshot!";
-        [self appendLogWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
-    }
 }
 
 @end

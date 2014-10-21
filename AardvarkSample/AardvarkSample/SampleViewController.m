@@ -39,7 +39,7 @@
     self.tapLogController.persistedLogsFilePath = [applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"];
     
     ARKEmailBugReporter *bugReporter = ((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter;
-    [bugReporter addLogController:self.tapLogController];
+    [bugReporter addLogControllers:@[self.tapLogController]];
 }
 
 - (void)viewDidAppear:(BOOL)animated;

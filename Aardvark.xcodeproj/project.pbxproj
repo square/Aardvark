@@ -21,6 +21,7 @@
 		EAAB38AA19E3180B00161A54 /* ARKBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB38A519E298ED00161A54 /* ARKBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAAB38AC19E318C700161A54 /* Aardvark-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444319E0849D0065A1FF /* Aardvark-Prefix.pch */; };
 		EAAB38AD19E3191D00161A54 /* libAardvark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD1442119E073FB0065A1FF /* libAardvark.a */; };
+		EAC8459C19F60B820000F165 /* ARKEmailBugReporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8459B19F60B810000F165 /* ARKEmailBugReporterTests.m */; };
 		EAD1442719E073FB0065A1FF /* Aardvark.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1442619E073FB0065A1FF /* Aardvark.m */; };
 		EAD1444519E0849D0065A1FF /* Aardvark-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444319E0849D0065A1FF /* Aardvark-Prefix.pch */; };
 		EAD1444619E0849D0065A1FF /* AardvarkDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444419E0849D0065A1FF /* AardvarkDefines.h */; };
@@ -73,6 +74,8 @@
 		EAAB389F19E28DEB00161A54 /* ARKLogFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKLogFormatter.h; path = "Bug Reporting/ARKLogFormatter.h"; sourceTree = "<group>"; };
 		EAAB38A319E2929C00161A54 /* ARKLogFormatterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogFormatterTests.m; path = AardvarkTests/ARKLogFormatterTests.m; sourceTree = "<group>"; };
 		EAAB38A519E298ED00161A54 /* ARKBugReporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKBugReporter.h; path = "Bug Reporting/ARKBugReporter.h"; sourceTree = "<group>"; };
+		EAC8459B19F60B810000F165 /* ARKEmailBugReporterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKEmailBugReporterTests.m; path = AardvarkTests/ARKEmailBugReporterTests.m; sourceTree = "<group>"; };
+		EAC8459D19F60BDB0000F165 /* ARKEmailBugReporter_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKEmailBugReporter_Testing.h; path = "Bug Reporting/ARKEmailBugReporter_Testing.h"; sourceTree = "<group>"; };
 		EAD1442119E073FB0065A1FF /* libAardvark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAardvark.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAD1442419E073FB0065A1FF /* Aardvark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aardvark.h; sourceTree = "<group>"; };
 		EAD1442619E073FB0065A1FF /* Aardvark.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Aardvark.m; sourceTree = "<group>"; };
@@ -130,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				EAAB38A319E2929C00161A54 /* ARKLogFormatterTests.m */,
+				EAC8459B19F60B810000F165 /* ARKEmailBugReporterTests.m */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -186,6 +190,7 @@
 				EAAB38A219E2928500161A54 /* Tests */,
 				EAAB38A519E298ED00161A54 /* ARKBugReporter.h */,
 				EAD1445D19E211250065A1FF /* ARKEmailBugReporter.h */,
+				EAC8459D19F60BDB0000F165 /* ARKEmailBugReporter_Testing.h */,
 				EAD1445E19E211250065A1FF /* ARKEmailBugReporter.m */,
 				EAAB389B19E28D5200161A54 /* ARKDefaultLogFormatter.h */,
 				EAAB389C19E28D5200161A54 /* ARKDefaultLogFormatter.m */,
@@ -378,6 +383,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EAAB38A419E2929C00161A54 /* ARKLogFormatterTests.m in Sources */,
+				EAC8459C19F60B820000F165 /* ARKEmailBugReporterTests.m in Sources */,
 				EAD1445419E201C70065A1FF /* ARKLogControllerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -37,4 +37,7 @@
 /// The window level for the email composer on iOS 7 or later. Defaults to UIWindowLevelStatusBar + 3.0.
 @property (nonatomic, assign, readwrite) UIWindowLevel emailComposeWindowLevel;
 
+/// Returns formatted log messages as NSData.
+- (NSData *)formattedLogMessagesAsData:(NSArray *)logMessages;
+
 @end

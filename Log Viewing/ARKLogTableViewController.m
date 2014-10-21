@@ -231,15 +231,30 @@
     }
 }
 
+#pragma mark - Public Methods
+
+- (NSArray *)contentForActivitySheet;
+{
+    NSMutableArray *formattedLogMessages = [NSMutableArray new];
+    
+    for (ARKLogMessage *logMessage in self.logMessages) {
+        [formattedLogMessages addObject:[self.logFormatter formattedLogMessage:logMessage]];
+        
+        if (logMessage.image != nil) {
+            [formattedLogMessages addObject:logMessage.image];
+        }
+    }
+    
+    return [formattedLogMessages copy];
+}
+
 #pragma mark - Private Methods
 
 - (IBAction)_openActivitySheet:(id)sender;
 {
-    NSArray *formattedLogMessages = [self.logFormatter formattedLogMessagesWithImages:self.logMessages];
+    NSArray *formattedLogMessages = [self contentForActivitySheet];
     UIActivityViewController *activityViewController = [UIActivityViewController ARK_newAardvarkActivityViewControllerWithItems:formattedLogMessages];
-    [self presentViewController:activityViewController animated:YES completion:^{
-        NSLog(@"Aardvark logs:\n%@", formattedLogMessages);
-    }];
+    [self presentViewController:activityViewController animated:YES completion:NULL];
 }
 
 - (IBAction)_clearLogs:(id)sender;
