@@ -55,10 +55,9 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    _persistedLogsFileURL = [NSURL fileURLWithPath:[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"]];
     
-    // Initialize logMessages. This can be done on this thread since we are still inside of init.
-    [self _initializeLogMessages_inLoggingQueue];
+    // Use setter to ensure we pick up the logs already on disk.
+    self.persistedLogsFileURL = [NSURL fileURLWithPath:[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"]];
     
     return self;
 }
@@ -70,15 +69,9 @@
         return nil;
     }
     
-    _logMessageClass = [ARKLogMessage class];
-    _maximumLogMessageCount = 2000;
-    _maximumLogCountToPersist = 500;
-    
-    _logMessages = [[NSMutableArray alloc] initWithCapacity:[self _maximumLogMessageCountToKeepInMemory]];
-    
     _loggingQueue = [NSOperationQueue new];
     _loggingQueue.maxConcurrentOperationCount = 1;
-    
+
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000 /* __IPHONE_8_0 */
     if ([_loggingQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
         _loggingQueue.qualityOfService = NSQualityOfServiceBackground;
@@ -86,6 +79,11 @@
 #endif
     
     _logHandlers = [NSMutableArray new];
+    
+    // Use setters on public ivars to ensure consistency.
+    self.logMessageClass = [ARKLogMessage class];
+    self.maximumLogMessageCount = 2000;
+    self.maximumLogCountToPersist = 500;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActiveNotification:) name:UIApplicationWillResignActiveNotification object:[UIApplication sharedApplication]];
     
