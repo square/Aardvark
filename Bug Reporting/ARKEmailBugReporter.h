@@ -26,7 +26,7 @@
 @property (nonatomic, copy, readwrite) NSString *prefilledEmailBody;
 
 /// The formatter used to prepare the log for entry into an email. Defaults to a vanilla instance of ARKDefaultLogFormatter.
-@property (nonatomic, copy, readwrite) id <ARKLogFormatter> logFormatter;
+@property (nonatomic, strong, readwrite) id <ARKLogFormatter> logFormatter;
 
 /// Controls the number of recent error logs per log controller to include in the email body of a bug report composed in a mail client that allows attachments. Defaults to 3.
 @property (nonatomic, assign, readwrite) NSUInteger numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable;
