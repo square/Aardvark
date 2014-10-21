@@ -12,6 +12,7 @@
 
 @protocol ARKLogHandler <NSObject>
 
+/// Called on a background operation queue when logs are appended to the log controller.
 - (void)logController:(ARKLogController *)logController didAppendLogMessage:(ARKLogMessage *)logMessage;
 
 @end

@@ -25,6 +25,11 @@
 
 @implementation ARKLogController
 
+@synthesize maximumLogMessageCount = _maximumLogMessageCount;
+@synthesize maximumLogCountToPersist = _maximumLogCountToPersist;
+@synthesize persistedLogsFileURL = _persistedLogsFileURL;
+@synthesize logsToConsole = _logsToConsole;
+
 #pragma mark - Class Methods
 
 + (instancetype)defaultController;
@@ -50,7 +55,7 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    _persistedLogsFilePath = [[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"] copy];
+    _persistedLogsFileURL = [NSURL URLWithString:[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"]];
     
     // Initialize logMessages. This can be done on this thread since we are still inside of init.
     [self _initializeLogMessages_inLoggingQueue];
@@ -69,7 +74,7 @@
     _maximumLogMessageCount = 2000;
     _maximumLogCountToPersist = 500;
     
-    _logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogMessageCount)];
+    _logMessages = [[NSMutableArray alloc] initWithCapacity:[self _maximumLogMessageCountToKeepInMemory]];
     
     _loggingQueue = [NSOperationQueue new];
     _loggingQueue.maxConcurrentOperationCount = 1;
@@ -106,15 +111,29 @@
     }];
 }
 
+- (NSUInteger)maximumLogMessageCount;
+{
+    if ([NSOperationQueue currentQueue] == self.loggingQueue) {
+        return _maximumLogMessageCount;
+    } else {
+        __block NSUInteger maximumLogMessageCount = 0;
+        [self _performBlockInLoggingQueueAndWaitUntilFinished:^{
+            maximumLogMessageCount = _maximumLogMessageCount;
+        }];
+        
+        return maximumLogMessageCount;
+    }
+}
+
 - (void)setMaximumLogMessageCount:(NSUInteger)maximumLogCount;
 {
-    if (_maximumLogMessageCount == maximumLogCount) {
-        return;
-    }
-    
-    _maximumLogMessageCount = maximumLogCount;
-    
     [self.loggingQueue addOperationWithBlock:^{
+        if (_maximumLogMessageCount == maximumLogCount) {
+            return;
+        }
+        
+        _maximumLogMessageCount = maximumLogCount;
+        
         if (maximumLogCount == 0) {
             self.logMessages = nil;
         } else if (self.logMessages == nil) {
@@ -123,16 +142,78 @@
     }];
 }
 
-- (void)setPersistedLogsFilePath:(NSString *)persistedLogsFilePath;
+- (NSUInteger)maximumLogCountToPersist;
 {
-    if (![_persistedLogsFilePath isEqualToString:persistedLogsFilePath]) {
-        _persistedLogsFilePath = persistedLogsFilePath;
-        NSArray *persistedLogs = [self _persistedLogs];
-        
-        [self.loggingQueue addOperationWithBlock:^{
-            [self.logMessages addObjectsFromArray:persistedLogs];
+    if ([NSOperationQueue currentQueue] == self.loggingQueue) {
+        return _maximumLogCountToPersist;
+    } else {
+        __block NSUInteger maximumLogCountToPersist = 0;
+        [self _performBlockInLoggingQueueAndWaitUntilFinished:^{
+            maximumLogCountToPersist = _maximumLogCountToPersist;
         }];
+        
+        return maximumLogCountToPersist;
     }
+}
+
+- (void)setMaximumLogCountToPersist:(NSUInteger)maximumLogCountToPersist;
+{
+    [self.loggingQueue addOperationWithBlock:^{
+        if (_maximumLogCountToPersist == maximumLogCountToPersist) {
+            return;
+        }
+        
+        _maximumLogCountToPersist = maximumLogCountToPersist;
+    }];
+}
+
+- (NSURL *)persistedLogsFileURL;
+{
+    if ([NSOperationQueue currentQueue] == self.loggingQueue) {
+        return _persistedLogsFileURL;
+    } else {
+        __block NSURL *persistedLogsFileURL = nil;
+        [self _performBlockInLoggingQueueAndWaitUntilFinished:^{
+            persistedLogsFileURL = _persistedLogsFileURL;
+        }];
+        
+        return persistedLogsFileURL;
+    }
+}
+
+- (void)setpersistedLogsFileURL:(NSURL *)persistedLogsFileURL;
+{
+    [self.loggingQueue addOperationWithBlock:^{
+        if (![_persistedLogsFileURL isEqual:persistedLogsFileURL]) {
+            _persistedLogsFileURL = persistedLogsFileURL;
+            NSArray *persistedLogs = [self _persistedLogs];
+            
+            [self.logMessages addObjectsFromArray:persistedLogs];
+        }
+    }];
+}
+
+- (BOOL)logsToConsole;
+{
+    if ([NSOperationQueue currentQueue] == self.loggingQueue) {
+        return _logsToConsole;
+    } else {
+        __block BOOL logsToConsole = NO;
+        [self _performBlockInLoggingQueueAndWaitUntilFinished:^{
+            logsToConsole = _logsToConsole;
+        }];
+        
+        return logsToConsole;
+    }
+}
+
+- (void)setLogsToConsole:(BOOL)logsToConsole;
+{
+    [self.loggingQueue addOperationWithBlock:^{
+        if (_logsToConsole != logsToConsole) {
+            _logsToConsole = logsToConsole;
+        }
+    }];
 }
 
 #pragma mark - Public Methods - Log Handlers
@@ -241,7 +322,7 @@
 
 - (void)clearLogs;
 {
-    [self _performBlockInLoggingQueueAndWaitUntilFinished:^{
+    [self.loggingQueue addOperationWithBlock:^{
         [self.logMessages removeAllObjects];
         [self _persistLogs_inLoggingQueue];
     }];
@@ -273,7 +354,7 @@
 - (void)_appendLogMessage_inLoggingQueue:(ARKLogMessage *)logMessage;
 {
     // Don't proactively trim too often.
-    if (self.maximumLogMessageCount > 0 && self.logMessages.count >= 2 * self.maximumLogMessageCount) {
+    if (self.maximumLogMessageCount > 0 && self.logMessages.count >= [self _maximumLogMessageCountToKeepInMemory]) {
         // We've held on to 2x more logs than we'll ever expose. Trim!
         [self _trimLogs_inLoggingQueue];
     }
@@ -291,7 +372,7 @@
 
 - (NSArray *)_persistedLogs;
 {
-    NSData *persistedLogData = [[NSFileManager defaultManager] contentsAtPath:self.persistedLogsFilePath];
+    NSData *persistedLogData = [NSData dataWithContentsOfURL:self.persistedLogsFileURL];
     NSArray *persistedLogs = persistedLogData ? [NSKeyedUnarchiver unarchiveObjectWithData:persistedLogData] : nil;
     if ([persistedLogs isKindOfClass:[NSArray class]] && persistedLogs.count > 0) {
         return persistedLogs;
@@ -311,7 +392,7 @@
             self.logMessages = [persistedLogs mutableCopy];
         }
     } else {
-        self.logMessages = [[NSMutableArray alloc] initWithCapacity:(2 * _maximumLogMessageCount)];
+        self.logMessages = [[NSMutableArray alloc] initWithCapacity:[self _maximumLogMessageCountToKeepInMemory]];
     }
 }
 
@@ -322,11 +403,11 @@
     NSFileManager *defaultManager = [NSFileManager defaultManager];
     
     if (logsToPersist.count == 0) {
-        [defaultManager removeItemAtPath:self.persistedLogsFilePath error:NULL];
+        [defaultManager removeItemAtURL:self.persistedLogsFileURL error:NULL];
     } else {
         BOOL persistedLogs = NO;
-        if ([defaultManager createDirectoryAtPath:[self.persistedLogsFilePath stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL]) {
-            persistedLogs = [defaultManager createFileAtPath:self.persistedLogsFilePath contents:[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] attributes:nil];
+        if ([defaultManager createDirectoryAtURL:[self.persistedLogsFileURL URLByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL]) {
+            persistedLogs = [[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] writeToURL:self.persistedLogsFileURL atomically:YES];
         }
         
         if (!persistedLogs) {
@@ -353,6 +434,11 @@
     }
     
     return [self.logMessages copy];
+}
+
+- (NSUInteger)_maximumLogMessageCountToKeepInMemory;
+{
+    return 2 * self.maximumLogMessageCount;
 }
 
 @end
