@@ -1,6 +1,6 @@
 # Aardvark
 
-Aardvark is a library that makes it dead simple to create useful bug reports without leaving your app.
+Aardvark is a threadsafe library that makes it dead simple to create actionable bug reports within your app without impacting impacting performance.
 
 ## Usage
 
