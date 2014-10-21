@@ -211,7 +211,7 @@
     va_end(argList);
 }
 
-- (void)appendLogScreenshot;
+- (void)appendScreenshotLog;
 {
     if (self.loggingEnabled) {
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];

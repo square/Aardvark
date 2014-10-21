@@ -61,7 +61,7 @@
 - (void)appendLog:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
 
 /// Creates a log message with a screenshot and appends it to the logs. Non-blocking call.
-- (void)appendLogScreenshot;
+- (void)appendScreenshotLog;
 
 /// Returns an array of ARKLogMessage objects. Blocking call.
 - (NSArray *)allLogMessages;

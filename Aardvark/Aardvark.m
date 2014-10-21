@@ -32,7 +32,7 @@ void ARKTypeLog(ARKLogType type, NSDictionary *userInfo, NSString *format, ...)
 
 void ARKLogScreenshot()
 {
-    [[ARKLogController defaultController] appendLogScreenshot];
+    [[ARKLogController defaultController] appendScreenshotLog];
 }
 
 
