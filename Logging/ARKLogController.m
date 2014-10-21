@@ -33,7 +33,7 @@
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        ARKDefaultLogController = [[[self class] alloc] initDefaultController];
+        ARKDefaultLogController = [[[self class] alloc] _initDefaultController];
     });
     
     return ARKDefaultLogController;
@@ -41,7 +41,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initDefaultController;
+- (instancetype)_initDefaultController;
 {
     self = [self init];
     if (!self) {
