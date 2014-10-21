@@ -181,7 +181,7 @@
     }
 }
 
-- (void)setpersistedLogsFileURL:(NSURL *)persistedLogsFileURL;
+- (void)setPersistedLogsFileURL:(NSURL *)persistedLogsFileURL;
 {
     [self.loggingQueue addOperationWithBlock:^{
         if (![_persistedLogsFileURL isEqual:persistedLogsFileURL]) {
