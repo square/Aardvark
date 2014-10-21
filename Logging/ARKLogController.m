@@ -55,7 +55,7 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    _persistedLogsFileURL = [NSURL URLWithString:[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"]];
+    _persistedLogsFileURL = [NSURL fileURLWithPath:[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogControllerLogMessages.data"]];
     
     // Initialize logMessages. This can be done on this thread since we are still inside of init.
     [self _initializeLogMessages_inLoggingQueue];
