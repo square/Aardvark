@@ -17,7 +17,7 @@
 
 @property (nonatomic, strong, readwrite) NSMutableArray *logMessages;
 @property (nonatomic, strong, readonly) NSOperationQueue *loggingQueue;
-@property (nonatomic, strong, readonly) NSMutableSet *logHandlers;
+@property (nonatomic, strong, readonly) NSMutableArray *logHandlers;
 @property (nonatomic, assign, readwrite) UIBackgroundTaskIdentifier persistLogsBackgroundTaskIdentifier;
 
 @end
@@ -85,7 +85,7 @@
     }
 #endif
     
-    _logHandlers = [NSMutableSet new];
+    _logHandlers = [NSMutableArray new];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActiveNotification:) name:UIApplicationWillResignActiveNotification object:[UIApplication sharedApplication]];
     
@@ -223,7 +223,9 @@
     NSAssert([logHandler conformsToProtocol:@protocol(ARKLogHandler)], @"Tried to add a log handler that does not conform to ARKLogHandler protocol");
     
     [self.loggingQueue addOperationWithBlock:^{
-        [self.logHandlers addObject:logHandler];
+        if (![self.logHandlers containsObject:logHandler]) {
+            [self.logHandlers addObject:logHandler];
+        }
     }];
 }
 
