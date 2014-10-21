@@ -80,7 +80,7 @@
     
     _logHandlers = [NSMutableArray new];
     
-    // Use setters on public ivars to ensure consistency.
+    // Use setters on public properties to ensure consistency.
     self.logMessageClass = [ARKLogMessage class];
     self.maximumLogMessageCount = 2000;
     self.maximumLogCountToPersist = 500;
