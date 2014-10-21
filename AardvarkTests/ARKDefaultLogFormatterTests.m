@@ -1,5 +1,5 @@
 //
-//  ARKLogFormatterTests.m
+//  ARKDefaultLogFormatterTests.m
 //  Aardvark
 //
 //  Created by Dan Federman on 10/6/14.
@@ -13,7 +13,7 @@
 #import "ARKLogController_Testing.h"
 
 
-@interface ARKLogFormatterTests : XCTestCase
+@interface ARKDefaultLogFormatterTests : XCTestCase
 
 @property (nonatomic, strong, readwrite) ARKLogController *defaultLogController;
 @property (nonatomic, strong, readwrite) ARKDefaultLogFormatter *logFormatter;
@@ -21,7 +21,7 @@
 @end
 
 
-@implementation ARKLogFormatterTests
+@implementation ARKDefaultLogFormatterTests
 
 #pragma mark - Setup
 
@@ -118,6 +118,22 @@
     NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.defaultLogController.allLogMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
     XCTAssertEqualObjects(splitLog.firstObject, self.logFormatter.separatorLogPrefix);
+}
+
+- (void)test_formattedLogMessage_errorPrefixOnSameLineIfLogTextIsEmpty;
+{
+    ARKTypeLog(ARKLogTypeError, nil, @"");
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.defaultLogController.allLogMessages.firstObject];
+    NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
+    XCTAssertEqual(splitLog.count, 1);
+}
+
+- (void)test_formattedLogMessage_separatorPrefixOnSameLineIfLogTextIsEmpty;
+{
+    ARKTypeLog(ARKLogTypeSeparator, nil, @"");
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.defaultLogController.allLogMessages.firstObject];
+    NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
+    XCTAssertEqual(splitLog.count, 1);
 }
 
 #pragma mark - Performance Tests

@@ -34,15 +34,23 @@
 {
     NSMutableString *formattedLogMessage = [NSMutableString new];
     
+    BOOL prefixPrepended = NO;
+    
     switch (logMessage.type) {
         case ARKLogTypeSeparator:
-            [formattedLogMessage appendFormat:@"%@\n", self.separatorLogPrefix];
+            [formattedLogMessage appendFormat:@"%@", self.separatorLogPrefix];
+            prefixPrepended = YES;
             break;
         case ARKLogTypeError:
-            [formattedLogMessage appendFormat:@"%@\n", self.errorLogPrefix];
+            [formattedLogMessage appendFormat:@"%@", self.errorLogPrefix];
+            prefixPrepended = YES;
             break;
         default:
             break;
+    }
+    
+    if (prefixPrepended && logMessage.text.length) {
+        [formattedLogMessage appendString:@"\n"];
     }
     
     [formattedLogMessage appendFormat:@"%@", logMessage];
