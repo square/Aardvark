@@ -235,7 +235,7 @@
 
 - (IBAction)_openActivitySheet:(id)sender;
 {
-    NSArray *formattedLogMessages = [self.logFormatter formattedLogMessages:self.logMessages];
+    NSArray *formattedLogMessages = [self.logFormatter formattedLogMessagesWithImages:self.logMessages];
     UIActivityViewController *activityViewController = [UIActivityViewController ARK_newAardvarkActivityViewControllerWithItems:formattedLogMessages];
     [self presentViewController:activityViewController animated:YES completion:^{
         NSLog(@"Aardvark logs:\n%@", formattedLogMessages);

@@ -30,7 +30,7 @@
 
 #pragma mark - ARKLogFormatter
 
-- (NSArray *)formattedLogMessages:(NSArray *)logMessages;
+- (NSArray *)formattedLogMessagesWithImages:(NSArray *)logMessages;
 {
     return [self _formattedLogMessages:logMessages withImages:YES];
 }

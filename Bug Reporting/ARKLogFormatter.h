@@ -10,8 +10,8 @@
 
 @required
 
-/// Returns an array of NSStrings that represent the logs.
-- (NSArray *)formattedLogMessages:(NSArray *)logMessages;
+/// Returns an array of NSStrings and UIImages that represent the logs.
+- (NSArray *)formattedLogMessagesWithImages:(NSArray *)logMessages;
 
 /// Returns formattedLogMessages as plain text, stripping out images.
 - (NSString *)formattedLogMessagesAsPlainText:(NSArray *)logMessages;
