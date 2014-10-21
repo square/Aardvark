@@ -47,6 +47,7 @@
     ARKLog(@"%s", __PRETTY_FUNCTION__);
     
     self.tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_tapDetected:)];
+    self.tapRecognizer.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:self.tapRecognizer];
     
     [super viewDidAppear:animated];
@@ -76,6 +77,26 @@
     ARKLog(@"%s", __PRETTY_FUNCTION__);
     ARKLogTableViewController *tapLogsViewController = [[ARKLogTableViewController alloc] initWithLogController:self.tapLogController logFormatter:[ARKDefaultLogFormatter new]];
     [self.navigationController pushViewController:tapLogsViewController animated:YES];
+}
+
+- (IBAction)blueButtonPressed:(id)sender;
+{
+    ARKLog(@"Blue");
+}
+
+- (IBAction)redButtonPressed:(id)sender;
+{
+    ARKLog(@"Red");
+}
+
+- (IBAction)greenButtonPressed:(id)sender;
+{
+    ARKLog(@"Green");
+}
+
+- (IBAction)yellowButtonPressed:(id)sender;
+{
+    ARKLog(@"Yellow");
 }
 
 #pragma mark - Private Methods
