@@ -25,6 +25,7 @@
 
 @implementation ARKLogController
 
+@synthesize logMessageClass = _logMessageClass;
 @synthesize maximumLogMessageCount = _maximumLogMessageCount;
 @synthesize maximumLogCountToPersist = _maximumLogCountToPersist;
 @synthesize persistedLogsFileURL = _persistedLogsFileURL;
@@ -100,11 +101,29 @@
 
 #pragma mark - Properties
 
+- (Class)logMessageClass;
+{
+    if ([NSOperationQueue currentQueue] == self.loggingQueue) {
+        return _logMessageClass;
+    } else {
+        __block Class logMessageClass = NULL;
+        [self _performBlockInLoggingQueueAndWaitUntilFinished:^{
+            logMessageClass = _logMessageClass;
+        }];
+        
+        return logMessageClass;
+    }
+}
+
 - (void)setLogMessageClass:(Class)logMessageClass;
 {
     NSAssert([logMessageClass isSubclassOfClass:[ARKLogMessage class]], @"Attempting to set a logMessageClass that is not a subclass of ARKLogMessage!");
     
     [self.loggingQueue addOperationWithBlock:^{
+        if (_logMessageClass == logMessageClass) {
+            return;
+        }
+        
         _logMessageClass = logMessageClass;
     }];
 }

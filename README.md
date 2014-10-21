@@ -8,7 +8,7 @@ There are only three steps to get Aardvark logging and bug reporting up and runn
 
 1) Call `[Aardvark enableDefaultLogController]` to enable logging.
 
-2) Call `[Aardvark addDefaultBugReportingGestureWithBugReportRecipient:]` to enable creating bug reports.
+2) Call `[Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:]` to enable the creation of email bug reports.
 
 3) Replace `NSLog` with `ARKLog`
 
@@ -16,7 +16,7 @@ This will allow users to report a bug by making a two-finger long-press gesture.
 
 You can change how many ARKLogs are included in bug reports by changing the value of `maximumLogCount` on your `defaultController` of `ARKLogController`.
 
-You can customize both how bug reports are triggered and how they are filed by passing your own `ARKBugReporter` object to `[Aardvark addBugReporter:withTriggeringGestureRecognizerOfClass:]`.
+You can customize both how bug reports are triggered and how they are filed by passing your own `ARKBugReporter` object and the desired subclass class of `UIGestureRecognizer` to `[Aardvark addBugReporter:withTriggeringGestureRecognizerOfClass:]`. You can further customize how bug reports will be triggerd by modifying the returned gesture recognizer.
 
 You can easily log to third party services by adding `ARKLogHandler`s to a ARKLogController. SampleCrashlyticsLogHandler is an example of a ARKLogHandler that logs events to Crashlytics.
 

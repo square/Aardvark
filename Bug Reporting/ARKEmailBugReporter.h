@@ -19,8 +19,8 @@
 
 - (instancetype)initWithEmailAddress:(NSString *)emailAddress logController:(ARKLogController *)logController;
 
-/// The email address to which bug reports will be sent. Must be set before composeBugReportWithLogs: is called.
-@property (nonatomic, copy, readonly) NSString *bugReportRecipientEmailAddress;
+/// The email address to which bug reports will be sent. Must be set before composeBugReport is called.
+@property (nonatomic, copy, readwrite) NSString *bugReportRecipientEmailAddress;
 
 /// The email body that will be presented to the user when they compose a report.
 @property (nonatomic, copy, readwrite) NSString *prefilledEmailBody;

@@ -10,6 +10,7 @@
 @class ARKLogMessage;
 
 
+/// Collects and persists log messages. All methods and properties on this class are threadsafe.
 @interface ARKLogController : NSObject
 
 /// Returns the instance of the log controller used by ARKLog().
@@ -18,7 +19,7 @@
 /// Enables logging. Defaults to NO. Turning off logging does not guarantee that logging on different threads will immediately cease. Property is atomic to support multithreaded logging.
 @property (atomic, assign, readwrite, getter=isLoggingEnabled) BOOL loggingEnabled;
 
-/// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage.
+/// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage. Accessor blocks on logging queue; setter is non-blocking.
 @property (nonatomic, assign, readwrite) Class logMessageClass;
 
 /// Convenience property that allows bug reporters to prefix logs with the name of the controller they came from. Defaults to nil.
