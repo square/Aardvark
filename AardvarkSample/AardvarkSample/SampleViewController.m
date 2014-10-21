@@ -36,7 +36,7 @@
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    self.tapLogController.persistedLogsFilePath = [applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"];
+    self.tapLogController.persistedLogsFileURL = [NSURL URLWithString:[applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"]];
     
     ARKEmailBugReporter *bugReporter = ((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter;
     [bugReporter addLogControllers:@[self.tapLogController]];
