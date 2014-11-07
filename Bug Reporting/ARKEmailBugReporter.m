@@ -183,15 +183,23 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                 
                 NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
                 NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for plaintext logs") stringByAppendingPathExtension:@"txt"];
+                NSMutableString *emailBodyForLogController = [NSMutableString new];
+                BOOL appendToEmailBody = NO;
+                
                 if (logController.name.length) {
-                    [emailBody appendFormat:@"%@:\n", logController.name];
+                    [emailBodyForLogController appendFormat:@"%@:\n", logController.name];
                     screenshotFileName = [logController.name stringByAppendingFormat:@"_%@", screenshotFileName];
                     logsFileName = [logController.name stringByAppendingFormat:@"_%@", logsFileName];
                 }
                 
                 NSString *recentErrorLogs = [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable];
                 if (recentErrorLogs.length) {
-                    [emailBody appendFormat:@"%@\n", recentErrorLogs];
+                    [emailBodyForLogController appendFormat:@"%@\n", recentErrorLogs];
+                    appendToEmailBody = YES;
+                }
+                
+                if (appendToEmailBody) {
+                    [emailBody appendString:emailBodyForLogController];
                 }
                 
                 NSData *mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
