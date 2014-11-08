@@ -71,12 +71,12 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 
 - (void)test_initDefaultController_setsPersistencePath;
 {
-    XCTAssertGreaterThan(self.defaultLogController.persistedLogsFilePath.length, 0);
+    XCTAssertNotNil(self.defaultLogController.persistedLogsFileURL);
 }
 
 - (void)test_init_doesNotSetPersistencePath;
 {
-    XCTAssertEqual([ARKLogController new].persistedLogsFilePath.length, 0);
+    XCTAssertNotNil([ARKLogController new].persistedLogsFileURL);
 }
 
 - (void)test_loggingEnabled_loggingInitiallyDisabled;
@@ -275,6 +275,21 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     XCTAssertNil([self.defaultLogController _persistedLogs]);
 }
 
+- (void)test_trimLogs_trimsOldestLogs;
+{
+    self.defaultLogController.maximumLogMessageCount = 5;
+    
+    NSString *lastLogText = nil;
+    for (NSUInteger i  = 0; i < self.defaultLogController.maximumLogMessageCount + 1; i++) {
+        lastLogText = [NSString stringWithFormat:@"Log %@", @(i)];
+        ARKLog(@"%@", lastLogText);
+    }
+    
+    NSArray *logMessages = self.defaultLogController.allLogMessages;
+    ARKLogMessage *lastLog = logMessages.lastObject;
+    XCTAssertEqualObjects(lastLog.text, lastLogText);
+}
+
 - (void)test_trimmedLogsToPersistLogs_maximumLogCountToPersistPersisted;
 {
     // Fill in some logs.
@@ -308,12 +323,10 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     ARKLogController *logController = [ARKLogController new];
     logController.loggingEnabled = YES;
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    NSString *persistenceTestLogsPath = [applicationSupportDirectory stringByAppendingPathComponent:@"ARKPersistenceTestLogControllerLogs.data"];
+    NSURL *persistenceTestLogsURL = [self _persistenceURLWithFileName:@"ARKPersistenceTestLogControllerLogs.data"];
     NSString *testPeristedLogMessageText = @"setpersistedLogsFilePath: test log";
     
-    logController.persistedLogsFilePath = persistenceTestLogsPath;
+    logController.persistedLogsFileURL = persistenceTestLogsURL;
     
     [logController appendLogWithFormat:@"%@", testPeristedLogMessageText];
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
@@ -325,7 +338,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     ARKLogController *persistenceTestLogController = [ARKLogController new];
     XCTAssertEqual(persistenceTestLogController.logMessages.count, 0);
     
-    persistenceTestLogController.persistedLogsFilePath = persistenceTestLogsPath;
+    persistenceTestLogController.persistedLogsFileURL = persistenceTestLogsURL;
     [persistenceTestLogController.loggingQueue waitUntilAllOperationsAreFinished];
     XCTAssertEqualObjects([persistenceTestLogController.allLogMessages.lastObject text], testPeristedLogMessageText, @"Setting persistedLogsFilePath did not load logs.");
     XCTAssertEqualObjects(persistenceTestLogController.logMessages.firstObject, persistenceTestLogController.logMessages.lastObject, @"Setting persistedLogsFilePath did not load logs.");
@@ -336,13 +349,11 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
 
 - (void)test_dealloc_persistsLogs;
 {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    NSString *persistenceTestLogsPath = [applicationSupportDirectory stringByAppendingPathComponent:@"ARKPersistenceTestLogControllerLogs.data"];
+    NSURL *persistenceTestLogsURL = [self _persistenceURLWithFileName:@"ARKPersistenceTestLogControllerLogs.data"];
     
     ARKLogController *logController = [ARKLogController new];
     logController.loggingEnabled = YES;
-    logController.persistedLogsFilePath = persistenceTestLogsPath;
+    logController.persistedLogsFileURL = persistenceTestLogsURL;
     
     NSMutableArray *numbers = [NSMutableArray new];
     for (NSUInteger i  = 0; i < logController.maximumLogCountToPersist; i++) {
@@ -370,14 +381,14 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     @autoreleasepool {
         // Create a new log controller.
         logController = [ARKLogController new];
-        logController.persistedLogsFilePath = persistenceTestLogsPath;
+        logController.persistedLogsFileURL = persistenceTestLogsURL;
         
         // Delete the persisted logs.
-        [[NSFileManager defaultManager] removeItemAtPath:logController.persistedLogsFilePath error:NULL];
+        [[NSFileManager defaultManager] removeItemAtURL:logController.persistedLogsFileURL error:NULL];
         
         // Ensure deleting the persisted logs removed all logs.
         persistenceCheckLogController = [ARKLogController new];
-        persistenceCheckLogController.persistedLogsFilePath = persistenceTestLogsPath;
+        persistenceCheckLogController.persistedLogsFileURL = persistenceTestLogsURL;
         XCTAssertEqual(persistenceCheckLogController.allLogMessages.count, 0, @"Removing file at persistedLogsFilePath did not remove logs!");
         
         weakLogController = logController;
@@ -394,7 +405,7 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
     
     // Create a new log controller
     logController = [ARKLogController new];
-    logController.persistedLogsFilePath = persistenceTestLogsPath;
+    logController.persistedLogsFileURL = persistenceTestLogsURL;
     
     XCTAssertEqual(logController.allLogMessages.count, logMessageCount, @"Logs did not persist in dealloc.");
     
@@ -410,10 +421,9 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
         [logController appendLogWithFormat:@"%@", @(i)];
     }
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    NSString *persistenceTestLogsPath = [applicationSupportDirectory stringByAppendingPathComponent:@"ARKPersistenceTestLogControllerLogs.data"];
-    logController.persistedLogsFilePath = persistenceTestLogsPath;
+    NSURL *persistenceTestLogsURL = [self _persistenceURLWithFileName:@"ARKPersistenceTestLogControllerLogs.data"];
+    
+    logController.persistedLogsFileURL = persistenceTestLogsURL;
     
     [logController.loggingQueue waitUntilAllOperationsAreFinished];
     [logController _persistLogs_inLoggingQueue];
@@ -507,6 +517,16 @@ typedef void (^LogHandlingBlock)(ARKLogController *logController, ARKLogMessage 
         
         [self.defaultLogController.loggingQueue waitUntilAllOperationsAreFinished];
     }];
+}
+
+#pragma mark - Private Methods
+
+- (NSURL *)_persistenceURLWithFileName:(NSString *)fileName;
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = paths.firstObject;
+    NSString *persistenceTestLogsPath = [applicationSupportDirectory stringByAppendingPathComponent:fileName];
+    return [NSURL fileURLWithPath:persistenceTestLogsPath isDirectory:NO];
 }
 
 @end
