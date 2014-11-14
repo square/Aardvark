@@ -144,9 +144,9 @@
         ARKLog(@"%@", text);
     }];
     
-    [ARKLogDistributor setDefaultLogStore:nil];
-    
     XCTAssertEqual(self.logStore.allLogMessages.count, numbers.count);
+    
+    [ARKLogDistributor setDefaultLogStore:nil];
 }
 
 - (void)test_clearLogs_removesAllLogMessages;

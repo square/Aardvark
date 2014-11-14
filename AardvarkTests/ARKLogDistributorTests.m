@@ -111,7 +111,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     XCTAssertEqual([self.logStore.allLogMessages.firstObject class], [ARKLogMessageTestSubclass class]);
 }
 
-- (void)_test_appendLogWithFormat_callsLogConsumers;
+- (void)test_appendLogWithFormat_callsLogConsumers;
 {
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
     
@@ -142,8 +142,6 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     for (NSUInteger i  = 0; i < self.logStore.maximumLogMessageCount; i++) {
         ARKLog(@"Log %@", @(i));
     }
-    
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
     XCTAssertGreaterThan(self.logStore.allLogMessages.count, 0);
     [self.logStore.allLogMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
@@ -179,6 +177,19 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     XCTAssertEqual(logConsumerTest.count, 0);
+}
+
+- (void)test_flushLogAppendingQueue_finishesAppendingLogs;
+{
+    NSMutableArray *numbers = [NSMutableArray new];
+    for (NSUInteger i  = 0; i < 100; i++) {
+        [numbers addObject:[NSString stringWithFormat:@"%@", @(i)]];
+    }
+    
+    [numbers enumerateObjectsUsingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
+        ARKLog(@"%@", text);
+        XCTAssertEqualObjects([(ARKLogMessage *)self.logStore.allLogMessages.lastObject text], text);
+    }];
 }
 
 @end

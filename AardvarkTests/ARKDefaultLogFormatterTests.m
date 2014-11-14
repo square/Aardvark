@@ -10,9 +10,7 @@
 
 #import "ARKDefaultLogFormatter.h"
 #import "ARKLogDistributor.h"
-#import "ARKLogDistributor_Testing.h"
 #import "ARKLogStore.h"
-#import "ARKLogStore_Testing.h"
 
 
 @interface ARKDefaultLogFormatterTests : XCTestCase
@@ -44,7 +42,10 @@
 - (void)tearDown;
 {
     [self.logStore clearLogs];
-    [self.logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
+    
+    // Wait for logs to clear.
+    (void)[self.logStore allLogMessages];
+    
     [ARKLogDistributor setDefaultLogStore:nil];
     
     [super tearDown];
@@ -55,29 +56,37 @@
 - (void)test_formattedLogMessage_errorLogLineCount;
 {
     ARKTypeLog(ARKLogTypeError, nil, @"Fake Error Log");
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
-    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.logStore.allLogMessages.firstObject];
+    NSArray *logMessages = self.logStore.allLogMessages;
+    XCTAssertEqual(logMessages.count, 1);
+    
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:logMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
     XCTAssertEqual(splitLog.count, 2, @"Logging an error should create two lines of formatted logs");
+    XCTAssertEqualObjects(splitLog.firstObject, self.logFormatter.errorLogPrefix);
 }
 
 - (void)test_formattedLogMessage_separatorLogLineCount;
 {
     ARKTypeLog(ARKLogTypeSeparator, nil, @"Separators Rule");
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
-    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.logStore.allLogMessages.firstObject];
+    NSArray *logMessages = self.logStore.allLogMessages;
+    XCTAssertEqual(logMessages.count, 1);
+    
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:logMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
     XCTAssertEqual(splitLog.count, 2, @"Logging a separator should create two lines of formatted logs");
+    XCTAssertEqualObjects(splitLog.firstObject, self.logFormatter.separatorLogPrefix);
 }
 
 - (void)test_formattedLogMessage_defaultLogLineCount;
 {
     ARKLog(@"Something Happened");
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
-    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.logStore.allLogMessages.firstObject];
+    NSArray *logMessages = self.logStore.allLogMessages;
+    XCTAssertEqual(logMessages.count, 1);
+    
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:logMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
     XCTAssertEqual(splitLog.count, 1, @"Logging a default log should create one line of formatted logs");
 }
@@ -86,12 +95,14 @@
 {
     NSString *errorLog = @"Fake Error Log";
     ARKTypeLog(ARKLogTypeError, nil, @"%@", errorLog);
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
-    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.logStore.allLogMessages.firstObject];
+    NSArray *logMessages = self.logStore.allLogMessages;
+    XCTAssertEqual(logMessages.count, 1);
+    
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:logMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
     XCTAssertEqualObjects(splitLog.firstObject, self.logFormatter.errorLogPrefix);
-    XCTAssertEqualObjects(splitLog.lastObject, [self.logStore.logMessages.firstObject description]);
+    XCTAssertEqualObjects(splitLog.lastObject, [self.logStore.allLogMessages.firstObject description]);
     XCTAssertEqual(splitLog.count, 2);
 }
 
@@ -99,12 +110,14 @@
 {
     NSString *separatorLog = @"Separators Rule";
     ARKTypeLog(ARKLogTypeSeparator, nil, @"%@", separatorLog);
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
-    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.logStore.allLogMessages.firstObject];
+    NSArray *logMessages = self.logStore.allLogMessages;
+    XCTAssertEqual(logMessages.count, 1);
+    
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:logMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
     XCTAssertEqualObjects(splitLog.firstObject, self.logFormatter.separatorLogPrefix);
-    XCTAssertEqualObjects(splitLog.lastObject, [self.logStore.logMessages.firstObject description]);
+    XCTAssertEqualObjects(splitLog.lastObject, [self.logStore.allLogMessages.firstObject description]);
     XCTAssertEqual(splitLog.count, 2);
 }
 
@@ -112,11 +125,13 @@
 {
     NSString *log = @"Something Happened";
     ARKLog(@"%@", log);
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
-    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.logStore.allLogMessages.firstObject];
+    NSArray *logMessages = self.logStore.allLogMessages;
+    XCTAssertEqual(logMessages.count, 1);
+    
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:logMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
-    XCTAssertEqualObjects(splitLog.firstObject, [self.logStore.logMessages.firstObject description]);
+    XCTAssertEqualObjects(splitLog.firstObject, [self.logStore.allLogMessages.firstObject description]);
     XCTAssertEqual(splitLog.count, 1);
 }
 
@@ -125,9 +140,11 @@
     self.logFormatter.errorLogPrefix = @"Error";
     
     ARKTypeLog(ARKLogTypeError, nil, @"Fake Error Log");
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
-    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.logStore.allLogMessages.firstObject];
+    NSArray *logMessages = self.logStore.allLogMessages;
+    XCTAssertEqual(logMessages.count, 1);
+    
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:logMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
     XCTAssertEqualObjects(splitLog.firstObject, self.logFormatter.errorLogPrefix);
 }
@@ -137,9 +154,11 @@
     self.logFormatter.separatorLogPrefix = @"New Thing";
     
     ARKTypeLog(ARKLogTypeSeparator, nil, @"Separators Rule");
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
-    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.logStore.allLogMessages.firstObject];
+    NSArray *logMessages = self.logStore.allLogMessages;
+    XCTAssertEqual(logMessages.count, 1);
+    
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:logMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
     XCTAssertEqualObjects(splitLog.firstObject, self.logFormatter.separatorLogPrefix);
 }
@@ -147,9 +166,11 @@
 - (void)test_formattedLogMessage_errorPrefixOnSameLineIfLogTextIsEmpty;
 {
     ARKTypeLog(ARKLogTypeError, nil, @"");
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
-    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.logStore.allLogMessages.firstObject];
+    NSArray *logMessages = self.logStore.allLogMessages;
+    XCTAssertEqual(logMessages.count, 1);
+    
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:logMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
     XCTAssertEqual(splitLog.count, 1);
 }
@@ -157,9 +178,11 @@
 - (void)test_formattedLogMessage_separatorPrefixOnSameLineIfLogTextIsEmpty;
 {
     ARKTypeLog(ARKLogTypeSeparator, nil, @"");
-    [self.defaultLogDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
-    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:self.logStore.allLogMessages.firstObject];
+    NSArray *logMessages = self.logStore.allLogMessages;
+    XCTAssertEqual(logMessages.count, 1);
+    
+    NSString *formattedSingleLog = [self.logFormatter formattedLogMessage:logMessages.firstObject];
     NSArray *splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
     XCTAssertEqual(splitLog.count, 1);
 }
