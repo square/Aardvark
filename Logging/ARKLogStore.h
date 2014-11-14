@@ -12,6 +12,7 @@
 /// Posting this notification triggers the owning log distributor to immediately distribute pending logs to the consumer.
 extern NSString *const ARKLogConsumerRequiresAllPendingLogsNotification;
 
+
 /// A block that takes a logMessage and returns YES if it wants the calling object to consume the log.
 typedef BOOL (^ARKConsumeLogPredicateBlock)(ARKLogMessage *logMessage);
 
