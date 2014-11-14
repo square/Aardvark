@@ -9,6 +9,7 @@
 #import <Aardvark/ARKDefaultLogFormatter.h>
 #import <Aardvark/ARKEmailBugReporter.h>
 #import <Aardvark/ARKLogTableViewController.h>
+#import <Aardvark/ARKLogStore.h>
 
 #import "SampleAppDelegate.h"
 #import "SampleViewController.h"
@@ -16,7 +17,8 @@
 
 @interface SampleViewController ()
 
-@property (nonatomic, readwrite, strong) ARKLogController *tapLogController;
+@property (nonatomic, readwrite, strong) ARKLogDistributor *tapLogDistributor;
+@property (nonatomic, readwrite, strong) ARKLogStore *tapLogStore;
 @property (nonatomic, strong, readwrite) UITapGestureRecognizer *tapRecognizer;
 
 @end
@@ -30,16 +32,19 @@
 {
     [super viewDidLoad];
     
-    self.tapLogController = [ARKLogController new];
-    self.tapLogController.loggingEnabled = YES;
-    self.tapLogController.name = @"Taps";
+    self.tapLogDistributor = [ARKLogDistributor new];
+    
+    self.tapLogStore = [ARKLogStore new];
+    self.tapLogStore.name = @"Taps";
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    self.tapLogController.persistedLogsFileURL = [NSURL fileURLWithPath:[applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"]];
+    self.tapLogStore.persistedLogsFileURL = [NSURL fileURLWithPath:[applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"]];
+    
+    [self.tapLogDistributor addLogConsumer:self.tapLogStore];
     
     ARKEmailBugReporter *bugReporter = ((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter;
-    [bugReporter addLogControllers:@[self.tapLogController]];
+    [bugReporter addLogStores:@[self.tapLogStore]];
 }
 
 - (void)viewDidAppear:(BOOL)animated;
@@ -75,7 +80,7 @@
 - (IBAction)viewTapLogs:(id)sender;
 {
     ARKLog(@"%s", __PRETTY_FUNCTION__);
-    ARKLogTableViewController *tapLogsViewController = [[ARKLogTableViewController alloc] initWithLogController:self.tapLogController logFormatter:[ARKDefaultLogFormatter new]];
+    ARKLogTableViewController *tapLogsViewController = [[ARKLogTableViewController alloc] initWithLogStore:self.tapLogStore logFormatter:[ARKDefaultLogFormatter new]];
     [self.navigationController pushViewController:tapLogsViewController animated:YES];
 }
 
@@ -104,8 +109,8 @@
 - (void)_tapDetected:(UITapGestureRecognizer *)tapRecognizer;
 {
     if (tapRecognizer == self.tapRecognizer && tapRecognizer.state == UIGestureRecognizerStateEnded) {
-        // Log directly to the tap log controller rather than using ARKLog, which logs to the default log controller.
-        [self.tapLogController appendLogWithFormat:@"Tapped %@", NSStringFromCGPoint([tapRecognizer locationInView:nil])];
+        // Log directly to the tap log distributor rather than using ARKLog, which logs to the default log distributor.
+        [self.tapLogDistributor appendLogWithFormat:@"Tapped %@", NSStringFromCGPoint([tapRecognizer locationInView:nil])];
     }
 }
 

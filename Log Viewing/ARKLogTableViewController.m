@@ -10,8 +10,9 @@
 
 #import "ARKIndividualLogViewController.h"
 #import "ARKDefaultLogFormatter.h"
-#import "ARKLogController.h"
+#import "ARKLogDistributor.h"
 #import "ARKLogMessage.h"
+#import "ARKLogStore.h"
 #import "ARKScreenshotViewController.h"
 #import "UIActivityViewController+ARKAdditions.h"
 
@@ -29,14 +30,14 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithLogController:(ARKLogController *)logController logFormatter:(id <ARKLogFormatter>)logFormatter;
+- (instancetype)initWithLogStore:(ARKLogStore *)logStore logFormatter:(id <ARKLogFormatter>)logFormatter;
 {
     self = [super init];
     if (!self) {
         return nil;
     }
     
-    _logController = logController;
+    _logStore = logStore;
     _logFormatter = logFormatter;
     
     return self;
@@ -44,7 +45,7 @@
 
 - (instancetype)init;
 {
-    return [self initWithLogController:[ARKLogController defaultController] logFormatter:[ARKDefaultLogFormatter new]];
+    return [self initWithLogStore:[ARKLogDistributor defaultLogStore] logFormatter:[ARKDefaultLogFormatter new]];
 }
 
 - (void)dealloc;
@@ -102,7 +103,7 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
     if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        [self.logController clearLogs];
+        [self.logStore clearLogs];
         [self _reloadLogs];
     }
 }
@@ -262,7 +263,7 @@
 
 - (void)_reloadLogs;
 {
-    self.logMessages = [self.logController allLogMessages];
+    self.logMessages = [self.logStore allLogMessages];
     [self.tableView reloadData];
 }
 

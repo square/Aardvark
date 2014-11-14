@@ -6,17 +6,17 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-@class ARKLogController;
 @protocol ARKLogFormatter;
+@class ARKLogStore;
 
 
 /// Displays a list of ARKArdvarkLogs in a table.
 @interface ARKLogTableViewController : UITableViewController
 
-- (instancetype)initWithLogController:(ARKLogController *)logController logFormatter:(id <ARKLogFormatter>)logFormatter;
+- (instancetype)initWithLogStore:(ARKLogStore *)logStore logFormatter:(id <ARKLogFormatter>)logFormatter;
 
-/// The log controller that provides the data for the table.
-@property (nonatomic, strong, readonly) ARKLogController *logController;
+/// The log storethat provides the data for the table.
+@property (nonatomic, strong, readonly) ARKLogStore *logStore;
 
 /// The formatter used to prepare the logs for the share/activity sheet.
 @property (nonatomic, strong, readonly) id <ARKLogFormatter> logFormatter;

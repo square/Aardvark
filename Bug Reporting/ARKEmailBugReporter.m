@@ -10,7 +10,7 @@
 #import "ARKEmailBugReporter_Testing.h"
 
 #import "ARKDefaultLogFormatter.h"
-#import "ARKLogController.h"
+#import "ARKLogStore.h"
 #import "ARKLogMessage.h"
 
 
@@ -28,7 +28,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 @property (nonatomic, strong) MFMailComposeViewController *mailComposeViewController;
 @property (nonatomic, strong) UIWindow *emailComposeWindow;
 
-@property (nonatomic, copy) NSMutableSet *mutableLogControllers;
+@property (nonatomic, copy) NSMutableSet *mutableLogStores;
 
 @end
 
@@ -56,12 +56,12 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable = 15;
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
     
-    _mutableLogControllers = [NSMutableSet new];
+    _mutableLogStores = [NSMutableSet new];
     
     return self;
 }
 
-- (instancetype)initWithEmailAddress:(NSString *)emailAddress logController:(ARKLogController *)logController;
+- (instancetype)initWithEmailAddress:(NSString *)emailAddress logStore:(ARKLogStore *)logStore;
 {
     self = [self init];
     if (!self) {
@@ -69,7 +69,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     }
     
     _bugReportRecipientEmailAddress = [emailAddress copy];
-    [self addLogControllers:@[logController]];
+    [self addLogStores:@[logStore]];
     
     return self;
 }
@@ -79,7 +79,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (void)composeBugReport;
 {
     NSAssert(self.bugReportRecipientEmailAddress.length, @"Attempting to compose a bug report without a recipient email address.");
-    NSAssert(self.mutableLogControllers.count > 0, @"Attempting to compose a bug report without logs.");
+    NSAssert(self.mutableLogStores.count > 0, @"Attempting to compose a bug report without logs.");
     
     if (!self.whiteScreen) {
         // Take a screenshot.
@@ -103,39 +103,39 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     }
 }
 
-- (void)addLogControllers:(NSArray *)logControllers;
+- (void)addLogStores:(NSArray *)logStores;
 {
-    NSAssert(self.mailComposeViewController == nil, @"Can not add a log controller while a bug is being composed.");
+    NSAssert(self.mailComposeViewController == nil, @"Can not add a log store while a bug is being composed.");
     
-    for (id logController in logControllers) {
-        NSAssert([logController isKindOfClass:[ARKLogController class]], @"Can not add a log controller of class %@", NSStringFromClass([logController class]));
+    for (id logStore in logStores) {
+        NSAssert([logStore isKindOfClass:[ARKLogStore class]], @"Can not add a log store of class %@", NSStringFromClass([logStore class]));
         
-        [self.mutableLogControllers addObject:[NSValue valueWithNonretainedObject:logController]];
+        [self.mutableLogStores addObject:[NSValue valueWithNonretainedObject:logStore]];
     }
 }
 
-- (void)removeLogControllers:(NSArray *)logControllers;
+- (void)removeLogStores:(NSArray *)logStores;
 {
     NSAssert(self.mailComposeViewController == nil, @"Can not add a remove a controller while a bug is being composed.");
     
-    for (id logController in logControllers) {
-        NSAssert([logController isKindOfClass:[ARKLogController class]], @"Can not remove a log controller of class %@", NSStringFromClass([logController class]));
+    for (id logStore in logStores) {
+        NSAssert([logStore isKindOfClass:[ARKLogStore class]], @"Can not remove a log store of class %@", NSStringFromClass([logStore class]));
         
-        [self.mutableLogControllers removeObject:[NSValue valueWithNonretainedObject:logController]];
+        [self.mutableLogStores removeObject:[NSValue valueWithNonretainedObject:logStore]];
     }
 }
 
-- (NSArray *)logControllers;
+- (NSArray *)logStores;
 {
-    NSMutableArray *logControllers = [NSMutableArray new];
-    for (NSValue *logControllerValue in [self.mutableLogControllers copy]) {
-        ARKLogController *logController = logControllerValue.nonretainedObjectValue;
-        if (logController) {
-            [logControllers addObject:logController];
+    NSMutableArray *logStores = [NSMutableArray new];
+    for (NSValue *logStoreValue in [self.mutableLogStores copy]) {
+        ARKLogStore *logStore = logStoreValue.nonretainedObjectValue;
+        if (logStore) {
+            [logStores addObject:logStore];
         }
     }
     
-    return [logControllers copy];
+    return [logStores copy];
 }
 
 #pragma mark - CAAnimationDelegate
@@ -178,28 +178,28 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             
             NSMutableString *emailBody = [NSMutableString stringWithFormat:@"%@\n", self.prefilledEmailBody];
             
-            for (ARKLogController *logController in self.logControllers) {
-                NSArray *logMessages = logController.allLogMessages;
+            for (ARKLogStore *logStore in self.logStores) {
+                NSArray *logMessages = logStore.allLogMessages;
                 
                 NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
                 NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for plaintext logs") stringByAppendingPathExtension:@"txt"];
-                NSMutableString *emailBodyForLogController = [NSMutableString new];
+                NSMutableString *emailBodyForLogStore = [NSMutableString new];
                 BOOL appendToEmailBody = NO;
                 
-                if (logController.name.length) {
-                    [emailBodyForLogController appendFormat:@"%@:\n", logController.name];
-                    screenshotFileName = [logController.name stringByAppendingFormat:@"_%@", screenshotFileName];
-                    logsFileName = [logController.name stringByAppendingFormat:@"_%@", logsFileName];
+                if (logStore.name.length) {
+                    [emailBodyForLogStore appendFormat:@"%@:\n", logStore.name];
+                    screenshotFileName = [logStore.name stringByAppendingFormat:@"_%@", screenshotFileName];
+                    logsFileName = [logStore.name stringByAppendingFormat:@"_%@", logsFileName];
                 }
                 
                 NSString *recentErrorLogs = [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable];
                 if (recentErrorLogs.length) {
-                    [emailBodyForLogController appendFormat:@"%@\n", recentErrorLogs];
+                    [emailBodyForLogStore appendFormat:@"%@\n", recentErrorLogs];
                     appendToEmailBody = YES;
                 }
                 
                 if (appendToEmailBody) {
-                    [emailBody appendString:emailBodyForLogController];
+                    [emailBody appendString:emailBodyForLogStore];
                 }
                 
                 NSData *mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
@@ -220,8 +220,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             [self _showEmailComposeWindow];
         } else {
             NSMutableString *emailBody = [NSMutableString new];
-            for (ARKLogController *logController in self.logControllers) {
-                NSArray *logMessages = logController.allLogMessages;
+            for (ARKLogStore *logStore in self.logStores) {
+                NSArray *logMessages = logStore.allLogMessages;
                 
                 [emailBody appendFormat:@"%@\n%@\n", self.prefilledEmailBody, [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
             }

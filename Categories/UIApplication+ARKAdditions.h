@@ -7,7 +7,7 @@
 //
 
 @protocol ARKBugReporter;
-@class ARKLogController;
+@class ARKLogDistributor;
 
 
 @interface UIApplication (ARKAdditions)
@@ -15,7 +15,7 @@
 /// Adds a two finger press and hold gesture recognizer to the application. Triggering that gesture causes bugReporter to compose a bug report.
 - (void)ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:(id <ARKBugReporter>)bugReporter;
 
-/// Adds a gesture recognizer of class gestureRecognizerClass to the application. Triggering that gesture causes bugReporter to compose a bug report from the logs of ARKLogController's defaultController.
+/// Adds a gesture recognizer of class gestureRecognizerClass to the application. Triggering that gesture causes bugReporter to compose a bug report from the logs of ARKLogDistributor's defaultDistributor.
 - (UIGestureRecognizer *)ARK_addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
 
 /// Removes bugReporter and the associated gestureRecognizer.

@@ -7,11 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EA491AFB19E5EAAA00762174 /* ARKLogHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = EA491AF919E5EAAA00762174 /* ARKLogHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA491AFB19E5EAAA00762174 /* ARKLogConsumer.h in Headers */ = {isa = PBXBuildFile; fileRef = EA491AF919E5EAAA00762174 /* ARKLogConsumer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA6E218E19E84C1D0097BF4F /* UIApplication+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EA6E218C19E84C1D0097BF4F /* UIApplication+ARKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA6E218F19E84C1D0097BF4F /* UIApplication+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6E218D19E84C1D0097BF4F /* UIApplication+ARKAdditions.m */; };
 		EA6E219119E8682B0097BF4F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4583FD19E65C3C00E44882 /* MessageUI.framework */; };
 		EA6E219219E868320097BF4F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4583FD19E65C3C00E44882 /* MessageUI.framework */; };
+		EA7353661A1577200060F54E /* ARKLogStore.h in Headers */ = {isa = PBXBuildFile; fileRef = EA7353641A1577200060F54E /* ARKLogStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA7353671A1577200060F54E /* ARKLogStore.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7353651A1577200060F54E /* ARKLogStore.m */; };
+		EA73536A1A157C960060F54E /* NSOperationQueue+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EA7353681A157C960060F54E /* NSOperationQueue+ARKAdditions.h */; };
+		EA73536B1A157C960060F54E /* NSOperationQueue+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7353691A157C960060F54E /* NSOperationQueue+ARKAdditions.m */; };
+		EA7353701A15C5E70060F54E /* ARKLogStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA73536F1A15C5E70060F54E /* ARKLogStoreTests.m */; };
+		EA7353711A15D25C0060F54E /* NSOperationQueue+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7353691A157C960060F54E /* NSOperationQueue+ARKAdditions.m */; };
 		EAAB389119E24DC900161A54 /* Aardvark.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1442419E073FB0065A1FF /* Aardvark.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAAB389D19E28D5200161A54 /* ARKDefaultLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB389B19E28D5200161A54 /* ARKDefaultLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAAB389E19E28D5200161A54 /* ARKDefaultLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAB389C19E28D5200161A54 /* ARKDefaultLogFormatter.m */; };
@@ -26,9 +32,9 @@
 		EAD1444519E0849D0065A1FF /* Aardvark-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444319E0849D0065A1FF /* Aardvark-Prefix.pch */; };
 		EAD1444619E0849D0065A1FF /* AardvarkDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444419E0849D0065A1FF /* AardvarkDefines.h */; };
 		EAD1444A19E084C40065A1FF /* ARKLogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1444819E084C40065A1FF /* ARKLogMessage.m */; };
-		EAD1444D19E09EEA0065A1FF /* ARKLogController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444B19E09EEA0065A1FF /* ARKLogController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAD1444E19E09EEA0065A1FF /* ARKLogController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1444C19E09EEA0065A1FF /* ARKLogController.m */; };
-		EAD1445419E201C70065A1FF /* ARKLogControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1445319E201C70065A1FF /* ARKLogControllerTests.m */; };
+		EAD1444D19E09EEA0065A1FF /* ARKLogDistributor.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444B19E09EEA0065A1FF /* ARKLogDistributor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAD1444E19E09EEA0065A1FF /* ARKLogDistributor.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1444C19E09EEA0065A1FF /* ARKLogDistributor.m */; };
+		EAD1445419E201C70065A1FF /* ARKLogDistributorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1445319E201C70065A1FF /* ARKLogDistributorTests.m */; };
 		EAD1445F19E211250065A1FF /* ARKEmailBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1445D19E211250065A1FF /* ARKEmailBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAD1446019E211250065A1FF /* ARKEmailBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1445E19E211250065A1FF /* ARKEmailBugReporter.m */; };
 		EAD1446519E22D080065A1FF /* ARKLogTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1446319E22D080065A1FF /* ARKLogTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -65,10 +71,16 @@
 
 /* Begin PBXFileReference section */
 		EA4583FD19E65C3C00E44882 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		EA491AF919E5EAAA00762174 /* ARKLogHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogHandler.h; path = Logging/ARKLogHandler.h; sourceTree = "<group>"; };
+		EA491AF919E5EAAA00762174 /* ARKLogConsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogConsumer.h; path = Logging/ARKLogConsumer.h; sourceTree = "<group>"; };
 		EA6E218C19E84C1D0097BF4F /* UIApplication+ARKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIApplication+ARKAdditions.h"; path = "Categories/UIApplication+ARKAdditions.h"; sourceTree = "<group>"; };
 		EA6E218D19E84C1D0097BF4F /* UIApplication+ARKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIApplication+ARKAdditions.m"; path = "Categories/UIApplication+ARKAdditions.m"; sourceTree = "<group>"; };
-		EAAB389819E2820000161A54 /* ARKLogController_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKLogController_Testing.h; path = Logging/ARKLogController_Testing.h; sourceTree = "<group>"; };
+		EA7353641A1577200060F54E /* ARKLogStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogStore.h; path = Logging/ARKLogStore.h; sourceTree = "<group>"; };
+		EA7353651A1577200060F54E /* ARKLogStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogStore.m; path = Logging/ARKLogStore.m; sourceTree = "<group>"; };
+		EA7353681A157C960060F54E /* NSOperationQueue+ARKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSOperationQueue+ARKAdditions.h"; path = "Categories/NSOperationQueue+ARKAdditions.h"; sourceTree = "<group>"; };
+		EA7353691A157C960060F54E /* NSOperationQueue+ARKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSOperationQueue+ARKAdditions.m"; path = "Categories/NSOperationQueue+ARKAdditions.m"; sourceTree = "<group>"; };
+		EA73536C1A15801D0060F54E /* ARKLogStore_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKLogStore_Testing.h; path = Logging/ARKLogStore_Testing.h; sourceTree = "<group>"; };
+		EA73536F1A15C5E70060F54E /* ARKLogStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogStoreTests.m; path = AardvarkTests/ARKLogStoreTests.m; sourceTree = "<group>"; };
+		EAAB389819E2820000161A54 /* ARKLogDistributor_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKLogDistributor_Testing.h; path = Logging/ARKLogDistributor_Testing.h; sourceTree = "<group>"; };
 		EAAB389B19E28D5200161A54 /* ARKDefaultLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKDefaultLogFormatter.h; path = "Bug Reporting/ARKDefaultLogFormatter.h"; sourceTree = "<group>"; };
 		EAAB389C19E28D5200161A54 /* ARKDefaultLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKDefaultLogFormatter.m; path = "Bug Reporting/ARKDefaultLogFormatter.m"; sourceTree = "<group>"; };
 		EAAB389F19E28DEB00161A54 /* ARKLogFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKLogFormatter.h; path = "Bug Reporting/ARKLogFormatter.h"; sourceTree = "<group>"; };
@@ -85,9 +97,9 @@
 		EAD1444419E0849D0065A1FF /* AardvarkDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AardvarkDefines.h; path = Other/AardvarkDefines.h; sourceTree = "<group>"; };
 		EAD1444719E084C40065A1FF /* ARKLogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogMessage.h; path = Logging/ARKLogMessage.h; sourceTree = "<group>"; };
 		EAD1444819E084C40065A1FF /* ARKLogMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogMessage.m; path = Logging/ARKLogMessage.m; sourceTree = "<group>"; };
-		EAD1444B19E09EEA0065A1FF /* ARKLogController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogController.h; path = Logging/ARKLogController.h; sourceTree = "<group>"; };
-		EAD1444C19E09EEA0065A1FF /* ARKLogController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogController.m; path = Logging/ARKLogController.m; sourceTree = "<group>"; };
-		EAD1445319E201C70065A1FF /* ARKLogControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogControllerTests.m; path = AardvarkTests/ARKLogControllerTests.m; sourceTree = "<group>"; };
+		EAD1444B19E09EEA0065A1FF /* ARKLogDistributor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogDistributor.h; path = Logging/ARKLogDistributor.h; sourceTree = "<group>"; };
+		EAD1444C19E09EEA0065A1FF /* ARKLogDistributor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogDistributor.m; path = Logging/ARKLogDistributor.m; sourceTree = "<group>"; };
+		EAD1445319E201C70065A1FF /* ARKLogDistributorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogDistributorTests.m; path = AardvarkTests/ARKLogDistributorTests.m; sourceTree = "<group>"; };
 		EAD1445D19E211250065A1FF /* ARKEmailBugReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKEmailBugReporter.h; path = "Bug Reporting/ARKEmailBugReporter.h"; sourceTree = "<group>"; };
 		EAD1445E19E211250065A1FF /* ARKEmailBugReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKEmailBugReporter.m; path = "Bug Reporting/ARKEmailBugReporter.m"; sourceTree = "<group>"; };
 		EAD1446319E22D080065A1FF /* ARKLogTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogTableViewController.h; path = "Log Viewing/ARKLogTableViewController.h"; sourceTree = "<group>"; };
@@ -174,12 +186,15 @@
 			isa = PBXGroup;
 			children = (
 				EAD1446219E21FB50065A1FF /* Tests */,
-				EAD1444B19E09EEA0065A1FF /* ARKLogController.h */,
-				EAAB389819E2820000161A54 /* ARKLogController_Testing.h */,
-				EAD1444C19E09EEA0065A1FF /* ARKLogController.m */,
-				EA491AF919E5EAAA00762174 /* ARKLogHandler.h */,
+				EA491AF919E5EAAA00762174 /* ARKLogConsumer.h */,
+				EAD1444B19E09EEA0065A1FF /* ARKLogDistributor.h */,
+				EAAB389819E2820000161A54 /* ARKLogDistributor_Testing.h */,
+				EAD1444C19E09EEA0065A1FF /* ARKLogDistributor.m */,
 				EAD1444719E084C40065A1FF /* ARKLogMessage.h */,
 				EAD1444819E084C40065A1FF /* ARKLogMessage.m */,
+				EA7353641A1577200060F54E /* ARKLogStore.h */,
+				EA73536C1A15801D0060F54E /* ARKLogStore_Testing.h */,
+				EA7353651A1577200060F54E /* ARKLogStore.m */,
 			);
 			name = Logging;
 			sourceTree = "<group>";
@@ -225,7 +240,8 @@
 		EAD1446219E21FB50065A1FF /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				EAD1445319E201C70065A1FF /* ARKLogControllerTests.m */,
+				EAD1445319E201C70065A1FF /* ARKLogDistributorTests.m */,
+				EA73536F1A15C5E70060F54E /* ARKLogStoreTests.m */,
 			);
 			name = Tests;
 			sourceTree = "<group>";
@@ -233,6 +249,8 @@
 		EAD1447719E22F470065A1FF /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				EA7353681A157C960060F54E /* NSOperationQueue+ARKAdditions.h */,
+				EA7353691A157C960060F54E /* NSOperationQueue+ARKAdditions.m */,
 				EAD1447C19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.h */,
 				EAD1447D19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.m */,
 				EA6E218C19E84C1D0097BF4F /* UIApplication+ARKAdditions.h */,
@@ -248,15 +266,17 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA7353661A1577200060F54E /* ARKLogStore.h in Headers */,
 				EAAB389119E24DC900161A54 /* Aardvark.h in Headers */,
 				EAD1445F19E211250065A1FF /* ARKEmailBugReporter.h in Headers */,
 				EAAB38A919E317D000161A54 /* ARKLogMessage.h in Headers */,
 				EAD1447E19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.h in Headers */,
-				EAD1444D19E09EEA0065A1FF /* ARKLogController.h in Headers */,
+				EAD1444D19E09EEA0065A1FF /* ARKLogDistributor.h in Headers */,
 				EAAB389D19E28D5200161A54 /* ARKDefaultLogFormatter.h in Headers */,
 				EAD1447119E22E470065A1FF /* ARKIndividualLogViewController.h in Headers */,
-				EA491AFB19E5EAAA00762174 /* ARKLogHandler.h in Headers */,
+				EA491AFB19E5EAAA00762174 /* ARKLogConsumer.h in Headers */,
 				EAAB38A019E28E9B00161A54 /* ARKLogFormatter.h in Headers */,
+				EA73536A1A157C960060F54E /* NSOperationQueue+ARKAdditions.h in Headers */,
 				EA6E218E19E84C1D0097BF4F /* UIApplication+ARKAdditions.h in Headers */,
 				EAD1444619E0849D0065A1FF /* AardvarkDefines.h in Headers */,
 				EAD1444519E0849D0065A1FF /* Aardvark-Prefix.pch in Headers */,
@@ -366,13 +386,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				EAD1442719E073FB0065A1FF /* Aardvark.m in Sources */,
-				EAD1444E19E09EEA0065A1FF /* ARKLogController.m in Sources */,
+				EAD1444E19E09EEA0065A1FF /* ARKLogDistributor.m in Sources */,
 				EAD1444A19E084C40065A1FF /* ARKLogMessage.m in Sources */,
 				EAD1446019E211250065A1FF /* ARKEmailBugReporter.m in Sources */,
 				EAAB389E19E28D5200161A54 /* ARKDefaultLogFormatter.m in Sources */,
 				EAD1447F19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.m in Sources */,
 				EAD1447219E22E470065A1FF /* ARKIndividualLogViewController.m in Sources */,
+				EA7353671A1577200060F54E /* ARKLogStore.m in Sources */,
 				EAD1446619E22D080065A1FF /* ARKLogTableViewController.m in Sources */,
+				EA73536B1A157C960060F54E /* NSOperationQueue+ARKAdditions.m in Sources */,
 				EAD1447619E22E800065A1FF /* ARKScreenshotViewController.m in Sources */,
 				EA6E218F19E84C1D0097BF4F /* UIApplication+ARKAdditions.m in Sources */,
 			);
@@ -383,8 +405,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				EAAB38A419E2929C00161A54 /* ARKDefaultLogFormatterTests.m in Sources */,
+				EA7353711A15D25C0060F54E /* NSOperationQueue+ARKAdditions.m in Sources */,
+				EA7353701A15C5E70060F54E /* ARKLogStoreTests.m in Sources */,
 				EAC8459C19F60B820000F165 /* ARKEmailBugReporterTests.m in Sources */,
-				EAD1445419E201C70065A1FF /* ARKLogControllerTests.m in Sources */,
+				EAD1445419E201C70065A1FF /* ARKLogDistributorTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

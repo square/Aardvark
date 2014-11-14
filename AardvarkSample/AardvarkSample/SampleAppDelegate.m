@@ -8,7 +8,7 @@
 
 #import "SampleAppDelegate.h"
 
-#import "SampleCrashlyticsLogHandler.h"
+#import "SampleCrashlyticsLogConsumer.h"
 
 
 @implementation SampleAppDelegate
@@ -17,12 +17,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 {
-    // These two lines are all you'll need to get started.
-    [Aardvark enableDefaultLogController];
+    // This line is all you'll need to get started.
     self.bugReporter = [Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:@"fake-email@aardvarkbugreporting.src"];
     
     // Log all ARKLog messages to Crashlytics to help debug crashes.
-    [[ARKLogController defaultController] addLogHandler:[SampleCrashlyticsLogHandler new]];
+    [[ARKLogDistributor defaultDistributor] addLogConsumer:[SampleCrashlyticsLogConsumer new]];
     
     ARKTypeLog(ARKLogTypeSeparator, nil, @"Hello World");
     

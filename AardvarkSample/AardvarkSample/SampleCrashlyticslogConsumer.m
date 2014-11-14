@@ -1,5 +1,5 @@
 //
-//  SampleCrashlyticsLogHandler.m
+//  SampleCrashlyticsLogConsumer.m
 //  AardvarkSample
 //
 //  Created by Dan Federman on 10/16/14.
@@ -9,12 +9,12 @@
 #import <Aardvark/ARKLogMessage.h>
 #import <Crashlytics/Crashlytics.h>
 
-#import "SampleCrashlyticsLogHandler.h"
+#import "SampleCrashlyticsLogConsumer.h"
 
 
-@implementation SampleCrashlyticsLogHandler
+@implementation SampleCrashlyticsLogConsumer
 
-- (void)logController:(ARKLogController *)logController didAppendLogMessage:(ARKLogMessage *)logMessage;
+- (void)consumeLogMessage:(ARKLogMessage *)logMessage;
 {
     CLSLog(@"%@", logMessage.text);
 }

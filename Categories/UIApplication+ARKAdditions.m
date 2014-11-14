@@ -11,7 +11,7 @@
 #import "UIApplication+ARKAdditions.h"
 
 #import "ARKBugReporter.h"
-#import "ARKLogController.h"
+#import "ARKLogDistributor.h"
 
 
 @interface UIApplication (ARKAdditions_Private)
@@ -34,10 +34,12 @@
 
 - (UIGestureRecognizer *)ARK_addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
 {
+    NSAssert(bugReporter.logStores.count > 0, @"Attempting to add a bug reporter without a log store!");
+    NSAssert([bugReporter conformsToProtocol:@protocol(ARKBugReporter)], @"Attempting to trigger bug reports with an object that does not conform to ARKBugReporter.");
+    
     UIGestureRecognizer *bugReportingGestureRecognizer = [self _ARK_newBugReportingGestureRecognizerWithClass:gestureRecognizerClass];
     [self.keyWindow addGestureRecognizer:bugReportingGestureRecognizer];
     
-    NSAssert([bugReporter conformsToProtocol:@protocol(ARKBugReporter)], @"Attempting to trigger bug reports with an object that does not conform to ARKBugReporter.");
     [self.ARK_bugReporterToGestureRecognizerMap setObject:bugReportingGestureRecognizer forKey:bugReporter];
     
     if (![self ARK_isObservingKeyWindowNotifications]) {

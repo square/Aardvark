@@ -9,8 +9,9 @@
 #import "Aardvark.h"
 
 #import "ARKEmailBugReporter.h"
-#import "ARKLogController.h"
+#import "ARKLogDistributor.h"
 #import "ARKLogMessage.h"
+#import "ARKLogStore.h"
 #import "UIApplication+ARKAdditions.h"
 
 
@@ -18,7 +19,7 @@ void ARKLog(NSString *format, ...)
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogController defaultController] appendLogWithFormat:format arguments:argList];
+    [[ARKLogDistributor defaultDistributor] appendLogWithFormat:format arguments:argList];
     va_end(argList);
 }
 
@@ -26,13 +27,13 @@ void ARKTypeLog(ARKLogType type, NSDictionary *userInfo, NSString *format, ...)
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogController defaultController] appendLogWithType:type userInfo:userInfo format:format arguments:argList];
+    [[ARKLogDistributor defaultDistributor] appendLogWithType:type userInfo:userInfo format:format arguments:argList];
     va_end(argList);
 }
 
 void ARKLogScreenshot()
 {
-    [[ARKLogController defaultController] appendScreenshotLog];
+    [[ARKLogDistributor defaultDistributor] appendScreenshotLog];
 }
 
 
@@ -40,21 +41,18 @@ void ARKLogScreenshot()
 
 #pragma mark - Class Methods
 
-+ (void)enableDefaultLogController;
-{
-    [ARKLogController defaultController].loggingEnabled = YES;
-}
-
-+ (void)disableDefaultLogController;
-{
-    [ARKLogController defaultController].loggingEnabled = NO;
-}
-
 + (ARKEmailBugReporter *)addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:(NSString *)emailAddress;
 {
     NSAssert([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:)], @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
     
-    ARKEmailBugReporter *bugReporter = [[ARKEmailBugReporter alloc] initWithEmailAddress:emailAddress logController:[ARKLogController defaultController]];
+    ARKLogStore *logStore = [ARKLogStore new];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = paths.firstObject;
+    logStore.persistedLogsFileURL = [NSURL fileURLWithPath:[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogStore.data"]];
+    
+    [ARKLogDistributor setDefaultLogStore:logStore];
+    
+    ARKEmailBugReporter *bugReporter = [[ARKEmailBugReporter alloc] initWithEmailAddress:emailAddress logStore:logStore];
     
     [[UIApplication sharedApplication] ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:bugReporter];
     

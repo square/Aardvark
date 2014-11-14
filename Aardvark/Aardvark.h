@@ -18,26 +18,21 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
 
 @protocol ARKBugReporter;
 @class ARKEmailBugReporter;
-@class ARKLogController;
+@class ARKLogDistributor;
+@class ARKLogStore;
 
 
-/// Appends a log with type default to the default log controller.
+/// Appends a log with type default to the default log distributor.
 OBJC_EXTERN void ARKLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 
-/// Logs a log with customized logs and flags to the default log controller.
+/// Logs a log with customized logs and flags to the default log distributor.
 OBJC_EXTERN void ARKTypeLog(ARKLogType type, NSDictionary *userInfo, NSString *format, ...) NS_FORMAT_FUNCTION(3,4);
 
-/// Logs a screenshot to the default log controller.
+/// Logs a screenshot to the default log distributor.
 OBJC_EXTERN void ARKLogScreenshot();
 
 
 @interface Aardvark : NSObject
-
-/// Enables logging to ARKLog.
-+ (void)enableDefaultLogController;
-
-/// Disables logging to ARKLog.
-+ (void)disableDefaultLogController;
 
 /// Sets up a two finger press-and-hold gesture recognizer to trigger email bug reports that will be sent to emailAddress. Returns the created bug reporter for convenience.
 + (ARKEmailBugReporter *)addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:(NSString *)emailAddress;

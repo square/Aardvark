@@ -6,21 +6,18 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-@class ARKLogController;
-
-
 @protocol ARKBugReporter <NSObject>
 
 /// Called when the user has triggered the creation of a bug report.
 - (void)composeBugReport;
 
-/// Add logs from logControllers to future bug reports. The bug reporter should hold weak references to the logControllers.
-- (void)addLogControllers:(NSArray *)logControllers;
+/// Add logs from logStores to future bug reports. The bug reporter should hold weak references to the logStores.
+- (void)addLogStores:(NSArray *)logStores;
 
-/// Remove logs from logControllers from future bug reports.
-- (void)removeLogControllers:(NSArray *)logControllers;
+/// Remove logs from logStores from future bug reports.
+- (void)removeLogStores:(NSArray *)logStores;
 
-/// The log controllers used to generate bug reports.
-- (NSArray *)logControllers;
+/// The log stores used to generate bug reports.
+- (NSArray *)logStores;
 
 @end
