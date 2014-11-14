@@ -28,6 +28,7 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
 
 @implementation ARKLogStore
 
+@synthesize name = _name;
 @synthesize maximumLogMessageCount = _maximumLogMessageCount;
 @synthesize maximumLogCountToPersist = _maximumLogCountToPersist;
 @synthesize persistedLogsFileURL = _persistedLogsFileURL;
@@ -73,6 +74,29 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
 }
 
 #pragma mark - Properties
+
+- (NSString *)name;
+{
+    if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
+        return _name;
+    } else {
+        __block NSString *name = nil;
+        [self.logConsumingQueue performOperationWithBlock:^{
+            name = _name;
+        } waitUntilFinished:YES];
+        
+        return name;
+    }
+}
+
+- (void)setName:(NSString *)name;
+{
+    [self.logConsumingQueue addOperationWithBlock:^{
+        if (![_name isEqualToString:name]) {
+            _name = [name copy];
+        }
+    }];
+}
 
 - (NSUInteger)maximumLogMessageCount;
 {
