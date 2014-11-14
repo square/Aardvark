@@ -26,6 +26,7 @@
 @implementation ARKLogDistributor
 
 @synthesize logMessageClass = _logMessageClass;
+@synthesize logConsumers = _logConsumers;
 
 #pragma mark - Class Methods
 
@@ -122,6 +123,21 @@ static __weak ARKLogStore *defaultLogStore;
         
         _logMessageClass = logMessageClass;
     }];
+}
+
+- (NSMutableArray *)logConsumers;
+{
+    if ([NSOperationQueue currentQueue] == self.logAppendingQueue) {
+        return _logConsumers;
+    } else {
+        __block NSMutableArray *logConsumers = NULL;
+        
+        [self.logAppendingQueue performOperationWithBlock:^{
+            logConsumers = _logConsumers;
+        } waitUntilFinished:YES];
+        
+        return logConsumers;
+    }
 }
 
 #pragma mark - Public Methods - Log Handlers
