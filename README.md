@@ -12,9 +12,9 @@ There are only two steps to get Aardvark logging and bug reporting up and runnin
 
 This will allow users to report a bug by making a two-finger long-press gesture. This gesture triggers a UIAlert asking the user what went wrong. When the user enters this information, an email bug report is generated complete with an attached app screenshot and a text file containing the last 2000 ARKLogs. Screenshots are created and stored within Aardvark and do not require camera roll access.
 
-You can change how many ARKLogs are included in bug reports by changing the value of `maximumLogCount` on the `defaultLogStore` of `ARKLogDistributor`.
+You can change how many ARKLogs are included in bug reports by changing the value of `maximumLogMessageCount` on the `defaultLogStore` of `ARKLogDistributor`.
 
-You can customize both how bug reports are triggered and how they are filed by passing your own `ARKBugReporter` object and the desired subclass class of `UIGestureRecognizer` to `[Aardvark addBugReporter:withTriggeringGestureRecognizerOfClass:]`. You can further customize how bug reports will be triggered by modifying the returned gesture recognizer.
+You can customize both how bug reports are triggered and how they are formatted by passing your own `ARKBugReporter` object and the desired subclass class of `UIGestureRecognizer` to `[Aardvark addBugReporter:withTriggeringGestureRecognizerOfClass:]`. You can further customize how bug reports will be triggered by modifying the returned gesture recognizer.
 
 You can easily log to third party services by adding `ARKLogConsumer`s to a ARKLogDistributor. SampleCrashlyticsLogHandler is an example of a ARKLogConsumer that logs events to Crashlytics.
 
