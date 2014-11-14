@@ -15,7 +15,7 @@
 
 - (instancetype)initWithLogStore:(ARKLogStore *)logStore logFormatter:(id <ARKLogFormatter>)logFormatter;
 
-/// The log storethat provides the data for the table.
+/// The log store that provides the data for the table.
 @property (nonatomic, strong, readonly) ARKLogStore *logStore;
 
 /// The formatter used to prepare the logs for the share/activity sheet.
