@@ -30,6 +30,7 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
 @synthesize maximumLogMessageCount = _maximumLogMessageCount;
 @synthesize maximumLogCountToPersist = _maximumLogCountToPersist;
 @synthesize persistedLogsFileURL = _persistedLogsFileURL;
+@synthesize consumeLogPredicate = _consumeLogPredicate;
 
 #pragma mark - Initialization
 
@@ -153,11 +154,41 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
     }];
 }
 
+- (ARKConsumeLogPredicateBlock)consumeLogPredicate;
+{
+    if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
+        return _consumeLogPredicate;
+    } else {
+        __block ARKConsumeLogPredicateBlock consumeLogPredicate = NULL;
+        [self.logConsumingQueue performOperationWithBlock:^{
+            consumeLogPredicate = _consumeLogPredicate;
+        } waitUntilFinished:YES];
+        
+        return consumeLogPredicate;
+    }
+}
+
+- (void)setConsumeLogPredicate:(ARKConsumeLogPredicateBlock)consumeLogPredicate;
+{
+    [self.logConsumingQueue addOperationWithBlock:^{
+        if (_consumeLogPredicate == consumeLogPredicate) {
+            return;
+        }
+        
+        _consumeLogPredicate = [consumeLogPredicate copy];
+    }];
+}
+
 #pragma mark - ARKLogDistributor
 
 - (void)consumeLogMessage:(ARKLogMessage *)logMessage;
 {
     [self.logConsumingQueue addOperationWithBlock:^{
+        if (self.consumeLogPredicate && !self.consumeLogPredicate(logMessage)) {
+            // Predicate told us we should not consume this log. Bail out.
+            return;
+        }
+        
         // Don't proactively trim too often.
         if (self.maximumLogMessageCount > 0 && self.logMessages.count >= [self _maximumLogMessageCountToKeepInMemory]) {
             // We've held on to 2x more logs than we'll ever expose. Trim!

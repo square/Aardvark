@@ -9,15 +9,18 @@
 #import <Aardvark/ARKDefaultLogFormatter.h>
 #import <Aardvark/ARKEmailBugReporter.h>
 #import <Aardvark/ARKLogTableViewController.h>
+#import <Aardvark/ARKLogMessage.h>
 #import <Aardvark/ARKLogStore.h>
 
 #import "SampleAppDelegate.h"
 #import "SampleViewController.h"
 
 
+NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
+
+
 @interface SampleViewController ()
 
-@property (nonatomic, readwrite, strong) ARKLogDistributor *tapLogDistributor;
 @property (nonatomic, readwrite, strong) ARKLogStore *tapLogStore;
 @property (nonatomic, strong, readwrite) UITapGestureRecognizer *tapRecognizer;
 
@@ -32,16 +35,24 @@
 {
     [super viewDidLoad];
     
-    self.tapLogDistributor = [ARKLogDistributor new];
-    
     self.tapLogStore = [ARKLogStore new];
     self.tapLogStore.name = @"Taps";
+    
+    // Ensure that the tap log store will only store tap logs.
+    self.tapLogStore.consumeLogPredicate = ^(ARKLogMessage *logMessage) {
+        return [logMessage.userInfo[SampleViewControllerTapLogKey] boolValue];
+    };
+    
+    // Do not log tap logs to the main tap log store.
+    [ARKLogDistributor defaultLogStore].consumeLogPredicate = ^(ARKLogMessage *logMessage) {
+        return ![logMessage.userInfo[SampleViewControllerTapLogKey] boolValue];
+    };
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
     self.tapLogStore.persistedLogsFileURL = [NSURL fileURLWithPath:[applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"]];
     
-    [self.tapLogDistributor addLogConsumer:self.tapLogStore];
+    [[ARKLogDistributor defaultDistributor] addLogConsumer:self.tapLogStore];
     
     ARKEmailBugReporter *bugReporter = ((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter;
     [bugReporter addLogStores:@[self.tapLogStore]];
@@ -109,8 +120,7 @@
 - (void)_tapDetected:(UITapGestureRecognizer *)tapRecognizer;
 {
     if (tapRecognizer == self.tapRecognizer && tapRecognizer.state == UIGestureRecognizerStateEnded) {
-        // Log directly to the tap log distributor rather than using ARKLog, which logs to the default log distributor.
-        [self.tapLogDistributor appendLogWithFormat:@"Tapped %@", NSStringFromCGPoint([tapRecognizer locationInView:nil])];
+        ARKTypeLog(ARKLogTypeDefault, @{ SampleViewControllerTapLogKey : @YES }, @"Tapped %@", NSStringFromCGPoint([tapRecognizer locationInView:nil]));
     }
 }
 

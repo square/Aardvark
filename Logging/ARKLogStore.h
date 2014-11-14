@@ -12,6 +12,9 @@
 /// Posting this notification triggers the owning log distributor to immediately distribute pending logs to the consumer.
 extern NSString *const ARKLogConsumerRequiresAllPendingLogsNotification;
 
+/// A block that takes a logMessage and returns YES if it wants the calling object to consume the log.
+typedef BOOL (^ARKConsumeLogPredicateBlock)(ARKLogMessage *logMessage);
+
 
 /// Stores log messages locally for use in bug reports. All methods and properties on this class are threadsafe.
 @interface ARKLogStore : NSObject <ARKLogConsumer>
@@ -27,6 +30,9 @@ extern NSString *const ARKLogConsumerRequiresAllPendingLogsNotification;
 
 /// Path to the file on disk that contains peristed logs. Defaults to nil. Accessor blocks on log handling queue; setter is non-blocking.
 @property (nonatomic, copy, readwrite) NSURL *persistedLogsFileURL;
+
+/// Block that allows for filtering logs.
+@property (nonatomic, copy, readwrite) ARKConsumeLogPredicateBlock consumeLogPredicate;
 
 /// Returns an array of ARKLogMessage objects. Blocks on log handling queue.
 - (NSArray *)allLogMessages;

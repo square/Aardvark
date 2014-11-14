@@ -80,7 +80,31 @@
     XCTAssertNotNil(self.logStore.logMessages);
 }
 
-- (void)test_appendLog_logTrimming;
+- (void)test_consumeLogPredicate_preventsLogsFromBeingConsumed;
+{
+    NSString *const ARKLogStoreTestShouldLogKey = @"ARKLogStoreTestShouldLog";
+    
+    self.logStore.consumeLogPredicate = ^(ARKLogMessage *logMessage) {
+        return [logMessage.userInfo[ARKLogStoreTestShouldLogKey] boolValue];
+    };
+    
+    NSDictionary *userInfo = @{ ARKLogStoreTestShouldLogKey : @NO };
+    for (NSUInteger i  = 0; i < self.logStore.maximumLogMessageCount; i++) {
+        [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault userInfo:userInfo]];
+    }
+    
+    XCTAssertEqual(self.logStore.allLogMessages.count, 0);
+    
+    [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:@"Log This Log" image:nil type:ARKLogTypeDefault userInfo:@{ ARKLogStoreTestShouldLogKey : @YES }]];
+    
+    XCTAssertEqual(self.logStore.allLogMessages.count, 1);
+    
+    [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:@"Do Not Log This Log" image:nil type:ARKLogTypeDefault userInfo:nil]];
+    
+    XCTAssertEqual(self.logStore.allLogMessages.count, 1);
+}
+
+- (void)test_consumeLogMessage_logTrimming;
 {
     NSUInteger numberOfLogsToEnter = 2 * self.logStore.maximumLogMessageCount + 10;
     NSUInteger expectedInternalLogCount = self.logStore.maximumLogMessageCount + (numberOfLogsToEnter % self.logStore.maximumLogMessageCount);
