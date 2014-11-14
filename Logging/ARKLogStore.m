@@ -172,7 +172,7 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
 {
     [self.logConsumingQueue addOperationWithBlock:^{
         if (![_persistedLogsFileURL isEqual:persistedLogsFileURL]) {
-            _persistedLogsFileURL = persistedLogsFileURL;
+            _persistedLogsFileURL = [persistedLogsFileURL copy];
             NSArray *persistedLogs = [self _persistedLogs];
             
             [self.logMessages addObjectsFromArray:persistedLogs];
