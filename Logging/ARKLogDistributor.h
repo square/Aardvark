@@ -26,9 +26,6 @@
 /// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage. Accessor blocks on log appending queue; setter is non-blocking.
 @property (nonatomic, assign, readwrite) Class logMessageClass;
 
-/// Controls whether appending logs also outputs to NSLog. Defaults to NO. Accessor blocks on log appending queue; setter is non-blocking.
-@property (nonatomic, assign, readwrite) BOOL logsToConsole;
-
 /// Retains an object that handles logging. Log handlers are sent consumeLogMessage: every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc). Non-blocking call.
 - (void)addLogConsumer:(id <ARKLogConsumer>)logConsumer;
 

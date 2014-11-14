@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-#import "ARKLogConsumer.h"
+#import <Aardvark/ARKLogConsumer.h>
 
 
 /// Posting this notification triggers the owning log distributor to immediately distribute pending logs to the consumer.
@@ -30,6 +30,9 @@ typedef BOOL (^ARKConsumeLogPredicateBlock)(ARKLogMessage *logMessage);
 
 /// Path to the file on disk that contains peristed logs. Defaults to nil. Accessor blocks on log handling queue; setter is non-blocking.
 @property (nonatomic, copy, readwrite) NSURL *persistedLogsFileURL;
+
+/// Controls whether consuming logs also outputs to NSLog. Defaults to NO. Accessor blocks on log appending queue; setter is non-blocking.
+@property (nonatomic, assign, readwrite) BOOL logsToConsole;
 
 /// Block that allows for filtering logs.
 @property (nonatomic, copy, readwrite) ARKConsumeLogPredicateBlock consumeLogPredicate;

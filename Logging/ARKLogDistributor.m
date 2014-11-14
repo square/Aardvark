@@ -26,7 +26,6 @@
 @implementation ARKLogDistributor
 
 @synthesize logMessageClass = _logMessageClass;
-@synthesize logsToConsole = _logsToConsole;
 
 #pragma mark - Class Methods
 
@@ -125,29 +124,6 @@ static __weak ARKLogStore *defaultLogStore;
     }];
 }
 
-- (BOOL)logsToConsole;
-{
-    if ([NSOperationQueue currentQueue] == self.logAppendingQueue) {
-        return _logsToConsole;
-    } else {
-        __block BOOL logsToConsole = NO;
-        [self.logAppendingQueue performOperationWithBlock:^{
-            logsToConsole = _logsToConsole;
-        } waitUntilFinished:YES];
-        
-        return logsToConsole;
-    }
-}
-
-- (void)setLogsToConsole:(BOOL)logsToConsole;
-{
-    [self.logAppendingQueue addOperationWithBlock:^{
-        if (_logsToConsole != logsToConsole) {
-            _logsToConsole = logsToConsole;
-        }
-    }];
-}
-
 #pragma mark - Public Methods - Log Handlers
 
 - (void)addLogConsumer:(id <ARKLogConsumer>)logConsumer;
@@ -230,10 +206,6 @@ static __weak ARKLogStore *defaultLogStore;
 
 - (void)_appendLogMessage_inLogAppendingQueue:(ARKLogMessage *)logMessage;
 {
-    if (self.logsToConsole) {
-        NSLog(@"%@", logMessage.text);
-    }
-    
     for (id <ARKLogConsumer> logConsumer in self.logConsumers) {
         [logConsumer consumeLogMessage:logMessage];
     }

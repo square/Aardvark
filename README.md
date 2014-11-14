@@ -22,7 +22,7 @@ You can easily log to third party services by adding `ARKLogConsumer`s to a ARKL
 
 Push an instance of `ARKLogTableViewController` onto the screen to view your logs. Customize the appearance of your logs by setting your own `logFormatter` on the `ARKLogTableViewController` instance.
 
-If you want ARKLogs to show up in your console, `[ARKLogDistributor defaultDistributor].logToConsole = YES;`.
+If you want ARKLogs to show up in your console, `[ARKLogDistributor defaultLogStore].logToConsole = YES;`.
 
 ## Contributing
 

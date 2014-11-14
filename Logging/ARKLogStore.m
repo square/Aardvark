@@ -10,6 +10,7 @@
 #import "ARKLogStore_Testing.h"
 
 #import "ARKLogDistributor.h"
+#import "ARKLogMessage.h"
 #import "NSOperationQueue+ARKAdditions.h"
 
 
@@ -31,6 +32,7 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
 @synthesize maximumLogCountToPersist = _maximumLogCountToPersist;
 @synthesize persistedLogsFileURL = _persistedLogsFileURL;
 @synthesize consumeLogPredicate = _consumeLogPredicate;
+@synthesize logsToConsole = _logsToConsole;
 
 #pragma mark - Initialization
 
@@ -154,6 +156,29 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
     }];
 }
 
+- (BOOL)logsToConsole;
+{
+    if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
+        return _logsToConsole;
+    } else {
+        __block BOOL logsToConsole = NO;
+        [self.logConsumingQueue performOperationWithBlock:^{
+            logsToConsole = _logsToConsole;
+        } waitUntilFinished:YES];
+        
+        return logsToConsole;
+    }
+}
+
+- (void)setLogsToConsole:(BOOL)logsToConsole;
+{
+    [self.logConsumingQueue addOperationWithBlock:^{
+        if (_logsToConsole != logsToConsole) {
+            _logsToConsole = logsToConsole;
+        }
+    }];
+}
+
 - (ARKConsumeLogPredicateBlock)consumeLogPredicate;
 {
     if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
@@ -193,6 +218,14 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
         if (self.maximumLogMessageCount > 0 && self.logMessages.count >= [self _maximumLogMessageCountToKeepInMemory]) {
             // We've held on to 2x more logs than we'll ever expose. Trim!
             [self _trimLogs_inLogConsumingQueue];
+        }
+        
+        if (self.logsToConsole) {
+            if (self.name.length) {
+                NSLog(@"%@: %@", self.name, logMessage.text);
+            } else {
+                NSLog(@"%@", logMessage.text);
+            }
         }
         
         [self.logMessages addObject:logMessage];
