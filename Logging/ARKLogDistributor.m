@@ -64,7 +64,6 @@
 #endif
     
     _logConsumers = [NSMutableArray new];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_flushLogDistributingQueue:) name:ARKLogConsumerRequiresAllPendingLogsNotification object:nil];
     
     // Use setters on public properties to ensure consistency.
     self.logMessageClass = [ARKLogMessage class];
@@ -96,17 +95,17 @@
 
 - (void)setDefaultLogStore:(ARKLogStore *)logStore;
 {
+    // Remove the old log store.
+    [self removeLogConsumer:_weakDefaultLogStore];
+    
+    if (logStore) {
+        // Add the new log store. The logConsumer array will hold onto the log store strongly.
+        [self addLogConsumer:logStore];
+    }
+    
     [self.logDistributingQueue addOperationWithBlock:^{
-        // Remove the old log store.
-        [self removeLogConsumer:_weakDefaultLogStore];
-        
         // Store the log store weakly.
         _weakDefaultLogStore = logStore;
-        
-        if (logStore != nil) {
-            // Add the new log store. The logConsumer array will hold onto the log store strongly.
-            [self addLogConsumer:_weakDefaultLogStore];
-        }
     }];
 }
 
@@ -138,39 +137,29 @@
     }];
 }
 
-- (NSMutableArray *)logConsumers;
-{
-    if ([NSOperationQueue currentQueue] == self.logDistributingQueue) {
-        return _logConsumers;
-    } else {
-        __block NSMutableArray *logConsumers = NULL;
-        
-        [self.logDistributingQueue performOperationWithBlock:^{
-            logConsumers = _logConsumers;
-        } waitUntilFinished:YES];
-        
-        return logConsumers;
-    }
-}
-
 #pragma mark - Public Methods - Log Handlers
 
 - (void)addLogConsumer:(id <ARKLogConsumer>)logConsumer;
 {
     NSAssert([logConsumer conformsToProtocol:@protocol(ARKLogConsumer)], @"Tried to add a log handler that does not conform to ARKLogDistributor protocol");
     
-    [self.logDistributingQueue addOperationWithBlock:^{
+    [self.logDistributingQueue performOperationWithBlock:^{
         if (![self.logConsumers containsObject:logConsumer]) {
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_flushLogDistributingQueue:) name:ARKLogConsumerRequiresAllPendingLogsNotification object:logConsumer];
             [self.logConsumers addObject:logConsumer];
         }
-    }];
+    } waitUntilFinished:YES];
 }
 
 - (void)removeLogConsumer:(id <ARKLogConsumer>)logConsumer;
 {
-    [self.logDistributingQueue addOperationWithBlock:^{
+    [self.logDistributingQueue performOperationWithBlock:^{
+        if (logConsumer) {
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:ARKLogConsumerRequiresAllPendingLogsNotification object:logConsumer];
+        }
+        
         [self.logConsumers removeObject:logConsumer];
-    }];
+    } waitUntilFinished:YES];
 }
 
 #pragma mark - Public Methods - Appending Logs
@@ -242,9 +231,7 @@
 
 - (void)_flushLogDistributingQueue:(NSNotification *)notification;
 {
-    if ([self.logConsumers containsObject:notification.object]) {
-        [self.logDistributingQueue waitUntilAllOperationsAreFinished];
-    }
+    [self.logDistributingQueue waitUntilAllOperationsAreFinished];
 }
 
 @end

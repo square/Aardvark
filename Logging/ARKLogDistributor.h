@@ -23,10 +23,10 @@
 /// Convenience method to store a reference to the default log store.
 @property (nonatomic, strong, readwrite) ARKLogStore *defaultLogStore;
 
-/// Retains an object that handles logging. Log handlers are sent consumeLogMessage: every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc). Non-blocking call.
+/// Retains an object that handles logging. Log handlers are sent consumeLogMessage: every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc). Blocks on the log distributing queue.
 - (void)addLogConsumer:(id <ARKLogConsumer>)logConsumer;
 
-/// Releases an object that handles logging. Non-blocking call.
+/// Releases an object that handles logging. Blocks on the log distributing queue.
 - (void)removeLogConsumer:(id <ARKLogConsumer>)logConsumer;
 
 /// Distributes the log to the log consumers. Non-blocking call.
