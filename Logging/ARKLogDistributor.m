@@ -20,11 +20,14 @@
 @property (nonatomic, strong, readonly) NSOperationQueue *logDistributingQueue;
 @property (nonatomic, strong, readonly) NSMutableArray *logConsumers;
 
+@property (nonatomic, weak, readwrite) ARKLogStore *weakDefaultLogStore;
+
 @end
 
 
 @implementation ARKLogDistributor
 
+@dynamic defaultLogStore;
 @synthesize logMessageClass = _logMessageClass;
 @synthesize logConsumers = _logConsumers;
 
@@ -40,27 +43,6 @@
     });
     
     return ARKDefaultLogDistributor;
-}
-
-static __weak ARKLogStore *defaultLogStore;
-
-+ (void)setDefaultLogStore:(ARKLogStore *)logStore;
-{
-    // Remove the old log store.
-    [[self defaultDistributor] removeLogConsumer:defaultLogStore];
-    
-    // Store the log store weakly.
-    defaultLogStore = logStore;
-    
-    if (logStore != nil) {
-        // Add the new log store. The default distributor will hold onto the log store strongly.
-        [[self defaultDistributor] addLogConsumer:logStore];
-    }
-}
-
-+ (ARKLogStore *)defaultLogStore;
-{
-    return defaultLogStore;
 }
 
 #pragma mark - Initialization
@@ -96,6 +78,37 @@ static __weak ARKLogStore *defaultLogStore;
 }
 
 #pragma mark - Properties
+
+- (ARKLogStore *)defaultLogStore;
+{
+    if ([NSOperationQueue currentQueue] == self.logDistributingQueue) {
+        return _weakDefaultLogStore;
+    } else {
+        __block ARKLogStore *defaultLogStore = nil;
+        
+        [self.logDistributingQueue performOperationWithBlock:^{
+            defaultLogStore = _weakDefaultLogStore;
+        } waitUntilFinished:YES];
+        
+        return _weakDefaultLogStore;
+    }
+}
+
+- (void)setDefaultLogStore:(ARKLogStore *)logStore;
+{
+    [self.logDistributingQueue addOperationWithBlock:^{
+        // Remove the old log store.
+        [self removeLogConsumer:_weakDefaultLogStore];
+        
+        // Store the log store weakly.
+        _weakDefaultLogStore = logStore;
+        
+        if (logStore != nil) {
+            // Add the new log store. The logConsumer array will hold onto the log store strongly.
+            [self addLogConsumer:_weakDefaultLogStore];
+        }
+    }];
+}
 
 - (Class)logMessageClass;
 {

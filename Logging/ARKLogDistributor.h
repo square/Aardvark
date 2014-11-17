@@ -17,14 +17,11 @@
 /// Returns the instance of the log distributor used by ARKLog().
 + (instancetype)defaultDistributor;
 
-/// Sets the log store on the default log distributor.
-+ (void)setDefaultLogStore:(ARKLogStore *)logStore;
-
-/// Returns the log store on the default log controller.
-+ (ARKLogStore *)defaultLogStore;
-
 /// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage. Accessor blocks on log distributing queue; setter is non-blocking.
 @property (nonatomic, assign, readwrite) Class logMessageClass;
+
+/// Convenience method to store a reference to the default log store.
+@property (nonatomic, strong, readwrite) ARKLogStore *defaultLogStore;
 
 /// Retains an object that handles logging. Log handlers are sent consumeLogMessage: every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc). Non-blocking call.
 - (void)addLogConsumer:(id <ARKLogConsumer>)logConsumer;

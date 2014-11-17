@@ -132,7 +132,7 @@
 
 - (void)test_allLogMessages_capturesAllLogsLogged;
 {
-    [ARKLogDistributor setDefaultLogStore:self.logStore];
+    [ARKLogDistributor defaultDistributor].defaultLogStore = self.logStore;
     
     NSMutableArray *numbers = [NSMutableArray new];
     for (NSUInteger i  = 0; i < self.logStore.maximumLogMessageCount; i++) {
@@ -146,7 +146,7 @@
     
     XCTAssertEqual(self.logStore.allLogMessages.count, numbers.count);
     
-    [ARKLogDistributor setDefaultLogStore:nil];
+    [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
 }
 
 - (void)test_clearLogs_removesAllLogMessages;

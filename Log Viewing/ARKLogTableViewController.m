@@ -45,7 +45,7 @@
 
 - (instancetype)init;
 {
-    return [self initWithLogStore:[ARKLogDistributor defaultLogStore] logFormatter:[ARKDefaultLogFormatter new]];
+    return [self initWithLogStore:[ARKLogDistributor defaultDistributor].defaultLogStore logFormatter:[ARKDefaultLogFormatter new]];
 }
 
 - (void)dealloc;

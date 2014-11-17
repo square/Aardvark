@@ -44,7 +44,7 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
     };
     
     // Do not log tap logs to the main tap log store.
-    [ARKLogDistributor defaultLogStore].consumeLogPredicate = ^(ARKLogMessage *logMessage) {
+    [ARKLogDistributor defaultDistributor].defaultLogStore.consumeLogPredicate = ^(ARKLogMessage *logMessage) {
         return (BOOL)![logMessage.userInfo[SampleViewControllerTapLogKey] boolValue];
     };
     

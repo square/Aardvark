@@ -50,7 +50,7 @@ void ARKLogScreenshot()
     NSString *applicationSupportDirectory = paths.firstObject;
     logStore.persistedLogsFileURL = [NSURL fileURLWithPath:[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogStore.data"]];
     
-    [ARKLogDistributor setDefaultLogStore:logStore];
+    [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     
     ARKEmailBugReporter *bugReporter = [[ARKEmailBugReporter alloc] initWithEmailAddress:emailAddress logStore:logStore];
     

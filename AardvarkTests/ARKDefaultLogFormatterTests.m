@@ -35,7 +35,7 @@
     self.logFormatter = [ARKDefaultLogFormatter new];
     
     ARKLogStore *logStore = [ARKLogStore new];
-    [ARKLogDistributor setDefaultLogStore:logStore];
+    [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     self.logStore = logStore;
 }
 
@@ -46,7 +46,7 @@
     // Wait for logs to clear.
     (void)[self.logStore allLogMessages];
     
-    [ARKLogDistributor setDefaultLogStore:nil];
+    [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
     
     [super tearDown];
 }

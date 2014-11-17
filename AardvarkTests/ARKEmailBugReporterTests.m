@@ -38,7 +38,7 @@
     self.bugReporter = [ARKEmailBugReporter new];
     
     ARKLogStore *logStore = [ARKLogStore new];
-    [ARKLogDistributor setDefaultLogStore:logStore];
+    [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     self.logStore = logStore;
 }
 
@@ -46,7 +46,7 @@
 {
     [self.logStore clearLogs];
     [self.logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
-    [ARKLogDistributor setDefaultLogStore:nil];
+    [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
     
     [super tearDown];
 }

@@ -67,7 +67,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     NSString *applicationSupportDirectory = paths.firstObject;
     logStore.persistedLogsFileURL = [NSURL fileURLWithPath:[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKLogDistributorTests.data"]];
     
-    [ARKLogDistributor setDefaultLogStore:logStore];
+    [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     
     self.logStore = logStore;
 }
@@ -80,7 +80,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     (void)[self.logStore allLogMessages];
     
     // Remove the default store.
-    [ARKLogDistributor setDefaultLogStore:nil];
+    [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
     
     [super tearDown];
 }
@@ -99,7 +99,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     XCTAssertEqual(self.logStore.allLogMessages.count, 1);
     XCTAssertEqual([self.logStore.allLogMessages.firstObject class], [ARKLogMessage class]);
     
-    [[ARKLogDistributor defaultLogStore] clearLogs];
+    [self.logStore clearLogs];
     XCTAssertEqual(self.logStore.allLogMessages.count, 0);
     
     logDistributor.logMessageClass = [ARKLogMessageTestSubclass class];
