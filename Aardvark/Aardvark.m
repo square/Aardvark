@@ -19,7 +19,7 @@ void ARKLog(NSString *format, ...)
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogDistributor defaultDistributor] appendLogWithFormat:format arguments:argList];
+    [[ARKLogDistributor defaultDistributor] logWithFormat:format arguments:argList];
     va_end(argList);
 }
 
@@ -27,13 +27,13 @@ void ARKTypeLog(ARKLogType type, NSDictionary *userInfo, NSString *format, ...)
 {
     va_list argList;
     va_start(argList, format);
-    [[ARKLogDistributor defaultDistributor] appendLogWithType:type userInfo:userInfo format:format arguments:argList];
+    [[ARKLogDistributor defaultDistributor] logWithType:type userInfo:userInfo format:format arguments:argList];
     va_end(argList);
 }
 
 void ARKLogScreenshot()
 {
-    [[ARKLogDistributor defaultDistributor] appendScreenshotLog];
+    [[ARKLogDistributor defaultDistributor] logScreenshot];
 }
 
 

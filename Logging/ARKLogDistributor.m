@@ -162,51 +162,51 @@ static __weak ARKLogStore *defaultLogStore;
 
 #pragma mark - Public Methods - Appending Logs
 
-- (void)appendLogMessage:(ARKLogMessage *)logMessage;
+- (void)logMessage:(ARKLogMessage *)logMessage;
 {
     [self.logAppendingQueue addOperationWithBlock:^{
-        [self _appendLogMessage_inLogAppendingQueue:logMessage];
+        [self _logMessage_inLogAppendingQueue:logMessage];
     }];
 }
 
-- (void)appendLogWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
+- (void)logWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 {
     [self.logAppendingQueue addOperationWithBlock:^{
         ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
         
-        [self _appendLogMessage_inLogAppendingQueue:logMessage];
+        [self _logMessage_inLogAppendingQueue:logMessage];
     }];
 }
 
-- (void)appendLogWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
+- (void)logWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 {
     NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-    [self appendLogWithText:logText image:nil type:type userInfo:userInfo];
+    [self logWithText:logText image:nil type:type userInfo:userInfo];
 }
 
-- (void)appendLogWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ...;
+- (void)logWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ...;
 {
     va_list argList;
     va_start(argList, format);
-    [self appendLogWithType:type userInfo:userInfo format:format arguments:argList];
+    [self logWithType:type userInfo:userInfo format:format arguments:argList];
     va_end(argList);
 }
 
-- (void)appendLogWithFormat:(NSString *)format arguments:(va_list)argList;
+- (void)logWithFormat:(NSString *)format arguments:(va_list)argList;
 {
     NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-    [self appendLogWithText:logText image:nil type:ARKLogTypeDefault userInfo:nil];
+    [self logWithText:logText image:nil type:ARKLogTypeDefault userInfo:nil];
 }
 
-- (void)appendLogWithFormat:(NSString *)format, ...;
+- (void)logWithFormat:(NSString *)format, ...;
 {
     va_list argList;
     va_start(argList, format);
-    [self appendLogWithFormat:format arguments:argList];
+    [self logWithFormat:format arguments:argList];
     va_end(argList);
 }
 
-- (void)appendScreenshotLog;
+- (void)logScreenshot;
 {
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     UIGraphicsBeginImageContext(window.bounds.size);
@@ -215,12 +215,12 @@ static __weak ARKLogStore *defaultLogStore;
     UIGraphicsEndImageContext();
     
     NSString *logText = @"📷📱 Screenshot!";
-    [self appendLogWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
+    [self logWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
 }
 
 #pragma mark - Private Methods
 
-- (void)_appendLogMessage_inLogAppendingQueue:(ARKLogMessage *)logMessage;
+- (void)_logMessage_inLogAppendingQueue:(ARKLogMessage *)logMessage;
 {
     for (id <ARKLogConsumer> logConsumer in self.logConsumers) {
         [logConsumer consumeLogMessage:logMessage];

@@ -32,25 +32,25 @@
 /// Releases an object that handles logging. Non-blocking call.
 - (void)removeLogConsumer:(id <ARKLogConsumer>)logConsumer;
 
-/// Appends a log message to the logs. Non-blocking call.
-- (void)appendLogMessage:(ARKLogMessage *)logMessage;
+/// Distributes the log to the log consumers. Non-blocking call.
+- (void)logMessage:(ARKLogMessage *)logMessage;
 
-/// Creates a log message and appends a log message to the logs. Non-blocking call.
-- (void)appendLogWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
+/// Creates a log message and distributes the log to the log consumers. Non-blocking call.
+- (void)logWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 
-/// Creates a log message and appends it to the logs. Non-blocking call.
-- (void)appendLogWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
+/// Creates a log message and distributes the log to the log consumers. Non-blocking call.
+- (void)logWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 
-/// Creates a log message and appends it to the logs. Non-blocking call.
-- (void)appendLogWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ... NS_FORMAT_FUNCTION(3,4);
+/// Creates a log message and distributes the log to the log consumers. Non-blocking call.
+- (void)logWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ... NS_FORMAT_FUNCTION(3,4);
 
-/// Creates a log message with ARKLogTypeDefault and appends it to the logs. Non-blocking call.
-- (void)appendLogWithFormat:(NSString *)format arguments:(va_list)argList;
+/// Creates a log message with ARKLogTypeDefault and distributes the log to the log consumers. Non-blocking call.
+- (void)logWithFormat:(NSString *)format arguments:(va_list)argList;
 
-/// Creates a log message with ARKLogTypeDefault and appends it to the logs. Non-blocking call.
-- (void)appendLogWithFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
+/// Creates a log message with ARKLogTypeDefault and distributes the log to the log consumers. Non-blocking call.
+- (void)logWithFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
 
-/// Creates a log message with a screenshot and appends it to the logs. Non-blocking call.
-- (void)appendScreenshotLog;
+/// Creates a log message with a screenshot and distributes the log to the log consumers. Non-blocking call.
+- (void)logScreenshot;
 
 @end

@@ -341,7 +341,7 @@
 
 #pragma mark - Performance Tests
 
-- (void)test_appendLog_performance;
+- (void)test_log_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
     for (NSUInteger i  = 0; i < 3 * self.logStore.maximumLogCountToPersist; i++) {

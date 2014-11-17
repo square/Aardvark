@@ -92,7 +92,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
     [logDistributor addLogConsumer:self.logStore];
     
-    [logDistributor appendLogWithFormat:@"This log should be an ARKLogMessage"];
+    [logDistributor logWithFormat:@"This log should be an ARKLogMessage"];
     
     [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
@@ -103,7 +103,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     XCTAssertEqual(self.logStore.allLogMessages.count, 0);
     
     logDistributor.logMessageClass = [ARKLogMessageTestSubclass class];
-    [logDistributor appendLogWithFormat:@"This log should be an ARKLogMessageTestSubclass"];
+    [logDistributor logWithFormat:@"This log should be an ARKLogMessageTestSubclass"];
     
     [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     
@@ -111,7 +111,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     XCTAssertEqual([self.logStore.allLogMessages.firstObject class], [ARKLogMessageTestSubclass class]);
 }
 
-- (void)test_appendLogWithFormat_callsLogConsumers;
+- (void)test_logWithFormat_callsLogConsumers;
 {
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
     
@@ -122,13 +122,13 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     };
     [logDistributor addLogConsumer:testLogConsumer];
     
-    [logDistributor appendLogWithFormat:@"Log"];
+    [logDistributor logWithFormat:@"Log"];
     
     [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
     XCTAssertEqual(logConsumerTest.count, 1);
 }
 
-- (void)test_addLogConsumer_notifiesLogConsumerOnAppendLog;
+- (void)test_addLogConsumer_notifiesLogConsumerOnlog;
 {
     NSMutableArray *logConsumerTest = [NSMutableArray new];
     ARKTestLogConsumer *testLogConsumer = [ARKTestLogConsumer new];
@@ -172,7 +172,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     XCTAssertEqual(logDistributor.logConsumers.count, 0);
     
     for (NSUInteger i  = 0; i < 100; i++) {
-        [logDistributor appendLogWithFormat:@"Log %@", @(i)];
+        [logDistributor logWithFormat:@"Log %@", @(i)];
     }
     
     [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
