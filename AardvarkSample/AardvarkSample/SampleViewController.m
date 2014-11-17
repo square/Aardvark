@@ -21,7 +21,7 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
 
 @interface SampleViewController ()
 
-@property (nonatomic, readwrite, strong) ARKLogStore *tapLogStore;
+@property (nonatomic, readwrite, strong) ARKLogStore *tapGestureLogStore;
 @property (nonatomic, strong, readwrite) UITapGestureRecognizer *tapRecognizer;
 
 @end
@@ -35,11 +35,11 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
 {
     [super viewDidLoad];
     
-    self.tapLogStore = [ARKLogStore new];
-    self.tapLogStore.name = @"Taps";
+    self.tapGestureLogStore = [ARKLogStore new];
+    self.tapGestureLogStore.name = @"Taps";
     
     // Ensure that the tap log store will only store tap logs.
-    self.tapLogStore.consumeLogPredicate = ^(ARKLogMessage *logMessage) {
+    self.tapGestureLogStore.consumeLogPredicate = ^(ARKLogMessage *logMessage) {
         return [logMessage.userInfo[SampleViewControllerTapLogKey] boolValue];
     };
     
@@ -50,12 +50,12 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    self.tapLogStore.persistedLogsFileURL = [NSURL fileURLWithPath:[applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"]];
+    self.tapGestureLogStore.persistedLogsFileURL = [NSURL fileURLWithPath:[applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"]];
     
-    [[ARKLogDistributor defaultDistributor] addLogConsumer:self.tapLogStore];
+    [[ARKLogDistributor defaultDistributor] addLogConsumer:self.tapGestureLogStore];
     
     ARKEmailBugReporter *bugReporter = ((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter;
-    [bugReporter addLogStores:@[self.tapLogStore]];
+    [bugReporter addLogStores:@[self.tapGestureLogStore]];
 }
 
 - (void)viewDidAppear:(BOOL)animated;
@@ -91,7 +91,7 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
 - (IBAction)viewTapLogs:(id)sender;
 {
     ARKLog(@"%s", __PRETTY_FUNCTION__);
-    ARKLogTableViewController *tapLogsViewController = [[ARKLogTableViewController alloc] initWithLogStore:self.tapLogStore logFormatter:[ARKDefaultLogFormatter new]];
+    ARKLogTableViewController *tapLogsViewController = [[ARKLogTableViewController alloc] initWithLogStore:self.tapGestureLogStore logFormatter:[ARKDefaultLogFormatter new]];
     [self.navigationController pushViewController:tapLogsViewController animated:YES];
 }
 
