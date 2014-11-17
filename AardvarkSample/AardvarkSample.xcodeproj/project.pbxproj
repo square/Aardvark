@@ -16,7 +16,7 @@
 		EA4583FC19E65C0D00E44882 /* libAardvark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4583F119E654FF00E44882 /* libAardvark.a */; };
 		EA8FA2EC19EA345C00ACF7E1 /* SampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA8FA2EB19EA345C00ACF7E1 /* SampleViewController.m */; };
 		EABB585319F091FB004DD7DA /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EABB585219F091FB004DD7DA /* Crashlytics.framework */; };
-		EABB585619F09227004DD7DA /* SampleCrashlyticslogConsumer.m in Sources */ = {isa = PBXBuildFile; fileRef = EABB585519F09227004DD7DA /* SampleCrashlyticslogConsumer.m */; };
+		EABB585619F09227004DD7DA /* SampleCrashlyticsLogConsumer.m in Sources */ = {isa = PBXBuildFile; fileRef = EABB585519F09227004DD7DA /* SampleCrashlyticsLogConsumer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,8 +68,8 @@
 		EA8FA2EA19EA345C00ACF7E1 /* SampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleViewController.h; sourceTree = "<group>"; };
 		EA8FA2EB19EA345C00ACF7E1 /* SampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleViewController.m; sourceTree = "<group>"; };
 		EABB585219F091FB004DD7DA /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Frameworks/Crashlytics.framework; sourceTree = "<group>"; };
-		EABB585419F09227004DD7DA /* SampleCrashlyticslogConsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleCrashlyticslogConsumer.h; sourceTree = "<group>"; };
-		EABB585519F09227004DD7DA /* SampleCrashlyticslogConsumer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleCrashlyticslogConsumer.m; sourceTree = "<group>"; };
+		EABB585419F09227004DD7DA /* SampleCrashlyticsLogConsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleCrashlyticsLogConsumer.h; sourceTree = "<group>"; };
+		EABB585519F09227004DD7DA /* SampleCrashlyticsLogConsumer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleCrashlyticsLogConsumer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,8 +116,8 @@
 			children = (
 				EA4583C819E6549800E44882 /* SampleAppDelegate.h */,
 				EA4583C919E6549800E44882 /* SampleAppDelegate.m */,
-				EABB585419F09227004DD7DA /* SampleCrashlyticslogConsumer.h */,
-				EABB585519F09227004DD7DA /* SampleCrashlyticslogConsumer.m */,
+				EABB585419F09227004DD7DA /* SampleCrashlyticsLogConsumer.h */,
+				EABB585519F09227004DD7DA /* SampleCrashlyticsLogConsumer.m */,
 				EA8FA2EA19EA345C00ACF7E1 /* SampleViewController.h */,
 				EA8FA2EB19EA345C00ACF7E1 /* SampleViewController.m */,
 				EA45840319E65CA400E44882 /* AardvarkSample-Prefix.pch */,
@@ -301,7 +301,7 @@
 				EA4583CA19E6549800E44882 /* SampleAppDelegate.m in Sources */,
 				EA8FA2EC19EA345C00ACF7E1 /* SampleViewController.m in Sources */,
 				EA4583C719E6549800E44882 /* main.m in Sources */,
-				EABB585619F09227004DD7DA /* SampleCrashlyticslogConsumer.m in Sources */,
+				EABB585619F09227004DD7DA /* SampleCrashlyticsLogConsumer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
