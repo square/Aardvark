@@ -94,7 +94,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     [logDistributor logWithFormat:@"This log should be an ARKLogMessage"];
     
-    [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
+    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     
     XCTAssertEqual(self.logStore.allLogMessages.count, 1);
     XCTAssertEqual([self.logStore.allLogMessages.firstObject class], [ARKLogMessage class]);
@@ -105,7 +105,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     logDistributor.logMessageClass = [ARKLogMessageTestSubclass class];
     [logDistributor logWithFormat:@"This log should be an ARKLogMessageTestSubclass"];
     
-    [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
+    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     
     XCTAssertEqual(self.logStore.allLogMessages.count, 1);
     XCTAssertEqual([self.logStore.allLogMessages.firstObject class], [ARKLogMessageTestSubclass class]);
@@ -124,7 +124,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     [logDistributor logWithFormat:@"Log"];
     
-    [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
+    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     XCTAssertEqual(logConsumerTest.count, 1);
 }
 
@@ -162,12 +162,12 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     };
     
     [logDistributor addLogConsumer:testLogConsumer];
-    [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
+    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     
     XCTAssertEqual(logDistributor.logConsumers.count, 1);
     
     [logDistributor removeLogConsumer:testLogConsumer];
-    [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
+    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     
     XCTAssertEqual(logDistributor.logConsumers.count, 0);
     
@@ -175,11 +175,11 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         [logDistributor logWithFormat:@"Log %@", @(i)];
     }
     
-    [logDistributor.logAppendingQueue waitUntilAllOperationsAreFinished];
+    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     XCTAssertEqual(logConsumerTest.count, 0);
 }
 
-- (void)test_flushLogAppendingQueue_finishesAppendingLogs;
+- (void)test_flushLogDistributingQueue_finishesAppendingLogs;
 {
     NSMutableArray *numbers = [NSMutableArray new];
     for (NSUInteger i  = 0; i < 100; i++) {

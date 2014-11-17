@@ -47,7 +47,7 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
     _logConsumingQueue = [NSOperationQueue new];
     _logConsumingQueue.maxConcurrentOperationCount = 1;
     
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000 /* __IPHONE_8_0 */
+#ifdef __IPHONE_8_0
     if ([_logConsumingQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
         _logConsumingQueue.qualityOfService = NSQualityOfServiceBackground;
     }

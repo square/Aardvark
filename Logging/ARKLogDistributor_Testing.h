@@ -9,6 +9,6 @@
 @interface ARKLogDistributor (Private)
 
 - (NSMutableSet *)logConsumers;
-- (NSOperationQueue *)logAppendingQueue;
+- (NSOperationQueue *)logDistributingQueue;
 
 @end

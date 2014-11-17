@@ -26,19 +26,19 @@ typedef BOOL (^ARKConsumeLogPredicateBlock)(ARKLogMessage *logMessage);
 /// The maximum number of logs allLogMessages should return. Defaults to 2000. Old messages are purged once this limit is hit. Accessor blocks on logging queue; setter is non-blocking.
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogMessageCount;
 
-/// The maximum number of logs to persist to disk. Defaults to 500. Accessor blocks on log handling queue; setter is non-blocking.
+/// The maximum number of logs to persist to disk. Defaults to 500. Accessor blocks on log distributing queue; setter is non-blocking.
 @property (nonatomic, assign, readwrite) NSUInteger maximumLogCountToPersist;
 
-/// Path to the file on disk that contains peristed logs. Defaults to nil. Accessor blocks on log handling queue; setter is non-blocking.
+/// Path to the file on disk that contains peristed logs. Defaults to nil. Accessor blocks on log distributing queue; setter is non-blocking.
 @property (nonatomic, copy, readwrite) NSURL *persistedLogsFileURL;
 
-/// Controls whether consuming logs also outputs to NSLog. Defaults to NO. Accessor blocks on log appending queue; setter is non-blocking.
+/// Controls whether consuming logs also outputs to NSLog. Defaults to NO. Accessor blocks on log distributing queue; setter is non-blocking.
 @property (nonatomic, assign, readwrite) BOOL logsToConsole;
 
 /// Block that allows for filtering logs.
 @property (nonatomic, copy, readwrite) ARKConsumeLogPredicateBlock consumeLogPredicate;
 
-/// Returns an array of ARKLogMessage objects. Blocks on log handling queue.
+/// Returns an array of ARKLogMessage objects. Blocks on log distributing queue.
 - (NSArray *)allLogMessages;
 
 /// Removes all logs. Non-blocking call.

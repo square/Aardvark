@@ -23,7 +23,7 @@
 /// Returns the log store on the default log controller.
 + (ARKLogStore *)defaultLogStore;
 
-/// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage. Accessor blocks on log appending queue; setter is non-blocking.
+/// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage. Accessor blocks on log distributing queue; setter is non-blocking.
 @property (nonatomic, assign, readwrite) Class logMessageClass;
 
 /// Retains an object that handles logging. Log handlers are sent consumeLogMessage: every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc). Non-blocking call.

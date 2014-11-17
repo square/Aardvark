@@ -17,7 +17,7 @@
 
 @interface ARKLogDistributor ()
 
-@property (nonatomic, strong, readonly) NSOperationQueue *logAppendingQueue;
+@property (nonatomic, strong, readonly) NSOperationQueue *logDistributingQueue;
 @property (nonatomic, strong, readonly) NSMutableArray *logConsumers;
 
 @end
@@ -72,17 +72,17 @@ static __weak ARKLogStore *defaultLogStore;
         return nil;
     }
     
-    _logAppendingQueue = [NSOperationQueue new];
-    _logAppendingQueue.maxConcurrentOperationCount = 1;
+    _logDistributingQueue = [NSOperationQueue new];
+    _logDistributingQueue.maxConcurrentOperationCount = 1;
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000 /* __IPHONE_8_0 */
-    if ([_logAppendingQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
-        _logAppendingQueue.qualityOfService = NSQualityOfServiceBackground;
+#ifdef __IPHONE_8_0
+    if ([_logDistributingQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
+        _logDistributingQueue.qualityOfService = NSQualityOfServiceBackground;
     }
 #endif
     
     _logConsumers = [NSMutableArray new];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_flushLogAppendingQueue:) name:ARKLogConsumerRequiresAllPendingLogsNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_flushLogDistributingQueue:) name:ARKLogConsumerRequiresAllPendingLogsNotification object:nil];
     
     // Use setters on public properties to ensure consistency.
     self.logMessageClass = [ARKLogMessage class];
@@ -99,12 +99,12 @@ static __weak ARKLogStore *defaultLogStore;
 
 - (Class)logMessageClass;
 {
-    if ([NSOperationQueue currentQueue] == self.logAppendingQueue) {
+    if ([NSOperationQueue currentQueue] == self.logDistributingQueue) {
         return _logMessageClass;
     } else {
         __block Class logMessageClass = NULL;
         
-        [self.logAppendingQueue performOperationWithBlock:^{
+        [self.logDistributingQueue performOperationWithBlock:^{
             logMessageClass = _logMessageClass;
         } waitUntilFinished:YES];
         
@@ -116,7 +116,7 @@ static __weak ARKLogStore *defaultLogStore;
 {
     NSAssert([logMessageClass isSubclassOfClass:[ARKLogMessage class]], @"Attempting to set a logMessageClass that is not a subclass of ARKLogMessage!");
     
-    [self.logAppendingQueue addOperationWithBlock:^{
+    [self.logDistributingQueue addOperationWithBlock:^{
         if (_logMessageClass == logMessageClass) {
             return;
         }
@@ -127,12 +127,12 @@ static __weak ARKLogStore *defaultLogStore;
 
 - (NSMutableArray *)logConsumers;
 {
-    if ([NSOperationQueue currentQueue] == self.logAppendingQueue) {
+    if ([NSOperationQueue currentQueue] == self.logDistributingQueue) {
         return _logConsumers;
     } else {
         __block NSMutableArray *logConsumers = NULL;
         
-        [self.logAppendingQueue performOperationWithBlock:^{
+        [self.logDistributingQueue performOperationWithBlock:^{
             logConsumers = _logConsumers;
         } waitUntilFinished:YES];
         
@@ -146,7 +146,7 @@ static __weak ARKLogStore *defaultLogStore;
 {
     NSAssert([logConsumer conformsToProtocol:@protocol(ARKLogConsumer)], @"Tried to add a log handler that does not conform to ARKLogDistributor protocol");
     
-    [self.logAppendingQueue addOperationWithBlock:^{
+    [self.logDistributingQueue addOperationWithBlock:^{
         if (![self.logConsumers containsObject:logConsumer]) {
             [self.logConsumers addObject:logConsumer];
         }
@@ -155,7 +155,7 @@ static __weak ARKLogStore *defaultLogStore;
 
 - (void)removeLogConsumer:(id <ARKLogConsumer>)logConsumer;
 {
-    [self.logAppendingQueue addOperationWithBlock:^{
+    [self.logDistributingQueue addOperationWithBlock:^{
         [self.logConsumers removeObject:logConsumer];
     }];
 }
@@ -164,17 +164,17 @@ static __weak ARKLogStore *defaultLogStore;
 
 - (void)logMessage:(ARKLogMessage *)logMessage;
 {
-    [self.logAppendingQueue addOperationWithBlock:^{
-        [self _logMessage_inLogAppendingQueue:logMessage];
+    [self.logDistributingQueue addOperationWithBlock:^{
+        [self _logMessage_inLogDistributingQueue:logMessage];
     }];
 }
 
 - (void)logWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 {
-    [self.logAppendingQueue addOperationWithBlock:^{
+    [self.logDistributingQueue addOperationWithBlock:^{
         ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
         
-        [self _logMessage_inLogAppendingQueue:logMessage];
+        [self _logMessage_inLogDistributingQueue:logMessage];
     }];
 }
 
@@ -220,17 +220,17 @@ static __weak ARKLogStore *defaultLogStore;
 
 #pragma mark - Private Methods
 
-- (void)_logMessage_inLogAppendingQueue:(ARKLogMessage *)logMessage;
+- (void)_logMessage_inLogDistributingQueue:(ARKLogMessage *)logMessage;
 {
     for (id <ARKLogConsumer> logConsumer in self.logConsumers) {
         [logConsumer consumeLogMessage:logMessage];
     }
 }
 
-- (void)_flushLogAppendingQueue:(NSNotification *)notification;
+- (void)_flushLogDistributingQueue:(NSNotification *)notification;
 {
     if ([self.logConsumers containsObject:notification.object]) {
-        [self.logAppendingQueue waitUntilAllOperationsAreFinished];
+        [self.logDistributingQueue waitUntilAllOperationsAreFinished];
     }
 }
 
