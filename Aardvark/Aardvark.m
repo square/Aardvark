@@ -45,11 +45,7 @@ void ARKLogScreenshot()
 {
     NSAssert([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:)], @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
     
-    ARKLogStore *logStore = [ARKLogStore new];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    logStore.persistedLogsFileURL = [NSURL fileURLWithPath:[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKDefaultLogStore.data"]];
-    
+    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKDefaultLogStore.data"];
     [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     
     ARKEmailBugReporter *bugReporter = [[ARKEmailBugReporter alloc] initWithEmailAddress:emailAddress logStore:logStore];
