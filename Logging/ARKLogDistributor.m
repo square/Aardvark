@@ -9,8 +9,8 @@
 #import "ARKLogDistributor.h"
 #import "ARKLogDistributor_Testing.h"
 
-#import "ARKLogConsumer.h"
 #import "ARKLogMessage.h"
+#import "ARKLogObserver.h"
 #import "ARKLogStore.h"
 #import "NSOperationQueue+ARKAdditions.h"
 
@@ -18,7 +18,7 @@
 @interface ARKLogDistributor ()
 
 @property (nonatomic, strong, readonly) NSOperationQueue *logDistributingQueue;
-@property (nonatomic, strong, readonly) NSMutableArray *logConsumers;
+@property (nonatomic, strong, readonly) NSMutableArray *logObservers;
 
 @property (nonatomic, weak, readwrite) ARKLogStore *weakDefaultLogStore;
 
@@ -29,7 +29,7 @@
 
 @dynamic defaultLogStore;
 @synthesize logMessageClass = _logMessageClass;
-@synthesize logConsumers = _logConsumers;
+@synthesize logObservers = _logObservers;
 
 #pragma mark - Class Methods
 
@@ -63,7 +63,7 @@
     }
 #endif
     
-    _logConsumers = [NSMutableArray new];
+    _logObservers = [NSMutableArray new];
     
     // Use setters on public properties to ensure consistency.
     self.logMessageClass = [ARKLogMessage class];
@@ -96,11 +96,11 @@
 - (void)setDefaultLogStore:(ARKLogStore *)logStore;
 {
     // Remove the old log store.
-    [self removeLogConsumer:_weakDefaultLogStore];
+    [self removeLogObserver:_weakDefaultLogStore];
     
     if (logStore) {
-        // Add the new log store. The logConsumer array will hold onto the log store strongly.
-        [self addLogConsumer:logStore];
+        // Add the new log store. The logObserver array will hold onto the log store strongly.
+        [self addLogObserver:logStore];
     }
     
     [self.logDistributingQueue addOperationWithBlock:^{
@@ -139,26 +139,26 @@
 
 #pragma mark - Public Methods - Log Handlers
 
-- (void)addLogConsumer:(id <ARKLogConsumer>)logConsumer;
+- (void)addLogObserver:(id <ARKLogObserver>)logObserver;
 {
-    NSAssert([logConsumer conformsToProtocol:@protocol(ARKLogConsumer)], @"Tried to add a log handler that does not conform to ARKLogDistributor protocol");
+    NSAssert([logObserver conformsToProtocol:@protocol(ARKLogObserver)], @"Tried to add a log observer that does not conform to ARKLogDistributor protocol");
     
     [self.logDistributingQueue performOperationWithBlock:^{
-        if (![self.logConsumers containsObject:logConsumer]) {
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_flushLogDistributingQueue:) name:ARKLogConsumerRequiresAllPendingLogsNotification object:logConsumer];
-            [self.logConsumers addObject:logConsumer];
+        if (![self.logObservers containsObject:logObserver]) {
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_flushLogDistributingQueue:) name:ARKLogObserverRequiresAllPendingLogsNotification object:logObserver];
+            [self.logObservers addObject:logObserver];
         }
     } waitUntilFinished:YES];
 }
 
-- (void)removeLogConsumer:(id <ARKLogConsumer>)logConsumer;
+- (void)removeLogObserver:(id <ARKLogObserver>)logObserver;
 {
     [self.logDistributingQueue performOperationWithBlock:^{
-        if (logConsumer) {
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:ARKLogConsumerRequiresAllPendingLogsNotification object:logConsumer];
+        if (logObserver) {
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:ARKLogObserverRequiresAllPendingLogsNotification object:logObserver];
         }
         
-        [self.logConsumers removeObject:logConsumer];
+        [self.logObservers removeObject:logObserver];
     } waitUntilFinished:YES];
 }
 
@@ -224,8 +224,8 @@
 
 - (void)_logMessage_inLogDistributingQueue:(ARKLogMessage *)logMessage;
 {
-    for (id <ARKLogConsumer> logConsumer in self.logConsumers) {
-        [logConsumer consumeLogMessage:logMessage];
+    for (id <ARKLogObserver> logObserver in self.logObservers) {
+        [logObserver observeLogMessage:logMessage];
     }
 }
 

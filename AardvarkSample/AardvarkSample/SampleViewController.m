@@ -39,12 +39,12 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
     self.tapGestureLogStore.name = @"Taps";
     
     // Ensure that the tap log store will only store tap logs.
-    self.tapGestureLogStore.consumeLogPredicate = ^(ARKLogMessage *logMessage) {
+    self.tapGestureLogStore.observeLogPredicate = ^(ARKLogMessage *logMessage) {
         return [logMessage.userInfo[SampleViewControllerTapLogKey] boolValue];
     };
     
     // Do not log tap logs to the main tap log store.
-    [ARKLogDistributor defaultDistributor].defaultLogStore.consumeLogPredicate = ^(ARKLogMessage *logMessage) {
+    [ARKLogDistributor defaultDistributor].defaultLogStore.observeLogPredicate = ^(ARKLogMessage *logMessage) {
         return (BOOL)![logMessage.userInfo[SampleViewControllerTapLogKey] boolValue];
     };
     
@@ -52,7 +52,7 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
     NSString *applicationSupportDirectory = paths.firstObject;
     self.tapGestureLogStore.persistedLogsFileURL = [NSURL fileURLWithPath:[applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"]];
     
-    [[ARKLogDistributor defaultDistributor] addLogConsumer:self.tapGestureLogStore];
+    [[ARKLogDistributor defaultDistributor] addLogObserver:self.tapGestureLogStore];
     
     ARKEmailBugReporter *bugReporter = ((SampleAppDelegate *)[UIApplication sharedApplication].delegate).bugReporter;
     [bugReporter addLogStores:@[self.tapGestureLogStore]];

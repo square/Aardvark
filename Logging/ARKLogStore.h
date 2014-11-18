@@ -6,19 +6,19 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-#import <Aardvark/ARKLogConsumer.h>
+#import <Aardvark/ARKLogObserver.h>
 
 
-/// Posting this notification triggers the owning log distributor to immediately distribute pending logs to the consumer.
-extern NSString *const ARKLogConsumerRequiresAllPendingLogsNotification;
+/// Posting this notification triggers the owning log distributor to immediately distribute pending logs to the observer.
+extern NSString *const ARKLogObserverRequiresAllPendingLogsNotification;
 
 
-/// A block that takes a logMessage and returns YES if it wants the calling object to consume the log.
-typedef BOOL (^ARKConsumeLogPredicateBlock)(ARKLogMessage *logMessage);
+/// A block that takes a logMessage and returns YES if it wants the calling object to observe the log.
+typedef BOOL (^ARKObserveLogPredicateBlock)(ARKLogMessage *logMessage);
 
 
 /// Stores log messages locally for use in bug reports. All methods and properties on this class are threadsafe.
-@interface ARKLogStore : NSObject <ARKLogConsumer>
+@interface ARKLogStore : NSObject <ARKLogObserver>
 
 /// Creates an ARKLogStore with persistedLogsFileURL set to NSApplicationSupportDirectory/fileName.
 - (instancetype)initWithPersistedLogFileName:(NSString *)fileName;
@@ -39,7 +39,7 @@ typedef BOOL (^ARKConsumeLogPredicateBlock)(ARKLogMessage *logMessage);
 @property (nonatomic, assign, readwrite) BOOL logsToConsole;
 
 /// Block that allows for filtering logs.
-@property (nonatomic, copy, readwrite) ARKConsumeLogPredicateBlock consumeLogPredicate;
+@property (nonatomic, copy, readwrite) ARKObserveLogPredicateBlock observeLogPredicate;
 
 /// Returns an array of ARKLogMessage objects. Blocks on log distributing queue.
 - (NSArray *)allLogMessages;

@@ -1,5 +1,5 @@
 //
-//  ARKLogConsumer.h
+//  ARKLogObserver.h
 //  Aardvark
 //
 //  Created by Dan Federman on 10/8/14.
@@ -9,9 +9,9 @@
 @class ARKLogMessage;
 
 
-@protocol ARKLogConsumer <NSObject>
+@protocol ARKLogObserver <NSObject>
 
 /// Called on a background operation queue when logs are appended to the log distributor.
-- (void)consumeLogMessage:(ARKLogMessage *)logMessage;
+- (void)observeLogMessage:(ARKLogMessage *)logMessage;
 
 @end

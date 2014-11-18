@@ -14,7 +14,7 @@
 #import "NSOperationQueue+ARKAdditions.h"
 
 
-NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsumerRequiresAllPendingLogs";
+NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObserverRequiresAllPendingLogs";
 
 
 @interface ARKLogStore ()
@@ -32,7 +32,7 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
 @synthesize maximumLogMessageCount = _maximumLogMessageCount;
 @synthesize maximumLogCountToPersist = _maximumLogCountToPersist;
 @synthesize persistedLogsFileURL = _persistedLogsFileURL;
-@synthesize consumeLogPredicate = _consumeLogPredicate;
+@synthesize observeLogPredicate = _observeLogPredicate;
 @synthesize logsToConsole = _logsToConsole;
 
 #pragma mark - Initialization
@@ -215,38 +215,38 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
     }];
 }
 
-- (ARKConsumeLogPredicateBlock)consumeLogPredicate;
+- (ARKObserveLogPredicateBlock)observeLogPredicate;
 {
     if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
-        return _consumeLogPredicate;
+        return _observeLogPredicate;
     } else {
-        __block ARKConsumeLogPredicateBlock consumeLogPredicate = NULL;
+        __block ARKObserveLogPredicateBlock observeLogPredicate = NULL;
         [self.logConsumingQueue performOperationWithBlock:^{
-            consumeLogPredicate = _consumeLogPredicate;
+            observeLogPredicate = _observeLogPredicate;
         } waitUntilFinished:YES];
         
-        return consumeLogPredicate;
+        return observeLogPredicate;
     }
 }
 
-- (void)setConsumeLogPredicate:(ARKConsumeLogPredicateBlock)consumeLogPredicate;
+- (void)setObserveLogPredicate:(ARKObserveLogPredicateBlock)observeLogPredicate;
 {
     [self.logConsumingQueue addOperationWithBlock:^{
-        if (_consumeLogPredicate == consumeLogPredicate) {
+        if (_observeLogPredicate == observeLogPredicate) {
             return;
         }
         
-        _consumeLogPredicate = [consumeLogPredicate copy];
+        _observeLogPredicate = [observeLogPredicate copy];
     }];
 }
 
 #pragma mark - ARKLogDistributor
 
-- (void)consumeLogMessage:(ARKLogMessage *)logMessage;
+- (void)observeLogMessage:(ARKLogMessage *)logMessage;
 {
     [self.logConsumingQueue addOperationWithBlock:^{
-        if (self.consumeLogPredicate && !self.consumeLogPredicate(logMessage)) {
-            // Predicate told us we should not consume this log. Bail out.
+        if (self.observeLogPredicate && !self.observeLogPredicate(logMessage)) {
+            // Predicate told us we should not observe this log. Bail out.
             return;
         }
         
@@ -272,8 +272,8 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
 
 - (NSArray *)allLogMessages;
 {
-    // Ensure we consume all log messages that have been queued by the distributor before we retrieve the our logs.
-    [[NSNotificationCenter defaultCenter] postNotificationName:ARKLogConsumerRequiresAllPendingLogsNotification object:self];
+    // Ensure we observe all log messages that have been queued by the distributor before we retrieve the our logs.
+    [[NSNotificationCenter defaultCenter] postNotificationName:ARKLogObserverRequiresAllPendingLogsNotification object:self];
     
     __block NSArray *logMessages = nil;
     

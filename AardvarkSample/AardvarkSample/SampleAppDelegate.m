@@ -8,7 +8,7 @@
 
 #import "SampleAppDelegate.h"
 
-#import "SampleCrashlyticsLogConsumer.h"
+#import "SampleCrashlyticsLogObserver.h"
 
 
 @implementation SampleAppDelegate
@@ -21,7 +21,7 @@
     self.bugReporter = [Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:@"fake-email@aardvarkbugreporting.src"];
     
     // Log all ARKLog messages to Crashlytics to help debug crashes.
-    [[ARKLogDistributor defaultDistributor] addLogConsumer:[SampleCrashlyticsLogConsumer new]];
+    [[ARKLogDistributor defaultDistributor] addLogObserver:[SampleCrashlyticsLogObserver new]];
     
     ARKTypeLog(ARKLogTypeSeparator, nil, @"Hello World");
     

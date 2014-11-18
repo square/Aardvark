@@ -51,7 +51,7 @@
 
 - (void)test_ARKLog_appendsLogToLogStore;
 {
-    [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:@"Logging Enabled" image:nil type:ARKLogTypeDefault userInfo:nil]];
+    [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:@"Logging Enabled" image:nil type:ARKLogTypeDefault userInfo:nil]];
     
     XCTAssertEqual(self.logStore.allLogMessages.count, 1, @"Log not appended with logging enabled!");
 }
@@ -79,31 +79,31 @@
     XCTAssertNotNil(self.logStore.logMessages);
 }
 
-- (void)test_consumeLogPredicate_preventsLogsFromBeingConsumed;
+- (void)test_observeLogPredicate_preventsLogsFromBeingObserved;
 {
     NSString *const ARKLogStoreTestShouldLogKey = @"ARKLogStoreTestShouldLog";
     
-    self.logStore.consumeLogPredicate = ^(ARKLogMessage *logMessage) {
+    self.logStore.observeLogPredicate = ^(ARKLogMessage *logMessage) {
         return [logMessage.userInfo[ARKLogStoreTestShouldLogKey] boolValue];
     };
     
     NSDictionary *userInfo = @{ ARKLogStoreTestShouldLogKey : @NO };
     for (NSUInteger i  = 0; i < self.logStore.maximumLogMessageCount; i++) {
-        [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault userInfo:userInfo]];
+        [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault userInfo:userInfo]];
     }
     
     XCTAssertEqual(self.logStore.allLogMessages.count, 0);
     
-    [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:@"Log This Log" image:nil type:ARKLogTypeDefault userInfo:@{ ARKLogStoreTestShouldLogKey : @YES }]];
+    [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:@"Log This Log" image:nil type:ARKLogTypeDefault userInfo:@{ ARKLogStoreTestShouldLogKey : @YES }]];
     
     XCTAssertEqual(self.logStore.allLogMessages.count, 1);
     
-    [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:@"Do Not Log This Log" image:nil type:ARKLogTypeDefault userInfo:nil]];
+    [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:@"Do Not Log This Log" image:nil type:ARKLogTypeDefault userInfo:nil]];
     
     XCTAssertEqual(self.logStore.allLogMessages.count, 1);
 }
 
-- (void)test_consumeLogMessage_logTrimming;
+- (void)test_observeLogMessage_logTrimming;
 {
     NSUInteger numberOfLogsToEnter = 2 * self.logStore.maximumLogMessageCount + 10;
     NSUInteger expectedInternalLogCount = self.logStore.maximumLogMessageCount + (numberOfLogsToEnter % self.logStore.maximumLogMessageCount);
@@ -115,7 +115,7 @@
     
     // Concurrently add all of the logs.
     [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
-        [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
+        [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
     }];
     
     // Wait until all logs are entered.
@@ -152,7 +152,7 @@
 {
     // Fill in some logs.
     for (NSUInteger i  = 0; i < self.logStore.maximumLogMessageCount; i++) {
-        [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"Log %@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
+        [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"Log %@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
     }
     
     [self.logStore clearLogs];
@@ -166,7 +166,7 @@
 {
     XCTAssertNil([self.logStore _persistedLogs]);
     
-    [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:@"Log" image:nil type:ARKLogTypeDefault userInfo:nil]];
+    [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:@"Log" image:nil type:ARKLogTypeDefault userInfo:nil]];
     [self.logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
     [self.logStore _persistLogs_inLogConsumingQueue];
     XCTAssertNotNil([self.logStore _persistedLogs]);
@@ -183,7 +183,7 @@
     NSString *lastLogText = nil;
     for (NSUInteger i  = 0; i < self.logStore.maximumLogMessageCount + 1; i++) {
         lastLogText = [NSString stringWithFormat:@"Log %@", @(i)];
-        [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:lastLogText image:nil type:ARKLogTypeDefault userInfo:nil]];
+        [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:lastLogText image:nil type:ARKLogTypeDefault userInfo:nil]];
     }
     
     NSArray *logMessages = self.logStore.allLogMessages;
@@ -196,7 +196,7 @@
     // Fill in some logs.
     NSUInteger numberOfLogsToEnter = self.logStore.maximumLogMessageCount + 10;
     for (NSUInteger i  = 0; i < numberOfLogsToEnter; i++) {
-        [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"Log %@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
+        [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"Log %@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
     }
     
     [self.logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
@@ -210,7 +210,7 @@
     // Fill in some logs.
     NSUInteger numberOfLogsToEnter = self.logStore.maximumLogMessageCount + 10;
     for (NSUInteger i  = 0; i < numberOfLogsToEnter; i++) {
-        [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"Log %@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
+        [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"Log %@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
     }
     
     [self.logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
@@ -227,7 +227,7 @@
     NSURL *persistenceTestLogsURL = logStore.persistedLogsFileURL;
     NSString *testPeristedLogMessageText = @"setpersistedLogsFilePath: test log";
     
-    [logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:testPeristedLogMessageText image:nil type:ARKLogTypeDefault userInfo:nil]];
+    [logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:testPeristedLogMessageText image:nil type:ARKLogTypeDefault userInfo:nil]];
     [logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
     [logStore _persistLogs_inLogConsumingQueue];
     
@@ -258,7 +258,7 @@
     
     // Concurrently add all of the logs.
     [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
-        [logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
+        [logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
     }];
     
     // Get the log count.
@@ -313,9 +313,9 @@
     ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKPersistenceTestLogDistributorLogs.data"];
     logStore.maximumLogMessageCount = 10;
     for (int i = 0; i < logStore.maximumLogMessageCount; i++) {
-        [logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
+        [logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
     }
-        
+    
     [logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
     [logStore _persistLogs_inLogConsumingQueue];
     
@@ -342,7 +342,7 @@
     [self measureBlock:^{
         // Concurrently add all of the logs.
         [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
-            [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
+            [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
         }];
         
         [self.logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
@@ -359,7 +359,7 @@
     [self measureBlock:^{
         // Concurrently add all of the logs.
         [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
-            [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
+            [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
         }];
         
         // Trim and format the logs.
@@ -377,7 +377,7 @@
     [self measureBlock:^{
         // Concurrently add all of the logs.
         [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
-            [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
+            [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
         }];
         
         [self.logStore.logConsumingQueue addOperationWithBlock:^{
@@ -398,7 +398,7 @@
     
     // Concurrently add all of the logs.
     [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
-        [self.logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
+        [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
     }];
 
     [self measureBlock:^{

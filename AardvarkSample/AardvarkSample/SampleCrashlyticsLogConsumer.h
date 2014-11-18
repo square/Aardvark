@@ -1,13 +1,13 @@
 //
-//  SampleCrashlyticsLogConsumer.h
+//  SampleCrashlyticsLogObserver.h
 //  AardvarkSample
 //
 //  Created by Dan Federman on 10/16/14.
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
-#import <Aardvark/ARKLogConsumer.h>
+#import <Aardvark/ARKLogObserver.h>
 
 
-@interface SampleCrashlyticsLogConsumer : NSObject <ARKLogConsumer>
+@interface SampleCrashlyticsLogObserver : NSObject <ARKLogObserver>
 @end

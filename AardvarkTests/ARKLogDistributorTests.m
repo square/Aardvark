@@ -10,8 +10,8 @@
 
 #import "ARKLogDistributor.h"
 #import "ARKLogDistributor_Testing.h"
-#import "ARKLogConsumer.h"
 #import "ARKLogMessage.h"
+#import "ARKLogObserver.h"
 #import "ARKLogStore.h"
 
 
@@ -26,16 +26,16 @@
 typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 
 
-@interface ARKTestLogConsumer : NSObject <ARKLogConsumer>
+@interface ARKTestLogObserver : NSObject <ARKLogObserver>
 
 @property (nonatomic, copy, readwrite) LogHandlingBlock logHandlingBlock;
 
 @end
 
 
-@implementation ARKTestLogConsumer
+@implementation ARKTestLogObserver
 
-- (void)consumeLogMessage:(ARKLogMessage *)logMessage;
+- (void)observeLogMessage:(ARKLogMessage *)logMessage;
 {
     if (self.logHandlingBlock) {
         self.logHandlingBlock(logMessage);
@@ -90,7 +90,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 - (void)test_setLogMessageClass_appendedLogsAreCorrectClass;
 {
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
-    [logDistributor addLogConsumer:self.logStore];
+    [logDistributor addLogObserver:self.logStore];
     
     [logDistributor logWithFormat:@"This log should be an ARKLogMessage"];
     
@@ -111,33 +111,33 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     XCTAssertEqual([self.logStore.allLogMessages.firstObject class], [ARKLogMessageTestSubclass class]);
 }
 
-- (void)test_logWithFormat_callsLogConsumers;
+- (void)test_logWithFormat_callsLogObservers;
 {
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
     
-    NSMutableArray *logConsumerTest = [NSMutableArray new];
-    ARKTestLogConsumer *testLogConsumer = [ARKTestLogConsumer new];
-    testLogConsumer.logHandlingBlock = ^(ARKLogMessage *logMessage) {
-        [logConsumerTest addObject:logMessage];
+    NSMutableArray *logObserverTest = [NSMutableArray new];
+    ARKTestLogObserver *testLogObserver = [ARKTestLogObserver new];
+    testLogObserver.logHandlingBlock = ^(ARKLogMessage *logMessage) {
+        [logObserverTest addObject:logMessage];
     };
-    [logDistributor addLogConsumer:testLogConsumer];
+    [logDistributor addLogObserver:testLogObserver];
     
     [logDistributor logWithFormat:@"Log"];
     
     [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
-    XCTAssertEqual(logConsumerTest.count, 1);
+    XCTAssertEqual(logObserverTest.count, 1);
 }
 
-- (void)test_addLogConsumer_notifiesLogConsumerOnlog;
+- (void)test_addLogObserver_notifiesLogObserverOnlog;
 {
-    NSMutableArray *logConsumerTest = [NSMutableArray new];
-    ARKTestLogConsumer *testLogConsumer = [ARKTestLogConsumer new];
-    testLogConsumer.logHandlingBlock = ^(ARKLogMessage *logMessage) {
-        [logConsumerTest addObject:logMessage];
+    NSMutableArray *logObserverTest = [NSMutableArray new];
+    ARKTestLogObserver *testLogObserver = [ARKTestLogObserver new];
+    testLogObserver.logHandlingBlock = ^(ARKLogMessage *logMessage) {
+        [logObserverTest addObject:logMessage];
     };
-    [self.defaultLogDistributor addLogConsumer:testLogConsumer];
+    [self.defaultLogDistributor addLogObserver:testLogObserver];
     
-    XCTAssertEqual(logConsumerTest.count, 0);
+    XCTAssertEqual(logObserverTest.count, 0);
     
     for (NSUInteger i  = 0; i < self.logStore.maximumLogMessageCount; i++) {
         ARKLog(@"Log %@", @(i));
@@ -145,38 +145,38 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     XCTAssertGreaterThan(self.logStore.allLogMessages.count, 0);
     [self.logStore.allLogMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
-        XCTAssertEqualObjects(logMessage, logConsumerTest[idx]);
+        XCTAssertEqualObjects(logMessage, logObserverTest[idx]);
     }];
     
-    [self.defaultLogDistributor removeLogConsumer:testLogConsumer];
+    [self.defaultLogDistributor removeLogObserver:testLogObserver];
 }
 
-- (void)test_removeLogHandler_removesLogConsumer;
+- (void)test_removeLogHandler_removesLogObserver;
 {
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
     
-    NSMutableArray *logConsumerTest = [NSMutableArray new];
-    ARKTestLogConsumer *testLogConsumer = [ARKTestLogConsumer new];
-    testLogConsumer.logHandlingBlock = ^(ARKLogMessage *logMessage) {
-        [logConsumerTest addObject:logMessage];
+    NSMutableArray *logObserverTest = [NSMutableArray new];
+    ARKTestLogObserver *testLogObserver = [ARKTestLogObserver new];
+    testLogObserver.logHandlingBlock = ^(ARKLogMessage *logMessage) {
+        [logObserverTest addObject:logMessage];
     };
     
-    [logDistributor addLogConsumer:testLogConsumer];
+    [logDistributor addLogObserver:testLogObserver];
     [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     
-    XCTAssertEqual(logDistributor.logConsumers.count, 1);
+    XCTAssertEqual(logDistributor.logObservers.count, 1);
     
-    [logDistributor removeLogConsumer:testLogConsumer];
+    [logDistributor removeLogObserver:testLogObserver];
     [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     
-    XCTAssertEqual(logDistributor.logConsumers.count, 0);
+    XCTAssertEqual(logDistributor.logObservers.count, 0);
     
     for (NSUInteger i  = 0; i < 100; i++) {
         [logDistributor logWithFormat:@"Log %@", @(i)];
     }
     
     [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
-    XCTAssertEqual(logConsumerTest.count, 0);
+    XCTAssertEqual(logObserverTest.count, 0);
 }
 
 - (void)test_flushLogDistributingQueue_finishesAppendingLogs;
