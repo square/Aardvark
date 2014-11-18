@@ -35,7 +35,7 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
 {
     [super viewDidLoad];
     
-    self.tapGestureLogStore = [ARKLogStore new];
+    self.tapGestureLogStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"SampleTapLogs.data"];
     self.tapGestureLogStore.name = @"Taps";
     
     // Ensure that the tap log store will only store tap logs.
@@ -47,10 +47,6 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
     [ARKLogDistributor defaultDistributor].defaultLogStore.observeLogPredicate = ^(ARKLogMessage *logMessage) {
         return (BOOL)![logMessage.userInfo[SampleViewControllerTapLogKey] boolValue];
     };
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    self.tapGestureLogStore.persistedLogsFileURL = [NSURL fileURLWithPath:[applicationSupportDirectory stringByAppendingPathComponent:@"SampleTapLogs.data"]];
     
     [[ARKLogDistributor defaultDistributor] addLogObserver:self.tapGestureLogStore];
     
