@@ -19,7 +19,6 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
 @protocol ARKBugReporter;
 @class ARKEmailBugReporter;
 @class ARKLogDistributor;
-@class ARKLogStore;
 
 
 /// Appends a log with type default to the default log distributor.
