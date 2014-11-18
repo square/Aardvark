@@ -62,11 +62,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     self.defaultLogDistributor = [ARKLogDistributor defaultDistributor];
     
-    ARKLogStore *logStore = [ARKLogStore new];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    logStore.persistedLogsFileURL = [NSURL fileURLWithPath:[[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:@"ARKLogDistributorTests.data"]];
-    
+    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKLogDistributorTests.data"];
     [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     
     self.logStore = logStore;
