@@ -38,6 +38,6 @@ OBJC_EXTERN void ARKLogScreenshot();
 + (ARKEmailBugReporter *)addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:(NSString *)emailAddress;
 
 /// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReport] after taking a screenshot.
-+ (UIGestureRecognizer *)addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
++ (id)addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
 
 @end
