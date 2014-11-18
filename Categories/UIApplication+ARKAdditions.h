@@ -16,7 +16,7 @@
 - (void)ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:(id <ARKBugReporter>)bugReporter;
 
 /// Adds a gesture recognizer of class gestureRecognizerClass to the application and returns it. Triggering that gesture causes bugReporter to compose a bug report from bugReporter's logStores.
-- (id)ARK_addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
+- (id)ARK_addBugReporter:(id <ARKBugReporter>)bugReporter triggeringGestureRecognizerClass:(Class)gestureRecognizerClass;
 
 /// Removes bugReporter and the associated gestureRecognizer.
 - (void)ARK_removeBugReporter:(id <ARKBugReporter>)bugReporter;

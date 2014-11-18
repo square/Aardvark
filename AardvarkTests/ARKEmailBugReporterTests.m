@@ -62,7 +62,7 @@
     
     // Concurrently add all of the logs.
     [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
-        ARKTypeLog(ARKLogTypeError, nil, @"%@", number);
+        ARKLogWithType(ARKLogTypeError, nil, @"%@", number);
     }];
     
     const NSUInteger numberOfRecentErrorLogs = 5;

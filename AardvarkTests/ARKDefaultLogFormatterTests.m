@@ -55,7 +55,7 @@
 
 - (void)test_formattedLogMessage_errorLogLineCount;
 {
-    ARKTypeLog(ARKLogTypeError, nil, @"Fake Error Log");
+    ARKLogWithType(ARKLogTypeError, nil, @"Fake Error Log");
     
     NSArray *logMessages = self.logStore.allLogMessages;
     XCTAssertEqual(logMessages.count, 1);
@@ -68,7 +68,7 @@
 
 - (void)test_formattedLogMessage_separatorLogLineCount;
 {
-    ARKTypeLog(ARKLogTypeSeparator, nil, @"Separators Rule");
+    ARKLogWithType(ARKLogTypeSeparator, nil, @"Separators Rule");
     
     NSArray *logMessages = self.logStore.allLogMessages;
     XCTAssertEqual(logMessages.count, 1);
@@ -94,7 +94,7 @@
 - (void)test_formattedLogMessage_errorLogContent;
 {
     NSString *errorLog = @"Fake Error Log";
-    ARKTypeLog(ARKLogTypeError, nil, @"%@", errorLog);
+    ARKLogWithType(ARKLogTypeError, nil, @"%@", errorLog);
     
     NSArray *logMessages = self.logStore.allLogMessages;
     XCTAssertEqual(logMessages.count, 1);
@@ -109,7 +109,7 @@
 - (void)test_formattedLogMessage_separatorLogContent;
 {
     NSString *separatorLog = @"Separators Rule";
-    ARKTypeLog(ARKLogTypeSeparator, nil, @"%@", separatorLog);
+    ARKLogWithType(ARKLogTypeSeparator, nil, @"%@", separatorLog);
     
     NSArray *logMessages = self.logStore.allLogMessages;
     XCTAssertEqual(logMessages.count, 1);
@@ -139,7 +139,7 @@
 {
     self.logFormatter.errorLogPrefix = @"Error";
     
-    ARKTypeLog(ARKLogTypeError, nil, @"Fake Error Log");
+    ARKLogWithType(ARKLogTypeError, nil, @"Fake Error Log");
     
     NSArray *logMessages = self.logStore.allLogMessages;
     XCTAssertEqual(logMessages.count, 1);
@@ -153,7 +153,7 @@
 {
     self.logFormatter.separatorLogPrefix = @"New Thing";
     
-    ARKTypeLog(ARKLogTypeSeparator, nil, @"Separators Rule");
+    ARKLogWithType(ARKLogTypeSeparator, nil, @"Separators Rule");
     
     NSArray *logMessages = self.logStore.allLogMessages;
     XCTAssertEqual(logMessages.count, 1);
@@ -165,7 +165,7 @@
 
 - (void)test_formattedLogMessage_errorPrefixOnSameLineIfLogTextIsEmpty;
 {
-    ARKTypeLog(ARKLogTypeError, nil, @"");
+    ARKLogWithType(ARKLogTypeError, nil, @"");
     
     NSArray *logMessages = self.logStore.allLogMessages;
     XCTAssertEqual(logMessages.count, 1);
@@ -177,7 +177,7 @@
 
 - (void)test_formattedLogMessage_separatorPrefixOnSameLineIfLogTextIsEmpty;
 {
-    ARKTypeLog(ARKLogTypeSeparator, nil, @"");
+    ARKLogWithType(ARKLogTypeSeparator, nil, @"");
     
     NSArray *logMessages = self.logStore.allLogMessages;
     XCTAssertEqual(logMessages.count, 1);

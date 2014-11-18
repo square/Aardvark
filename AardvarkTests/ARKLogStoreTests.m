@@ -79,11 +79,11 @@
     XCTAssertNotNil(self.logStore.logMessages);
 }
 
-- (void)test_observeLogPredicate_preventsLogsFromBeingObserved;
+- (void)test_logFilterBlock_preventsLogsFromBeingObserved;
 {
     NSString *const ARKLogStoreTestShouldLogKey = @"ARKLogStoreTestShouldLog";
     
-    self.logStore.observeLogPredicate = ^(ARKLogMessage *logMessage) {
+    self.logStore.logFilterBlock = ^(ARKLogMessage *logMessage) {
         return [logMessage.userInfo[ARKLogStoreTestShouldLogKey] boolValue];
     };
     

@@ -13,14 +13,10 @@
 extern NSString *const ARKLogObserverRequiresAllPendingLogsNotification;
 
 
-/// A block that takes a logMessage and returns YES if it wants the calling object to observe the log.
-typedef BOOL (^ARKObserveLogPredicateBlock)(ARKLogMessage *logMessage);
-
-
 /// Stores log messages locally for use in bug reports. All methods and properties on this class are threadsafe.
 @interface ARKLogStore : NSObject <ARKLogObserver>
 
-/// Creates an ARKLogStore with persistedLogsFileURL set to NSApplicationSupportDirectory/fileName.
+/// Creates an ARKLogStore with persistedLogsFileURL set to the supplied fileName within the application support directory.
 - (instancetype)initWithPersistedLogFileName:(NSString *)fileName;
 
 /// Convenience property that allows bug reporters to prefix logs with the name of the store they came from. Defaults to nil. Accessor blocks on logging queue; setter is non-blocking.
@@ -38,8 +34,8 @@ typedef BOOL (^ARKObserveLogPredicateBlock)(ARKLogMessage *logMessage);
 /// Controls whether consuming logs also outputs to NSLog. Defaults to NO. Accessor blocks on log distributing queue; setter is non-blocking.
 @property (nonatomic, assign, readwrite) BOOL logsToConsole;
 
-/// Block that allows for filtering logs.
-@property (nonatomic, copy, readwrite) ARKObserveLogPredicateBlock observeLogPredicate;
+/// Block that allows for filtering logs. Return YES if the receiver should observe the supplied log.
+@property (nonatomic, copy, readwrite) BOOL (^logFilterBlock)(ARKLogMessage *logMessage);
 
 /// Returns an array of ARKLogMessage objects. Blocks on log distributing queue.
 - (NSArray *)allLogMessages;

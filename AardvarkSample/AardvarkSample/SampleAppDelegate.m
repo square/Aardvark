@@ -23,7 +23,7 @@
     // Log all ARKLog messages to Crashlytics to help debug crashes.
     [[ARKLogDistributor defaultDistributor] addLogObserver:[SampleCrashlyticsLogObserver new]];
     
-    ARKTypeLog(ARKLogTypeSeparator, nil, @"Hello World");
+    ARKLogWithType(ARKLogTypeSeparator, nil, @"Hello World");
     
     return YES;
 }
@@ -40,7 +40,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application;
 {
-    ARKTypeLog(ARKLogTypeError, nil, @"Exiting Sample App");
+    ARKLogWithType(ARKLogTypeError, nil, @"Exiting Sample App");
 }
 
 @end

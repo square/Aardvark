@@ -28,11 +28,11 @@
 
 - (void)ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:(id <ARKBugReporter>)bugReporter;
 {
-    UILongPressGestureRecognizer *bugReportingGestureRecognizer = (UILongPressGestureRecognizer *)[self ARK_addBugReporter:bugReporter withTriggeringGestureRecognizerOfClass:[UILongPressGestureRecognizer class]];
+    UILongPressGestureRecognizer *bugReportingGestureRecognizer = (UILongPressGestureRecognizer *)[self ARK_addBugReporter:bugReporter triggeringGestureRecognizerClass:[UILongPressGestureRecognizer class]];
     bugReportingGestureRecognizer.numberOfTouchesRequired = 2;
 }
 
-- (id)ARK_addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
+- (id)ARK_addBugReporter:(id <ARKBugReporter>)bugReporter triggeringGestureRecognizerClass:(Class)gestureRecognizerClass;
 {
     NSAssert(bugReporter.logStores.count > 0, @"Attempting to add a bug reporter without a log store!");
     NSAssert([bugReporter conformsToProtocol:@protocol(ARKBugReporter)], @"Attempting to trigger bug reports with an object that does not conform to ARKBugReporter.");

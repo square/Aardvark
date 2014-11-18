@@ -23,7 +23,7 @@ void ARKLog(NSString *format, ...)
     va_end(argList);
 }
 
-void ARKTypeLog(ARKLogType type, NSDictionary *userInfo, NSString *format, ...)
+void ARKLogWithType(ARKLogType type, NSDictionary *userInfo, NSString *format, ...)
 {
     va_list argList;
     va_start(argList, format);
@@ -55,11 +55,11 @@ void ARKLogScreenshot()
     return bugReporter;
 }
 
-+ (id)addBugReporter:(id <ARKBugReporter>)bugReporter withTriggeringGestureRecognizerOfClass:(Class)gestureRecognizerClass;
++ (id)addBugReporter:(id <ARKBugReporter>)bugReporter triggeringGestureRecognizerClass:(Class)gestureRecognizerClass;
 {
-    NSAssert([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addBugReporter:withTriggeringGestureRecognizerOfClass:)], @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
+    NSAssert([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addBugReporter:triggeringGestureRecognizerClass:)], @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
     
-    return [[UIApplication sharedApplication] ARK_addBugReporter:bugReporter withTriggeringGestureRecognizerOfClass:gestureRecognizerClass];
+    return [[UIApplication sharedApplication] ARK_addBugReporter:bugReporter triggeringGestureRecognizerClass:gestureRecognizerClass];
 }
 
 @end

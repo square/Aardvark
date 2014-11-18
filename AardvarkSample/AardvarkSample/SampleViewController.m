@@ -116,7 +116,7 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
 - (void)_tapDetected:(UITapGestureRecognizer *)tapRecognizer;
 {
     if (tapRecognizer == self.tapRecognizer && tapRecognizer.state == UIGestureRecognizerStateEnded) {
-        ARKTypeLog(ARKLogTypeDefault, @{ SampleViewControllerTapLogKey : @YES }, @"Tapped %@", NSStringFromCGPoint([tapRecognizer locationInView:nil]));
+        ARKLogWithType(ARKLogTypeDefault, @{ SampleViewControllerTapLogKey : @YES }, @"Tapped %@", NSStringFromCGPoint([tapRecognizer locationInView:nil]));
     }
 }
 

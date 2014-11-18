@@ -32,7 +32,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
 @synthesize maximumLogMessageCount = _maximumLogMessageCount;
 @synthesize maximumLogCountToPersist = _maximumLogCountToPersist;
 @synthesize persistedLogsFileURL = _persistedLogsFileURL;
-@synthesize observeLogPredicate = _observeLogPredicate;
+@synthesize logFilterBlock = _logFilterBlock;
 @synthesize logsToConsole = _logsToConsole;
 
 #pragma mark - Initialization
@@ -215,28 +215,28 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
     }];
 }
 
-- (ARKObserveLogPredicateBlock)observeLogPredicate;
+- (BOOL (^)(ARKLogMessage *))logFilterBlock;
 {
     if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
-        return _observeLogPredicate;
+        return _logFilterBlock;
     } else {
-        __block ARKObserveLogPredicateBlock observeLogPredicate = NULL;
+        __block BOOL (^logFilterBlock)(ARKLogMessage *) = NULL;
         [self.logConsumingQueue performOperationWithBlock:^{
-            observeLogPredicate = _observeLogPredicate;
+            logFilterBlock = _logFilterBlock;
         } waitUntilFinished:YES];
         
-        return observeLogPredicate;
+        return logFilterBlock;
     }
 }
 
-- (void)setObserveLogPredicate:(ARKObserveLogPredicateBlock)observeLogPredicate;
+- (void)setObserveLogPredicate:(BOOL (^)(ARKLogMessage *))logFilterBlock;
 {
     [self.logConsumingQueue addOperationWithBlock:^{
-        if (_observeLogPredicate == observeLogPredicate) {
+        if (_logFilterBlock == logFilterBlock) {
             return;
         }
         
-        _observeLogPredicate = [observeLogPredicate copy];
+        _logFilterBlock = [logFilterBlock copy];
     }];
 }
 
@@ -245,7 +245,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
 - (void)observeLogMessage:(ARKLogMessage *)logMessage;
 {
     [self.logConsumingQueue addOperationWithBlock:^{
-        if (self.observeLogPredicate && !self.observeLogPredicate(logMessage)) {
+        if (self.logFilterBlock && !self.logFilterBlock(logMessage)) {
             // Predicate told us we should not observe this log. Bail out.
             return;
         }
@@ -389,7 +389,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    NSString *persistenceLogsPath = [[applicationSupportDirectory stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]] stringByAppendingPathComponent:fileName];
+    NSString *persistenceLogsPath = [[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:fileName];
     return [NSURL fileURLWithPath:persistenceLogsPath isDirectory:NO];
 }
 
