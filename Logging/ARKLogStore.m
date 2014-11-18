@@ -62,6 +62,18 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
     return self;
 }
 
+- (instancetype)initWithPersistedLogFileName:(NSString *)fileName;
+{
+    self = [self init];
+    if (!self) {
+        return nil;
+    }
+    
+    self.persistedLogsFileURL = [self _persistenceURLWithFileName:fileName];
+    
+    return self;
+}
+
 - (void)dealloc;
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -371,6 +383,14 @@ NSString *const ARKLogConsumerRequiresAllPendingLogsNotification = @"ARKLogConsu
 - (NSUInteger)_maximumLogMessageCountToKeepInMemory;
 {
     return 2 * self.maximumLogMessageCount;
+}
+
+- (NSURL *)_persistenceURLWithFileName:(NSString *)fileName;
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = paths.firstObject;
+    NSString *persistenceLogsPath = [[applicationSupportDirectory stringByAppendingPathComponent:[[NSBundle mainBundle] bundleIdentifier]] stringByAppendingPathComponent:fileName];
+    return [NSURL fileURLWithPath:persistenceLogsPath isDirectory:NO];
 }
 
 @end

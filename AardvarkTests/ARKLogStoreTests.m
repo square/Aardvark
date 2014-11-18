@@ -31,8 +31,7 @@
 {
     [super setUp];
     
-    self.logStore = [ARKLogStore new];
-    self.logStore.persistedLogsFileURL = [self _persistenceURLWithFileName:@"ARKLogStoreTests.data"];
+    self.logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKLogStoreTests.data"];
 }
 
 - (void)tearDown;
@@ -223,12 +222,10 @@
 
 - (void)test_setPersistedLogsFilePath_appendsLogsInPersistedObjects;
 {
-    ARKLogStore *logStore = [ARKLogStore new];
+    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKPersistenceTestLogDistributorLogs.data"];
     
-    NSURL *persistenceTestLogsURL = [self _persistenceURLWithFileName:@"ARKPersistenceTestLogDistributorLogs.data"];
+    NSURL *persistenceTestLogsURL = logStore.persistedLogsFileURL;
     NSString *testPeristedLogMessageText = @"setpersistedLogsFilePath: test log";
-    
-    logStore.persistedLogsFileURL = persistenceTestLogsURL;
     
     [logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:testPeristedLogMessageText image:nil type:ARKLogTypeDefault userInfo:nil]];
     [logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
@@ -251,10 +248,8 @@
 
 - (void)test_dealloc_persistsLogs;
 {
-    NSURL *persistenceTestLogsURL = [self _persistenceURLWithFileName:@"ARKPersistenceTestLogDistributorLogs.data"];
-    
-    ARKLogStore *logStore = [ARKLogStore new];
-    logStore.persistedLogsFileURL = persistenceTestLogsURL;
+    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKPersistenceTestLogDistributorLogs.data"];
+    NSURL *persistenceTestLogsURL = logStore.persistedLogsFileURL;
     
     NSMutableArray *numbers = [NSMutableArray new];
     for (NSUInteger i  = 0; i < logStore.maximumLogCountToPersist; i++) {
@@ -315,16 +310,12 @@
 
 - (void)test_initializeLogMessages_ressurectsAtMostMaximumLogCount;
 {
-    ARKLogStore *logStore = [ARKLogStore new];
+    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKPersistenceTestLogDistributorLogs.data"];
     logStore.maximumLogMessageCount = 10;
     for (int i = 0; i < logStore.maximumLogMessageCount; i++) {
         [logStore consumeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
     }
-    
-    NSURL *persistenceTestLogsURL = [self _persistenceURLWithFileName:@"ARKPersistenceTestLogDistributorLogs.data"];
-    
-    logStore.persistedLogsFileURL = persistenceTestLogsURL;
-    
+        
     [logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
     [logStore _persistLogs_inLogConsumingQueue];
     
@@ -418,16 +409,6 @@
         
         [self.logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
     }];
-}
-
-#pragma mark - Private Methods
-
-- (NSURL *)_persistenceURLWithFileName:(NSString *)fileName;
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    NSString *persistenceTestLogsPath = [applicationSupportDirectory stringByAppendingPathComponent:fileName];
-    return [NSURL fileURLWithPath:persistenceTestLogsPath isDirectory:NO];
 }
 
 @end

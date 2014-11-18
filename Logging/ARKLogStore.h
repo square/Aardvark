@@ -20,6 +20,9 @@ typedef BOOL (^ARKConsumeLogPredicateBlock)(ARKLogMessage *logMessage);
 /// Stores log messages locally for use in bug reports. All methods and properties on this class are threadsafe.
 @interface ARKLogStore : NSObject <ARKLogConsumer>
 
+/// Creates an ARKLogStore with persistedLogsFileURL set to NSApplicationSupportDirectory/fileName.
+- (instancetype)initWithPersistedLogFileName:(NSString *)fileName;
+
 /// Convenience property that allows bug reporters to prefix logs with the name of the store they came from. Defaults to nil. Accessor blocks on logging queue; setter is non-blocking.
 @property (nonatomic, copy, readwrite) NSString *name;
 
