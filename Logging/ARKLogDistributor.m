@@ -211,7 +211,7 @@
 - (void)logScreenshot;
 {
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    UIGraphicsBeginImageContext(window.bounds.size);
+    UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 0.0);
     [window.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
