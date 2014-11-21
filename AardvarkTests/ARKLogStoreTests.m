@@ -49,11 +49,11 @@
     XCTAssertNil([ARKLogStore new].persistedLogsFileURL);
 }
 
-- (void)test_ARKLog_appendsLogToLogStore;
+- (void)test_observeLogMessage_logsLogToLogStore;
 {
     [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:@"Logging Enabled" image:nil type:ARKLogTypeDefault userInfo:nil]];
     
-    XCTAssertEqual(self.logStore.allLogMessages.count, 1, @"Log not appended with logging enabled!");
+    XCTAssertEqual(self.logStore.allLogMessages.count, 1, @"Log not stored!");
 }
 
 - (void)test_setMaximumLogCount_settingToZeroDestroysLogMessageArray;
@@ -220,12 +220,12 @@
     XCTAssertEqual(self.logStore.logMessages.count, numberOfLogsToEnter, @"Persisting logs should not have affected internal log count");
 }
 
-- (void)test_setPersistedLogsFilePath_appendsLogsInPersistedObjects;
+- (void)test_setPersistedLogsFileURL_observesPersistedLogsAtFileURL;
 {
     ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKPersistenceTestLogDistributorLogs.data"];
     
     NSURL *persistenceTestLogsURL = logStore.persistedLogsFileURL;
-    NSString *testPeristedLogMessageText = @"setpersistedLogsFilePath: test log";
+    NSString *testPeristedLogMessageText = @"setPersistedLogsFileURL: test log";
     
     [logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:testPeristedLogMessageText image:nil type:ARKLogTypeDefault userInfo:nil]];
     [logStore.logConsumingQueue waitUntilAllOperationsAreFinished];

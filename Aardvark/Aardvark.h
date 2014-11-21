@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
 @class ARKLogDistributor;
 
 
-/// Appends a log with type default to the default log distributor.
+/// Logs a log with default type to the default log distributor.
 OBJC_EXTERN void ARKLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 
 /// Logs a log with customized type and userInfo to the default log distributor.
