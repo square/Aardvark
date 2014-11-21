@@ -13,7 +13,6 @@
 
 #import "ARKLogDistributor.h"
 #import "ARKLogStore.h"
-#import "ARKLogStore_Testing.h"
 
 
 @interface ARKEmailBugReporterTests : XCTestCase
@@ -45,7 +44,10 @@
 - (void)tearDown;
 {
     [self.logStore clearLogs];
-    [self.logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
+    
+    // Wait for logs to clear.
+    (void)[self.logStore allLogMessages];
+    
     [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
     
     [super tearDown];
