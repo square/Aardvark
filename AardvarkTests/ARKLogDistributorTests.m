@@ -147,7 +147,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     [self.defaultLogDistributor removeLogObserver:testLogObserver];
 }
 
-- (void)test_removeLogHandler_removesLogObserver;
+- (void)test_removeLogObserver_removesLogObserver;
 {
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
     
@@ -175,17 +175,34 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     XCTAssertEqual(logObserverTest.count, 0);
 }
 
-- (void)test_flushLogDistributingQueue_finishesAppendingLogs;
+- (void)test_flushLogDistributingQueue_informsLogObserversOfAllPendingLogs;
 {
-    NSMutableArray *numbers = [NSMutableArray new];
+    NSMutableSet *numbers = [NSMutableSet new];
     for (NSUInteger i  = 0; i < 100; i++) {
         [numbers addObject:[NSString stringWithFormat:@"%@", @(i)]];
     }
     
-    [numbers enumerateObjectsUsingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
+    [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, BOOL *stop) {
+        // Log to ARKLog, which will cause the default log distributor to queue up observeLogMessage: calls on its log observers on its background queue.
         ARKLog(@"%@", text);
-        XCTAssertEqualObjects([(ARKLogMessage *)self.logStore.allLogMessages.lastObject text], text);
     }];
+    
+    // The log distributor should have pending operations.
+    XCTAssertGreaterThan(self.defaultLogDistributor.logDistributingQueue.operationCount, 0);
+    
+    // Calling allLogMessges on the logStore will cause the logStore to fire ARKLogObserverRequiresAllPendingLogsNotification. This will call _flushLogDistributingQueue:, which will cause the queued observeLogMessage: calls to be executed. This will result in the logStore returing all logs that have been enqueued to date.
+    NSArray *allLogMessages = self.logStore.allLogMessages;
+    
+    // Internal log queue should now be empty.
+    XCTAssertEqual(self.defaultLogDistributor.logDistributingQueue.operationCount, 0);
+    
+    NSMutableSet *allLogText = [NSMutableSet new];
+    for (ARKLogMessage *logMessage in allLogMessages) {
+        [allLogText addObject:logMessage.text];
+    }
+    
+    // allLogText should contain the same content as the original log set.
+    XCTAssertEqualObjects(allLogText, numbers);
 }
 
 @end
