@@ -18,7 +18,7 @@
 @interface ARKLogDistributorTests : XCTestCase
 
 @property (nonatomic, weak, readwrite) ARKLogDistributor *defaultLogDistributor;
-@property (nonatomic, weak, readwrite) ARKLogStore *logStore;
+@property (nonatomic, weak, readwrite) ARKLogStore *defaultLogStore;
 
 @end
 
@@ -75,15 +75,15 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKLogDistributorTests.data"];
     [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     
-    self.logStore = logStore;
+    self.defaultLogStore = logStore;
 }
 
 - (void)tearDown;
 {
-    [self.logStore clearLogs];
+    [self.defaultLogStore clearLogs];
     
     // Wait for logs to be cleared.
-    (void)[self.logStore allLogMessages];
+    (void)[self.defaultLogStore allLogMessages];
     
     // Remove the default store.
     [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
@@ -96,28 +96,29 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 - (void)test_logMessageClass_defaultsToARKLogMessage;
 {
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
-    [logDistributor addLogObserver:self.logStore];
+    ARKLogStore *logStore = [ARKLogStore new];
+    [logDistributor addLogObserver:logStore];
     
     [logDistributor logWithFormat:@"This log should be an ARKLogMessage"];
     
     [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     
-    XCTAssertEqual(self.logStore.allLogMessages.count, 1);
-    XCTAssertEqual([self.logStore.allLogMessages.firstObject class], [ARKLogMessage class]);
+    XCTAssertEqual(logStore.allLogMessages.count, 1);
+    XCTAssertEqual([logStore.allLogMessages.firstObject class], [ARKLogMessage class]);
 }
 
 - (void)test_setLogMessageClass_appendedLogsAreCorrectClass;
 {
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
-    [logDistributor addLogObserver:self.logStore];
+    [logDistributor addLogObserver:self.defaultLogStore];
     
     logDistributor.logMessageClass = [ARKLogMessageTestSubclass class];
     [logDistributor logWithFormat:@"This log should be an ARKLogMessageTestSubclass"];
     
     [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     
-    XCTAssertEqual(self.logStore.allLogMessages.count, 1);
-    XCTAssertEqual([self.logStore.allLogMessages.firstObject class], [ARKLogMessageTestSubclass class]);
+    XCTAssertEqual(self.defaultLogStore.allLogMessages.count, 1);
+    XCTAssertEqual([self.defaultLogStore.allLogMessages.firstObject class], [ARKLogMessageTestSubclass class]);
 }
 
 - (void)test_addLogObserver_notifiesLogObserverOnARKLog;
@@ -127,12 +128,12 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     XCTAssertEqual(testLogObserver.observedLogs.count, 0);
     
-    for (NSUInteger i  = 0; i < self.logStore.maximumLogMessageCount; i++) {
+    for (NSUInteger i  = 0; i < self.defaultLogStore.maximumLogMessageCount; i++) {
         ARKLog(@"Log %@", @(i));
     }
     
-    XCTAssertGreaterThan(self.logStore.allLogMessages.count, 0);
-    [self.logStore.allLogMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
+    XCTAssertGreaterThan(self.defaultLogStore.allLogMessages.count, 0);
+    [self.defaultLogStore.allLogMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
         XCTAssertEqualObjects(logMessage, testLogObserver.observedLogs[idx]);
     }];
     
@@ -189,7 +190,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     }];
     
     // Calling allLogMessges on the logStore will cause the logStore to fire ARKLogObserverRequiresAllPendingLogsNotification. This will call _flushLogDistributingQueue:, which will cause the queued observeLogMessage: calls to be executed. This will result in the logStore returing all logs that have been enqueued to date.
-    NSArray *allLogMessages = self.logStore.allLogMessages;
+    NSArray *allLogMessages = self.defaultLogStore.allLogMessages;
     
     // Internal log queue should now be empty.
     XCTAssertEqual(self.defaultLogDistributor.logDistributingQueue.operationCount, 0);
@@ -208,7 +209,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 - (void)test_logDistribution_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < 3 * self.logStore.maximumLogCountToPersist; i++) {
+    for (NSUInteger i  = 0; i < 3 * self.defaultLogStore.maximumLogCountToPersist; i++) {
         [numbers addObject:[NSString stringWithFormat:@"%@", @(i)]];
     }
     
