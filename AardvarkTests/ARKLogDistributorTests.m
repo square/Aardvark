@@ -203,4 +203,21 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     XCTAssertEqualObjects(allLogText, numbers);
 }
 
+#pragma mark - Performance Tests
+
+- (void)test_logDistribution_performance;
+{
+    NSMutableArray *numbers = [NSMutableArray new];
+    for (NSUInteger i  = 0; i < 3 * self.logStore.maximumLogCountToPersist; i++) {
+        [numbers addObject:[NSString stringWithFormat:@"%@", @(i)]];
+    }
+    
+    [self measureBlock:^{
+        // Concurrently add all of the logs.
+        [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
+            [self.defaultLogDistributor logWithFormat:@"%@", text];
+        }];
+    }];
+}
+
 @end
