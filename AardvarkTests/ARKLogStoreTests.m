@@ -344,8 +344,6 @@
         [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
             [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
         }];
-        
-        [self.logStore.logConsumingQueue waitUntilAllOperationsAreFinished];
     }];
 }
 
