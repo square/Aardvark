@@ -101,4 +101,14 @@
     XCTAssertEqualObjects(recentErrorLogs, nil);
 }
 
+- (void)test_addLogStores_enforcesARKLogStoreClass;
+{
+    XCTAssertThrows([self.bugReporter addLogStores:@[[NSObject new]]]);
+}
+
+- (void)test_removeLogStores_enforcesARKLogStoreClass;
+{
+    XCTAssertThrows([self.bugReporter removeLogStores:@[[NSObject new]]]);
+}
+
 @end

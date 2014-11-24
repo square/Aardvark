@@ -8,6 +8,6 @@
 
 @interface NSOperationQueue (ARKAdditions)
 
-- (void)performOperationWithBlock:(dispatch_block_t)block waitUntilFinished:(BOOL)wait;
+- (void)ARK_addOperationWithBlock:(dispatch_block_t)block waitUntilFinished:(BOOL)wait;
 
 @end

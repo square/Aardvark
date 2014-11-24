@@ -39,12 +39,12 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
     self.tapGestureLogStore.name = @"Taps";
     
     // Ensure that the tap log store will only store tap logs.
-    self.tapGestureLogStore.observeLogPredicate = ^(ARKLogMessage *logMessage) {
+    self.tapGestureLogStore.logFilterBlock = ^(ARKLogMessage *logMessage) {
         return [logMessage.userInfo[SampleViewControllerTapLogKey] boolValue];
     };
     
     // Do not log tap logs to the main tap log store.
-    [ARKLogDistributor defaultDistributor].defaultLogStore.observeLogPredicate = ^(ARKLogMessage *logMessage) {
+    [ARKLogDistributor defaultDistributor].defaultLogStore.logFilterBlock = ^(ARKLogMessage *logMessage) {
         return (BOOL)![logMessage.userInfo[SampleViewControllerTapLogKey] boolValue];
     };
     

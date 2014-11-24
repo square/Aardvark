@@ -11,7 +11,7 @@
 /// Called when the user has triggered the creation of a bug report.
 - (void)composeBugReport;
 
-/// Add logs from logStores to future bug reports. The bug reporter should hold weak references to the logStores.
+/// Add logs from logStores to future bug reports.
 - (void)addLogStores:(NSArray *)logStores;
 
 /// Remove logs from logStores from future bug reports.

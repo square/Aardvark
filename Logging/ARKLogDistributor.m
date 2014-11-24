@@ -55,6 +55,7 @@
     }
     
     _logDistributingQueue = [NSOperationQueue new];
+    _logDistributingQueue.name = [NSString stringWithFormat:@"%@ Log Distributing Queue", self];
     _logDistributingQueue.maxConcurrentOperationCount = 1;
 
 #ifdef __IPHONE_8_0
@@ -85,11 +86,11 @@
     } else {
         __block ARKLogStore *defaultLogStore = nil;
         
-        [self.logDistributingQueue performOperationWithBlock:^{
+        [self.logDistributingQueue ARK_addOperationWithBlock:^{
             defaultLogStore = _weakDefaultLogStore;
         } waitUntilFinished:YES];
         
-        return _weakDefaultLogStore;
+        return defaultLogStore;
     }
 }
 
@@ -116,7 +117,7 @@
     } else {
         __block Class logMessageClass = NULL;
         
-        [self.logDistributingQueue performOperationWithBlock:^{
+        [self.logDistributingQueue ARK_addOperationWithBlock:^{
             logMessageClass = _logMessageClass;
         } waitUntilFinished:YES];
         
@@ -143,7 +144,7 @@
 {
     NSAssert([logObserver conformsToProtocol:@protocol(ARKLogObserver)], @"Tried to add a log observer that does not conform to ARKLogDistributor protocol");
     
-    [self.logDistributingQueue performOperationWithBlock:^{
+    [self.logDistributingQueue ARK_addOperationWithBlock:^{
         if (![self.logObservers containsObject:logObserver]) {
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_flushLogDistributingQueue:) name:ARKLogObserverRequiresAllPendingLogsNotification object:logObserver];
             [self.logObservers addObject:logObserver];
@@ -153,7 +154,7 @@
 
 - (void)removeLogObserver:(id <ARKLogObserver>)logObserver;
 {
-    [self.logDistributingQueue performOperationWithBlock:^{
+    [self.logDistributingQueue ARK_addOperationWithBlock:^{
         if (logObserver) {
             [[NSNotificationCenter defaultCenter] removeObserver:self name:ARKLogObserverRequiresAllPendingLogsNotification object:logObserver];
         }

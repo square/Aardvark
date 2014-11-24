@@ -45,6 +45,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
     }
     
     _logConsumingQueue = [NSOperationQueue new];
+    _logConsumingQueue.name = [NSString stringWithFormat:@"%@ Log Consuming Queue", self];
     _logConsumingQueue.maxConcurrentOperationCount = 1;
     
 #ifdef __IPHONE_8_0
@@ -93,7 +94,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
         return _name;
     } else {
         __block NSString *name = nil;
-        [self.logConsumingQueue performOperationWithBlock:^{
+        [self.logConsumingQueue ARK_addOperationWithBlock:^{
             name = _name;
         } waitUntilFinished:YES];
         
@@ -116,7 +117,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
         return _maximumLogMessageCount;
     } else {
         __block NSUInteger maximumLogMessageCount = 0;
-        [self.logConsumingQueue performOperationWithBlock:^{
+        [self.logConsumingQueue ARK_addOperationWithBlock:^{
             maximumLogMessageCount = _maximumLogMessageCount;
         } waitUntilFinished:YES];
         
@@ -147,7 +148,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
         return _maximumLogCountToPersist;
     } else {
         __block NSUInteger maximumLogCountToPersist = 0;
-        [self.logConsumingQueue performOperationWithBlock:^{
+        [self.logConsumingQueue ARK_addOperationWithBlock:^{
             maximumLogCountToPersist = _maximumLogCountToPersist;
         } waitUntilFinished:YES];
         
@@ -172,7 +173,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
         return _persistedLogsFileURL;
     } else {
         __block NSURL *persistedLogsFileURL = nil;
-        [self.logConsumingQueue performOperationWithBlock:^{
+        [self.logConsumingQueue ARK_addOperationWithBlock:^{
             persistedLogsFileURL = _persistedLogsFileURL;
         } waitUntilFinished:YES];
         
@@ -198,7 +199,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
         return _logsToConsole;
     } else {
         __block BOOL logsToConsole = NO;
-        [self.logConsumingQueue performOperationWithBlock:^{
+        [self.logConsumingQueue ARK_addOperationWithBlock:^{
             logsToConsole = _logsToConsole;
         } waitUntilFinished:YES];
         
@@ -221,7 +222,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
         return _logFilterBlock;
     } else {
         __block BOOL (^logFilterBlock)(ARKLogMessage *) = NULL;
-        [self.logConsumingQueue performOperationWithBlock:^{
+        [self.logConsumingQueue ARK_addOperationWithBlock:^{
             logFilterBlock = _logFilterBlock;
         } waitUntilFinished:YES];
         
@@ -277,7 +278,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
     
     __block NSArray *logMessages = nil;
     
-    [self.logConsumingQueue performOperationWithBlock:^{
+    [self.logConsumingQueue ARK_addOperationWithBlock:^{
         [self _trimLogs_inLogConsumingQueue];
         logMessages = [self.logMessages copy];
     } waitUntilFinished:YES];

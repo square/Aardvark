@@ -23,7 +23,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @interface ARKEmailBugReporter () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, strong, readwrite) UIView *whiteScreen;
+@property (nonatomic, strong, readwrite) UIView *whiteScreenView;
 
 @property (nonatomic, strong) MFMailComposeViewController *mailComposeViewController;
 @property (nonatomic, strong) UIWindow *emailComposeWindow;
@@ -81,16 +81,16 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     NSAssert(self.bugReportRecipientEmailAddress.length, @"Attempting to compose a bug report without a recipient email address.");
     NSAssert(self.mutableLogStores.count > 0, @"Attempting to compose a bug report without logs.");
     
-    if (!self.whiteScreen) {
+    if (!self.whiteScreenView) {
         // Take a screenshot.
         ARKLogScreenshot();
         
         // Flash the screen to simulate a screenshot being taken.
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-        self.whiteScreen = [[UIView alloc] initWithFrame:keyWindow.frame];
-        self.whiteScreen.layer.opacity = 0.0f;
-        self.whiteScreen.layer.backgroundColor = [[UIColor whiteColor] CGColor];
-        [keyWindow addSubview:self.whiteScreen];
+        self.whiteScreenView = [[UIView alloc] initWithFrame:keyWindow.frame];
+        self.whiteScreenView.layer.opacity = 0.0f;
+        self.whiteScreenView.layer.backgroundColor = [[UIColor whiteColor] CGColor];
+        [keyWindow addSubview:self.whiteScreenView];
         
         CAKeyframeAnimation *screenFlash = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
         screenFlash.duration = 0.8;
@@ -99,7 +99,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         screenFlash.delegate = self;
         
         // Start the screen flash animation. Once this is done we'll fire up the bug reporter.
-        [self.whiteScreen.layer addAnimation:screenFlash forKey:ARKScreenshotFlashAnimationKey];
+        [self.whiteScreenView.layer addAnimation:screenFlash forKey:ARKScreenshotFlashAnimationKey];
     }
 }
 
@@ -107,10 +107,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     NSAssert(self.mailComposeViewController == nil, @"Can not add a log store while a bug is being composed.");
     
-    for (id logStore in logStores) {
+    for (ARKLogStore *logStore in logStores) {
         NSAssert([logStore isKindOfClass:[ARKLogStore class]], @"Can not add a log store of class %@", NSStringFromClass([logStore class]));
         
-        [self.mutableLogStores addObject:[NSValue valueWithNonretainedObject:logStore]];
+        [self.mutableLogStores addObject:logStore];
     }
 }
 
@@ -118,18 +118,17 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     NSAssert(self.mailComposeViewController == nil, @"Can not add a remove a controller while a bug is being composed.");
     
-    for (id logStore in logStores) {
+    for (ARKLogStore *logStore in logStores) {
         NSAssert([logStore isKindOfClass:[ARKLogStore class]], @"Can not remove a log store of class %@", NSStringFromClass([logStore class]));
         
-        [self.mutableLogStores removeObject:[NSValue valueWithNonretainedObject:logStore]];
+        [self.mutableLogStores removeObject:logStore];
     }
 }
 
 - (NSArray *)logStores;
 {
     NSMutableArray *logStores = [NSMutableArray new];
-    for (NSValue *logStoreValue in [self.mutableLogStores copy]) {
-        ARKLogStore *logStore = logStoreValue.nonretainedObjectValue;
+    for (ARKLogStore *logStore in [self.mutableLogStores copy]) {
         if (logStore) {
             [logStores addObject:logStore];
         }
@@ -142,8 +141,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished;
 {
-    [self.whiteScreen removeFromSuperview];
-    self.whiteScreen = nil;
+    [self.whiteScreenView removeFromSuperview];
+    self.whiteScreenView = nil;
     
     /*
      iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
