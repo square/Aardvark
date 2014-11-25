@@ -131,10 +131,8 @@
 
 - (void)distributeAllPendingLogsWithCompletionHandler:(dispatch_block_t)completionHandler;
 {
-    NSOperationQueue *callingQueue = ([NSOperationQueue currentQueue] ?: [NSOperationQueue mainQueue]);
-    
     [self.logDistributingQueue addOperationWithBlock:^{
-        [callingQueue addOperationWithBlock:^{
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             if (completionHandler) {
                 completionHandler();
             }

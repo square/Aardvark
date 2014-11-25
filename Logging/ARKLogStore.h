@@ -33,7 +33,7 @@
 /// Block that allows for filtering logs. Return YES if the receiver should observe the supplied log.
 @property (atomic, copy, readwrite) BOOL (^logFilterBlock)(ARKLogMessage *logMessage);
 
-/// Retrieves an array of ARKLogMessage objects. Completion handler is called on the calling queue, or the main queue if the calling queue can not be determined.
+/// Retrieves an array of ARKLogMessage objects. Completion handler is called on the main queue.
 - (void)retrieveAllLogMessagesWithCompletionHandler:(void (^)(NSArray *logMessages))completionHandler;
 
 /// Removes all logs.

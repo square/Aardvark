@@ -29,7 +29,7 @@
 /// Releases an object that handles logging.
 - (void)removeLogObserver:(id <ARKLogObserver>)logObserver;
 
-/// Calling this causes an asynchronous flush of the internal queue. The completion handler is called once all pending logs have been distributed. Completion handler is called on the calling queue, or the main queue if the calling queue can not be determined.
+/// Calling this causes an asynchronous flush of the internal queue. The completion handler is called once all pending logs have been distributed. Completion handler is called on the main queue.
 - (void)distributeAllPendingLogsWithCompletionHandler:(dispatch_block_t)completionHandler;
 
 /// Distributes the log to the log observers.

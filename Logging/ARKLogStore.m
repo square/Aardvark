@@ -74,9 +74,6 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
-    // We're guaranteed that no one is logging to us since we're in dealloc. Set our log consuming queue to be the current queue to ensure property access is instant.
-    _logObservingQueue = [NSOperationQueue currentQueue];
-    
     // Force our log distributor to nil so persisting logs does not wait on the distributor.
     _logDistributor = nil;
     
@@ -154,7 +151,6 @@
 - (void)retrieveAllLogMessagesWithCompletionHandler:(void (^)(NSArray *logMessages))completionHandler;
 {
     NSAssert(self.logDistributor, @"Can not retrieve log messages without a log distributor");
-    NSOperationQueue *callingQueue = ([NSOperationQueue currentQueue] ?: [NSOperationQueue mainQueue]);
     
     // Ensure we observe all log messages that have been queued by the distributor before we retrieve the our logs.
     [self.logDistributor distributeAllPendingLogsWithCompletionHandler:^{
@@ -162,7 +158,7 @@
             [self _trimLogs_inLogObservingQueue];
             if (completionHandler) {
                 NSArray *logMessages = [self.logMessages copy];
-                [callingQueue addOperationWithBlock:^{
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
                     completionHandler(logMessages);
                 }];
             }
