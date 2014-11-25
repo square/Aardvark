@@ -13,6 +13,7 @@
 
 #import "ARKLogDistributor.h"
 #import "ARKLogStore.h"
+#import "ARKLogStore_Testing.h"
 
 
 @interface ARKEmailBugReporterTests : XCTestCase
@@ -43,12 +44,10 @@
 
 - (void)tearDown;
 {
-    [self.logStore clearLogs];
-    
-    // Wait for logs to clear.
-    (void)[self.logStore allLogMessages];
-    
     [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
+    
+    [self.logStore clearLogs];
+    [self.logStore.logObservingQueue waitUntilAllOperationsAreFinished];
     
     [super tearDown];
 }
@@ -68,37 +67,61 @@
     }];
     
     const NSUInteger numberOfRecentErrorLogs = 5;
-    NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:self.logStore.allLogMessages count:numberOfRecentErrorLogs];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"test_recentErrorLogMessagesAsPlainText_countRespected"];
+    [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
+        XCTAssertEqual([recentErrorLogs componentsSeparatedByString:@"\n"].count, numberOfRecentErrorLogs);
+        
+        [expectation fulfill];
+    }];
     
-    XCTAssertEqual([recentErrorLogs componentsSeparatedByString:@"\n"].count, numberOfRecentErrorLogs);
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_recentErrorLogMessagesAsPlainText_returnsNilIfNoErrorLogsPresent;
 {
     const NSUInteger numberOfRecentErrorLogs = 5;
-    NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:self.logStore.allLogMessages count:numberOfRecentErrorLogs];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"test_recentErrorLogMessagesAsPlainText_returnsNilIfNoErrorLogsPresent"];
+    [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        __block NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
+        
+        XCTAssertEqualObjects(recentErrorLogs, nil);
+        
+        ARKLog(@"This is not an error");
+        
+        [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+            recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
+            
+            XCTAssertEqualObjects(recentErrorLogs, nil);
+            
+            [expectation fulfill];
+        }];
+    }];
     
-    XCTAssertEqualObjects(recentErrorLogs, nil);
-    
-    ARKLog(@"This is not an error");
-    
-    recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:self.logStore.allLogMessages count:numberOfRecentErrorLogs];
-    
-    XCTAssertEqualObjects(recentErrorLogs, nil);
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_recentErrorLogMessagesAsPlainText_returnsNilIfRecentErrorLogsIsZero;
 {
     const NSUInteger numberOfRecentErrorLogs = 0;
-    NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:self.logStore.allLogMessages count:numberOfRecentErrorLogs];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"test_recentErrorLogMessagesAsPlainText_returnsNilIfRecentErrorLogsIsZero"];
+    [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        __block NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
+        
+        XCTAssertEqualObjects(recentErrorLogs, nil);
+        
+        ARKLog(@"This is not an error");
+        
+        [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+            recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
+            
+            XCTAssertEqualObjects(recentErrorLogs, nil);
+            
+            [expectation fulfill];
+        }];
+    }];
     
-    XCTAssertEqualObjects(recentErrorLogs, nil);
-    
-    ARKLog(@"This is not an error");
-    
-    recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:self.logStore.allLogMessages count:numberOfRecentErrorLogs];
-    
-    XCTAssertEqualObjects(recentErrorLogs, nil);
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_addLogStores_enforcesARKLogStoreClass;

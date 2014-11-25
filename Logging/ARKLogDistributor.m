@@ -12,15 +12,17 @@
 #import "ARKLogMessage.h"
 #import "ARKLogObserver.h"
 #import "ARKLogStore.h"
-#import "NSOperationQueue+ARKAdditions.h"
 
 
 @interface ARKLogDistributor ()
 
 @property (nonatomic, strong, readonly) NSOperationQueue *logDistributingQueue;
-@property (nonatomic, strong, readonly) NSMutableArray *logObservers;
+@property (atomic, strong, readonly) NSMutableArray *logObservers;
 
-@property (nonatomic, weak, readwrite) ARKLogStore *weakDefaultLogStore;
+@property (atomic, assign, readwrite) Class internalLogMessageClass;
+@property (atomic, weak, readwrite) ARKLogStore *weakDefaultLogStore;
+
+@property (nonatomic, strong, readonly) NSObject *logObserverSynchronization;
 
 @end
 
@@ -28,8 +30,6 @@
 @implementation ARKLogDistributor
 
 @dynamic defaultLogStore;
-@synthesize logMessageClass = _logMessageClass;
-@synthesize logObservers = _logObservers;
 
 #pragma mark - Class Methods
 
@@ -65,6 +65,7 @@
 #endif
     
     _logObservers = [NSMutableArray new];
+    _logObserverSynchronization = [NSObject new];
     
     // Use setters on public properties to ensure consistency.
     self.logMessageClass = [ARKLogMessage class];
@@ -72,95 +73,73 @@
     return self;
 }
 
-- (void)dealloc;
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
 #pragma mark - Properties
 
 - (ARKLogStore *)defaultLogStore;
 {
-    if ([NSOperationQueue currentQueue] == self.logDistributingQueue) {
-        return _weakDefaultLogStore;
-    } else {
-        __block ARKLogStore *defaultLogStore = nil;
-        
-        [self.logDistributingQueue ARK_addOperationWithBlock:^{
-            defaultLogStore = _weakDefaultLogStore;
-        } waitUntilFinished:YES];
-        
-        return defaultLogStore;
-    }
+    return self.weakDefaultLogStore;
 }
 
 - (void)setDefaultLogStore:(ARKLogStore *)logStore;
 {
     // Remove the old log store.
-    [self removeLogObserver:_weakDefaultLogStore];
+    [self removeLogObserver:self.weakDefaultLogStore];
     
     if (logStore) {
         // Add the new log store. The logObserver array will hold onto the log store strongly.
         [self addLogObserver:logStore];
     }
     
-    [self.logDistributingQueue addOperationWithBlock:^{
-        // Store the log store weakly.
-        _weakDefaultLogStore = logStore;
-    }];
+    // Store the log store weakly.
+    self.weakDefaultLogStore = logStore;
 }
 
 - (Class)logMessageClass;
 {
-    if ([NSOperationQueue currentQueue] == self.logDistributingQueue) {
-        return _logMessageClass;
-    } else {
-        __block Class logMessageClass = NULL;
-        
-        [self.logDistributingQueue ARK_addOperationWithBlock:^{
-            logMessageClass = _logMessageClass;
-        } waitUntilFinished:YES];
-        
-        return logMessageClass;
-    }
+    return self.internalLogMessageClass;
 }
 
 - (void)setLogMessageClass:(Class)logMessageClass;
 {
     NSAssert([logMessageClass isSubclassOfClass:[ARKLogMessage class]], @"Attempting to set a logMessageClass that is not a subclass of ARKLogMessage!");
     
-    [self.logDistributingQueue addOperationWithBlock:^{
-        if (_logMessageClass == logMessageClass) {
-            return;
-        }
-        
-        _logMessageClass = logMessageClass;
-    }];
+    self.internalLogMessageClass = logMessageClass;
 }
 
-#pragma mark - Public Methods - Log Handlers
+#pragma mark - Public Methods - Log Observers
 
 - (void)addLogObserver:(id <ARKLogObserver>)logObserver;
 {
     NSAssert([logObserver conformsToProtocol:@protocol(ARKLogObserver)], @"Tried to add a log observer that does not conform to ARKLogDistributor protocol");
+    NSAssert(!logObserver.logDistributor || logObserver.logDistributor == self, @"Log observer already has a distributor");
     
-    [self.logDistributingQueue ARK_addOperationWithBlock:^{
+    logObserver.logDistributor = self;
+    @synchronized(self.logObserverSynchronization) {
         if (![self.logObservers containsObject:logObserver]) {
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_flushLogDistributingQueue:) name:ARKLogObserverRequiresAllPendingLogsNotification object:logObserver];
             [self.logObservers addObject:logObserver];
         }
-    } waitUntilFinished:YES];
+    }
 }
 
 - (void)removeLogObserver:(id <ARKLogObserver>)logObserver;
 {
-    [self.logDistributingQueue ARK_addOperationWithBlock:^{
-        if (logObserver) {
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:ARKLogObserverRequiresAllPendingLogsNotification object:logObserver];
-        }
-        
+    logObserver.logDistributor = nil;
+    @synchronized(self.logObserverSynchronization) {
         [self.logObservers removeObject:logObserver];
-    } waitUntilFinished:YES];
+    }
+}
+
+- (void)distributeAllPendingLogsWithCompletionHandler:(dispatch_block_t)completionHandler;
+{
+    NSOperationQueue *callingQueue = ([NSOperationQueue currentQueue] ?: [NSOperationQueue mainQueue]);
+    
+    [self.logDistributingQueue addOperationWithBlock:^{
+        [callingQueue addOperationWithBlock:^{
+            if (completionHandler) {
+                completionHandler();
+            }
+        }];
+    }];
 }
 
 #pragma mark - Public Methods - Appending Logs
@@ -174,8 +153,10 @@
 
 - (void)logWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 {
+    Class logMessageClass = self.logMessageClass;
+    
     [self.logDistributingQueue addOperationWithBlock:^{
-        ARKLogMessage *logMessage = [[self.logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
+        ARKLogMessage *logMessage = [[logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
         
         [self _logMessage_inLogDistributingQueue:logMessage];
     }];
@@ -225,7 +206,12 @@
 
 - (void)_logMessage_inLogDistributingQueue:(ARKLogMessage *)logMessage;
 {
-    for (id <ARKLogObserver> logObserver in self.logObservers) {
+    NSArray *logObservers = nil;
+    @synchronized(self.logObserverSynchronization) {
+        logObservers = [self.logObservers copy];
+    }
+    
+    for (id <ARKLogObserver> logObserver in logObservers) {
         [logObserver observeLogMessage:logMessage];
     }
 }

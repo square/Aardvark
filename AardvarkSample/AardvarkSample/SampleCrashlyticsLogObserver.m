@@ -14,6 +14,10 @@
 
 @implementation SampleCrashlyticsLogObserver
 
+@synthesize logDistributor;
+
+#pragma mark - ARKLogObserver
+
 - (void)observeLogMessage:(ARKLogMessage *)logMessage;
 {
     CLSLog(@"%@", logMessage.text);

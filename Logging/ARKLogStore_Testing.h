@@ -9,11 +9,11 @@
 @interface ARKLogStore (Private)
 
 - (NSMutableArray *)logMessages;
-- (NSOperationQueue *)logConsumingQueue;
+- (NSOperationQueue *)logObservingQueue;
 
 - (NSArray *)_persistedLogs;
-- (void)_persistLogs_inLogConsumingQueue;
-- (void)_trimLogs_inLogConsumingQueue;
-- (NSArray *)_trimmedLogsToPersist_inLogConsumingQueue;
+- (void)_persistLogs_inLogObservingQueue;
+- (void)_trimLogs_inLogObservingQueue;
+- (void)_trimmedLogsToPersist_inLogObservingQueue:(void (^)(NSArray *logsToPersist))completionHandler;
 
 @end

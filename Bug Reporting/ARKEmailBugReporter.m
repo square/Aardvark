@@ -168,6 +168,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     if (alertView.firstOtherButtonIndex == buttonIndex) {
         NSString *bugTitle = [alertView textFieldAtIndex:0].text;
+        NSUInteger logStoreCount = self.logStores.count;
+        __block NSUInteger logStoresProcessed = 0;
         
         if ([MFMailComposeViewController canSendMail]) {
             self.mailComposeViewController = [MFMailComposeViewController new];
@@ -178,56 +180,61 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             NSMutableString *emailBody = [NSMutableString stringWithFormat:@"%@\n", self.prefilledEmailBody];
             
             for (ARKLogStore *logStore in self.logStores) {
-                NSArray *logMessages = logStore.allLogMessages;
-                
-                NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
-                NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for plaintext logs") stringByAppendingPathExtension:@"txt"];
-                NSMutableString *emailBodyForLogStore = [NSMutableString new];
-                BOOL appendToEmailBody = NO;
-                
-                if (logStore.name.length) {
-                    [emailBodyForLogStore appendFormat:@"%@:\n", logStore.name];
-                    screenshotFileName = [logStore.name stringByAppendingFormat:@"_%@", screenshotFileName];
-                    logsFileName = [logStore.name stringByAppendingFormat:@"_%@", logsFileName];
-                }
-                
-                NSString *recentErrorLogs = [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable];
-                if (recentErrorLogs.length) {
-                    [emailBodyForLogStore appendFormat:@"%@\n", recentErrorLogs];
-                    appendToEmailBody = YES;
-                }
-                
-                if (appendToEmailBody) {
-                    [emailBody appendString:emailBodyForLogStore];
-                }
-                
-                NSData *mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
-                if (mostRecentImage.length) {
-                    [self.mailComposeViewController addAttachmentData:mostRecentImage mimeType:@"image/png" fileName:screenshotFileName];
-                }
-                
-                NSData *formattedLogs = [self formattedLogMessagesAsData:logMessages];
-                if (formattedLogs.length) {
-                    [self.mailComposeViewController addAttachmentData:formattedLogs mimeType:@"text/plain" fileName:logsFileName];
-                }
+                [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+                    NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
+                    NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for plaintext logs") stringByAppendingPathExtension:@"txt"];
+                    NSMutableString *emailBodyForLogStore = [NSMutableString new];
+                    BOOL appendToEmailBody = NO;
+                    
+                    if (logStore.name.length) {
+                        [emailBodyForLogStore appendFormat:@"%@:\n", logStore.name];
+                        screenshotFileName = [logStore.name stringByAppendingFormat:@"_%@", screenshotFileName];
+                        logsFileName = [logStore.name stringByAppendingFormat:@"_%@", logsFileName];
+                    }
+                    
+                    NSString *recentErrorLogs = [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable];
+                    if (recentErrorLogs.length) {
+                        [emailBodyForLogStore appendFormat:@"%@\n", recentErrorLogs];
+                        appendToEmailBody = YES;
+                    }
+                    
+                    if (appendToEmailBody) {
+                        [emailBody appendString:emailBodyForLogStore];
+                    }
+                    
+                    NSData *mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
+                    if (mostRecentImage.length) {
+                        [self.mailComposeViewController addAttachmentData:mostRecentImage mimeType:@"image/png" fileName:screenshotFileName];
+                    }
+                    
+                    NSData *formattedLogs = [self formattedLogMessagesAsData:logMessages];
+                    if (formattedLogs.length) {
+                        [self.mailComposeViewController addAttachmentData:formattedLogs mimeType:@"text/plain" fileName:logsFileName];
+                    }
+                    
+                    logStoresProcessed++;
+                    if (logStoresProcessed == logStoreCount) {
+                        [self.mailComposeViewController setMessageBody:emailBody isHTML:NO];
+                        self.mailComposeViewController.mailComposeDelegate = self;
+                        [self _showEmailComposeWindow];
+                    }
+                }];
             }
             
-            [self.mailComposeViewController setMessageBody:emailBody isHTML:NO];
-            
-            self.mailComposeViewController.mailComposeDelegate = self;
-            
-            [self _showEmailComposeWindow];
         } else {
             NSMutableString *emailBody = [NSMutableString new];
             for (ARKLogStore *logStore in self.logStores) {
-                NSArray *logMessages = logStore.allLogMessages;
-                
-                [emailBody appendFormat:@"%@\n%@\n", self.prefilledEmailBody, [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
-            }
-            
-            NSURL *composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:bugTitle body:emailBody];
-            if (composeEmailURL != nil) {
-                [[UIApplication sharedApplication] openURL:composeEmailURL];
+                [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+                    [emailBody appendFormat:@"%@\n%@\n", self.prefilledEmailBody, [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
+                    
+                    logStoresProcessed++;
+                    if (logStoresProcessed == logStoreCount) {
+                        NSURL *composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:bugTitle body:emailBody];
+                        if (composeEmailURL != nil) {
+                            [[UIApplication sharedApplication] openURL:composeEmailURL];
+                        }
+                    }
+                }];
             }
         }
     }

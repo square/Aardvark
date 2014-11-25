@@ -59,7 +59,7 @@
 {
     [super viewDidLayoutSubviews];
     
-    if (!self.hasScrolledToBottom) {
+    if (!self.hasScrolledToBottom && self.logMessages.count > 0) {
         [self _scrollTableViewToBottomAnimated:NO];
         self.hasScrolledToBottom = YES;
     }
@@ -263,8 +263,10 @@
 
 - (void)_reloadLogs;
 {
-    self.logMessages = [self.logStore allLogMessages];
-    [self.tableView reloadData];
+    [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        self.logMessages = logMessages;
+        [self.tableView reloadData];
+    }];
 }
 
 - (void)_viewWillAppearForFirstTime:(BOOL)animated;

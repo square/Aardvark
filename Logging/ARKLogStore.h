@@ -9,38 +9,34 @@
 #import <Aardvark/ARKLogObserver.h>
 
 
-/// Posting this notification triggers the owning log distributor to immediately distribute pending logs to the observer.
-extern NSString *const ARKLogObserverRequiresAllPendingLogsNotification;
-
-
 /// Stores log messages locally for use in bug reports. All methods and properties on this class are threadsafe.
 @interface ARKLogStore : NSObject <ARKLogObserver>
 
 /// Creates an ARKLogStore with persistedLogsFileURL set to the supplied fileName within the application support directory.
 - (instancetype)initWithPersistedLogFileName:(NSString *)fileName;
 
-/// Convenience property that allows bug reporters to prefix logs with the name of the store they came from. Defaults to nil. Accessor blocks on logging queue; setter is non-blocking.
-@property (nonatomic, copy, readwrite) NSString *name;
+/// Convenience property that allows bug reporters to prefix logs with the name of the store they came from. Defaults to nil.
+@property (atomic, copy, readwrite) NSString *name;
 
-/// The maximum number of logs allLogMessages should return. Defaults to 2000. Old messages are purged once this limit is hit. Accessor blocks on logging queue; setter is non-blocking.
-@property (nonatomic, assign, readwrite) NSUInteger maximumLogMessageCount;
+/// The maximum number of logs retrieveAllLogMessagesWithCompletionHandler: should return. Defaults to 2000. Old messages are purged once this limit is hit.
+@property (atomic, assign, readwrite) NSUInteger maximumLogMessageCount;
 
-/// The maximum number of logs to persist to disk. Defaults to 500. Accessor blocks on log distributing queue; setter is non-blocking.
-@property (nonatomic, assign, readwrite) NSUInteger maximumLogCountToPersist;
+/// The maximum number of logs to persist to disk. Defaults to 500.
+@property (atomic, assign, readwrite) NSUInteger maximumLogCountToPersist;
 
-/// Path to the file on disk that contains peristed logs. Defaults to nil. Accessor blocks on log distributing queue; setter is non-blocking.
-@property (nonatomic, copy, readwrite) NSURL *persistedLogsFileURL;
+/// Path to the file on disk that contains peristed logs. Defaults to nil.
+@property (atomic, copy, readwrite) NSURL *persistedLogsFileURL;
 
-/// Controls whether consuming logs also outputs to NSLog. Defaults to NO. Accessor blocks on log distributing queue; setter is non-blocking.
-@property (nonatomic, assign, readwrite) BOOL logsToConsole;
+/// Controls whether consuming logs also outputs to NSLog. Defaults to NO.
+@property (atomic, assign, readwrite) BOOL logsToConsole;
 
 /// Block that allows for filtering logs. Return YES if the receiver should observe the supplied log.
-@property (nonatomic, copy, readwrite) BOOL (^logFilterBlock)(ARKLogMessage *logMessage);
+@property (atomic, copy, readwrite) BOOL (^logFilterBlock)(ARKLogMessage *logMessage);
 
-/// Returns an array of ARKLogMessage objects. Blocks on log distributing queue.
-- (NSArray *)allLogMessages;
+/// Retrieves an array of ARKLogMessage objects. Completion handler is called on the calling queue, or the main queue if the calling queue can not be determined.
+- (void)retrieveAllLogMessagesWithCompletionHandler:(void (^)(NSArray *logMessages))completionHandler;
 
-/// Removes all logs. Non-blocking call.
+/// Removes all logs.
 - (void)clearLogs;
 
 @end

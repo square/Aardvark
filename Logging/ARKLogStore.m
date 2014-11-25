@@ -11,29 +11,23 @@
 
 #import "ARKLogDistributor.h"
 #import "ARKLogMessage.h"
-#import "NSOperationQueue+ARKAdditions.h"
-
-
-NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObserverRequiresAllPendingLogs";
 
 
 @interface ARKLogStore ()
 
 @property (nonatomic, strong, readwrite) NSMutableArray *logMessages;
-@property (nonatomic, strong, readonly) NSOperationQueue *logConsumingQueue;
+@property (nonatomic, strong, readonly) NSOperationQueue *logObservingQueue;
 @property (nonatomic, assign, readwrite) UIBackgroundTaskIdentifier persistLogsBackgroundTaskIdentifier;
+
+@property (atomic, assign, readwrite) NSUInteger internalMaximumLogMessageCount;
+@property (atomic, copy, readwrite) NSURL *internalPersistedLogsFileURL;
 
 @end
 
 
 @implementation ARKLogStore
 
-@synthesize name = _name;
-@synthesize maximumLogMessageCount = _maximumLogMessageCount;
-@synthesize maximumLogCountToPersist = _maximumLogCountToPersist;
-@synthesize persistedLogsFileURL = _persistedLogsFileURL;
-@synthesize logFilterBlock = _logFilterBlock;
-@synthesize logsToConsole = _logsToConsole;
+@synthesize logDistributor = _logDistributor;
 
 #pragma mark - Initialization
 
@@ -44,19 +38,20 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
         return nil;
     }
     
-    _logConsumingQueue = [NSOperationQueue new];
-    _logConsumingQueue.name = [NSString stringWithFormat:@"%@ Log Consuming Queue", self];
-    _logConsumingQueue.maxConcurrentOperationCount = 1;
+    _logObservingQueue = [NSOperationQueue new];
+    _logObservingQueue.name = [NSString stringWithFormat:@"%@ Log Observing Queue", self];
+    _logObservingQueue.maxConcurrentOperationCount = 1;
     
 #ifdef __IPHONE_8_0
-    if ([_logConsumingQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
-        _logConsumingQueue.qualityOfService = NSQualityOfServiceBackground;
+    if ([_logObservingQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
+        _logObservingQueue.qualityOfService = NSQualityOfServiceBackground;
     }
 #endif
     
-    // Use setters on public properties to ensure consistency.
-    self.maximumLogMessageCount = 2000;
-    self.maximumLogCountToPersist = 500;
+    _internalMaximumLogMessageCount = 2000;
+    [self _initializeLogMessages_inLogObservingQueue];
+    
+    _maximumLogCountToPersist = 500;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillResignActiveNotification:) name:UIApplicationWillResignActiveNotification object:[UIApplication sharedApplication]];
     
@@ -80,164 +75,49 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     // We're guaranteed that no one is logging to us since we're in dealloc. Set our log consuming queue to be the current queue to ensure property access is instant.
-    _logConsumingQueue = [NSOperationQueue currentQueue];
+    _logObservingQueue = [NSOperationQueue currentQueue];
+    
+    // Force our log distributor to nil so persisting logs does not wait on the distributor.
+    _logDistributor = nil;
     
     // Persist the logs on whatever thread we're on.
-    [self _persistLogs_inLogConsumingQueue];
+    [self _persistLogs_inLogObservingQueue];
 }
 
 #pragma mark - Properties
 
-- (NSString *)name;
-{
-    if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
-        return _name;
-    } else {
-        __block NSString *name = nil;
-        [self.logConsumingQueue ARK_addOperationWithBlock:^{
-            name = _name;
-        } waitUntilFinished:YES];
-        
-        return name;
-    }
-}
-
-- (void)setName:(NSString *)name;
-{
-    [self.logConsumingQueue addOperationWithBlock:^{
-        if (![_name isEqualToString:name]) {
-            _name = [name copy];
-        }
-    }];
-}
-
 - (NSUInteger)maximumLogMessageCount;
 {
-    if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
-        return _maximumLogMessageCount;
-    } else {
-        __block NSUInteger maximumLogMessageCount = 0;
-        [self.logConsumingQueue ARK_addOperationWithBlock:^{
-            maximumLogMessageCount = _maximumLogMessageCount;
-        } waitUntilFinished:YES];
-        
-        return maximumLogMessageCount;
-    }
+    return self.internalMaximumLogMessageCount;
 }
 
 - (void)setMaximumLogMessageCount:(NSUInteger)maximumLogCount;
 {
-    [self.logConsumingQueue addOperationWithBlock:^{
-        if (_maximumLogMessageCount == maximumLogCount) {
-            return;
-        }
-        
-        _maximumLogMessageCount = maximumLogCount;
-        
+    self.internalMaximumLogMessageCount = maximumLogCount;
+    
+    [self.logObservingQueue addOperationWithBlock:^{
         if (maximumLogCount == 0) {
             self.logMessages = nil;
         } else if (self.logMessages == nil) {
-            [self _initializeLogMessages_inLogConsumingQueue];
+            [self _initializeLogMessages_inLogObservingQueue];
         }
-    }];
-}
-
-- (NSUInteger)maximumLogCountToPersist;
-{
-    if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
-        return _maximumLogCountToPersist;
-    } else {
-        __block NSUInteger maximumLogCountToPersist = 0;
-        [self.logConsumingQueue ARK_addOperationWithBlock:^{
-            maximumLogCountToPersist = _maximumLogCountToPersist;
-        } waitUntilFinished:YES];
-        
-        return maximumLogCountToPersist;
-    }
-}
-
-- (void)setMaximumLogCountToPersist:(NSUInteger)maximumLogCountToPersist;
-{
-    [self.logConsumingQueue addOperationWithBlock:^{
-        if (_maximumLogCountToPersist == maximumLogCountToPersist) {
-            return;
-        }
-        
-        _maximumLogCountToPersist = maximumLogCountToPersist;
     }];
 }
 
 - (NSURL *)persistedLogsFileURL;
 {
-    if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
-        return _persistedLogsFileURL;
-    } else {
-        __block NSURL *persistedLogsFileURL = nil;
-        [self.logConsumingQueue ARK_addOperationWithBlock:^{
-            persistedLogsFileURL = _persistedLogsFileURL;
-        } waitUntilFinished:YES];
-        
-        return persistedLogsFileURL;
-    }
+    return self.internalPersistedLogsFileURL;
 }
 
 - (void)setPersistedLogsFileURL:(NSURL *)persistedLogsFileURL;
 {
-    [self.logConsumingQueue addOperationWithBlock:^{
-        if (![_persistedLogsFileURL isEqual:persistedLogsFileURL]) {
-            _persistedLogsFileURL = [persistedLogsFileURL copy];
-            NSArray *persistedLogs = [self _persistedLogs];
-            
-            [self.logMessages addObjectsFromArray:persistedLogs];
-        }
-    }];
-}
-
-- (BOOL)logsToConsole;
-{
-    if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
-        return _logsToConsole;
-    } else {
-        __block BOOL logsToConsole = NO;
-        [self.logConsumingQueue ARK_addOperationWithBlock:^{
-            logsToConsole = _logsToConsole;
-        } waitUntilFinished:YES];
-        
-        return logsToConsole;
+    if ([self.internalPersistedLogsFileURL isEqual:persistedLogsFileURL]) {
+        return;
     }
-}
-
-- (void)setLogsToConsole:(BOOL)logsToConsole;
-{
-    [self.logConsumingQueue addOperationWithBlock:^{
-        if (_logsToConsole != logsToConsole) {
-            _logsToConsole = logsToConsole;
-        }
-    }];
-}
-
-- (BOOL (^)(ARKLogMessage *))logFilterBlock;
-{
-    if ([NSOperationQueue currentQueue] == self.logConsumingQueue) {
-        return _logFilterBlock;
-    } else {
-        __block BOOL (^logFilterBlock)(ARKLogMessage *) = NULL;
-        [self.logConsumingQueue ARK_addOperationWithBlock:^{
-            logFilterBlock = _logFilterBlock;
-        } waitUntilFinished:YES];
-        
-        return logFilterBlock;
-    }
-}
-
-- (void)setObserveLogPredicate:(BOOL (^)(ARKLogMessage *))logFilterBlock;
-{
-    [self.logConsumingQueue addOperationWithBlock:^{
-        if (_logFilterBlock == logFilterBlock) {
-            return;
-        }
-        
-        _logFilterBlock = [logFilterBlock copy];
+    
+    self.internalPersistedLogsFileURL = persistedLogsFileURL;
+    [self.logObservingQueue addOperationWithBlock:^{
+        [self.logMessages addObjectsFromArray:[self _persistedLogs]];
     }];
 }
 
@@ -245,7 +125,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
 
 - (void)observeLogMessage:(ARKLogMessage *)logMessage;
 {
-    [self.logConsumingQueue addOperationWithBlock:^{
+    [self.logObservingQueue addOperationWithBlock:^{
         if (self.logFilterBlock && !self.logFilterBlock(logMessage)) {
             // Predicate told us we should not observe this log. Bail out.
             return;
@@ -254,7 +134,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
         // Don't proactively trim too often.
         if (self.maximumLogMessageCount > 0 && self.logMessages.count >= [self _maximumLogMessageCountToKeepInMemory]) {
             // We've held on to 2x more logs than we'll ever expose. Trim!
-            [self _trimLogs_inLogConsumingQueue];
+            [self _trimLogs_inLogObservingQueue];
         }
         
         if (self.logsToConsole) {
@@ -271,26 +151,30 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
 
 #pragma mark - Public Methods
 
-- (NSArray *)allLogMessages;
+- (void)retrieveAllLogMessagesWithCompletionHandler:(void (^)(NSArray *logMessages))completionHandler;
 {
+    NSAssert(self.logDistributor, @"Can not retrieve log messages without a log distributor");
+    NSOperationQueue *callingQueue = ([NSOperationQueue currentQueue] ?: [NSOperationQueue mainQueue]);
+    
     // Ensure we observe all log messages that have been queued by the distributor before we retrieve the our logs.
-    [[NSNotificationCenter defaultCenter] postNotificationName:ARKLogObserverRequiresAllPendingLogsNotification object:self];
-    
-    __block NSArray *logMessages = nil;
-    
-    [self.logConsumingQueue ARK_addOperationWithBlock:^{
-        [self _trimLogs_inLogConsumingQueue];
-        logMessages = [self.logMessages copy];
-    } waitUntilFinished:YES];
-    
-    return logMessages;
+    [self.logDistributor distributeAllPendingLogsWithCompletionHandler:^{
+        [self.logObservingQueue addOperationWithBlock:^{
+            [self _trimLogs_inLogObservingQueue];
+            if (completionHandler) {
+                NSArray *logMessages = [self.logMessages copy];
+                [callingQueue addOperationWithBlock:^{
+                    completionHandler(logMessages);
+                }];
+            }
+        }];
+    }];
 }
 
 - (void)clearLogs;
 {
-    [self.logConsumingQueue addOperationWithBlock:^{
+    [self.logObservingQueue addOperationWithBlock:^{
         [self.logMessages removeAllObjects];
-        [self _persistLogs_inLogConsumingQueue];
+        [self _persistLogs_inLogObservingQueue];
     }];
 }
 
@@ -302,8 +186,8 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
         [[UIApplication sharedApplication] endBackgroundTask:self.persistLogsBackgroundTaskIdentifier];
     }];
     
-    [self.logConsumingQueue addOperationWithBlock:^{
-        [self _persistLogs_inLogConsumingQueue];
+    [self.logObservingQueue addOperationWithBlock:^{
+        [self _persistLogs_inLogObservingQueue];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [[UIApplication sharedApplication] endBackgroundTask:self.persistLogsBackgroundTaskIdentifier];
@@ -322,7 +206,7 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
     return nil;
 }
 
-- (void)_initializeLogMessages_inLogConsumingQueue;
+- (void)_initializeLogMessages_inLogObservingQueue;
 {
     NSArray *persistedLogs = [self _persistedLogs];
     if (persistedLogs.count > 0) {
@@ -337,24 +221,26 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
     }
 }
 
-- (void)_persistLogs_inLogConsumingQueue;
+- (void)_persistLogs_inLogObservingQueue;
 {
     if (!self.persistedLogsFileURL) {
         return;
     }
     
-    // Perist trimmed logs when the app is backgrounded.
-    NSArray *logsToPersist = [self _trimmedLogsToPersist_inLogConsumingQueue];
-    NSFileManager *defaultManager = [NSFileManager defaultManager];
-    
-    if (logsToPersist.count == 0) {
-        [defaultManager removeItemAtURL:self.persistedLogsFileURL error:NULL];
-    } else if ([defaultManager createDirectoryAtURL:[self.persistedLogsFileURL URLByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL]) {
-        [[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] writeToURL:self.persistedLogsFileURL atomically:YES];
-    }
+    [self _trimmedLogsToPersist_inLogObservingQueue:^(NSArray *logsToPersist) {
+        NSFileManager *defaultManager = [NSFileManager defaultManager];
+        
+        if (logsToPersist.count == 0) {
+            [defaultManager removeItemAtURL:self.persistedLogsFileURL error:NULL];
+        } else {
+            if ([defaultManager createDirectoryAtURL:[self.persistedLogsFileURL URLByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL]) {
+                [[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] writeToURL:self.persistedLogsFileURL atomically:YES];
+            }
+        }
+    }];
 }
 
-- (void)_trimLogs_inLogConsumingQueue;
+- (void)_trimLogs_inLogObservingQueue;
 {
     NSUInteger numberOfLogs = self.logMessages.count;
     if (numberOfLogs > self.maximumLogMessageCount) {
@@ -362,16 +248,30 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
     }
 }
 
-- (NSArray *)_trimmedLogsToPersist_inLogConsumingQueue;
+- (void)_trimmedLogsToPersist_inLogObservingQueue:(void (^)(NSArray *logsToPersist))completionHandler;
 {
-    NSUInteger numberOfLogs = self.logMessages.count;
-    if (numberOfLogs > self.maximumLogCountToPersist) {
-        NSMutableArray *logsToPersist = [self.logMessages mutableCopy];
-        [logsToPersist removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogCountToPersist)];
-        return [logsToPersist copy];
-    }
+    dispatch_block_t trimLogsBlock = ^{
+        [self _trimLogs_inLogObservingQueue];
+        
+        if (completionHandler) {
+            NSUInteger numberOfLogs = self.logMessages.count;
+            if (numberOfLogs > self.maximumLogCountToPersist) {
+                NSMutableArray *logsToPersist = [self.logMessages mutableCopy];
+                [logsToPersist removeObjectsInRange:NSMakeRange(0, numberOfLogs - self.maximumLogCountToPersist)];
+                completionHandler([logsToPersist copy]);
+                
+            } else {
+                completionHandler([self.logMessages copy]);
+            }
+        }
+    };
     
-    return [self.logMessages copy];
+    if (self.logDistributor) {
+        // Ensure we observe all log messages that have been queued by the distributor before we retrieve the our logs.
+        [self.logDistributor distributeAllPendingLogsWithCompletionHandler:trimLogsBlock];
+    } else {
+        trimLogsBlock();
+    }
 }
 
 - (NSUInteger)_maximumLogMessageCountToKeepInMemory;
