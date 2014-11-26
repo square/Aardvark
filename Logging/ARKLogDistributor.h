@@ -18,10 +18,10 @@
 + (instancetype)defaultDistributor;
 
 /// Defaults to ARKLogMessage. Can be set to a subclass of ARKLogMessage.
-@property (assign, readwrite) Class logMessageClass;
+@property (atomic, assign, readwrite) Class logMessageClass;
 
 /// Convenience method to store a reference to the default log store.
-@property (strong, readwrite) ARKLogStore *defaultLogStore;
+@property (atomic, strong, readwrite) ARKLogStore *defaultLogStore;
 
 /// Retains an object that handles logging. Log observers are sent observeLogMessage: every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc).
 - (void)addLogObserver:(id <ARKLogObserver>)logObserver;

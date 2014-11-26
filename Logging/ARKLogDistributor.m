@@ -22,8 +22,6 @@
 @property (atomic, assign, readwrite) Class internalLogMessageClass;
 @property (atomic, weak, readwrite) ARKLogStore *weakDefaultLogStore;
 
-@property (nonatomic, strong, readonly) NSObject *logObserverSynchronization;
-
 @end
 
 
@@ -65,7 +63,6 @@
 #endif
     
     _logObservers = [NSMutableArray new];
-    _logObserverSynchronization = [NSObject new];
     
     // Use setters on public properties to ensure consistency.
     self.logMessageClass = [ARKLogMessage class];
@@ -114,7 +111,7 @@
     NSAssert(!logObserver.logDistributor || logObserver.logDistributor == self, @"Log observer already has a distributor");
     
     logObserver.logDistributor = self;
-    @synchronized(self.logObserverSynchronization) {
+    @synchronized(self) {
         if (![self.logObservers containsObject:logObserver]) {
             [self.logObservers addObject:logObserver];
         }
@@ -124,7 +121,7 @@
 - (void)removeLogObserver:(id <ARKLogObserver>)logObserver;
 {
     logObserver.logDistributor = nil;
-    @synchronized(self.logObserverSynchronization) {
+    @synchronized(self) {
         [self.logObservers removeObject:logObserver];
     }
 }
@@ -205,7 +202,7 @@
 - (void)_logMessage_inLogDistributingQueue:(ARKLogMessage *)logMessage;
 {
     NSArray *logObservers = nil;
-    @synchronized(self.logObserverSynchronization) {
+    @synchronized(self) {
         logObservers = [self.logObservers copy];
     }
     
