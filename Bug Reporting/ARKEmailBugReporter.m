@@ -168,7 +168,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     if (alertView.firstOtherButtonIndex == buttonIndex) {
         NSString *bugTitle = [alertView textFieldAtIndex:0].text;
-        NSUInteger logStoreCount = self.logStores.count;
+        NSUInteger const logStoreCount = self.logStores.count;
         __block NSUInteger logStoresProcessed = 0;
         
         if ([MFMailComposeViewController canSendMail]) {

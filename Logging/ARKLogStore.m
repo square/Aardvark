@@ -15,8 +15,12 @@
 
 @interface ARKLogStore ()
 
-@property (nonatomic, strong, readwrite) NSMutableArray *logMessages;
 @property (nonatomic, strong, readonly) NSOperationQueue *logObservingQueue;
+
+/// Stores all log messages. Must be accessed only from the log observing queue.
+@property (nonatomic, strong, readwrite) NSMutableArray *logMessages;
+
+/// Background task identifier for persisting logs to disk. Must be accessed only from the main queue.
 @property (nonatomic, assign, readwrite) UIBackgroundTaskIdentifier persistLogsBackgroundTaskIdentifier;
 
 @property (atomic, assign, readwrite) NSUInteger internalMaximumLogMessageCount;
