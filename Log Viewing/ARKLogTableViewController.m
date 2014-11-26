@@ -117,7 +117,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex;
 {
-    NSAssert(sectionIndex == 0, 0, @"There is only one section index!");
+    ARKCheckCondition(sectionIndex == 0, 0, @"There is only one section index!");
     return self.logMessages.count;
 }
 

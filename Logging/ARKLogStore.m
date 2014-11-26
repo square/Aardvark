@@ -154,7 +154,7 @@
 
 - (void)retrieveAllLogMessagesWithCompletionHandler:(void (^)(NSArray *logMessages))completionHandler;
 {
-    NSAssert(self.logDistributor, @"Can not retrieve log messages without a log distributor");
+    ARKCheckCondition(self.logDistributor, , @"Can not retrieve log messages without a log distributor");
     
     // Ensure we observe all log messages that have been queued by the distributor before we retrieve the our logs.
     [self.logDistributor distributeAllPendingLogsWithCompletionHandler:^{

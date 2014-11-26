@@ -78,8 +78,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)composeBugReport;
 {
-    NSAssert(self.bugReportRecipientEmailAddress.length, @"Attempting to compose a bug report without a recipient email address.");
-    NSAssert(self.mutableLogStores.count > 0, @"Attempting to compose a bug report without logs.");
+    ARKCheckCondition(self.bugReportRecipientEmailAddress.length, , @"Attempting to compose a bug report without a recipient email address.");
+    ARKCheckCondition(self.mutableLogStores.count > 0, , @"Attempting to compose a bug report without logs.");
     
     if (!self.screenFlashView) {
         // Take a screenshot.
@@ -105,10 +105,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)addLogStores:(NSArray *)logStores;
 {
-    NSAssert(self.mailComposeViewController == nil, @"Can not add a log store while a bug is being composed.");
+    ARKCheckCondition(self.mailComposeViewController == nil, , @"Can not add a log store while a bug is being composed.");
     
     for (ARKLogStore *logStore in logStores) {
-        NSAssert([logStore isKindOfClass:[ARKLogStore class]], @"Can not add a log store of class %@", NSStringFromClass([logStore class]));
+        ARKCheckCondition([logStore isKindOfClass:[ARKLogStore class]], , @"Can not add a log store of class %@", NSStringFromClass([logStore class]));
         if ([self.mutableLogStores containsObject:logStore]) {
             [self.mutableLogStores removeObject:logStore];
         }
@@ -119,10 +119,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)removeLogStores:(NSArray *)logStores;
 {
-    NSAssert(self.mailComposeViewController == nil, @"Can not add a remove a controller while a bug is being composed.");
+    ARKCheckCondition(self.mailComposeViewController == nil, , @"Can not add a remove a controller while a bug is being composed.");
     
     for (ARKLogStore *logStore in logStores) {
-        NSAssert([logStore isKindOfClass:[ARKLogStore class]], @"Can not remove a log store of class %@", NSStringFromClass([logStore class]));
+        ARKCheckCondition([logStore isKindOfClass:[ARKLogStore class]], , @"Can not remove a log store of class %@", NSStringFromClass([logStore class]));
         
         [self.mutableLogStores removeObject:logStore];
     }

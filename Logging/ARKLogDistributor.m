@@ -98,7 +98,7 @@
 
 - (void)setLogMessageClass:(Class)logMessageClass;
 {
-    NSAssert([logMessageClass isSubclassOfClass:[ARKLogMessage class]], @"Attempting to set a logMessageClass that is not a subclass of ARKLogMessage!");
+    ARKCheckCondition([logMessageClass isSubclassOfClass:[ARKLogMessage class]], , @"Attempting to set a logMessageClass that is not a subclass of ARKLogMessage!");
     
     self.internalLogMessageClass = logMessageClass;
 }
@@ -107,8 +107,8 @@
 
 - (void)addLogObserver:(id <ARKLogObserver>)logObserver;
 {
-    NSAssert([logObserver conformsToProtocol:@protocol(ARKLogObserver)], @"Tried to add a log observer that does not conform to ARKLogDistributor protocol");
-    NSAssert(!logObserver.logDistributor || logObserver.logDistributor == self, @"Log observer already has a distributor");
+    ARKCheckCondition([logObserver conformsToProtocol:@protocol(ARKLogObserver)], , @"Tried to add a log observer that does not conform to ARKLogObserver protocol");
+    ARKCheckCondition(!logObserver.logDistributor || logObserver.logDistributor == self, , @"Log observer already has a distributor");
     
     logObserver.logDistributor = self;
     @synchronized(self) {

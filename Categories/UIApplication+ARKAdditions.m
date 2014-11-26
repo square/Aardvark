@@ -34,8 +34,8 @@
 
 - (id)ARK_addBugReporter:(id <ARKBugReporter>)bugReporter triggeringGestureRecognizerClass:(Class)gestureRecognizerClass;
 {
-    NSAssert(bugReporter.logStores.count > 0, @"Attempting to add a bug reporter without a log store!");
-    NSAssert([bugReporter conformsToProtocol:@protocol(ARKBugReporter)], @"Attempting to trigger bug reports with an object that does not conform to ARKBugReporter.");
+    ARKCheckCondition(bugReporter.logStores.count > 0, nil, @"Attempting to add a bug reporter without a log store!");
+    ARKCheckCondition([bugReporter conformsToProtocol:@protocol(ARKBugReporter)], nil, @"Attempting to trigger bug reports with an object that does not conform to ARKBugReporter.");
     
     UIGestureRecognizer *bugReportingGestureRecognizer = [self _ARK_newBugReportingGestureRecognizerWithClass:gestureRecognizerClass];
     [self.keyWindow addGestureRecognizer:bugReportingGestureRecognizer];
@@ -63,7 +63,7 @@
 
 - (id)_ARK_newBugReportingGestureRecognizerWithClass:(Class)gestureRecognizerClass;
 {
-    NSAssert([gestureRecognizerClass isSubclassOfClass:[UIGestureRecognizer class]], @"%@ is not a gesture recognizer class", NSStringFromClass(gestureRecognizerClass));
+    ARKCheckCondition([gestureRecognizerClass isSubclassOfClass:[UIGestureRecognizer class]], nil, @"%@ is not a gesture recognizer class", NSStringFromClass(gestureRecognizerClass));
     
     UIGestureRecognizer *bugReportingGestureRecognizer = [[gestureRecognizerClass alloc] initWithTarget:self action:@selector(_ARK_didFireBugReportGestureRecognizer:)];
     bugReportingGestureRecognizer.cancelsTouchesInView = NO;

@@ -126,12 +126,11 @@
 
 - (void)test_addLogStores_enforcesARKLogStoreClass;
 {
-    XCTAssertThrows([self.bugReporter addLogStores:@[[NSObject new]]]);
-}
-
-- (void)test_removeLogStores_enforcesARKLogStoreClass;
-{
-    XCTAssertThrows([self.bugReporter removeLogStores:@[[NSObject new]]]);
+    XCTAssertEqual(self.bugReporter.logStores.count, 0);
+    
+    [self.bugReporter addLogStores:@[[NSObject new]]];
+    
+    XCTAssertEqual(self.bugReporter.logStores.count, 0);
 }
 
 @end

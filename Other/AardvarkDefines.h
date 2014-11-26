@@ -23,3 +23,23 @@
     ({ if (NO) { (void)((object).keyPath); } @#keyPath; })
 
 #define ARKSelfKeyPath(keyPath) ARKKeyPath(self, keyPath)
+
+
+/**
+ Throws a caught exception and returns "return_statement" if "condition" is false.
+ 
+ Example:
+ ARKCheckCondition(isProperlyConfigured, nil, @"Foo was not properly configured.");
+ 
+ */
+#define ARKCheckCondition(condition, result, desc, ...) \
+    do { \
+        if (!(condition)) { \
+            @try { \
+                NSAssert(condition, (desc), ##__VA_ARGS__); \
+            } @catch (NSException *exception) { \
+                NSLog(@"Aardvark API Misuse: %s %@", __PRETTY_FUNCTION__, exception.reason); \
+                return result;\
+            } \
+        } \
+    } while(0)
