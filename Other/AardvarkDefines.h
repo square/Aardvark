@@ -34,9 +34,10 @@
  */
 #define ARKCheckCondition(condition, result, desc, ...) \
     do { \
-        if (!(condition)) { \
+        const BOOL conditionResult = !!(condition); \
+        if (!conditionResult) { \
             @try { \
-                NSAssert(condition, (desc), ##__VA_ARGS__); \
+                NSAssert(conditionResult, (desc), ##__VA_ARGS__); \
             } @catch (NSException *exception) { \
                 NSLog(@"Aardvark API Misuse: %s %@", __PRETTY_FUNCTION__, exception.reason); \
                 return result;\
