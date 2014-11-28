@@ -107,7 +107,6 @@
 
 - (void)addLogObserver:(id <ARKLogObserver>)logObserver;
 {
-    ARKCheckCondition([logObserver conformsToProtocol:@protocol(ARKLogObserver)], , @"Tried to add a log observer that does not conform to ARKLogObserver protocol");
     ARKCheckCondition(!logObserver.logDistributor || logObserver.logDistributor == self, , @"Log observer already has a distributor");
     
     logObserver.logDistributor = self;

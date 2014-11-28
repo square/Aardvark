@@ -180,6 +180,18 @@
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
+- (void)test_retrieveAllLogMessagesWithCompletionHandler_callsCompletionHandlerIfNoLogDistributor;
+{
+    ARKLogStore *logStore = [ARKLogStore new];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"test_retrieveAllLogMessagesWithCompletionHandler_callsCompletionHandlerIfNoLogDistributor"];
+    [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        XCTAssertNil(logMessages);
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+}
+
 - (void)test_clearLogs_removesAllLogMessages;
 {
     // Fill in some logs.

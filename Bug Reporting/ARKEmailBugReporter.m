@@ -123,7 +123,9 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     
     for (ARKLogStore *logStore in logStores) {
         ARKCheckCondition([logStore isKindOfClass:[ARKLogStore class]], , @"Can not remove a log store of class %@", NSStringFromClass([logStore class]));
-        
+    }
+    
+    for (ARKLogStore *logStore in logStores) {
         [self.mutableLogStores removeObject:logStore];
     }
 }
