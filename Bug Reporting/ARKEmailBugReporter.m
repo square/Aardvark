@@ -168,7 +168,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     if (alertView.firstOtherButtonIndex == buttonIndex) {
         NSString *bugTitle = [alertView textFieldAtIndex:0].text;
-        NSUInteger const logStoreCount = self.logStores.count;
+        NSArray *logStores = [self.logStores copy];
+        NSUInteger const logStoreCount = logStores.count;
         __block NSUInteger logStoresProcessed = 0;
         
         if ([MFMailComposeViewController canSendMail]) {
@@ -179,7 +180,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             
             NSMutableString *emailBody = [NSMutableString stringWithFormat:@"%@\n", self.prefilledEmailBody];
             
-            for (ARKLogStore *logStore in self.logStores) {
+            for (ARKLogStore *logStore in logStores) {
                 [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
                     NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
                     NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for plaintext logs") stringByAppendingPathExtension:@"txt"];
@@ -223,7 +224,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             
         } else {
             NSMutableString *emailBody = [NSMutableString new];
-            for (ARKLogStore *logStore in self.logStores) {
+            for (ARKLogStore *logStore in logStores) {
                 [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
                     [emailBody appendFormat:@"%@\n%@\n", self.prefilledEmailBody, [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
                     
