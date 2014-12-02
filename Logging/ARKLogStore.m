@@ -250,7 +250,7 @@
 
 - (void)_trimmedLogsToPersist_inLogObservingQueue:(void (^)(NSArray *logsToPersist))completionHandler;
 {
-    dispatch_block_t trimLogsBlock = ^{
+    dispatch_block_t trimLogsBlock_inLogObservingQueue = ^{
         [self _trimLogs_inLogObservingQueue];
         
         if (completionHandler) {
@@ -268,9 +268,13 @@
     
     if (self.logDistributor) {
         // Ensure we observe all log messages that have been queued by the distributor before we retrieve the our logs.
-        [self.logDistributor distributeAllPendingLogsWithCompletionHandler:trimLogsBlock];
+        [self.logDistributor distributeAllPendingLogsWithCompletionHandler:^{
+            [self.logObservingQueue addOperationWithBlock:^{
+                trimLogsBlock_inLogObservingQueue();
+            }];
+        }];
     } else {
-        trimLogsBlock();
+        trimLogsBlock_inLogObservingQueue();
     }
 }
 
