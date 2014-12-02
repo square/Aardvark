@@ -183,7 +183,7 @@
 - (void)test_retrieveAllLogMessagesWithCompletionHandler_callsCompletionHandlerIfNoLogDistributor;
 {
     ARKLogStore *logStore = [ARKLogStore new];
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_retrieveAllLogMessagesWithCompletionHandler_callsCompletionHandlerIfNoLogDistributor"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertNil(logMessages);
         [expectation fulfill];

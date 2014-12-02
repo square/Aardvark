@@ -35,7 +35,6 @@
 - (id)ARK_addBugReporter:(id <ARKBugReporter>)bugReporter triggeringGestureRecognizerClass:(Class)gestureRecognizerClass;
 {
     ARKCheckCondition(bugReporter.logStores.count > 0, nil, @"Attempting to add a bug reporter without a log store!");
-    ARKCheckCondition([bugReporter conformsToProtocol:@protocol(ARKBugReporter)], nil, @"Attempting to trigger bug reports with an object that does not conform to ARKBugReporter.");
     
     UIGestureRecognizer *bugReportingGestureRecognizer = [self _ARK_newBugReportingGestureRecognizerWithClass:gestureRecognizerClass];
     [self.keyWindow addGestureRecognizer:bugReportingGestureRecognizer];

@@ -155,7 +155,10 @@
 - (void)retrieveAllLogMessagesWithCompletionHandler:(void (^)(NSArray *logMessages))completionHandler;
 {
     ARKCheckCondition(completionHandler, , @"Can not retrieve log messages without a completion handler");
-    ARKCheckCondition(self.logDistributor, completionHandler(nil), @"Can not retrieve log messages without a log distributor");
+    if (!self.logDistributor) {
+        completionHandler(nil);
+        ARKCheckCondition(NO, , @"Can not retrieve log messages without a log distributor");
+    }
     
     // Ensure we observe all log messages that have been queued by the distributor before we retrieve the our logs.
     [self.logDistributor distributeAllPendingLogsWithCompletionHandler:^{
