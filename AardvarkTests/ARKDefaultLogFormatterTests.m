@@ -56,7 +56,7 @@
 {
     ARKLogWithType(ARKLogTypeError, nil, @"Fake Error Log");
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_errorLogLineCount"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
@@ -75,7 +75,7 @@
 {
     ARKLogWithType(ARKLogTypeSeparator, nil, @"Separators Rule");
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_separatorLogLineCount"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
@@ -94,7 +94,7 @@
 {
     ARKLog(@"Something Happened");
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_defaultLogLineCount"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
@@ -113,7 +113,7 @@
     NSString *errorLog = @"Fake Error Log";
     ARKLogWithType(ARKLogTypeError, nil, @"%@", errorLog);
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_errorLogContent"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
@@ -134,7 +134,7 @@
     NSString *separatorLog = @"Separators Rule";
     ARKLogWithType(ARKLogTypeSeparator, nil, @"%@", separatorLog);
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_separatorLogContent"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
@@ -155,7 +155,7 @@
     NSString *log = @"Something Happened";
     ARKLog(@"%@", log);
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_defaultLogContent"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
@@ -176,7 +176,7 @@
     
     ARKLogWithType(ARKLogTypeError, nil, @"Fake Error Log");
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_errorPrefixChangeRespected"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
@@ -196,7 +196,7 @@
     
     ARKLogWithType(ARKLogTypeSeparator, nil, @"Separators Rule");
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_separatorPrefixChangeRespected"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
@@ -214,7 +214,7 @@
 {
     ARKLogWithType(ARKLogTypeError, nil, @"");
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_errorPrefixOnSameLineIfLogTextIsEmpty"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
@@ -232,7 +232,7 @@
 {
     ARKLogWithType(ARKLogTypeSeparator, nil, @"");
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_separatorPrefixOnSameLineIfLogTextIsEmpty"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
@@ -261,7 +261,7 @@
     }];
     
     [self measureBlock:^{
-        XCTestExpectation *expectation = [self expectationWithDescription:@"test_formattedLogMessage_separatorPrefixOnSameLineIfLogTextIsEmpty"];
+        XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
         [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
             for (ARKLogMessage *logMessage in logMessages) {
                 [self.logFormatter formattedLogMessage:logMessage];

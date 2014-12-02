@@ -18,7 +18,6 @@
 
 @interface ARKLogDistributorTests : XCTestCase
 
-@property (nonatomic, weak, readwrite) ARKLogDistributor *defaultLogDistributor;
 @property (nonatomic, weak, readwrite) ARKLogStore *defaultLogStore;
 
 @end
@@ -73,8 +72,6 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 {
     [super setUp];
     
-    self.defaultLogDistributor = [ARKLogDistributor defaultDistributor];
-    
     ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKLogDistributorTests.data"];
     [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     
@@ -127,7 +124,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 - (void)test_addLogObserver_notifiesLogObserverOnARKLog;
 {
     ARKTestLogObserver *testLogObserver = [ARKTestLogObserver new];
-    [self.defaultLogDistributor addLogObserver:testLogObserver];
+    [[ARKLogDistributor defaultDistributor] addLogObserver:testLogObserver];
     
     XCTAssertEqual(testLogObserver.observedLogs.count, 0);
     
@@ -135,14 +132,14 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         ARKLog(@"Log %@", @(i));
     }
     
-    [self.defaultLogDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
+    [[ARKLogDistributor defaultDistributor].logDistributingQueue waitUntilAllOperationsAreFinished];
     [self.defaultLogStore.logObservingQueue waitUntilAllOperationsAreFinished];
     XCTAssertEqual(self.defaultLogStore.logMessages.count, self.defaultLogStore.maximumLogMessageCount);
     [self.defaultLogStore.logMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
         XCTAssertEqualObjects(logMessage, testLogObserver.observedLogs[idx]);
     }];
     
-    [self.defaultLogDistributor removeLogObserver:testLogObserver];
+    [[ARKLogDistributor defaultDistributor] removeLogObserver:testLogObserver];
 }
 
 - (void)test_addLogObserver_notifiesLogObserverOnLogWithFormat;
@@ -194,10 +191,10 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         ARKLog(@"%@", text);
     }];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_distributeAllPendingLogsWithCompletionHandler_informsLogObserversOfAllPendingLogs"];
-    [self.defaultLogDistributor distributeAllPendingLogsWithCompletionHandler:^{
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [[ARKLogDistributor defaultDistributor] distributeAllPendingLogsWithCompletionHandler:^{
         // Internal log queue should now be empty.
-        XCTAssertEqual(self.defaultLogDistributor.logDistributingQueue.operationCount, 0);
+        XCTAssertEqual([ARKLogDistributor defaultDistributor].logDistributingQueue.operationCount, 0);
         
         [self.defaultLogStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
             NSMutableSet *allLogText = [NSMutableSet new];
@@ -227,7 +224,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     [self measureBlock:^{
         // Concurrently add all of the logs.
         [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
-            [self.defaultLogDistributor logWithFormat:@"%@", text];
+            [[ARKLogDistributor defaultDistributor] logWithFormat:@"%@", text];
         }];
     }];
 }

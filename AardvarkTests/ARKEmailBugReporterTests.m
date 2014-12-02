@@ -67,7 +67,7 @@
     }];
     
     const NSUInteger numberOfRecentErrorLogs = 5;
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_recentErrorLogMessagesAsPlainText_countRespected"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
         XCTAssertEqual([recentErrorLogs componentsSeparatedByString:@"\n"].count, numberOfRecentErrorLogs);
@@ -81,7 +81,7 @@
 - (void)test_recentErrorLogMessagesAsPlainText_returnsNilIfNoErrorLogsPresent;
 {
     const NSUInteger numberOfRecentErrorLogs = 5;
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_recentErrorLogMessagesAsPlainText_returnsNilIfNoErrorLogsPresent"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         __block NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
         
@@ -104,7 +104,7 @@
 - (void)test_recentErrorLogMessagesAsPlainText_returnsNilIfRecentErrorLogsIsZero;
 {
     const NSUInteger numberOfRecentErrorLogs = 0;
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_recentErrorLogMessagesAsPlainText_returnsNilIfRecentErrorLogsIsZero"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         __block NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
         

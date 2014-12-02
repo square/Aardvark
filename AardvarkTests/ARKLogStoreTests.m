@@ -58,7 +58,7 @@
 {
     [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:@"Logging Enabled" image:nil type:ARKLogTypeDefault userInfo:nil]];
 
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_observeLogMessage_logsLogToLogStore"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1, @"Log not stored!");
         
@@ -104,7 +104,7 @@
         [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault userInfo:userInfo]];
     }
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_logFilterBlock_preventsLogsFromBeingObserved"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 0);
         
@@ -147,7 +147,7 @@
     // Internal log count should be proactively truncated at 2 * maximumLogCount.
     XCTAssertEqual(self.logStore.logMessages.count, expectedInternalLogCount, @"Expected internal log count to be proactively truncated to (%@) at 2 * maximumLogCount. Expected internal log count of %@, got %@.", @(self.logStore.maximumLogMessageCount), @(expectedInternalLogCount), @(self.logStore.logMessages.count));
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_observeLogMessage_logTrimming"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         // Exposed log count should never be greater than maximumLogCount.
         XCTAssertGreaterThanOrEqual(logMessages.count, self.logStore.maximumLogMessageCount, @"Exposed log count (%@) must never exceed maximum log count (%@).", @(logMessages.count), @(self.logStore.maximumLogMessageCount));
@@ -170,7 +170,7 @@
         [self.logDistributor logWithFormat:@"%@", text];
     }];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_retrieveAllLogMessagesWithCompletionHandler_capturesAllLogsLogged"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, numbers.count);
         
@@ -192,7 +192,7 @@
     
     XCTAssertTrue(self.logStore.logMessages.count == 0, @"Local logs have count of %@ after clearing!", @(self.logStore.logMessages.count));
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_clearLogs_removesAllLogMessages"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertTrue(logMessages.count == 0, @"Local logs have count of %@ after clearing!", @(logMessages.count));
         
@@ -232,7 +232,7 @@
         [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:lastLogText image:nil type:ARKLogTypeDefault userInfo:nil]];
     }
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_trimLogs_trimsOldestLogs"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         ARKLogMessage *lastLog = logMessages.lastObject;
         XCTAssertEqualObjects(lastLog.text, lastLogText);
@@ -253,7 +253,7 @@
     
     [self.logStore.logObservingQueue waitUntilAllOperationsAreFinished];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_trimmedLogsToPersistLogs_maximumLogCountToPersistPersisted"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore _trimmedLogsToPersist_inLogObservingQueue:^(NSArray *logsToPersist) {
         XCTAssertEqual(logsToPersist.count, self.logStore.maximumLogCountToPersist);
         
@@ -304,7 +304,7 @@
     ARKLogDistributor *distributor = [ARKLogDistributor new];
     [distributor addLogObserver:logStore];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_setPersistedLogsFileURL_observesPersistedLogsAtFileURL"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqualObjects([logMessages.lastObject text], testPeristedLogMessageText, @"Setting persistedLogsFilePath did not load logs.");
         
@@ -386,7 +386,7 @@
     ARKLogDistributor *distributor = [ARKLogDistributor new];
     [distributor addLogObserver:logStore];
     
-    XCTestExpectation *expectation = [self expectationWithDescription:@"test_dealloc_persistsLogs"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logStore.logMessages.count, numbers.count, @"Logs did not persist in dealloc.");
         
@@ -458,7 +458,7 @@
         }];
         
         // Trim and format the logs.
-        XCTestExpectation *expectation = [self expectationWithDescription:@"test_retrieveAllLogMessagesWithCompletionHandler_performance"];
+        XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
         [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
             [expectation fulfill];
         }];
