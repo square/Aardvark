@@ -349,15 +349,8 @@ NSString *const ARKLogObserverRequiresAllPendingLogsNotification = @"ARKLogObser
     
     if (logsToPersist.count == 0) {
         [defaultManager removeItemAtURL:self.persistedLogsFileURL error:NULL];
-    } else {
-        BOOL persistedLogs = NO;
-        if ([defaultManager createDirectoryAtURL:[self.persistedLogsFileURL URLByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL]) {
-            persistedLogs = [[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] writeToURL:self.persistedLogsFileURL atomically:YES];
-        }
-        
-        if (!persistedLogs) {
-            NSLog(@"ERROR! Could not persist logs.");
-        }
+    } else if ([defaultManager createDirectoryAtURL:[self.persistedLogsFileURL URLByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:NULL]) {
+        [[NSKeyedArchiver archivedDataWithRootObject:logsToPersist] writeToURL:self.persistedLogsFileURL atomically:YES];
     }
 }
 
