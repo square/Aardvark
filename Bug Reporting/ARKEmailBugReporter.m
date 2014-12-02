@@ -23,7 +23,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @interface ARKEmailBugReporter () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
-@property (nonatomic, strong, readwrite) UIView *whiteScreenView;
+@property (nonatomic, strong, readwrite) UIView *screenFlashView;
 
 @property (nonatomic, strong) MFMailComposeViewController *mailComposeViewController;
 @property (nonatomic, strong) UIWindow *emailComposeWindow;
@@ -81,16 +81,16 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     NSAssert(self.bugReportRecipientEmailAddress.length, @"Attempting to compose a bug report without a recipient email address.");
     NSAssert(self.mutableLogStores.count > 0, @"Attempting to compose a bug report without logs.");
     
-    if (!self.whiteScreenView) {
+    if (!self.screenFlashView) {
         // Take a screenshot.
         ARKLogScreenshot();
         
         // Flash the screen to simulate a screenshot being taken.
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-        self.whiteScreenView = [[UIView alloc] initWithFrame:keyWindow.frame];
-        self.whiteScreenView.layer.opacity = 0.0f;
-        self.whiteScreenView.layer.backgroundColor = [[UIColor whiteColor] CGColor];
-        [keyWindow addSubview:self.whiteScreenView];
+        self.screenFlashView = [[UIView alloc] initWithFrame:keyWindow.frame];
+        self.screenFlashView.layer.opacity = 0.0f;
+        self.screenFlashView.layer.backgroundColor = [[UIColor whiteColor] CGColor];
+        [keyWindow addSubview:self.screenFlashView];
         
         CAKeyframeAnimation *screenFlash = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
         screenFlash.duration = 0.8;
@@ -99,7 +99,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         screenFlash.delegate = self;
         
         // Start the screen flash animation. Once this is done we'll fire up the bug reporter.
-        [self.whiteScreenView.layer addAnimation:screenFlash forKey:ARKScreenshotFlashAnimationKey];
+        [self.screenFlashView.layer addAnimation:screenFlash forKey:ARKScreenshotFlashAnimationKey];
     }
 }
 
@@ -141,8 +141,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished;
 {
-    [self.whiteScreenView removeFromSuperview];
-    self.whiteScreenView = nil;
+    [self.screenFlashView removeFromSuperview];
+    self.screenFlashView = nil;
     
     /*
      iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
