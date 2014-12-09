@@ -17,6 +17,13 @@
 #import "UIActivityViewController+ARKAdditions.h"
 
 
+@interface ARKTimestampLogMessage : ARKLogMessage
+
+- (instancetype)initTimestampMessageWithDate:(NSDate *)date;
+
+@end
+
+
 @interface ARKLogTableViewController () <UIActionSheetDelegate>
 
 @property (nonatomic, copy, readwrite) NSArray *logMessages;
@@ -27,6 +34,19 @@
 
 
 @implementation ARKLogTableViewController
+
+#pragma mark - Class Methods
+
++ (NSCalendar *)sharedCalendar;
+{
+    static NSCalendar *sharedCalendar = nil;
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedCalendar = [NSCalendar currentCalendar];
+    });
+    
+    return sharedCalendar;
+}
 
 #pragma mark - Initialization
 
@@ -39,6 +59,7 @@
     
     _logStore = logStore;
     _logFormatter = logFormatter;
+    _minutesBetweenTimestamps = 3;
     
     return self;
 }
@@ -134,47 +155,44 @@
     NSInteger index = [indexPath row];
     ARKLogMessage *currentLog = self.logMessages[index];
     
-    ARKLogMessage *firstSeparatorLog = nil;
+    ARKLogMessage *mostRecentSeparatorLog = nil;
     for (NSInteger i = index; i >= 0; i--) {
-        firstSeparatorLog = self.logMessages[i];
-        if (firstSeparatorLog.type == ARKLogTypeSeparator) {
+        mostRecentSeparatorLog = self.logMessages[i];
+        if (mostRecentSeparatorLog.type == ARKLogTypeSeparator) {
             break;
         }
     }
     
-    NSTimeInterval delta = firstSeparatorLog ? [currentLog.creationDate timeIntervalSinceDate:firstSeparatorLog.creationDate] : 0.0;
-    if (delta > 60.0) {
-        cell.textLabel.text = [NSString stringWithFormat:@"+%.fm\t%@", delta / 60.0, currentLog.text];
-    } else if (delta > 1.0) {
-        cell.textLabel.text = [NSString stringWithFormat:@"+%.1f\t%@", delta, currentLog.text];
-    } else {
-        cell.textLabel.text = [NSString stringWithFormat:@"+0\t%@", currentLog.text];;
-    }
+    NSTimeInterval delta = mostRecentSeparatorLog ? [currentLog.creationDate timeIntervalSinceDate:mostRecentSeparatorLog.creationDate] : 0.0;
+    cell.textLabel.text = [NSString stringWithFormat:@"+%.1f\t%@", delta, currentLog.text];
     
     UIColor *textColor = nil;
     UIColor *backgroundColor = nil;
     switch (currentLog.type) {
         case ARKLogTypeSeparator:
         {
-            static NSCalendar *calendar = nil;
-            static dispatch_once_t onceToken = 0;
-            dispatch_once(&onceToken, ^{
-                calendar = [NSCalendar currentCalendar];
-            });
-            
             NSCalendarUnit dayComponents = (NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay);
-            NSDateComponents *logDateComponents = [calendar components:dayComponents fromDate:currentLog.creationDate];
-            NSDateComponents *todayDateComponents = [calendar components:dayComponents fromDate:[NSDate date]];
-
-            if ([logDateComponents isEqual:todayDateComponents]) {
-                // Log was created today.
-                cell.textLabel.text = [NSString stringWithFormat:@"%@ -- %@",
-                                       currentLog.text,
-                                       [NSDateFormatter localizedStringFromDate:currentLog.creationDate dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterMediumStyle]];
+            NSDateComponents *logDateComponents = [[[self class] sharedCalendar] components:dayComponents fromDate:currentLog.creationDate];
+            NSDateComponents *todayDateComponents = [[[self class] sharedCalendar] components:dayComponents fromDate:[NSDate date]];
+            
+            BOOL logWasCreatedToday = [logDateComponents isEqual:todayDateComponents];
+            if ([currentLog isKindOfClass:[ARKTimestampLogMessage class]]) {
+                if (logWasCreatedToday) {
+                    cell.textLabel.text = [NSDateFormatter localizedStringFromDate:currentLog.creationDate dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+                } else {
+                    cell.textLabel.text = [NSDateFormatter localizedStringFromDate:currentLog.creationDate dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+                }
+                
             } else {
-                cell.textLabel.text = [NSString stringWithFormat:@"%@ -- %@",
-                                       currentLog.text,
-                                       [NSDateFormatter localizedStringFromDate:currentLog.creationDate dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle]];
+                if (logWasCreatedToday) {
+                    cell.textLabel.text = [NSString stringWithFormat:@"%@ -- %@",
+                                           currentLog.text,
+                                           [NSDateFormatter localizedStringFromDate:currentLog.creationDate dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterMediumStyle]];
+                } else {
+                    cell.textLabel.text = [NSString stringWithFormat:@"%@ -- %@",
+                                           currentLog.text,
+                                           [NSDateFormatter localizedStringFromDate:currentLog.creationDate dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle]];
+                }
             }
             
             textColor = [UIColor whiteColor];
@@ -264,7 +282,24 @@
 - (void)_reloadLogs;
 {
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
-        self.logMessages = logMessages;
+        NSMutableArray *logMessagesWithMinuteSeparators = [NSMutableArray new];
+        
+        NSDate *previousTimestampDate = nil;
+        for (ARKLogMessage *logMessage in logMessages) {
+            if (!previousTimestampDate || [logMessage.creationDate timeIntervalSinceDate:previousTimestampDate] > self.minutesBetweenTimestamps * 60.0) {
+                NSDateComponents *minuteSeparatorDateComponents = [[[self class] sharedCalendar] components:NSDateComponentUndefined fromDate:logMessage.creationDate];
+                minuteSeparatorDateComponents.second = 0;
+                minuteSeparatorDateComponents.nanosecond = 0;
+                
+                NSDate *timestampDate = [minuteSeparatorDateComponents date];
+                [logMessagesWithMinuteSeparators addObject:[[ARKTimestampLogMessage alloc] initTimestampMessageWithDate:timestampDate]];
+                previousTimestampDate = timestampDate;
+            }
+            
+            [logMessagesWithMinuteSeparators addObject:logMessage];
+        }
+        
+        self.logMessages = logMessagesWithMinuteSeparators;
         [self.tableView reloadData];
     }];
 }
@@ -283,6 +318,49 @@
     if (bottomOffset.y > 0.0f) {
         [self.tableView setContentOffset:bottomOffset animated:NO];
     }
+}
+
+@end
+
+
+#pragma mark - ARKTimestampLogMessage
+
+@implementation ARKTimestampLogMessage
+
+@synthesize text = _text;
+@synthesize type = _type;
+@synthesize creationDate = _creationDate;
+
+#pragma mark - Class Methods
+
++ (NSDateFormatter *)sharedDateFormatter;
+{
+    static NSDateFormatter *sharedDateFormatter = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedDateFormatter = [NSDateFormatter new];
+        sharedDateFormatter.dateStyle = NSDateFormatterNoStyle;
+        sharedDateFormatter.timeStyle = NSDateFormatterShortStyle;
+    });
+    
+    return sharedDateFormatter;
+}
+
+#pragma mark - Initialization
+
+- (instancetype)initTimestampMessageWithDate:(NSDate *)date;
+{
+    self = [self init];
+    if (!self) {
+        return nil;
+    }
+    
+    _text = [[[self class] sharedDateFormatter] stringFromDate:date];
+    _type = ARKLogTypeSeparator;
+    _creationDate = date;
+    
+    return self;
 }
 
 @end

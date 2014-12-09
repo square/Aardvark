@@ -21,6 +21,9 @@
 /// The formatter used to prepare the logs for the share/activity sheet.
 @property (nonatomic, strong, readonly) id <ARKLogFormatter> logFormatter;
 
+/// The number of minutes between timestamps. Defaults to 3.
+@property (nonatomic, assign, readwrite) NSUInteger minutesBetweenTimestamps;
+
 /// Returns an array suitable for sharing via the activity sheet.
 - (NSArray *)contentForActivitySheet;
 
