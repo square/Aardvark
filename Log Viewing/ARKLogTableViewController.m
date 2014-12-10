@@ -175,7 +175,7 @@
             NSDateComponents *logDateComponents = [[[self class] sharedCalendar] components:dayComponents fromDate:currentLog.creationDate];
             NSDateComponents *todayDateComponents = [[[self class] sharedCalendar] components:dayComponents fromDate:[NSDate date]];
             
-            BOOL logWasCreatedToday = [logDateComponents isEqual:todayDateComponents];
+            BOOL const logWasCreatedToday = [logDateComponents isEqual:todayDateComponents];
             if ([currentLog isKindOfClass:[ARKTimestampLogMessage class]]) {
                 if (logWasCreatedToday) {
                     cell.textLabel.text = [NSDateFormatter localizedStringFromDate:currentLog.creationDate dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
@@ -287,7 +287,7 @@
         NSDate *previousTimestampDate = nil;
         for (ARKLogMessage *logMessage in logMessages) {
             if (!previousTimestampDate || [logMessage.creationDate timeIntervalSinceDate:previousTimestampDate] > self.minutesBetweenTimestamps * 60.0) {
-                NSDateComponents *minuteSeparatorDateComponents = [[[self class] sharedCalendar] components:NSDateComponentUndefined fromDate:logMessage.creationDate];
+                NSDateComponents *minuteSeparatorDateComponents = [[[self class] sharedCalendar] components:NSIntegerMax fromDate:logMessage.creationDate];
                 minuteSeparatorDateComponents.second = 0;
                 minuteSeparatorDateComponents.nanosecond = 0;
                 
