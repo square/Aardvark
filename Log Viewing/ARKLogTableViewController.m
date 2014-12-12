@@ -19,7 +19,7 @@
 
 @interface ARKTimestampLogMessage : ARKLogMessage
 
-- (instancetype)initTimestampMessageWithDate:(NSDate *)date;
+- (instancetype)initWithDate:(NSDate *)date;
 
 @end
 
@@ -34,19 +34,6 @@
 
 
 @implementation ARKLogTableViewController
-
-#pragma mark - Class Methods
-
-+ (NSCalendar *)sharedCalendar;
-{
-    static NSCalendar *sharedCalendar = nil;
-    static dispatch_once_t onceToken = 0;
-    dispatch_once(&onceToken, ^{
-        sharedCalendar = [NSCalendar currentCalendar];
-    });
-    
-    return sharedCalendar;
-}
 
 #pragma mark - Initialization
 
@@ -155,15 +142,16 @@
     NSInteger index = [indexPath row];
     ARKLogMessage *currentLog = self.logMessages[index];
     
-    ARKLogMessage *mostRecentSeparatorLog = nil;
+    // Find the most recent separator log, or the first log in the list.
+    ARKLogMessage *logForTimestampDelta = nil;
     for (NSInteger i = index; i >= 0; i--) {
-        mostRecentSeparatorLog = self.logMessages[i];
-        if (mostRecentSeparatorLog.type == ARKLogTypeSeparator) {
+        logForTimestampDelta = self.logMessages[i];
+        if (logForTimestampDelta.type == ARKLogTypeSeparator) {
             break;
         }
     }
     
-    NSTimeInterval delta = mostRecentSeparatorLog ? [currentLog.creationDate timeIntervalSinceDate:mostRecentSeparatorLog.creationDate] : 0.0;
+    NSTimeInterval delta = logForTimestampDelta ? [currentLog.creationDate timeIntervalSinceDate:logForTimestampDelta.creationDate] : 0.0;
     cell.textLabel.text = [NSString stringWithFormat:@"+%.1f\t%@", delta, currentLog.text];
     
     UIColor *textColor = nil;
@@ -172,8 +160,8 @@
         case ARKLogTypeSeparator:
         {
             NSCalendarUnit dayComponents = (NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay);
-            NSDateComponents *logDateComponents = [[[self class] sharedCalendar] components:dayComponents fromDate:currentLog.creationDate];
-            NSDateComponents *todayDateComponents = [[[self class] sharedCalendar] components:dayComponents fromDate:[NSDate date]];
+            NSDateComponents *logDateComponents = [[NSCalendar currentCalendar] components:dayComponents fromDate:currentLog.creationDate];
+            NSDateComponents *todayDateComponents = [[NSCalendar currentCalendar] components:dayComponents fromDate:[NSDate date]];
             
             BOOL const logWasCreatedToday = [logDateComponents isEqual:todayDateComponents];
             if ([currentLog isKindOfClass:[ARKTimestampLogMessage class]]) {
@@ -286,13 +274,11 @@
         
         NSDate *previousTimestampDate = nil;
         for (ARKLogMessage *logMessage in logMessages) {
-            if (!previousTimestampDate || [logMessage.creationDate timeIntervalSinceDate:previousTimestampDate] > self.minutesBetweenTimestamps * 60.0) {
-                NSDateComponents *minuteSeparatorDateComponents = [[[self class] sharedCalendar] components:NSIntegerMax fromDate:logMessage.creationDate];
-                minuteSeparatorDateComponents.second = 0;
-                minuteSeparatorDateComponents.nanosecond = 0;
-                
-                NSDate *timestampDate = [minuteSeparatorDateComponents date];
-                [logMessagesWithMinuteSeparators addObject:[[ARKTimestampLogMessage alloc] initTimestampMessageWithDate:timestampDate]];
+            NSTimeInterval const secondsPerMinute = 60.0;
+            if (!previousTimestampDate || [logMessage.creationDate timeIntervalSinceDate:previousTimestampDate] > self.minutesBetweenTimestamps * secondsPerMinute) {
+                NSTimeInterval timeIntervalRoundedToMinute = [logMessage.creationDate timeIntervalSinceReferenceDate] - fmod([logMessage.creationDate timeIntervalSinceReferenceDate], secondsPerMinute);
+                NSDate *timestampDate = [NSDate dateWithTimeIntervalSinceReferenceDate:timeIntervalRoundedToMinute];
+                [logMessagesWithMinuteSeparators addObject:[[ARKTimestampLogMessage alloc] initWithDate:timestampDate]];
                 previousTimestampDate = timestampDate;
             }
             
@@ -349,7 +335,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initTimestampMessageWithDate:(NSDate *)date;
+- (instancetype)initWithDate:(NSDate *)date;
 {
     self = [self init];
     if (!self) {
