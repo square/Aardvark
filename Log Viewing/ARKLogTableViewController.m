@@ -354,11 +354,21 @@
         return nil;
     }
     
-    _text = [[[self class] sharedDateFormatter] stringFromDate:date];
     _type = ARKLogTypeSeparator;
     _creationDate = date;
     
     return self;
+}
+
+#pragma mark - Properties
+
+- (NSString *)text;
+{
+    if (!_text) {
+        _text = [[[self class] sharedDateFormatter] stringFromDate:self.creationDate];
+    }
+    
+    return _text;
 }
 
 @end
