@@ -226,6 +226,18 @@
     }
 }
 
+#pragma mark - Properties
+
+- (void)setMinutesBetweenTimestamps:(NSUInteger)minutesBetweenTimestamps;
+{
+    if (_minutesBetweenTimestamps == minutesBetweenTimestamps) {
+        return;
+    }
+    
+    _minutesBetweenTimestamps = minutesBetweenTimestamps;
+    [self _reloadLogs];
+}
+
 #pragma mark - Public Methods
 
 - (NSArray *)contentForActivitySheet;
