@@ -81,8 +81,6 @@
 
 #pragma mark - Behavior Tests
 
-
-
 - (void)test_minutesBetweenTimestamps_insertsTimestampsBetweenLogs;
 {
     XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
