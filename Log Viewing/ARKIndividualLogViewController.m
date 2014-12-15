@@ -10,6 +10,7 @@
 
 #import "ARKLogMessage.h"
 
+
 @interface ARKIndividualLogViewController ()
 
 @property (nonatomic, strong, readonly) UITextView *textView;

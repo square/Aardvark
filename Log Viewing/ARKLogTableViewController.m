@@ -7,6 +7,7 @@
 //
 
 #import "ARKLogTableViewController.h"
+#import "ARKLogTableViewController_Testing.h"
 
 #import "ARKIndividualLogViewController.h"
 #import "ARKDefaultLogFormatter.h"
@@ -15,13 +16,6 @@
 #import "ARKLogStore.h"
 #import "ARKScreenshotViewController.h"
 #import "UIActivityViewController+ARKAdditions.h"
-
-
-@interface ARKTimestampLogMessage : ARKLogMessage
-
-- (instancetype)initWithDate:(NSDate *)date;
-
-@end
 
 
 @interface ARKLogTableViewController () <UIActionSheetDelegate>
