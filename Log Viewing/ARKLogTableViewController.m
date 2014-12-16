@@ -276,24 +276,29 @@
 - (void)_reloadLogs;
 {
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
-        NSMutableArray *logMessagesWithMinuteSeparators = [NSMutableArray new];
-        
-        NSDate *previousTimestampDate = nil;
-        for (ARKLogMessage *logMessage in logMessages) {
-            NSTimeInterval const secondsPerMinute = 60.0;
-            if (!previousTimestampDate || [logMessage.creationDate timeIntervalSinceDate:previousTimestampDate] > self.minutesBetweenTimestamps * secondsPerMinute) {
-                NSTimeInterval timeIntervalRoundedToMinute = [logMessage.creationDate timeIntervalSinceReferenceDate] - fmod([logMessage.creationDate timeIntervalSinceReferenceDate], secondsPerMinute);
-                NSDate *timestampDate = [NSDate dateWithTimeIntervalSinceReferenceDate:timeIntervalRoundedToMinute];
-                [logMessagesWithMinuteSeparators addObject:[[ARKTimestampLogMessage alloc] initWithDate:timestampDate]];
-                previousTimestampDate = timestampDate;
-            }
-            
-            [logMessagesWithMinuteSeparators addObject:logMessage];
-        }
-        
-        self.logMessages = logMessagesWithMinuteSeparators;
+        self.logMessages = [self _logMessagesWithMinuteSeparators:logMessages];
         [self.tableView reloadData];
     }];
+}
+
+- (NSArray *)_logMessagesWithMinuteSeparators:(NSArray *)logMessages;
+{
+    NSMutableArray *logMessagesWithMinuteSeparators = [NSMutableArray new];
+    
+    NSDate *previousTimestampDate = nil;
+    for (ARKLogMessage *logMessage in logMessages) {
+        NSTimeInterval const secondsPerMinute = 60.0;
+        if (!previousTimestampDate || [logMessage.creationDate timeIntervalSinceDate:previousTimestampDate] > self.minutesBetweenTimestamps * secondsPerMinute) {
+            NSTimeInterval timeIntervalRoundedToMinute = [logMessage.creationDate timeIntervalSinceReferenceDate] - fmod([logMessage.creationDate timeIntervalSinceReferenceDate], secondsPerMinute);
+            NSDate *timestampDate = [NSDate dateWithTimeIntervalSinceReferenceDate:timeIntervalRoundedToMinute];
+            [logMessagesWithMinuteSeparators addObject:[[ARKTimestampLogMessage alloc] initWithDate:timestampDate]];
+            previousTimestampDate = timestampDate;
+        }
+        
+        [logMessagesWithMinuteSeparators addObject:logMessage];
+    }
+    
+    return logMessagesWithMinuteSeparators;
 }
 
 - (void)_viewWillAppearForFirstTime:(BOOL)animated;
