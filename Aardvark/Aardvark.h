@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
+#import <Aardvark/ARKBugReporter.h>
+#import <Aardvark/ARKEmailBugReporter.h>
+
+
 typedef NS_ENUM(NSUInteger, ARKLogType) {
     /// Default log type.
     ARKLogTypeDefault,
@@ -14,11 +18,6 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
     /// Marks that the log represents an error.
     ARKLogTypeError,
 };
-
-
-@protocol ARKBugReporter;
-@class ARKEmailBugReporter;
-@class ARKLogDistributor;
 
 
 /// Logs a log with default type to the default log distributor.
