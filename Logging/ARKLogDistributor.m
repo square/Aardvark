@@ -192,7 +192,7 @@
     UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    NSString *logText = @"📷📱 Screenshot!";
+    NSString *logText = @"⎙ Screenshot!";
     [self logWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
 }
 
