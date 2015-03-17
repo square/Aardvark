@@ -10,7 +10,7 @@ extern "C" {
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
 
-    #import "Aardvark.h"
+    #import <Aardvark/Aardvark.h>
     #import "AardvarkDefines.h"
 #endif
     

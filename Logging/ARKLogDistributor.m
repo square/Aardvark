@@ -19,8 +19,11 @@
 @property (nonatomic, strong, readonly) NSOperationQueue *logDistributingQueue;
 @property (atomic, strong, readonly) NSMutableArray *logObservers;
 
-@property (atomic, assign, readwrite) Class internalLogMessageClass;
-@property (atomic, weak, readwrite) ARKLogStore *weakDefaultLogStore;
+@property (atomic, assign) Class internalLogMessageClass;
+@property (atomic, weak) ARKLogStore *weakDefaultLogStore;
+
+// This ivar must be accessed directly.
+@property dispatch_once_t defaultLogStoreAccessOnceToken;
 
 @end
 
@@ -28,6 +31,7 @@
 @implementation ARKLogDistributor
 
 @dynamic defaultLogStore;
+@synthesize defaultLogStoreAccessOnceToken = _defaultLogStoreAccessOnceToken;
 
 #pragma mark - Class Methods
 
@@ -70,10 +74,17 @@
     return self;
 }
 
-#pragma mark - Properties
+#pragma mark - Public Properties
 
 - (ARKLogStore *)defaultLogStore;
 {
+    dispatch_once(&_defaultLogStoreAccessOnceToken, ^{
+        // Lazily create a default log store if none exists.
+        if (self.weakDefaultLogStore == nil) {
+            self.defaultLogStore = [ARKLogStore new];
+        }
+    });
+    
     return self.weakDefaultLogStore;
 }
 
@@ -101,6 +112,18 @@
     ARKCheckCondition([logMessageClass isSubclassOfClass:[ARKLogMessage class]], , @"Attempting to set a logMessageClass that is not a subclass of ARKLogMessage!");
     
     self.internalLogMessageClass = logMessageClass;
+}
+
+#pragma mark - Private Properties
+
+- (dispatch_once_t)defaultLogStoreAccessOnceToken;
+{
+    ARKCheckCondition(NO, 0, @"Should not attempt to access this token via a getter. This property must be used directly.");
+}
+
+- (void)setDefaultLogStoreAccessOnceToken:(dispatch_once_t)defaultLogStoreAccessOnceToken;
+{
+    ARKCheckCondition(NO, , @"Should not attempt to set this token via the setter. This property must be used directly.");
 }
 
 #pragma mark - Public Methods - Log Observers

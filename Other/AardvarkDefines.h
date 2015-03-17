@@ -26,7 +26,7 @@
 
 
 /**
- Throws a caught exception and returns "return_statement" if "condition" is false.
+ Throws a caught exception and returns "result" if "condition" is false.
  
  Example:
  ARKCheckCondition(isProperlyConfigured, nil, @"Foo was not properly configured.");
@@ -34,7 +34,7 @@
  */
 #define ARKCheckCondition(condition, result, desc, ...) \
     do { \
-        const BOOL conditionResult = !!(condition); \
+        BOOL const conditionResult = !!(condition); \
         if (!conditionResult) { \
             @try { \
                 NSAssert(conditionResult, (desc), ##__VA_ARGS__); \

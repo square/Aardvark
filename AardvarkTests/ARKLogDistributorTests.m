@@ -121,6 +121,15 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     XCTAssertEqual([logStore.logMessages.firstObject class], [ARKLogMessageTestSubclass class]);
 }
 
+- (void)test_defaultLogStore_lazilyInitializesOnFirstAccess;
+{
+    ARKLogDistributor *logDistributor = [ARKLogDistributor new];
+    XCTAssertNotNil(logDistributor.defaultLogStore);
+    
+    logDistributor.defaultLogStore = nil;
+    XCTAssertNil(logDistributor.defaultLogStore, @"Default log store should not initialize itself lazily twice.");
+}
+
 - (void)test_addLogObserver_notifiesLogObserverOnARKLog;
 {
     ARKTestLogObserver *testLogObserver = [ARKTestLogObserver new];
