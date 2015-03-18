@@ -43,30 +43,30 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithArchiveFilename:(NSString *)filename maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount;
+- (instancetype)initWithURL:(NSURL *)fileURL maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount;
 {
-    ARKCheckCondition(filename.length > 0, nil, @"Must provide a filename!");
+    
+    ARKCheckCondition([fileURL isFileURL], nil, @"Must provide a file URL!");
     
     self = [super init];
     if (!self) {
         return nil;
     }
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    NSString *archivePath = [[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:filename];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:archivePath]) {
-        [[NSFileManager defaultManager] createFileAtPath:archivePath contents:nil attributes:nil];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:fileURL.path]) {
+        [[NSFileManager defaultManager] createFileAtPath:fileURL.path contents:nil attributes:nil];
     }
     
-    _archiveFileURL = [NSURL fileURLWithPath:archivePath isDirectory:NO];
     
     NSError *error = nil;
-    _fileHandle = [NSFileHandle fileHandleForUpdatingURL:_archiveFileURL error:&error];
-    if (_fileHandle == nil || error != nil) {
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingURL:fileURL error:&error];
+    
+    if (fileHandle == nil || error != nil) {
         return nil;
     }
+    
+    _archiveFileURL = [fileURL copy];
+    _fileHandle = fileHandle;
     
     _maximumObjectCount = maximumObjectCount;
     _trimmedObjectCount = trimmedObjectCount;
@@ -103,6 +103,17 @@
     }];
     
     return self;
+}
+
+- (instancetype)initWithApplicationSupportFilename:(NSString *)filename maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount;
+{
+    ARKCheckCondition(filename.length > 0, nil, @"Must provide a filename!");
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = paths.firstObject;
+    NSString *archivePath = [[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:filename];
+    
+    return [self initWithURL:[NSURL fileURLWithPath:archivePath isDirectory:NO] maximumObjectCount:maximumObjectCount trimmedObjectCount:trimmedObjectCount];
 }
 
 - (void)dealloc;
@@ -187,13 +198,6 @@
 #endif
     
     [self.fileOperationQueue addOperation:readOperation];
-}
-
-- (void)trimArchive;
-{
-    [self.fileOperationQueue addOperationWithBlock:^{
-        [self _trimArchiveIfNecessary];
-    }];
 }
 
 - (void)clearArchive;
@@ -360,7 +364,7 @@
     // Truncate the file.
     [self truncateFileAtOffset:self.offsetInFile];
     
-    // Restore the offset.
+    // Restore the offset to the same equivalent location.
     [self seekToFileOffset:((originalOffset > offset) ? (originalOffset - offset) : 0)];
 }
 

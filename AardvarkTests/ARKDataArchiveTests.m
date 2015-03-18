@@ -9,7 +9,6 @@
 #import <XCTest/XCTest.h>
 
 #import "ARKDataArchive.h"
-#import "ARKDataArchive_Testing.h"
 
 
 @interface ARKFaultyUnarchivingObject : NSObject <NSSecureCoding>
@@ -30,7 +29,6 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 {
-    [aCoder encodeObject:@"foo" forKey:@"bar"];
 }
 
 @end
@@ -48,11 +46,11 @@
 - (void)setUp {
     [super setUp];
     
-    self.dataArchive = [[ARKDataArchive alloc] initWithArchiveFilename:@"archive.data" maximumObjectCount:8 trimmedObjectCount:5];
+    self.dataArchive = [[ARKDataArchive alloc] initWithApplicationSupportFilename:@"archive.data" maximumObjectCount:8 trimmedObjectCount:5];
 }
 
 - (void)tearDown {
-    [self.dataArchive waitUntilAllOperationsAreFinished];
+    [self.dataArchive saveArchiveAndWait:YES];
     
     NSURL *fileURL = self.dataArchive.archiveFileURL;
     self.dataArchive = nil;
@@ -89,7 +87,7 @@
     [self.dataArchive saveArchiveAndWait:YES];
     self.dataArchive = nil;
     
-    self.dataArchive = [[ARKDataArchive alloc] initWithArchiveFilename:@"archive.data" maximumObjectCount:10 trimmedObjectCount:5];
+    self.dataArchive = [[ARKDataArchive alloc] initWithApplicationSupportFilename:@"archive.data" maximumObjectCount:10 trimmedObjectCount:5];
     
     XCTestExpectation *expectation1 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)]];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
@@ -108,6 +106,18 @@
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Re-appended archive didn't have expected objects!");
         
         [expectation2 fulfill];
+    }];
+    
+    [self.dataArchive saveArchiveAndWait:YES];
+    self.dataArchive = nil;
+    
+    self.dataArchive = [[ARKDataArchive alloc] initWithApplicationSupportFilename:@"archive.data" maximumObjectCount:5 trimmedObjectCount:4];
+    XCTestExpectation *expectation3 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-3", NSStringFromSelector(_cmd)]];
+    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+        NSArray *expectedObjects = @[ @"Three", @"Four", @"Five", @"Six" ];
+        XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Re-opened archive didn't trim to new values!");
+        
+        [expectation3 fulfill];
     }];
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
@@ -217,7 +227,7 @@
     NSData *fileData = [[NSData dataWithContentsOfURL:fileURL] subdataWithRange:NSMakeRange(0, 300)];
     [fileData writeToURL:fileURL atomically:YES];
     
-    self.dataArchive = [[ARKDataArchive alloc] initWithArchiveFilename:@"archive.data" maximumObjectCount:10 trimmedObjectCount:5];
+    self.dataArchive = [[ARKDataArchive alloc] initWithApplicationSupportFilename:@"archive.data" maximumObjectCount:10 trimmedObjectCount:5];
     
     XCTestExpectation *expectation2 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)]];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {

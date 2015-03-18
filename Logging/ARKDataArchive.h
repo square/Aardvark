@@ -8,7 +8,8 @@
 
 @interface ARKDataArchive : NSObject
 
-- (instancetype)initWithArchiveFilename:(NSString *)filename maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithURL:(NSURL *)fileURL maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithApplicationSupportFilename:(NSString *)filename maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount;
 
 @property (nonatomic, readonly) NSUInteger maximumObjectCount;
 @property (nonatomic, readonly) NSUInteger trimmedObjectCount;
@@ -17,7 +18,6 @@
 - (void)appendArchiveOfObject:(id <NSSecureCoding>)object;
 - (void)readObjectsFromArchiveWithCompletionHandler:(void (^)(NSArray *unarchivedObjects))completionHandler;
 
-- (void)trimArchive;
 - (void)clearArchive;
 
 - (void)saveArchiveAndWait:(BOOL)wait;
