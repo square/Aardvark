@@ -1,0 +1,325 @@
+//
+//  ARKFileHandleAdditionsTests.m
+//  Aardvark
+//
+//  Created by Peter Westen on 3/17/15.
+//  Copyright (c) 2015 Square, Inc. All rights reserved.
+//
+
+#import <XCTest/XCTest.h>
+
+#import "NSFileHandle+ARKAdditions.h"
+
+#import "NSURL+ARKAdditions.h"
+
+
+@interface ARKFileHandleAdditionsTests : XCTestCase
+
+@property (nonatomic) NSFileHandle *fileHandle;
+
+@property (nonatomic, copy) NSURL *fileURL;
+
+@property (nonatomic) NSData *data_4;
+@property (nonatomic) NSData *dataWithLength_4;
+
+@property (nonatomic) NSData *data_6;
+@property (nonatomic) NSData *dataWithLength_6;
+
+@property (nonatomic) NSData *data_7;
+@property (nonatomic) NSData *dataWithLength_7;
+
+@property (nonatomic) NSData *data_9;
+@property (nonatomic) NSData *dataWithLength_9;
+
+@end
+
+
+@implementation ARKFileHandleAdditionsTests
+
+- (void)setUp;
+{
+    [super setUp];
+    
+    if (self.fileURL == nil) {
+        self.fileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"FileHandleAdditionsTests.data"];
+        
+        // Create sample data blocks. The lengths of each block are numbers that don't occur in the contents.
+        uint8_t bytes_4[] = { 0, 0, 0, 4,    1, 1, 2, 3 };
+        uint8_t bytes_6[] = { 0, 0, 0, 6,    5, 8, 13, 21, 34, 55 };
+        uint8_t bytes_7[] = { 0, 0, 0, 7,    53, 59, 61, 67, 71, 73, 79 };
+        uint8_t bytes_9[] = { 0, 0, 0, 9,    83, 89, 101, 103, 107, 109, 113, 127, 131 };
+        
+        // The data_x objects are the input, and the dataWithLength_x objects are the expected contents of the file.
+        self.data_4 = [[NSData alloc] initWithBytes:(bytes_4 + 4) length:4];
+        self.dataWithLength_4 = [[NSData alloc] initWithBytes:bytes_4 length:(4 + 4)];
+        
+        self.data_6 = [[NSData alloc] initWithBytes:(bytes_6 + 4) length:6];
+        self.dataWithLength_6 = [[NSData alloc] initWithBytes:bytes_6 length:(4 + 6)];
+        
+        self.data_7 = [[NSData alloc] initWithBytes:(bytes_7 + 4) length:7];
+        self.dataWithLength_7 = [[NSData alloc] initWithBytes:bytes_7 length:(4 + 7)];
+        
+        self.data_9 = [[NSData alloc] initWithBytes:(bytes_9 + 4) length:9];
+        self.dataWithLength_9 = [[NSData alloc] initWithBytes:bytes_9 length:(4 + 9)];
+    }
+    
+    [[NSFileManager defaultManager] removeItemAtURL:self.fileURL error:NULL];
+    [[NSFileManager defaultManager] createFileAtPath:self.fileURL.path contents:nil attributes:nil];
+    
+    self.fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.fileURL.path];
+}
+
+- (void)tearDown;
+{
+    [self.fileHandle closeFile];
+    self.fileHandle = nil;
+    
+    [super tearDown];
+}
+
+- (void)_assertFileContentsMatchDataList:(NSArray *)dataList;
+{
+    NSMutableData *concatenatedData = [NSMutableData new];
+    for (NSData *data in dataList) {
+        [concatenatedData appendData:data];
+    }
+    
+    [self.fileHandle synchronizeFile];
+    NSData *fileData = [NSData dataWithContentsOfURL:self.fileURL];
+    XCTAssertEqualObjects(fileData, concatenatedData, @"File contents not expected!");
+}
+
+- (void)test_writeDataBlock;
+{
+    // Check that the file starts empty.
+    [self _assertFileContentsMatchDataList:@[]];
+    
+    // Write data to empty file.
+    [self.fileHandle ARK_writeDataBlock:self.data_6];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_6 ]];
+    
+    // Append data to non-empty file.
+    [self.fileHandle ARK_writeDataBlock:self.data_7];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_6, self.dataWithLength_7 ]];
+    
+    // Over-write data in file (note that 9+4 = 6+7 so the contents line up).
+    [self.fileHandle ARK_writeDataBlock:self.data_7];
+    [self.fileHandle seekToFileOffset:0];
+    [self.fileHandle ARK_writeDataBlock:self.data_9];
+    [self.fileHandle ARK_writeDataBlock:self.data_4];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_9, self.dataWithLength_4, self.dataWithLength_7 ]];
+    
+    // Write empty-length data.
+    [self.fileHandle ARK_writeDataBlock:nil];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_9, self.dataWithLength_4, self.dataWithLength_7 ]];
+    
+    [self.fileHandle ARK_writeDataBlock:[NSData data]];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_9, self.dataWithLength_4, self.dataWithLength_7 ]];
+}
+
+- (void)test_appendDataBlock;
+{
+    // Check that the file starts empty.
+    [self _assertFileContentsMatchDataList:@[]];
+    
+    // Append to empty file.
+    [self.fileHandle ARK_appendDataBlock:self.data_6];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_6 ]];
+    
+    // Seek to beginning and append.
+    [self.fileHandle seekToFileOffset:0];
+    [self.fileHandle ARK_appendDataBlock:self.data_7];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_6, self.dataWithLength_7 ]];
+    
+    // Seek to middle and append.
+    [self.fileHandle seekToFileOffset:10];
+    [self.fileHandle ARK_appendDataBlock:self.data_9];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_6, self.dataWithLength_7, self.dataWithLength_9 ]];
+    
+    // Seek to end and append.
+    [self.fileHandle seekToEndOfFile];
+    [self.fileHandle ARK_appendDataBlock:self.data_4];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_6, self.dataWithLength_7, self.dataWithLength_9, self.dataWithLength_4 ]];
+    
+    // Append empty data.
+    [self.fileHandle ARK_appendDataBlock:nil];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_6, self.dataWithLength_7, self.dataWithLength_9, self.dataWithLength_4 ]];
+    
+    [self.fileHandle ARK_appendDataBlock:[NSData data]];
+    [self _assertFileContentsMatchDataList:@[ self.dataWithLength_6, self.dataWithLength_7, self.dataWithLength_9, self.dataWithLength_4 ]];
+}
+
+- (void)test_readAndSeekDataBlockLength;
+{
+    // Check empty file.
+    XCTAssertEqual([self.fileHandle ARK_readDataBlockLength], 0, @"Should get 0 for empty file!");
+    
+    // Write in some data, move to the beginning.
+    [self.fileHandle ARK_writeDataBlock:self.data_7];
+    [self.fileHandle ARK_writeDataBlock:self.data_9];
+    [self.fileHandle seekToFileOffset:0];
+    
+    // Read and seek from the beginning.
+    NSUInteger dataBlockLength = [self.fileHandle ARK_readDataBlockLength];
+    XCTAssertEqual(dataBlockLength, 7, @"First block should be marked as 7 bytes.");
+    XCTAssertEqual(self.fileHandle.offsetInFile, 4, @"Reading a data block length should advance the seek position.");
+    
+    BOOL seekResult = [self.fileHandle ARK_seekForwardByDataBlockLength:dataBlockLength];
+    XCTAssertTrue(seekResult, @"seekForward should succeed.");
+    XCTAssertEqual(self.fileHandle.offsetInFile, (4 + 7), @"seekForward should advance by block size.");
+    
+    // Read and seek from the middle.
+    dataBlockLength = [self.fileHandle ARK_readDataBlockLength];
+    XCTAssertEqual(dataBlockLength, 9, @"Second block should be marked as 9 bytes.");
+    XCTAssertEqual(self.fileHandle.offsetInFile, (4 + 7 + 4), @"Reading a data block length should advance the seek position.");
+    
+    seekResult = [self.fileHandle ARK_seekForwardByDataBlockLength:dataBlockLength];
+    XCTAssertTrue(seekResult, @"seekForward should succeed.");
+    XCTAssertEqual(self.fileHandle.offsetInFile, (4 + 7 + 4 + 9), @"seekForward should advance to end of data.");
+    
+    // Read and seek from the end.
+    dataBlockLength = [self.fileHandle ARK_readDataBlockLength];
+    XCTAssertEqual(dataBlockLength, 0, @"Non-existent block should be marked as 0 bytes.");
+    XCTAssertEqual(self.fileHandle.offsetInFile, (4 + 7 + 4 + 9), @"Reading a data block length of 0 shouldn't advance the seek position.");
+    
+    // Read an invalid block length.
+    [self.fileHandle seekToFileOffset:(4 + 7 + 4 + 9 - 1)];
+    dataBlockLength = [self.fileHandle ARK_readDataBlockLength];
+    XCTAssertEqual(dataBlockLength, ARKInvalidDataBlockLength, @"Reading a data block length at EOF-1 should return ARKInvalidDataBlockLength");
+    
+    [self.fileHandle seekToFileOffset:(4 + 7 + 4 + 9 - 2)];
+    dataBlockLength = [self.fileHandle ARK_readDataBlockLength];
+    XCTAssertEqual(dataBlockLength, ARKInvalidDataBlockLength, @"Reading a data block length at EOF-2 should return ARKInvalidDataBlockLength");
+    
+    [self.fileHandle seekToFileOffset:(4 + 7 + 4 + 9 - 3)];
+    dataBlockLength = [self.fileHandle ARK_readDataBlockLength];
+    XCTAssertEqual(dataBlockLength, ARKInvalidDataBlockLength, @"Reading a data block length at EOF-3 should return ARKInvalidDataBlockLength");
+    
+    // Read an incorrect block length (this isn't detected).
+    [self.fileHandle seekToFileOffset:1];
+    dataBlockLength = [self.fileHandle ARK_readDataBlockLength];
+    XCTAssertEqual(dataBlockLength, 0x0735, @"Reading a data block length within the file should succeed with unusable result.");
+}
+
+- (void)_test_seekForwardByInvalidDataBlockLengthAtOffset:(unsigned long long)offset;
+{
+    [self.fileHandle seekToFileOffset:offset];
+    BOOL seekResult = [self.fileHandle ARK_seekForwardByDataBlockLength:ARKInvalidDataBlockLength];
+    
+    XCTAssertFalse(seekResult, @"Seeking forward by invalid block length should return NO.");
+    XCTAssertEqual(self.fileHandle.offsetInFile, offset, @"Reading invalid block length shouldn't advance the seek position from %llu.", offset);
+}
+
+- (void)test_seekForwardByInvalidDataBlockLength;
+{
+    // Check empty file.
+    [self _test_seekForwardByInvalidDataBlockLengthAtOffset:0];
+    
+    // Populate some data.
+    [self.fileHandle ARK_writeDataBlock:self.data_7];
+    [self.fileHandle ARK_writeDataBlock:self.data_9];
+    
+    // Check various positions within the file.
+    [self _test_seekForwardByInvalidDataBlockLengthAtOffset:(0)];
+    [self _test_seekForwardByInvalidDataBlockLengthAtOffset:(4)];
+    [self _test_seekForwardByInvalidDataBlockLengthAtOffset:(4 + 7)];
+    [self _test_seekForwardByInvalidDataBlockLengthAtOffset:(4 + 7 + 4)];
+    [self _test_seekForwardByInvalidDataBlockLengthAtOffset:(4 + 7 + 4 + 9)];
+}
+
+- (void)test_seekForwardByIncorrectDataBlockLength;
+{
+    // Check empty file.
+    XCTAssertFalse([self.fileHandle ARK_seekForwardByDataBlockLength:1], @"Seek forward in empty file should return NO.");
+    XCTAssertEqual(self.fileHandle.offsetInFile, 0, @"Seek forward in empty file should leave offset at 0.");
+    
+    [self.fileHandle ARK_writeDataBlock:self.data_7];
+    [self.fileHandle ARK_writeDataBlock:self.data_9];
+    
+    // Seeks too close to EOF should return NO, and seek to EOF.
+    unsigned long long offsetAtEnd = [self.fileHandle seekToEndOfFile];
+    for (unsigned long long offsetFromEnd = 0; offsetFromEnd <= 9; offsetFromEnd++) {
+        [self.fileHandle seekToFileOffset:(offsetAtEnd - offsetFromEnd)];
+        
+        BOOL seekResult = [self.fileHandle ARK_seekForwardByDataBlockLength:9];
+        unsigned long long offset = self.fileHandle.offsetInFile;
+        
+        if (offsetFromEnd < 9) {
+            XCTAssertFalse(seekResult, @"Seek past EOF should return NO.");
+        } else {
+            XCTAssertTrue(seekResult, @"Seek to EOF should return YES.");
+        }
+        
+        XCTAssertEqual(offset, offsetAtEnd, @"Seek past or to EOF should seek to EOF.");
+    }
+}
+
+- (void)_test_truncateFileWithData:(NSData *)data toOffset:(unsigned long long)offset;
+{
+    NSData *expectedData = (offset > data.length) ? [NSData data] : [data subdataWithRange:NSMakeRange(offset, data.length - offset)];
+    
+    // Test a variety of chunk sizes.
+    NSArray *chunkSizes = @[ @(0), @(1), @(2), @(3), @(4), @(8), @(9), @(1023), @(1024), @(NSUIntegerMax) ];
+    
+    // Test several starting offsets, noting that the parameter is allowed to be past EOF but the file offsets cannot.
+    NSUInteger constrainedOffset = MIN(data.length, offset);
+    NSArray *startOffsets = @[ @(0), @(constrainedOffset / 2), @(constrainedOffset), @(constrainedOffset + (data.length - constrainedOffset) / 2), @(data.length) ];
+    NSMutableArray *expectedOffsets = [NSMutableArray new];
+    for (NSNumber *startOffset in startOffsets) {
+        if (constrainedOffset >= startOffset.integerValue) {
+            [expectedOffsets addObject:@(0)];
+        } else {
+            [expectedOffsets addObject:@(startOffset.integerValue - constrainedOffset)];
+        }
+    }
+    
+    for (NSNumber *chunkSize in chunkSizes) {
+        for (NSUInteger offsetIndex = 0; offsetIndex < startOffsets.count; offsetIndex++) {
+            unsigned long long startOffset = [(NSNumber *)startOffsets[offsetIndex] unsignedLongLongValue];
+            unsigned long long expectedOffset = [(NSNumber *)expectedOffsets[offsetIndex] unsignedLongLongValue];
+            
+            // Restore the contents.
+            [self.fileHandle truncateFileAtOffset:0];
+            [self.fileHandle writeData:data];
+            
+            // Seek, truncate and check results.
+            [self.fileHandle seekToFileOffset:startOffset];
+            [self.fileHandle ARK_truncateFileToOffset:offset maximumChunkSize:chunkSize.unsignedIntegerValue];
+            
+            unsigned long long resultOffset = self.fileHandle.offsetInFile;
+            [self.fileHandle synchronizeFile];
+            NSData *resultData = [NSData dataWithContentsOfURL:self.fileURL];
+            
+            XCTAssert([resultData isEqualToData:expectedData], @"Truncate data of length %@ to offset %@ with chunk size %@ didn't produce expected result.", @(data.length), @(offset), chunkSize);
+            XCTAssert(resultOffset == expectedOffset, @"Truncate data of length %@ to offset %@ with start offset %@ didn't result in expected offset %@.", @(data.length), @(offset), @(startOffset), @(expectedOffset));
+        }
+    }
+}
+
+- (void)test_truncateFileToOffset;
+{
+    // Test empty data.
+    [self _test_truncateFileWithData:[NSData data] toOffset:0];
+    [self _test_truncateFileWithData:[NSData data] toOffset:1];
+    
+    // Test single-byte data.
+    uint8_t oneByte = 120;
+    NSData *singleByteData = [[NSData alloc] initWithBytes:&oneByte length:1];
+    [self _test_truncateFileWithData:singleByteData toOffset:0];
+    [self _test_truncateFileWithData:singleByteData toOffset:1];
+    [self _test_truncateFileWithData:singleByteData toOffset:2];
+    
+    // Test longer data.
+    NSMutableData *sampleData = [NSMutableData new];
+    [sampleData appendData:self.dataWithLength_6];
+    [sampleData appendData:self.dataWithLength_7];
+    
+    [self _test_truncateFileWithData:sampleData toOffset:0];
+    [self _test_truncateFileWithData:sampleData toOffset:1];
+    [self _test_truncateFileWithData:sampleData toOffset:10];
+    [self _test_truncateFileWithData:sampleData toOffset:(sampleData.length - 1)];
+    [self _test_truncateFileWithData:sampleData toOffset:sampleData.length];
+    [self _test_truncateFileWithData:sampleData toOffset:(sampleData.length + 1)];
+}
+
+@end

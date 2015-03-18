@@ -15,6 +15,7 @@
 		D04D47FF1AB905C900A342E9 /* NSFileHandle+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D47FD1AB905C900A342E9 /* NSFileHandle+ARKAdditions.h */; };
 		D04D48001AB905C900A342E9 /* NSFileHandle+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47FE1AB905C900A342E9 /* NSFileHandle+ARKAdditions.m */; };
 		D04D48021AB908DD00A342E9 /* ARKDataArchive_Testing.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D48011AB908DD00A342E9 /* ARKDataArchive_Testing.h */; };
+		D04D48051AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D48041AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m */; };
 		EA09D3C51A2E6D2F004C1125 /* ARKDefineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA09D3C41A2E6D2F004C1125 /* ARKDefineTests.m */; };
 		EA491AFB19E5EAAA00762174 /* ARKLogObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = EA491AF919E5EAAA00762174 /* ARKLogObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA6E218E19E84C1D0097BF4F /* UIApplication+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EA6E218C19E84C1D0097BF4F /* UIApplication+ARKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -85,6 +86,7 @@
 		D04D47FD1AB905C900A342E9 /* NSFileHandle+ARKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileHandle+ARKAdditions.h"; path = "Categories/NSFileHandle+ARKAdditions.h"; sourceTree = "<group>"; };
 		D04D47FE1AB905C900A342E9 /* NSFileHandle+ARKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileHandle+ARKAdditions.m"; path = "Categories/NSFileHandle+ARKAdditions.m"; sourceTree = "<group>"; };
 		D04D48011AB908DD00A342E9 /* ARKDataArchive_Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKDataArchive_Testing.h; path = Logging/ARKDataArchive_Testing.h; sourceTree = "<group>"; };
+		D04D48041AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKFileHandleAdditionsTests.m; path = AardvarkTests/ARKFileHandleAdditionsTests.m; sourceTree = "<group>"; };
 		EA09D3C41A2E6D2F004C1125 /* ARKDefineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKDefineTests.m; path = AardvarkTests/ARKDefineTests.m; sourceTree = "<group>"; };
 		EA4583FD19E65C3C00E44882 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		EA491AF919E5EAAA00762174 /* ARKLogObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogObserver.h; path = Logging/ARKLogObserver.h; sourceTree = "<group>"; };
@@ -149,6 +151,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D04D48031AB9194A00A342E9 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				D04D48041AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m */,
+			);
+			name = Tests;
+			sourceTree = "<group>";
+		};
 		EA09D3C11A2E6CFA004C1125 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -288,6 +298,7 @@
 		EAD1447719E22F470065A1FF /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				D04D48031AB9194A00A342E9 /* Tests */,
 				D04D47FD1AB905C900A342E9 /* NSFileHandle+ARKAdditions.h */,
 				D04D47FE1AB905C900A342E9 /* NSFileHandle+ARKAdditions.m */,
 				D04D47F41AB8FD9000A342E9 /* NSURL+ARKAdditions.h */,
@@ -454,6 +465,7 @@
 				EA7353701A15C5E70060F54E /* ARKLogStoreTests.m in Sources */,
 				D04D47ED1AB8A0BA00A342E9 /* ARKDataArchiveTests.m in Sources */,
 				EA09D3C51A2E6D2F004C1125 /* ARKDefineTests.m in Sources */,
+				D04D48051AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m in Sources */,
 				EAC8459C19F60B820000F165 /* ARKEmailBugReporterTests.m in Sources */,
 				EA82F7931A3F9D6B0043BA42 /* ARKLogTableViewControllerTests.m in Sources */,
 				EAD1445419E201C70065A1FF /* ARKLogDistributorTests.m in Sources */,

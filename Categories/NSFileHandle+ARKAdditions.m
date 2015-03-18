@@ -21,30 +21,38 @@ NSUInteger const ARKInvalidDataBlockLength = NSUIntegerMax;
     ARKCheckCondition(dataBlockLength > 0, , @"Can't write data block %@", dataBlock);
     
     // Be sure to store the length value as big-endian in the file.
-    uint32_t dataLengthBytes = OSSwapHostToBigInt32(dataBlockLength);
-    [self writeData:[NSData dataWithBytes:&dataLengthBytes length:sizeof(dataLengthBytes)]];
+    uint8_t dataLengthBytes[4] = { };
+    OSWriteBigInt32(dataLengthBytes, 0, dataBlockLength);
+    NSData *dataLengthData = [NSData dataWithBytes:dataLengthBytes length:4];
     
+    [self writeData:dataLengthData];
     [self writeData:dataBlock];
+}
+
+- (void)ARK_appendDataBlock:(NSData *)dataBlock;
+{
+    [self seekToEndOfFile];
+    [self ARK_writeDataBlock:dataBlock];
 }
 
 - (NSUInteger)ARK_readDataBlockLength;
 {
-    uint32_t dataLengthBytes = 0;
+    NSData *dataLengthData = [self readDataOfLength:4];
     
-    NSData *dataLengthData = [self readDataOfLength:sizeof(dataLengthBytes)];
     if (dataLengthData.length == 0) {
         // We're at the end of the file.
         return 0;
     }
     
-    if (dataLengthData.length != sizeof(dataLengthBytes)) {
+    if (dataLengthData.length != 4) {
         // Something went wrong, we read a portion of a block length.
         return ARKInvalidDataBlockLength;
     }
     
     // The value is stored big-endian in the file.
+    uint8_t dataLengthBytes[4] = { };
     [dataLengthData getBytes:&dataLengthBytes];
-    return OSSwapBigToHostInt32(dataLengthBytes);
+    return OSReadBigInt32(dataLengthBytes, 0);
 }
 
 - (BOOL)ARK_seekForwardByDataBlockLength:(NSUInteger)dataBlockLength;
