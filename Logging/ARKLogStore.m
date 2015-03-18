@@ -11,6 +11,7 @@
 
 #import "ARKLogDistributor.h"
 #import "ARKLogMessage.h"
+#import "NSURL+ARKAdditions.h"
 
 
 @interface ARKLogStore ()
@@ -69,7 +70,7 @@
         return nil;
     }
     
-    self.persistedLogsFileURL = [self _persistenceURLWithFileName:fileName];
+    self.persistedLogsFileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:fileName];
     
     return self;
 }
@@ -285,14 +286,6 @@
 - (NSUInteger)_maximumLogMessageCountToKeepInMemory;
 {
     return 2 * self.maximumLogMessageCount;
-}
-
-- (NSURL *)_persistenceURLWithFileName:(NSString *)fileName;
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    NSString *persistenceLogsPath = [[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:fileName];
-    return [NSURL fileURLWithPath:persistenceLogsPath isDirectory:NO];
 }
 
 @end

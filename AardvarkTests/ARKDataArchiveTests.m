@@ -9,6 +9,9 @@
 #import <XCTest/XCTest.h>
 
 #import "ARKDataArchive.h"
+#import "ARKDataArchive_Testing.h"
+
+#import "NSURL+ARKAdditions.h"
 
 
 @interface ARKFaultyUnarchivingObject : NSObject <NSSecureCoding>
@@ -22,13 +25,15 @@
     return YES;
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
 {
+    // This is the "faulty" unarchive.
     return nil;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder;
 {
+    // No need to actually archive anything, since we always fail to unarchive.
 }
 
 @end
@@ -43,23 +48,31 @@
 
 @implementation ARKDataArchiveTests
 
-- (void)setUp {
+#pragma mark - Setup
+
+- (void)setUp;
+{
     [super setUp];
     
-    self.dataArchive = [[ARKDataArchive alloc] initWithApplicationSupportFilename:@"archive.data" maximumObjectCount:8 trimmedObjectCount:5];
+    NSURL *fileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"archive.data"];
+    
+    [[NSFileManager defaultManager] removeItemAtURL:fileURL error:NULL];
+    
+    self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:8 trimmedObjectCount:5];
 }
 
-- (void)tearDown {
+- (void)tearDown;
+{
     [self.dataArchive saveArchiveAndWait:YES];
-    
-    NSURL *fileURL = self.dataArchive.archiveFileURL;
     self.dataArchive = nil;
-    [[NSFileManager defaultManager] removeItemAtURL:fileURL error:NULL];
     
     [super tearDown];
 }
 
-- (void)testBasics {
+#pragma mark - Behavior Tests
+
+- (void)test_setUp_providesEmptyArchive;
+{
     XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
         XCTAssertNotNil(unarchivedObjects, @"-[ARKDataArchive readObjectsFromArchiveWithCompletionHandler:] should never return nil!");
@@ -71,7 +84,29 @@
     [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
-- (void)testReopenedArchive {
+- (void)test_dealloc_closesFile;
+{
+    int fileDescriptor = -1;
+    
+    @autoreleasepool {
+        // Create and destroy and instance within an autorelease pool to ensure ARC cleans it up.
+        NSURL *tempArchiveURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"testfile.data"];
+        ARKDataArchive *tempArchive = [[ARKDataArchive alloc] initWithURL:tempArchiveURL maximumObjectCount:10 trimmedObjectCount:5];
+        
+        fileDescriptor = tempArchive.archiveFileDescriptor;
+        XCTAssertTrue(fileDescriptor >= 0, @"Didn't get file descriptor!");
+        
+        [tempArchive saveArchiveAndWait:YES];
+        tempArchive = nil;
+    }
+    
+    XCTAssertEqual(fcntl(fileDescriptor, F_GETFD), -1, @"File descriptor should be closed after deallocating data archive!");
+}
+
+- (void)test_initWithURL_preservesExistingData;
+{
+    NSURL *fileURL = self.dataArchive.archiveFileURL;
+    
     XCTestExpectation *expectation0 = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
         XCTAssertEqual(unarchivedObjects.count, 0, @"Archive not initially empty!");
@@ -87,7 +122,7 @@
     [self.dataArchive saveArchiveAndWait:YES];
     self.dataArchive = nil;
     
-    self.dataArchive = [[ARKDataArchive alloc] initWithApplicationSupportFilename:@"archive.data" maximumObjectCount:10 trimmedObjectCount:5];
+    self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:10 trimmedObjectCount:5];
     
     XCTestExpectation *expectation1 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)]];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
@@ -111,7 +146,7 @@
     [self.dataArchive saveArchiveAndWait:YES];
     self.dataArchive = nil;
     
-    self.dataArchive = [[ARKDataArchive alloc] initWithApplicationSupportFilename:@"archive.data" maximumObjectCount:5 trimmedObjectCount:4];
+    self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:5 trimmedObjectCount:4];
     XCTestExpectation *expectation3 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-3", NSStringFromSelector(_cmd)]];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @"Three", @"Four", @"Five", @"Six" ];
@@ -123,7 +158,7 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
-- (void)testArchiveTrimming;
+- (void)test_appendArchiveOfObject_trimsArchive;
 {
     XCTestExpectation *expectation0 = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
@@ -199,7 +234,7 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
-- (void)testArchiveCorruptionDetection;
+- (void)test_initWithURL_detectsCorruptedArchive;
 {
     XCTestExpectation *expectation0 = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
@@ -227,7 +262,7 @@
     NSData *fileData = [[NSData dataWithContentsOfURL:fileURL] subdataWithRange:NSMakeRange(0, 300)];
     [fileData writeToURL:fileURL atomically:YES];
     
-    self.dataArchive = [[ARKDataArchive alloc] initWithApplicationSupportFilename:@"archive.data" maximumObjectCount:10 trimmedObjectCount:5];
+    self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:10 trimmedObjectCount:5];
     
     XCTestExpectation *expectation2 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)]];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
@@ -239,7 +274,7 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
-- (void)testUnarchivingProtection;
+- (void)test_readObjectsFromArchive_excludesFaultyUnarchives;
 {
     XCTestExpectation *expectation0 = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {

@@ -7,9 +7,12 @@
 //
 
 #import "ARKDataArchive.h"
+#import "ARKDataArchive_Testing.h"
+
+#import "NSFileHandle+ARKAdditions.h"
 
 
-#define BREAK_IF_ARCHIVE_IS_CORRUPT(condition) \
+#define BREAK_IF_ARCHIVE_IS_CORRUPTED(condition) \
     { \
         if ((condition)) { \
             NSLog(@"ERROR: -[%@ %@] corrupted archive at %@.", NSStringFromClass([self class]), NSStringFromSelector(_cmd), self.archiveFileURL); \
@@ -19,14 +22,7 @@
     }
 
 
-@interface NSFileHandle (ARKDataExtensions)
-
-- (NSUInteger)readDataBlockLength;
-- (void)writeDataBlockLength:(NSUInteger)dataBlockLength;
-- (BOOL)seekForwardByDataBlockLength:(NSUInteger)dataBlockLength;
-- (void)truncateFileToOffset:(unsigned long long)offset maximumBlockSize:(NSUInteger)maximumBlockSize;
-
-@end
+NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 
 
 @interface ARKDataArchive ()
@@ -45,7 +41,6 @@
 
 - (instancetype)initWithURL:(NSURL *)fileURL maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount;
 {
-    
     ARKCheckCondition([fileURL isFileURL], nil, @"Must provide a file URL!");
     
     self = [super init];
@@ -57,13 +52,10 @@
         [[NSFileManager defaultManager] createFileAtPath:fileURL.path contents:nil attributes:nil];
     }
     
-    
     NSError *error = nil;
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForUpdatingURL:fileURL error:&error];
     
-    if (fileHandle == nil || error != nil) {
-        return nil;
-    }
+    ARKCheckCondition(fileHandle != nil, nil, @"Couldn't create file handle for %@, got error %@", fileURL, error);
     
     _archiveFileURL = [fileURL copy];
     _fileHandle = fileHandle;
@@ -84,16 +76,17 @@
     [_fileOperationQueue addOperationWithBlock:^{
         // Count the number of objects and validate the structure of the file.
         [self.fileHandle seekToFileOffset:0];
+        
         while (YES) {
-            NSUInteger dataLength = [self.fileHandle readDataBlockLength];
+            NSUInteger dataLength = [self.fileHandle ARK_readDataBlockLength];
             if (dataLength == 0) {
                 // We're done.
                 break;
             }
             
-            BREAK_IF_ARCHIVE_IS_CORRUPT(dataLength == NSUIntegerMax);
+            BREAK_IF_ARCHIVE_IS_CORRUPTED(dataLength == ARKInvalidDataBlockLength);
             
-            BREAK_IF_ARCHIVE_IS_CORRUPT(![self.fileHandle seekForwardByDataBlockLength:dataLength]);
+            BREAK_IF_ARCHIVE_IS_CORRUPTED(![self.fileHandle ARK_seekForwardByDataBlockLength:dataLength]);
             
             self.objectCount++;
         }
@@ -103,22 +96,6 @@
     }];
     
     return self;
-}
-
-- (instancetype)initWithApplicationSupportFilename:(NSString *)filename maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount;
-{
-    ARKCheckCondition(filename.length > 0, nil, @"Must provide a filename!");
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    NSString *archivePath = [[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:filename];
-    
-    return [self initWithURL:[NSURL fileURLWithPath:archivePath isDirectory:NO] maximumObjectCount:maximumObjectCount trimmedObjectCount:trimmedObjectCount];
-}
-
-- (void)dealloc;
-{
-    [self.fileHandle closeFile];
 }
 
 #pragma mark - Public Methods
@@ -137,8 +114,7 @@
     if (data.length > 0) {
         [self.fileOperationQueue addOperationWithBlock:^{
             [self.fileHandle seekToEndOfFile];
-            [self.fileHandle writeDataBlockLength:data.length];
-            [self.fileHandle writeData:data];
+            [self.fileHandle ARK_writeDataBlock:data];
             
             self.objectCount++;
             
@@ -149,9 +125,7 @@
 
 - (void)readObjectsFromArchiveWithCompletionHandler:(void (^)(NSArray *unarchivedObjects))completionHandler;
 {
-    if (completionHandler == NULL) {
-        return;
-    }
+    ARKCheckCondition(completionHandler != NULL, , @"Must provide a completionHandler!");
     
     NSBlockOperation *readOperation = [NSBlockOperation blockOperationWithBlock:^{
         NSMutableArray *unarchivedObjects = [NSMutableArray arrayWithCapacity:self.objectCount];
@@ -159,15 +133,15 @@
             [self.fileHandle seekToFileOffset:0];
             
             while (YES) {
-                NSUInteger dataLength = [self.fileHandle readDataBlockLength];
+                NSUInteger dataLength = [self.fileHandle ARK_readDataBlockLength];
                 if (dataLength == 0) {
                     break;
                 }
                 
-                BREAK_IF_ARCHIVE_IS_CORRUPT(dataLength == NSUIntegerMax);
+                BREAK_IF_ARCHIVE_IS_CORRUPTED(dataLength == NSUIntegerMax);
                 
                 NSData *objectData = [self.fileHandle readDataOfLength:dataLength];
-                BREAK_IF_ARCHIVE_IS_CORRUPT(objectData == nil || objectData.length != dataLength);
+                BREAK_IF_ARCHIVE_IS_CORRUPTED(objectData == nil || objectData.length != dataLength);
                 
                 id object = nil;
                 
@@ -175,7 +149,7 @@
                     object = [NSKeyedUnarchiver unarchiveObjectWithData:objectData];
                 }
                 @catch (NSException *exception) {
-                    // We don't clear the archive if an individual object can't be unarchived, since the file itself is still well-formed.
+                    // We don't clear the archive if an individual object can't be unarchived, only if the structure of the archive itself is corrupted.
                     continue;
                 }
                 
@@ -214,7 +188,7 @@
     }];
     
     if (wait) {
-        // Set the QoS of this operation to be high if the calling code is waiting on it.
+        // Set the QoS of this operation to be high if the calling code is waiting for it.
 #ifdef __IPHONE_8_0
         if ([saveOperation respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
             saveOperation.qualityOfService = NSQualityOfServiceUserInitiated;
@@ -231,9 +205,9 @@
 
 #pragma mark - Testing Methods
 
-- (void)waitUntilAllOperationsAreFinished;
+- (int)archiveFileDescriptor;
 {
-    [self.fileOperationQueue waitUntilAllOperationsAreFinished];
+    return self.fileHandle.fileDescriptor;
 }
 
 #pragma mark - Private Methods
@@ -252,12 +226,12 @@
         [self.fileHandle seekToFileOffset:0];
         while (YES) {
             if (numberOfLogsToTrim == 0) {
-                [self.fileHandle truncateFileToOffset:self.fileHandle.offsetInFile maximumBlockSize:(1024 * 1024)];
+                [self.fileHandle ARK_truncateFileToOffset:self.fileHandle.offsetInFile maximumChunkSize:ARKMaximumChunkSizeForTrimOperation];
                 self.objectCount = self.trimmedObjectCount;
                 break;
             }
             
-            BREAK_IF_ARCHIVE_IS_CORRUPT(![self.fileHandle seekForwardByDataBlockLength:[self.fileHandle readDataBlockLength]]);
+            BREAK_IF_ARCHIVE_IS_CORRUPTED(![self.fileHandle ARK_seekForwardByDataBlockLength:[self.fileHandle ARK_readDataBlockLength]]);
             
             numberOfLogsToTrim--;
         }
@@ -271,102 +245,3 @@
 }
 
 @end
-
-
-#pragma mark -
-
-
-@implementation NSFileHandle (ARKDataExtensions)
-
-- (NSUInteger)readDataBlockLength;
-{
-    uint32_t dataLengthBytes = 0;
-    
-    NSData *dataLengthData = [self readDataOfLength:sizeof(dataLengthBytes)];
-    if (dataLengthData.length == 0) {
-        // We're at the end of the file.
-        return 0;
-    }
-    
-    if (dataLengthData.length != sizeof(dataLengthBytes)) {
-        // Something went wrong, we read a portion of a block length.
-        return NSUIntegerMax;
-    }
-    
-    // The value is stored big-endian in the file.
-    [dataLengthData getBytes:&dataLengthBytes];
-    return OSSwapBigToHostInt32(dataLengthBytes);
-}
-
-- (void)writeDataBlockLength:(NSUInteger)dataBlockLength;
-{
-    // Store the value as big-endian in the file.
-    uint32_t dataLengthBytes = OSSwapHostToBigInt32(dataBlockLength);
-    [self writeData:[NSData dataWithBytes:&dataLengthBytes length:sizeof(dataLengthBytes)]];
-}
-
-- (BOOL)seekForwardByDataBlockLength:(NSUInteger)dataBlockLength;
-{
-    if (dataBlockLength == NSUIntegerMax) {
-        return NO;
-    }
-    
-    unsigned long long newOffset = self.offsetInFile + dataBlockLength;
-    unsigned long long endOffset = [self seekToEndOfFile];
-    
-    if (endOffset < newOffset) {
-        return NO;
-    }
-    
-    [self seekToFileOffset:newOffset];
-    return YES;
-}
-
-- (void)truncateFileToOffset:(unsigned long long)offset maximumBlockSize:(NSUInteger)maximumBlockSize;
-{
-    // If there's nothing to do, bail out.
-    if (offset == 0) {
-        return;
-    }
-    
-    unsigned long long originalOffset = self.offsetInFile;
-    unsigned long long endOffset = [self seekToEndOfFile];
-    
-    if (offset >= endOffset) {
-        // We've been asked to empty the file.
-        [self truncateFileAtOffset:0];
-        return;
-    }
-    
-    if (maximumBlockSize == 0) {
-        maximumBlockSize = NSUIntegerMax;
-    }
-    
-    unsigned long long currentBlockOffset = offset;
-    
-    while (currentBlockOffset < endOffset) {
-        @autoreleasepool {
-            [self seekToFileOffset:currentBlockOffset];
-            
-            // Enforce the maximum block size, and avoid loss of accuracy when casting from ull to NSUInteger.
-            unsigned long long remainingDataLength = endOffset - currentBlockOffset;
-            NSUInteger blockLength = (remainingDataLength < maximumBlockSize) ? (NSUInteger)remainingDataLength : maximumBlockSize;
-            
-            NSData *dataBlock = [self readDataOfLength:blockLength];
-            
-            [self seekToFileOffset:(currentBlockOffset - offset)];
-            [self writeData:dataBlock];
-            
-            currentBlockOffset += blockLength;
-        }
-    }
-    
-    // Truncate the file.
-    [self truncateFileAtOffset:self.offsetInFile];
-    
-    // Restore the offset to the same equivalent location.
-    [self seekToFileOffset:((originalOffset > offset) ? (originalOffset - offset) : 0)];
-}
-
-@end
-
