@@ -127,12 +127,10 @@
 
 - (void)distributeAllPendingLogsWithCompletionHandler:(dispatch_block_t)completionHandler;
 {
+    ARKCheckCondition(completionHandler != NULL, , @"Must provide a completion handler!");
+    
     [self.logDistributingQueue addOperationWithBlock:^{
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-            if (completionHandler) {
-                completionHandler();
-            }
-        }];
+        [[NSOperationQueue mainQueue] addOperationWithBlock:completionHandler];
     }];
 }
 
