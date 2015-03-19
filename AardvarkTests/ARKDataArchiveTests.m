@@ -94,7 +94,7 @@
         ARKDataArchive *tempArchive = [[ARKDataArchive alloc] initWithURL:tempArchiveURL maximumObjectCount:10 trimmedObjectCount:5];
         
         fileDescriptor = tempArchive.archiveFileDescriptor;
-        XCTAssertTrue(fileDescriptor >= 0, @"Didn't get file descriptor!");
+        XCTAssertGreaterThanOrEqual(fileDescriptor, 0, @"Didn't get file descriptor!");
         
         [tempArchive saveArchiveAndWait:YES];
         tempArchive = nil;
