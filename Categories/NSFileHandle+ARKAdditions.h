@@ -17,11 +17,11 @@ extern NSUInteger const ARKInvalidDataBlockLength;
 /// Seeks to the end of the file before writing.
 - (void)ARK_appendDataBlock:(NSData *)dataBlock;
 
-/// Reads the length of the following data block (or 0 at EOF). The current file offset must be at a block length marker. If the current offsetInFile is too close to EOF, returns ARKInvalidDataBlockLength.
-- (NSUInteger)ARK_readDataBlockLength;
+/// Seeks forward from the beginning of the file, and returns blockIndex on success, or the index of the last block it reached without detecting corruption.
+- (NSUInteger)ARK_seekToDataBlockAtIndex:(NSUInteger)blockIndex;
 
-/// Advances the file offset by the specified number of bytes, as returned from a prior call to -ARK_readDataBlockLength. Returns NO if dataBlockLength is ARKInvalidDataBlockLength or too few bytes remain in the file.
-- (BOOL)ARK_seekForwardByDataBlockLength:(NSUInteger)dataBlockLength;
+/// Reads the length of the data block, followed by the data itself. Returns nil at the end of the file, and passes back NO if corruption was detected (without changing the current offsetInFile).
+- (NSData *)ARK_readDataBlock:(out BOOL *)success;
 
 /// Truncates the file from the beginning to the specified offset, moving data in chunks no larger than maximumChunkSize (to constrain the memory usage of the operation, at the expense of more processor and I/O time). Pass 0 or NSUIntegerMax to impose no limit.
 - (void)ARK_truncateFileToOffset:(unsigned long long)offset maximumChunkSize:(NSUInteger)maximumChunkSize;

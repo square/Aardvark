@@ -11,6 +11,7 @@
 
 @interface ARKDataArchive (Private)
 
+@property (nonatomic, strong, readonly) NSFileHandle *fileHandle;
 @property (readonly) int archiveFileDescriptor;
 
 @end

@@ -12,23 +12,14 @@
 #import "NSFileHandle+ARKAdditions.h"
 
 
-#define BREAK_IF_ARCHIVE_IS_CORRUPTED(condition) \
-    { \
-        if ((condition)) { \
-            NSLog(@"ERROR: -[%@ %@] corrupted archive at %@.", NSStringFromClass([self class]), NSStringFromSelector(_cmd), self.archiveFileURL); \
-            [self _clearArchive]; \
-            break; \
-        } \
-    }
-
-
 NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 
 
 @interface ARKDataArchive ()
 
-@property (nonatomic, strong, readonly) NSOperationQueue *fileOperationQueue;
 @property (nonatomic, strong, readonly) NSFileHandle *fileHandle;
+
+@property (nonatomic, strong, readonly) NSOperationQueue *fileOperationQueue;
 
 @property (nonatomic) NSUInteger objectCount;
 
@@ -74,24 +65,13 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 #endif
     
     [_fileOperationQueue addOperationWithBlock:^{
-        // Count the number of objects and validate the structure of the file.
-        [self.fileHandle seekToFileOffset:0];
+        // Count the (valid) number of archived objects.
+        self.objectCount = [self.fileHandle ARK_seekToDataBlockAtIndex:NSUIntegerMax];
         
-        while (YES) {
-            NSUInteger dataLength = [self.fileHandle ARK_readDataBlockLength];
-            if (dataLength == 0) {
-                // We're done.
-                break;
-            }
-            
-            BREAK_IF_ARCHIVE_IS_CORRUPTED(dataLength == ARKInvalidDataBlockLength);
-            
-            BREAK_IF_ARCHIVE_IS_CORRUPTED(![self.fileHandle ARK_seekForwardByDataBlockLength:dataLength]);
-            
-            self.objectCount++;
-        }
+        // Truncate corrupted content (if any).
+        [self.fileHandle truncateFileAtOffset:self.fileHandle.offsetInFile];
         
-        // Trim if appropriate.
+        // If maximumObjectCount is smaller than what was used previously, we may need to trim.
         [self _trimArchiveIfNecessary];
     }];
     
@@ -113,9 +93,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     
     if (data.length > 0) {
         [self.fileOperationQueue addOperationWithBlock:^{
-            [self.fileHandle seekToEndOfFile];
-            [self.fileHandle ARK_writeDataBlock:data];
-            
+            [self.fileHandle ARK_appendDataBlock:data];
             self.objectCount++;
             
             [self _trimArchiveIfNecessary];
@@ -129,27 +107,36 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     
     NSBlockOperation *readOperation = [NSBlockOperation blockOperationWithBlock:^{
         NSMutableArray *unarchivedObjects = [NSMutableArray arrayWithCapacity:self.objectCount];
+        
         if (self.objectCount > 0) {
-            [self.fileHandle seekToFileOffset:0];
+            [self.fileHandle ARK_seekToDataBlockAtIndex:0];
             
             while (YES) {
-                NSUInteger dataLength = [self.fileHandle ARK_readDataBlockLength];
-                if (dataLength == 0) {
+                BOOL success = NO;
+                NSData *objectData = [self.fileHandle ARK_readDataBlock:&success];
+                
+                if (!success) {
+                    NSLog(@"ERROR: -[%@ %@] corrupted archive at index %@ of %@ in %@.",
+                          NSStringFromClass([self class]), NSStringFromSelector(_cmd),
+                          @(unarchivedObjects.count), @(self.objectCount),
+                          self.archiveFileURL);
+                    
+                    // We can't trust anything in the file from here forward.
+                    [self.fileHandle truncateFileAtOffset:self.fileHandle.offsetInFile];
                     break;
                 }
                 
-                BREAK_IF_ARCHIVE_IS_CORRUPTED(dataLength == NSUIntegerMax);
-                
-                NSData *objectData = [self.fileHandle readDataOfLength:dataLength];
-                BREAK_IF_ARCHIVE_IS_CORRUPTED(objectData == nil || objectData.length != dataLength);
+                if (objectData == nil) {
+                    // We're done.
+                    break;
+                }
                 
                 id object = nil;
-                
                 @try {
                     object = [NSKeyedUnarchiver unarchiveObjectWithData:objectData];
                 }
                 @catch (NSException *exception) {
-                    // We don't clear the archive if an individual object can't be unarchived, only if the structure of the archive itself is corrupted.
+                    // The structure of the archive itself isn't corrupted, just the data itself, so ignore and continue.
                     continue;
                 }
                 
@@ -196,18 +183,11 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 #endif
     }
     
-    [self.fileOperationQueue addOperation:saveOperation];
-    
     if (wait) {
-        [self.fileOperationQueue waitUntilAllOperationsAreFinished];
+        [self.fileOperationQueue addOperations:@[ saveOperation ] waitUntilFinished:YES];
+    } else {
+        [self.fileOperationQueue addOperation:saveOperation];
     }
-}
-
-#pragma mark - Testing Methods
-
-- (int)archiveFileDescriptor;
-{
-    return self.fileHandle.fileDescriptor;
 }
 
 #pragma mark - Private Methods
@@ -221,19 +201,22 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     NSUInteger objectCount = self.objectCount;
     
     if (objectCount > self.maximumObjectCount && objectCount > self.trimmedObjectCount) {
-        NSUInteger numberOfLogsToTrim = (objectCount - self.trimmedObjectCount);
+        NSUInteger blockIndex = objectCount - self.trimmedObjectCount;
+        NSUInteger seekIndex = [self.fileHandle ARK_seekToDataBlockAtIndex:blockIndex];
         
-        [self.fileHandle seekToFileOffset:0];
-        while (YES) {
-            if (numberOfLogsToTrim == 0) {
-                [self.fileHandle ARK_truncateFileToOffset:self.fileHandle.offsetInFile maximumChunkSize:ARKMaximumChunkSizeForTrimOperation];
-                self.objectCount = self.trimmedObjectCount;
-                break;
-            }
+        if (seekIndex == blockIndex) {
+            [self.fileHandle ARK_truncateFileToOffset:self.fileHandle.offsetInFile maximumChunkSize:ARKMaximumChunkSizeForTrimOperation];
+            self.objectCount = self.trimmedObjectCount;
             
-            BREAK_IF_ARCHIVE_IS_CORRUPTED(![self.fileHandle ARK_seekForwardByDataBlockLength:[self.fileHandle ARK_readDataBlockLength]]);
+        } else {
+            NSLog(@"ERROR: -[%@ %@] corrupted archive at index %@ of %@ in %@.",
+                  NSStringFromClass([self class]), NSStringFromSelector(_cmd),
+                  @(seekIndex), @(objectCount),
+                  self.archiveFileURL);
             
-            numberOfLogsToTrim--;
+            // Trim from here forward.
+            [self.fileHandle truncateFileAtOffset:self.fileHandle.offsetInFile];
+            self.objectCount = seekIndex;
         }
     }
 }

@@ -11,6 +11,9 @@
 
 NSUInteger const ARKInvalidDataBlockLength = NSUIntegerMax;
 
+/// Type convenience.
+typedef unsigned long long ARKFileOffset;
+
 
 @implementation NSFileHandle (ARKAdditions)
 
@@ -31,45 +34,71 @@ NSUInteger const ARKInvalidDataBlockLength = NSUIntegerMax;
 
 - (void)ARK_appendDataBlock:(NSData *)dataBlock;
 {
-    [self seekToEndOfFile];
+    (void)[self seekToEndOfFile];
     [self ARK_writeDataBlock:dataBlock];
 }
 
-- (NSUInteger)ARK_readDataBlockLength;
+/// Seeks forward from the beginning of the file, and returns blockIndex on success, or the index of the last block it reached without detecting corruption.
+- (NSUInteger)ARK_seekToDataBlockAtIndex:(NSUInteger)blockIndex;
 {
-    NSData *dataLengthData = [self readDataOfLength:4];
-    
-    if (dataLengthData.length == 0) {
-        // We're at the end of the file.
+    // Simple case.
+    if (blockIndex == 0) {
+        [self seekToFileOffset:0];
         return 0;
     }
     
-    if (dataLengthData.length != 4) {
-        // Something went wrong, we read a portion of a block length.
-        return ARKInvalidDataBlockLength;
+    ARKFileOffset endOffset = [self seekToEndOfFile];
+    ARKFileOffset currentBlockOffset = 0;
+    [self seekToFileOffset:0];
+    
+    NSUInteger currentBlockIndex = 0;
+    while (currentBlockIndex < blockIndex) {
+        // Read the block length and break if we're done.
+        NSUInteger dataBlockLength = [self _ARK_readDataBlockLength];
+        if (dataBlockLength == 0) {
+            break;
+        }
+        
+        // If we've detected corruption, seek back and bail out.
+        if (dataBlockLength == ARKInvalidDataBlockLength || dataBlockLength > endOffset - self.offsetInFile) {
+            [self seekToFileOffset:currentBlockOffset];
+            break;
+        }
+        
+        // Seek forward.
+        currentBlockIndex++;
+        currentBlockOffset = self.offsetInFile + dataBlockLength;
+        [self seekToFileOffset:currentBlockOffset];
     }
     
-    // The value is stored big-endian in the file.
-    uint8_t dataLengthBytes[4] = { };
-    [dataLengthData getBytes:&dataLengthBytes];
-    return OSReadBigInt32(dataLengthBytes, 0);
+    return currentBlockIndex;
 }
 
-- (BOOL)ARK_seekForwardByDataBlockLength:(NSUInteger)dataBlockLength;
+- (NSData *)ARK_readDataBlock:(out BOOL *)success;
 {
-    if (dataBlockLength == ARKInvalidDataBlockLength) {
-        return NO;
+    // Check the length of the file before doing anything.
+    ARKFileOffset currentOffset = self.offsetInFile;
+    ARKFileOffset endOffset = [self seekToEndOfFile];
+    [self seekToFileOffset:currentOffset];
+    
+    // Read the block length.
+    NSUInteger dataBlockLength = [self _ARK_readDataBlockLength];
+    
+    // Bail out if the length itself was invalid, or there isn't enough remaining data in the file.
+    if (dataBlockLength == ARKInvalidDataBlockLength || dataBlockLength > endOffset - self.offsetInFile) {
+        [self seekToFileOffset:currentOffset];
+        if (success != NULL) {
+            *success = NO;
+        }
+        
+        return nil;
     }
     
-    unsigned long long newOffset = self.offsetInFile + dataBlockLength;
-    unsigned long long endOffset = [self seekToEndOfFile];
-    
-    if (endOffset < newOffset) {
-        return NO;
+    if (success != NULL) {
+        *success = YES;
     }
     
-    [self seekToFileOffset:newOffset];
-    return YES;
+    return (dataBlockLength > 0) ? [self readDataOfLength:dataBlockLength] : nil;
 }
 
 - (void)ARK_truncateFileToOffset:(unsigned long long)offset maximumChunkSize:(NSUInteger)maximumChunkSize;
@@ -79,8 +108,8 @@ NSUInteger const ARKInvalidDataBlockLength = NSUIntegerMax;
         return;
     }
     
-    unsigned long long originalOffset = self.offsetInFile;
-    unsigned long long endOffset = [self seekToEndOfFile];
+    ARKFileOffset originalOffset = self.offsetInFile;
+    ARKFileOffset endOffset = [self seekToEndOfFile];
     
     if (offset >= endOffset) {
         // We've been asked to empty the file.
@@ -92,15 +121,15 @@ NSUInteger const ARKInvalidDataBlockLength = NSUIntegerMax;
         maximumChunkSize = NSUIntegerMax;
     }
     
-    unsigned long long currentChunkOffset = offset;
+    ARKFileOffset currentChunkOffset = offset;
     
     while (currentChunkOffset < endOffset) {
         // The purpose of copying data in chunks is to avoid a large high-water mark of memory use, so make sure the NSData objects returned by -[NSFileHandler readDataOfLength:] get cleaned up as we go.
         @autoreleasepool {
             [self seekToFileOffset:currentChunkOffset];
             
-            // Enforce the maximum block size, and avoid loss of accuracy when casting from ull to NSUInteger.
-            unsigned long long remainingDataLength = endOffset - currentChunkOffset;
+            // Enforce the maximum block size, and avoid loss of accuracy when casting from ARKFileOffset to NSUInteger.
+            ARKFileOffset remainingDataLength = endOffset - currentChunkOffset;
             NSUInteger chunkLength = (remainingDataLength < maximumChunkSize) ? (NSUInteger)remainingDataLength : maximumChunkSize;
             
             NSData *dataChunk = [self readDataOfLength:chunkLength];
@@ -117,6 +146,28 @@ NSUInteger const ARKInvalidDataBlockLength = NSUIntegerMax;
     
     // Restore the offset to the same equivalent location.
     [self seekToFileOffset:((originalOffset > offset) ? (originalOffset - offset) : 0)];
+}
+
+#pragma mark - Private Methods
+
+- (NSUInteger)_ARK_readDataBlockLength;
+{
+    NSData *dataBlockLengthData = [self readDataOfLength:4];
+    
+    if (dataBlockLengthData.length == 0) {
+        // We're at the end of the file.
+        return 0;
+    }
+    
+    if (dataBlockLengthData.length != 4) {
+        // Something went wrong, we read a portion of a block length.
+        return ARKInvalidDataBlockLength;
+    }
+    
+    // The value is stored big-endian in the file.
+    uint8_t dataBlockLengthBytes[4] = { };
+    [dataBlockLengthData getBytes:&dataBlockLengthBytes];
+    return OSReadBigInt32(dataBlockLengthBytes, 0);
 }
 
 @end

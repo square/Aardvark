@@ -11,6 +11,7 @@
 #import "ARKDataArchive.h"
 #import "ARKDataArchive_Testing.h"
 
+#import "NSFileHandle+ARKAdditions.h"
 #import "NSURL+ARKAdditions.h"
 
 
@@ -93,7 +94,7 @@
         NSURL *tempArchiveURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"testfile.data"];
         ARKDataArchive *tempArchive = [[ARKDataArchive alloc] initWithURL:tempArchiveURL maximumObjectCount:10 trimmedObjectCount:5];
         
-        fileDescriptor = tempArchive.archiveFileDescriptor;
+        fileDescriptor = tempArchive.fileHandle.fileDescriptor;
         XCTAssertGreaterThanOrEqual(fileDescriptor, 0, @"Didn't get file descriptor!");
         
         [tempArchive saveArchiveAndWait:YES];
@@ -234,41 +235,95 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
-- (void)test_initWithURL_detectsCorruptedArchive;
+- (void)test_appendArchiveOfObject_trimsCorruptedArchive;
 {
-    XCTestExpectation *expectation0 = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
-        XCTAssertEqual(unarchivedObjects.count, 0, @"Archive not initially empty!");
-        
-        [expectation0 fulfill];
-    }];
-    
-    [self.dataArchive appendArchiveOfObject:@[ @1, @2 ]];
-    [self.dataArchive appendArchiveOfObject:@[ @3, @4 ]];
-    [self.dataArchive appendArchiveOfObject:@[ @5, @6 ]];
+    [self.dataArchive appendArchiveOfObject:@1];
+    [self.dataArchive appendArchiveOfObject:@2];
+    [self.dataArchive appendArchiveOfObject:@3];
+    [self.dataArchive appendArchiveOfObject:@4];
+    [self.dataArchive appendArchiveOfObject:@5];
+    [self.dataArchive appendArchiveOfObject:@6];
+    [self.dataArchive appendArchiveOfObject:@7];
+    [self.dataArchive appendArchiveOfObject:@8];
     
     XCTestExpectation *expectation1 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)]];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
-        NSArray *expectedObjects = @[ @[ @1, @2 ], @[ @3, @4 ], @[ @5, @6 ] ];
-        XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected objects!");
+        NSArray *expectedObjects = @[ @1, @2, @3, @4, @5, @6, @7, @8 ];
+        XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected initial maximum number of objects!");
         
         [expectation1 fulfill];
     }];
     
+    // Truncate the file partway into a block length marker (flushing the queue first, since we use the fileHandle directly to corrupt the data).
     [self.dataArchive saveArchiveAndWait:YES];
-    NSURL *fileURL = self.dataArchive.archiveFileURL;
-    self.dataArchive = nil;
+    [self.dataArchive.fileHandle ARK_seekToDataBlockAtIndex:3];
+    [self.dataArchive.fileHandle truncateFileAtOffset:(self.dataArchive.fileHandle.offsetInFile + 2)];
     
-    NSData *fileData = [[NSData dataWithContentsOfURL:fileURL] subdataWithRange:NSMakeRange(0, 300)];
-    [fileData writeToURL:fileURL atomically:YES];
-    
-    self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:10 trimmedObjectCount:5];
+    [self.dataArchive appendArchiveOfObject:@9];
     
     XCTestExpectation *expectation2 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)]];
     [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
-        XCTAssertEqual(unarchivedObjects.count, 0, @"Archive not empty after re-initializing with invalid data!");
+        NSArray *expectedObjects = @[ @1, @2, @3 ];
+        XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected objects after trimming a corrupted archive!");
         
         [expectation2 fulfill];
+    }];
+    
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void)test_initWithURL_detectsCorruptedArchive;
+{
+    // Populate with data.
+    [self.dataArchive appendArchiveOfObject:@[ @1, @2 ]];
+    [self.dataArchive appendArchiveOfObject:@[ @3, @4 ]];
+    [self.dataArchive appendArchiveOfObject:@[ @5, @6 ]];
+    
+    // Truncate the file partway into the first block (flushing the queue first, since we use the fileHandle directly to corrupt the data).
+    [self.dataArchive saveArchiveAndWait:YES];
+    [self.dataArchive.fileHandle truncateFileAtOffset:8];
+    
+    // Reload from scratch.
+    [self.dataArchive saveArchiveAndWait:YES];
+    NSURL *fileURL = self.dataArchive.archiveFileURL;
+    self.dataArchive = nil;
+    self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:10 trimmedObjectCount:5];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:[NSString stringWithFormat:@"%@", NSStringFromSelector(_cmd)]];
+    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+        XCTAssertEqualObjects(unarchivedObjects, @[], @"Archive didn't trim invalid data after re-initialization.");
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void)test_initWithURL_detectsPartiallyCorruptedArchive;
+{
+    // Populate with data.
+    [self.dataArchive appendArchiveOfObject:@[ @1, @2 ]];
+    [self.dataArchive appendArchiveOfObject:@[ @3, @4 ]];
+    [self.dataArchive appendArchiveOfObject:@[ @5, @6 ]];
+    
+    // Truncate the file partway into a block length marker (flushing the queue first, since we use the fileHandle directly to corrupt the data).
+    [self.dataArchive saveArchiveAndWait:YES];
+    [self.dataArchive.fileHandle ARK_seekToDataBlockAtIndex:1];
+    [self.dataArchive.fileHandle truncateFileAtOffset:(self.dataArchive.fileHandle.offsetInFile + 2)];
+    
+    // Reload from scratch.
+    [self.dataArchive saveArchiveAndWait:YES];
+    NSURL *fileURL = self.dataArchive.archiveFileURL;
+    self.dataArchive = nil;
+    self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:10 trimmedObjectCount:5];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:[NSString stringWithFormat:@"%@", NSStringFromSelector(_cmd)]];
+    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+        NSArray *expectedObjects = @[ @[ @1, @2 ] ];
+        XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't truncate invalid data after re-initialization.");
+        
+        [expectation fulfill];
     }];
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
