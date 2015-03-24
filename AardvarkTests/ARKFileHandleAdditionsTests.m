@@ -153,24 +153,147 @@
     [self _assertFileContentsMatchDataList:@[ self.block_6, self.block_7, self.block_9, self.block_4 ] failureMessage:@"Appending empty data shouldn't change the file."];
 }
 
+- (void)_assert_seekToDataBlockAtIndex:(NSUInteger)index seeksToIndex:(NSUInteger)expectedIndex atFileOffset:(unsigned long long)expectedFileOffset;
+{
+    NSUInteger seekIndex = [self.fileHandle ARK_seekToDataBlockAtIndex:index];
+    unsigned long long seekOffset = self.fileHandle.offsetInFile;
+    
+    XCTAssertEqual(seekIndex, expectedIndex, @"seekToDataBlockAtIndex:%@ didn't seek to expected index.", @(index));
+    XCTAssertEqual(seekOffset, expectedFileOffset, "seekToDataBlockAtIndex:%@ didn't seek to expected file offset.", @(index));
+}
+
 - (void)test_seekToDataBlockAtIndex;
 {
+    XCTAssertEqual(self.fileHandle.offsetInFile, 0, @"Offset should start out at 0.");
     
+    // Define these up front for convenience.
+    unsigned long long offset0 = 0;
+    unsigned long long offset1 = offset0 + self.block_4.length;
+    unsigned long long offset2 = offset1 + self.block_7.length;
+    unsigned long long offset3 = offset2 + self.block_6.length;
+    
+    [self _assert_seekToDataBlockAtIndex:0 seeksToIndex:0 atFileOffset:offset0];
+    [self _assert_seekToDataBlockAtIndex:1 seeksToIndex:0 atFileOffset:offset0];
+    [self _assert_seekToDataBlockAtIndex:NSUIntegerMax seeksToIndex:0 atFileOffset:offset0];
+    
+    [self.fileHandle ARK_appendDataBlock:self.data_4];
+    
+    [self _assert_seekToDataBlockAtIndex:0 seeksToIndex:0 atFileOffset:offset0];
+    [self _assert_seekToDataBlockAtIndex:1 seeksToIndex:1 atFileOffset:offset1];
+    [self _assert_seekToDataBlockAtIndex:2 seeksToIndex:1 atFileOffset:offset1];
+    [self _assert_seekToDataBlockAtIndex:NSUIntegerMax seeksToIndex:1 atFileOffset:offset1];
+    
+    [self.fileHandle ARK_appendDataBlock:self.data_7];
+    
+    [self _assert_seekToDataBlockAtIndex:0 seeksToIndex:0 atFileOffset:offset0];
+    [self _assert_seekToDataBlockAtIndex:1 seeksToIndex:1 atFileOffset:offset1];
+    [self _assert_seekToDataBlockAtIndex:2 seeksToIndex:2 atFileOffset:offset2];
+    [self _assert_seekToDataBlockAtIndex:3 seeksToIndex:2 atFileOffset:offset2];
+    [self _assert_seekToDataBlockAtIndex:NSUIntegerMax seeksToIndex:2 atFileOffset:offset2];
+    
+    [self.fileHandle ARK_appendDataBlock:self.data_6];
+    
+    [self _assert_seekToDataBlockAtIndex:0 seeksToIndex:0 atFileOffset:offset0];
+    [self _assert_seekToDataBlockAtIndex:1 seeksToIndex:1 atFileOffset:offset1];
+    [self _assert_seekToDataBlockAtIndex:2 seeksToIndex:2 atFileOffset:offset2];
+    [self _assert_seekToDataBlockAtIndex:3 seeksToIndex:3 atFileOffset:offset3];
+    [self _assert_seekToDataBlockAtIndex:4 seeksToIndex:3 atFileOffset:offset3];
+    [self _assert_seekToDataBlockAtIndex:NSUIntegerMax seeksToIndex:3 atFileOffset:offset3];
 }
 
 - (void)test_seekToDataBlockAtIndex_detectsCorruptedData;
 {
+    // Define these up front for convenience.
+    unsigned long long offset0 = 0;
+    unsigned long long offset1 = offset0 + self.block_7.length;
+    unsigned long long offset2 = offset1 + self.block_9.length;
+    unsigned long long offset3 = offset2 + self.block_4.length;
     
+    [self.fileHandle ARK_appendDataBlock:self.data_7];
+    [self.fileHandle ARK_appendDataBlock:self.data_9];
+    [self.fileHandle ARK_appendDataBlock:self.data_4];
+    
+    // Truncate part of the last data block.
+    [self.fileHandle truncateFileAtOffset:(offset3 - 3)];
+    
+    [self _assert_seekToDataBlockAtIndex:0 seeksToIndex:0 atFileOffset:offset0];
+    [self _assert_seekToDataBlockAtIndex:1 seeksToIndex:1 atFileOffset:offset1];
+    [self _assert_seekToDataBlockAtIndex:2 seeksToIndex:2 atFileOffset:offset2];
+    [self _assert_seekToDataBlockAtIndex:3 seeksToIndex:2 atFileOffset:offset2];
+    [self _assert_seekToDataBlockAtIndex:4 seeksToIndex:2 atFileOffset:offset2];
+    [self _assert_seekToDataBlockAtIndex:NSUIntegerMax seeksToIndex:2 atFileOffset:offset2];
+    
+    // Truncate part of the last data length marker.
+    [self.fileHandle ARK_seekToDataBlockAtIndex:2];
+    [self.fileHandle truncateFileAtOffset:(offset2 + 2)];
+    
+    [self _assert_seekToDataBlockAtIndex:0 seeksToIndex:0 atFileOffset:offset0];
+    [self _assert_seekToDataBlockAtIndex:1 seeksToIndex:1 atFileOffset:offset1];
+    [self _assert_seekToDataBlockAtIndex:2 seeksToIndex:2 atFileOffset:offset2];
+    [self _assert_seekToDataBlockAtIndex:3 seeksToIndex:2 atFileOffset:offset2];
+    [self _assert_seekToDataBlockAtIndex:4 seeksToIndex:2 atFileOffset:offset2];
+    [self _assert_seekToDataBlockAtIndex:NSUIntegerMax seeksToIndex:2 atFileOffset:offset2];
+    
+    // Truncate everything but three bytes.
+    [self.fileHandle truncateFileAtOffset:3];
+    
+    [self _assert_seekToDataBlockAtIndex:0 seeksToIndex:0 atFileOffset:offset0];
+    [self _assert_seekToDataBlockAtIndex:1 seeksToIndex:0 atFileOffset:offset0];
+    [self _assert_seekToDataBlockAtIndex:NSUIntegerMax seeksToIndex:0 atFileOffset:offset0];
+}
+
+- (void)_assert_readDataBlock_returnsData:(NSData *)expectedData;
+{
+    BOOL success = NO;
+    NSData *data = [self.fileHandle ARK_readDataBlock:&success];
+    
+    if (expectedData != nil) {
+        XCTAssertEqualObjects(expectedData, data, @"ARK_readDataBlock didn't read expected data.");
+    } else {
+        XCTAssertNil(data, @"ARK_readDataBlock read unexpected data.");
+    }
+    
+    XCTAssertTrue(success, @"ARK_readDataBlock didn't pass back success when expected.");
 }
 
 - (void)test_readDataBlock;
 {
+    // Read nil when empty.
+    [self _assert_readDataBlock_returnsData:nil];
     
+    [self.fileHandle ARK_appendDataBlock:self.data_9];
+    
+    [self.fileHandle seekToFileOffset:0];
+    [self _assert_readDataBlock_returnsData:self.data_9];
+    [self _assert_readDataBlock_returnsData:nil];
+    
+    [self.fileHandle ARK_appendDataBlock:self.data_4];
+    
+    [self.fileHandle seekToFileOffset:0];
+    [self _assert_readDataBlock_returnsData:self.data_9];
+    [self _assert_readDataBlock_returnsData:self.data_4];
+    [self _assert_readDataBlock_returnsData:nil];
 }
 
-- (void)test_readDataBlock_detectsCorruptedData;
+- (void)test_readDataBlock_detectsCorruptedDataOrInvalidOffset;
 {
+    [self.fileHandle ARK_appendDataBlock:self.data_7];
+    [self.fileHandle ARK_appendDataBlock:self.data_9];
+    [self.fileHandle ARK_appendDataBlock:self.data_4];
     
+    [self.fileHandle ARK_seekToDataBlockAtIndex:2];
+    
+    // Check all the offsets within the last data block.
+    unsigned long long startOffset = self.fileHandle.offsetInFile;
+    for (NSUInteger blockOffset = 1; blockOffset < self.block_4.length; blockOffset++) {
+        [self.fileHandle seekToFileOffset:(startOffset + blockOffset)];
+        
+        BOOL success = YES;
+        NSData *data = [self.fileHandle ARK_readDataBlock:&success];
+        
+        XCTAssertNil(data, @"ARK_readDataBlock should return nil at invalid offset %@.", @(startOffset + blockOffset));
+        XCTAssertFalse(success, @"ARK_readDataBlock should pass back !success at invalid offset %@.", @(startOffset + blockOffset));
+    }
 }
 
 - (void)_test_truncateFileWithData:(NSData *)data toOffset:(unsigned long long)offset;
