@@ -11,6 +11,7 @@
 #import "ARKDataArchive.h"
 #import "ARKDataArchive_Testing.h"
 
+#import "ARKLogMessage.h"
 #import "NSFileHandle+ARKAdditions.h"
 #import "NSURL+ARKAdditions.h"
 
@@ -369,6 +370,104 @@
     }];
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+#pragma mark - Performance Tests
+
+- (void)test_appendArchiveOfObject_performance;
+{
+    // Start fresh.
+    NSURL *fileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"archive-performance.data"];
+    ARKDataArchive *dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
+    [dataArchive.fileHandle truncateFileAtOffset:0];
+    [dataArchive saveArchiveAndWait:YES];
+    
+    NSMutableArray *numbers = [NSMutableArray new];
+    for (NSUInteger i  = 0; i < dataArchive.maximumObjectCount; i++) {
+        [numbers addObject:@(i)];
+    }
+    
+    [self measureBlock:^{
+        // Concurrently add all of the objects.
+        [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
+            [dataArchive appendArchiveOfObject:number];
+        }];
+        
+        [dataArchive waitUntilAllOperationsAreFinished];
+    }];
+}
+
+- (void)test_saveArchive_performance;
+{
+    // Start fresh.
+    NSURL *fileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"archive-performance.data"];
+    ARKDataArchive *dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
+    [dataArchive.fileHandle truncateFileAtOffset:0];
+    [dataArchive saveArchiveAndWait:YES];
+    
+    NSMutableArray *numbers = [NSMutableArray new];
+    for (NSUInteger i  = 0; i < dataArchive.maximumObjectCount; i++) {
+        [numbers addObject:@(i)];
+    }
+    
+    // Concurrently add all of the objects.
+    [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
+        [dataArchive appendArchiveOfObject:number];
+    }];
+    
+    [dataArchive waitUntilAllOperationsAreFinished];
+    
+    [self measureBlock:^{
+        [dataArchive saveArchiveAndWait:YES];
+    }];
+}
+
+- (void)test_appendLogsAndSave_performance;
+{
+    // Start fresh.
+    NSURL *fileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"archive-performance.data"];
+    ARKDataArchive *dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
+    [dataArchive.fileHandle truncateFileAtOffset:0];
+    [dataArchive saveArchiveAndWait:YES];
+    
+    NSMutableArray *logMessages = [NSMutableArray new];
+    for (NSUInteger i  = 0; i < dataArchive.maximumObjectCount; i++) {
+        [logMessages addObject:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
+    }
+    
+    [self measureBlock:^{
+        // Concurrently add all of the logs.
+        [logMessages enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
+            [dataArchive appendArchiveOfObject:logMessage];
+        }];
+        
+        [dataArchive saveArchiveAndWait:YES];
+    }];
+}
+
+- (void)test_initWithURL_performance;
+{
+    // Start fresh.
+    NSURL *fileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"archive-performance.data"];
+    ARKDataArchive *dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
+    [dataArchive.fileHandle truncateFileAtOffset:0];
+    [dataArchive saveArchiveAndWait:YES];
+    
+    NSMutableArray *numbers = [NSMutableArray new];
+    for (NSUInteger i  = 0; i < dataArchive.maximumObjectCount; i++) {
+        [numbers addObject:@(i)];
+    }
+    
+    // Concurrently add all of the objects.
+    [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
+        [dataArchive appendArchiveOfObject:number];
+    }];
+    
+    [dataArchive saveArchiveAndWait:YES];
+    
+    [self measureBlock:^{
+        (void)[[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
+    }];
 }
 
 @end

@@ -13,4 +13,6 @@
 
 @property (nonatomic, strong, readonly) NSFileHandle *fileHandle;
 
+- (void)waitUntilAllOperationsAreFinished;
+
 @end

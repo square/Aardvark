@@ -190,6 +190,13 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     }
 }
 
+#pragma mark - Testing Methods
+
+- (void)waitUntilAllOperationsAreFinished;
+{
+    [self.fileOperationQueue waitUntilAllOperationsAreFinished];
+}
+
 #pragma mark - Private Methods
 
 - (void)_trimArchiveIfNecessary;

@@ -441,7 +441,7 @@
 
 #pragma mark - Performance Tests
 
-- (void)test_log_performance;
+- (void)test_observeLogMessage_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
     for (NSUInteger i  = 0; i < 3 * self.logStore.maximumLogCountToPersist; i++) {
@@ -519,6 +519,57 @@
         [self.logStore.logObservingQueue addOperationWithBlock:^{
             // Trim and persist the logs.
             [self.logStore _persistLogs_inLogObservingQueue];
+        }];
+        
+        [self.logStore.logObservingQueue waitUntilAllOperationsAreFinished];
+    }];
+}
+
+- (void)test_persistLogsAndSave_performance;
+{
+    NSMutableArray *logMessages = [NSMutableArray new];
+    for (NSUInteger i  = 0; i < self.logStore.maximumLogCountToPersist; i++) {
+        [logMessages addObject:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
+    }
+    
+    [self measureBlock:^{
+        // Concurrently add all of the logs.
+        [logMessages enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
+            [self.logStore observeLogMessage:logMessage];
+        }];
+        
+        [self.logStore.logObservingQueue addOperationWithBlock:^{
+            // Trim and persist the logs.
+            [self.logStore _persistLogs_inLogObservingQueue];
+        }];
+        
+        [self.logStore.logObservingQueue waitUntilAllOperationsAreFinished];
+    }];
+}
+
+- (void)test_loadPersistedLogs_performance;
+{
+    NSMutableArray *numbers = [NSMutableArray new];
+    for (NSUInteger i  = 0; i < self.logStore.maximumLogCountToPersist; i++) {
+        [numbers addObject:[NSString stringWithFormat:@"%@", @(i)]];
+    }
+    
+    // Concurrently add all of the logs.
+    [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSString *text, NSUInteger idx, BOOL *stop) {
+        [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:text image:nil type:ARKLogTypeDefault userInfo:nil]];
+    }];
+    
+    // Persist the logs.
+    [self.logStore.logObservingQueue addOperationWithBlock:^{
+        [self.logStore _persistLogs_inLogObservingQueue];
+    }];
+    
+    [self.logStore.logObservingQueue waitUntilAllOperationsAreFinished];
+    
+    [self measureBlock:^{
+        [self.logStore.logObservingQueue addOperationWithBlock:^{
+            // Load the persisted logs.
+            (void)[self.logStore _persistedLogs];
         }];
         
         [self.logStore.logObservingQueue waitUntilAllOperationsAreFinished];
