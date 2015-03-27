@@ -14,6 +14,11 @@ NSUInteger const ARKInvalidDataBlockLength = NSUIntegerMax;
 /// Type convenience.
 typedef unsigned long long ARKFileOffset;
 
+/// These defines must all be kept in sync. Changing them will render files with differently-sized data block lengths unreadable.
+#define ARKBlockLengthBytes (sizeof(uint32_t))
+#define ARKWriteBigEndianBlockLength OSWriteBigInt32
+#define ARKReadBigEndianBlockLength OSReadBigInt32
+
 
 @implementation NSFileHandle (ARKAdditions)
 
@@ -24,9 +29,9 @@ typedef unsigned long long ARKFileOffset;
     ARKCheckCondition(dataBlockLength > 0, , @"Can't write data block %@", dataBlock);
     
     // Be sure to store the length value as big-endian in the file.
-    uint8_t dataLengthBytes[4] = { };
-    OSWriteBigInt32(dataLengthBytes, 0, dataBlockLength);
-    NSData *dataLengthData = [NSData dataWithBytes:dataLengthBytes length:4];
+    uint8_t dataLengthBytes[ARKBlockLengthBytes] = { };
+    ARKWriteBigEndianBlockLength(dataLengthBytes, 0, dataBlockLength);
+    NSData *dataLengthData = [NSData dataWithBytes:dataLengthBytes length:ARKBlockLengthBytes];
     
     [self writeData:dataLengthData];
     [self writeData:dataBlock];
@@ -152,22 +157,22 @@ typedef unsigned long long ARKFileOffset;
 
 - (NSUInteger)_ARK_readDataBlockLength;
 {
-    NSData *dataBlockLengthData = [self readDataOfLength:4];
+    NSData *dataBlockLengthData = [self readDataOfLength:ARKBlockLengthBytes];
     
     if (dataBlockLengthData.length == 0) {
         // We're at the end of the file.
         return 0;
     }
     
-    if (dataBlockLengthData.length != 4) {
+    if (dataBlockLengthData.length != ARKBlockLengthBytes) {
         // Something went wrong, we read a portion of a block length.
         return ARKInvalidDataBlockLength;
     }
     
     // The value is stored big-endian in the file.
-    uint8_t dataBlockLengthBytes[4] = { };
+    uint8_t dataBlockLengthBytes[ARKBlockLengthBytes] = { };
     [dataBlockLengthData getBytes:&dataBlockLengthBytes];
-    return OSReadBigInt32(dataBlockLengthBytes, 0);
+    return ARKReadBigEndianBlockLength(dataBlockLengthBytes, 0);
 }
 
 @end

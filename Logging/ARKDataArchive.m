@@ -65,7 +65,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 #endif
     
     [_fileOperationQueue addOperationWithBlock:^{
-        // Count the (valid) number of archived objects.
+        // Count the number of (valid) archived objects.
         self.objectCount = [self.fileHandle ARK_seekToDataBlockAtIndex:NSUIntegerMax];
         
         // Truncate corrupted content (if any).
