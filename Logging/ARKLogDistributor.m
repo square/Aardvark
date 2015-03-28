@@ -81,7 +81,7 @@
     dispatch_once(&_defaultLogStoreAccessOnceToken, ^{
         // Lazily create a default log store if none exists.
         if (self.weakDefaultLogStore == nil) {
-            self.defaultLogStore = [ARKLogStore new];
+            self.defaultLogStore = [[ARKLogStore alloc] initWithPersistedLogFileName:[NSStringFromClass([self class]) stringByAppendingString:@"_DefaultLogStore"]];
         }
     });
     
@@ -217,6 +217,20 @@
     [self logWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
 }
 
+#pragma mark - Protected Methods
+
+- (void)waitUntilAllPendingLogsHaveBeenDistributed;
+{
+    [self.logDistributingQueue waitUntilAllOperationsAreFinished];
+}
+
+#pragma mark - Testing Methods
+
+- (NSUInteger)internalQueueOperationCount;
+{
+    return self.logDistributingQueue.operationCount;
+}
+
 #pragma mark - Private Methods
 
 - (void)_logMessage_inLogDistributingQueue:(ARKLogMessage *)logMessage;
@@ -229,11 +243,6 @@
     for (id <ARKLogObserver> logObserver in logObservers) {
         [logObserver observeLogMessage:logMessage];
     }
-}
-
-- (void)_flushLogDistributingQueue:(NSNotification *)notification;
-{
-    [self.logDistributingQueue waitUntilAllOperationsAreFinished];
 }
 
 @end

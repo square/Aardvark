@@ -33,7 +33,7 @@
 - (void)removeLogObserver:(id <ARKLogObserver>)logObserver;
 
 /// Distributes all enqueued log messages to log observers prior to calling the completionHandler. Completion handler is called on the main queue.
-- (void)distributeAllPendingLogsWithCompletionHandler:(dispatch_block_t)completionHandler;
+- (void)distributeAllPendingLogsWithCompletionHandler:(dispatch_block_t)completionHandler __attribute__((nonnull(1)));
 
 /// Distributes the log to the log observers.
 - (void)logMessage:(ARKLogMessage *)logMessage;

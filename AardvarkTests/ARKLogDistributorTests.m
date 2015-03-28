@@ -9,7 +9,11 @@
 #import <XCTest/XCTest.h>
 
 #import "ARKLogDistributor.h"
+#import "ARKLogDistributor_Protected.h"
 #import "ARKLogDistributor_Testing.h"
+
+#import "ARKDataArchive.h"
+#import "ARKDataArchive_Testing.h"
 #import "ARKLogMessage.h"
 #import "ARKLogObserver.h"
 #import "ARKLogStore.h"
@@ -18,7 +22,7 @@
 
 @interface ARKLogDistributorTests : XCTestCase
 
-@property (nonatomic, weak, readwrite) ARKLogStore *defaultLogStore;
+@property (nonatomic, weak) ARKLogStore *logStore;
 
 @end
 
@@ -28,7 +32,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 
 @interface ARKTestLogObserver : NSObject <ARKLogObserver>
 
-@property (nonatomic, copy, readwrite) NSMutableArray *observedLogs;
+@property (nonatomic, copy) NSMutableArray *observedLogs;
 
 @end
 
@@ -72,18 +76,21 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 {
     [super setUp];
     
-    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKLogDistributorTests.data"];
+    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
+    [logStore clearLogsWithCompletionHandler:NULL];
+    [logStore.dataArchive waitUntilAllOperationsAreFinished];
+    
     [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     
-    self.defaultLogStore = logStore;
+    self.logStore = logStore;
 }
 
 - (void)tearDown;
 {
-    [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
+    [[ARKLogDistributor defaultDistributor] waitUntilAllPendingLogsHaveBeenDistributed];
     
-    [self.defaultLogStore clearLogs];
-    [self.defaultLogStore.logObservingQueue waitUntilAllOperationsAreFinished];
+    [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
+    [ARKLogDistributor defaultDistributor].logMessageClass = [ARKLogMessage class];
     
     [super tearDown];
 }
@@ -92,33 +99,33 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 
 - (void)test_logMessageClass_defaultsToARKLogMessage;
 {
-    ARKLogDistributor *logDistributor = [ARKLogDistributor new];
-    ARKLogStore *logStore = [ARKLogStore new];
-    [logDistributor addLogObserver:logStore];
+    [[ARKLogDistributor defaultDistributor] logWithFormat:@"This log should be an ARKLogMessage"];
     
-    [logDistributor logWithFormat:@"This log should be an ARKLogMessage"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        XCTAssertEqual(logMessages.count, 1);
+        XCTAssertEqual([logMessages.firstObject class], [ARKLogMessage class]);
+        
+        [expectation fulfill];
+    }];
     
-    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
-    [logStore.logObservingQueue waitUntilAllOperationsAreFinished];
-    
-    XCTAssertEqual(logStore.logMessages.count, 1);
-    XCTAssertEqual([logStore.logMessages.firstObject class], [ARKLogMessage class]);
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_setLogMessageClass_appendedLogsAreCorrectClass;
 {
-    ARKLogStore *logStore = [ARKLogStore new];
-    ARKLogDistributor *logDistributor = [ARKLogDistributor new];
-    [logDistributor addLogObserver:logStore];
+    [ARKLogDistributor defaultDistributor].logMessageClass = [ARKLogMessageTestSubclass class];
+    [[ARKLogDistributor defaultDistributor] logWithFormat:@"This log should be an ARKLogMessageTestSubclass"];
     
-    logDistributor.logMessageClass = [ARKLogMessageTestSubclass class];
-    [logDistributor logWithFormat:@"This log should be an ARKLogMessageTestSubclass"];
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        XCTAssertEqual(logMessages.count, 1);
+        XCTAssertEqual([logMessages.firstObject class], [ARKLogMessageTestSubclass class]);
+        
+        [expectation fulfill];
+    }];
     
-    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
-    [logStore.logObservingQueue waitUntilAllOperationsAreFinished];
-    
-    XCTAssertEqual(logStore.logMessages.count, 1);
-    XCTAssertEqual([logStore.logMessages.firstObject class], [ARKLogMessageTestSubclass class]);
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_defaultLogStore_lazilyInitializesOnFirstAccess;
@@ -137,16 +144,21 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     XCTAssertEqual(testLogObserver.observedLogs.count, 0);
     
-    for (NSUInteger i  = 0; i < self.defaultLogStore.maximumLogMessageCount; i++) {
+    for (NSUInteger i  = 0; i < self.logStore.maximumLogMessageCount; i++) {
         ARKLog(@"Log %@", @(i));
     }
     
-    [[ARKLogDistributor defaultDistributor].logDistributingQueue waitUntilAllOperationsAreFinished];
-    [self.defaultLogStore.logObservingQueue waitUntilAllOperationsAreFinished];
-    XCTAssertEqual(self.defaultLogStore.logMessages.count, self.defaultLogStore.maximumLogMessageCount);
-    [self.defaultLogStore.logMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
-        XCTAssertEqualObjects(logMessage, testLogObserver.observedLogs[idx]);
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        XCTAssertEqual(logMessages.count, self.logStore.maximumLogMessageCount);
+        [logMessages enumerateObjectsUsingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
+            XCTAssertEqualObjects(logMessage, testLogObserver.observedLogs[idx]);
+        }];
+        
+        [expectation fulfill];
     }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
     
     [[ARKLogDistributor defaultDistributor] removeLogObserver:testLogObserver];
 }
@@ -160,23 +172,26 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     [logDistributor logWithFormat:@"Log"];
     
-    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
-    XCTAssertEqual(testLogObserver.observedLogs.count, 1);
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [logDistributor distributeAllPendingLogsWithCompletionHandler:^{
+        XCTAssertEqual(testLogObserver.observedLogs.count, 1);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_removeLogObserver_removesLogObserver;
 {
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
-    
     ARKTestLogObserver *testLogObserver = [ARKTestLogObserver new];
     
     [logDistributor addLogObserver:testLogObserver];
-    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     
     XCTAssertEqual(logDistributor.logObservers.count, 1);
     
     [logDistributor removeLogObserver:testLogObserver];
-    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
     
     XCTAssertEqual(logDistributor.logObservers.count, 0);
     
@@ -184,8 +199,14 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         [logDistributor logWithFormat:@"Log %@", @(i)];
     }
     
-    [logDistributor.logDistributingQueue waitUntilAllOperationsAreFinished];
-    XCTAssertEqual(testLogObserver.observedLogs.count, 0);
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [logDistributor distributeAllPendingLogsWithCompletionHandler:^{
+        XCTAssertEqual(testLogObserver.observedLogs.count, 0);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_distributeAllPendingLogsWithCompletionHandler_informsLogObserversOfAllPendingLogs;
@@ -202,10 +223,10 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [[ARKLogDistributor defaultDistributor] distributeAllPendingLogsWithCompletionHandler:^{
-        // Internal log queue should now be empty.
-        XCTAssertEqual([ARKLogDistributor defaultDistributor].logDistributingQueue.operationCount, 0);
+        // Internal log queue should now contain just this operation.
+        XCTAssertEqual([ARKLogDistributor defaultDistributor].internalQueueOperationCount, 0);
         
-        [self.defaultLogStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
             NSMutableSet *allLogText = [NSMutableSet new];
             for (ARKLogMessage *logMessage in logMessages) {
                 [allLogText addObject:logMessage.text];
@@ -218,7 +239,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         }];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 #pragma mark - Performance Tests
@@ -226,7 +247,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 - (void)test_logDistribution_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
-    for (NSUInteger i  = 0; i < 3 * self.defaultLogStore.maximumLogCountToPersist; i++) {
+    for (NSUInteger i  = 0; i < 3 * self.logStore.maximumLogMessageCount; i++) {
         [numbers addObject:[NSString stringWithFormat:@"%@", @(i)]];
     }
     

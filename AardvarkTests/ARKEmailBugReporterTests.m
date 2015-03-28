@@ -11,7 +11,10 @@
 #import "ARKEmailBugReporter.h"
 #import "ARKEmailBugReporter_Testing.h"
 
+#import "ARKDataArchive.h"
+#import "ARKDataArchive_Testing.h"
 #import "ARKLogDistributor.h"
+#import "ARKLogDistributor_Testing.h"
 #import "ARKLogStore.h"
 #import "ARKLogStore_Testing.h"
 
@@ -37,17 +40,18 @@
     
     self.bugReporter = [ARKEmailBugReporter new];
     
-    ARKLogStore *logStore = [ARKLogStore new];
+    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
+    [logStore clearLogsWithCompletionHandler:NULL];
+    [logStore.dataArchive waitUntilAllOperationsAreFinished];
+    
     [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
+    
     self.logStore = logStore;
 }
 
 - (void)tearDown;
 {
     [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
-    
-    [self.logStore clearLogs];
-    [self.logStore.logObservingQueue waitUntilAllOperationsAreFinished];
     
     [super tearDown];
 }
@@ -75,7 +79,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_recentErrorLogMessagesAsPlainText_returnsNilIfNoErrorLogsPresent;
@@ -98,7 +102,7 @@
         }];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_recentErrorLogMessagesAsPlainText_returnsNilIfRecentErrorLogsIsZero;
@@ -121,7 +125,7 @@
         }];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_addLogStores_enforcesARKLogStoreClass;

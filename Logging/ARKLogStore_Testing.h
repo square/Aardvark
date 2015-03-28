@@ -6,14 +6,11 @@
 //  Copyright (c) 2014 Square, Inc. All rights reserved.
 //
 
+@class ARKDataArchive;
+
+
 @interface ARKLogStore (Private)
 
-- (NSMutableArray *)logMessages;
-- (NSOperationQueue *)logObservingQueue;
-
-- (NSArray *)_persistedLogs;
-- (void)_persistLogs_inLogObservingQueue;
-- (void)_trimLogs_inLogObservingQueue;
-- (void)_trimmedLogsToPersist_inLogObservingQueue:(void (^)(NSArray *logsToPersist))completionHandler;
+@property (strong) ARKDataArchive *dataArchive;
 
 @end

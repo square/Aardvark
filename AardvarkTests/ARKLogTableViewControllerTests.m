@@ -11,10 +11,14 @@
 #import "ARKLogTableViewController.h"
 #import "ARKLogTableViewController_Testing.h"
 
+#import "ARKDataArchive.h"
+#import "ARKDataArchive_Testing.h"
 #import "ARKDefaultLogFormatter.h"
 #import "ARKLogDistributor.h"
+#import "ARKLogDistributor_Testing.h"
 #import "ARKLogMessage.h"
 #import "ARKLogStore.h"
+#import "ARKLogStore_Testing.h"
 
 
 @class ARKTimestampLogMessage;
@@ -53,14 +57,33 @@
     return [NSString stringWithFormat:@"[%@] Fake Log", dateString];
 }
 
+#pragma mark - NSCoding
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+{
+    self = [self init];
+    if (!self) {
+        return nil;
+    }
+    
+    _creationDate = [[aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(creationDate)] copy];
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder;
+{
+    [aCoder encodeObject:self.creationDate forKey:ARKSelfKeyPath(creationDate)];
+}
+
 @end
 
 
 @interface ARKLogTableViewControllerTests : XCTestCase
 
-@property (nonatomic, strong, readwrite) ARKLogTableViewController *logTableViewController;
-@property (nonatomic, strong, readwrite) ARKLogStore *logStore;
-@property (nonatomic, strong, readwrite) ARKLogDistributor *logDistributor;
+@property (nonatomic) ARKLogTableViewController *logTableViewController;
+@property (nonatomic, weak) ARKLogStore *logStore;
+@property (nonatomic) ARKLogDistributor *logDistributor;
 
 @end
 
@@ -73,10 +96,22 @@
 {
     [super setUp];
     
-    self.logStore = [ARKLogStore new];
+    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromSelector(_cmd)];
+    [logStore clearLogsWithCompletionHandler:NULL];
+    [logStore.dataArchive waitUntilAllOperationsAreFinished];
+    
     self.logDistributor = [ARKLogDistributor new];
-    self.logStore.logDistributor = self.logDistributor;
-    self.logTableViewController = [[ARKLogTableViewController alloc] initWithLogStore:self.logStore logFormatter:[ARKDefaultLogFormatter new]];
+    [self.logDistributor addLogObserver:logStore];
+    self.logTableViewController = [[ARKLogTableViewController alloc] initWithLogStore:logStore logFormatter:[ARKDefaultLogFormatter new]];
+    
+    self.logStore = logStore;
+}
+
+- (void)tearDown;
+{
+    self.logDistributor.defaultLogStore = nil;
+    
+    [super tearDown];
 }
 
 #pragma mark - Behavior Tests
@@ -100,20 +135,20 @@
         XCTAssertEqual([self.logTableViewController.logMessages[0] class], [ARKTimestampLogMessage class]);
         
         XCTAssertEqual([self.logTableViewController.logMessages[1] class], [ARKFakeLogMessage class]);
-        XCTAssertEqual([self.logTableViewController.logMessages[1] creationDate], threeMinutesFiveSecondsAgo);
+        XCTAssertEqualObjects([self.logTableViewController.logMessages[1] creationDate], threeMinutesFiveSecondsAgo);
         
         XCTAssertEqual([self.logTableViewController.logMessages[2] class], [ARKFakeLogMessage class]);
-        XCTAssertEqual([self.logTableViewController.logMessages[2] creationDate], twoMinutesFiftyFiveSecondsAgo);
+        XCTAssertEqualObjects([self.logTableViewController.logMessages[2] creationDate], twoMinutesFiftyFiveSecondsAgo);
         
         XCTAssertEqual([self.logTableViewController.logMessages[3] class], [ARKTimestampLogMessage class]);
         
         XCTAssertEqual([self.logTableViewController.logMessages[4] class], [ARKFakeLogMessage class]);
-        XCTAssertEqual([self.logTableViewController.logMessages[4] creationDate], now);
+        XCTAssertEqualObjects([self.logTableViewController.logMessages[4] creationDate], now);
         
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 @end

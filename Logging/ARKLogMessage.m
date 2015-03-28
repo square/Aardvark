@@ -48,7 +48,7 @@
     _text = [aDecoder decodeObjectOfClass:[NSString class] forKey:ARKSelfKeyPath(text)];
     _image = [aDecoder decodeObjectOfClass:[UIImage class] forKey:ARKSelfKeyPath(image)];
     _type = (ARKLogType)[[aDecoder decodeObjectOfClass:[NSNumber class] forKey:ARKSelfKeyPath(type)] unsignedIntegerValue];
-    _creationDate = [aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(creationDate)];
+    _creationDate = [[aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(creationDate)] copy];
     
     return self;
 }
@@ -70,6 +70,37 @@
 }
 
 #pragma mark - NSObject
+
+- (BOOL)isEqual:(id)object;
+{
+    if (![self isMemberOfClass:[object class]]) {
+        return NO;
+    }
+    
+    ARKLogMessage *otherMessage = (ARKLogMessage *)object;
+    if (!(self.text == otherMessage.text || [self.text isEqualToString:otherMessage.text])) {
+        return NO;
+    }
+    
+    if (!(self.image == otherMessage.image || [self.image isEqual:otherMessage.image])) {
+        return NO;
+    }
+    
+    if (self.type != otherMessage.type) {
+        return NO;
+    }
+
+    if (![self.creationDate isEqualToDate:otherMessage.creationDate]) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (NSUInteger)hash;
+{
+    return self.creationDate.hash;
+}
 
 - (NSString *)description;
 {

@@ -9,7 +9,11 @@
 #import <XCTest/XCTest.h>
 
 #import "ARKDefaultLogFormatter.h"
+
+#import "ARKDataArchive.h"
+#import "ARKDataArchive_Testing.h"
 #import "ARKLogDistributor.h"
+#import "ARKLogDistributor_Testing.h"
 #import "ARKLogStore.h"
 #import "ARKLogStore_Testing.h"
 
@@ -35,7 +39,10 @@
     
     self.logFormatter = [ARKDefaultLogFormatter new];
     
-    ARKLogStore *logStore = [ARKLogStore new];
+    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
+    [logStore clearLogsWithCompletionHandler:NULL];
+    [logStore.dataArchive waitUntilAllOperationsAreFinished];
+    
     [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     self.logStore = logStore;
 }
@@ -43,9 +50,6 @@
 - (void)tearDown;
 {
     [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
-    
-    [self.logStore clearLogs];
-    [self.logStore.logObservingQueue waitUntilAllOperationsAreFinished];
     
     [super tearDown];
 }
@@ -68,7 +72,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_separatorLogLineCount;
@@ -87,7 +91,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_defaultLogLineCount;
@@ -105,7 +109,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_errorLogContent;
@@ -126,7 +130,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_separatorLogContent;
@@ -147,7 +151,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_defaultLogContent;
@@ -167,7 +171,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_errorPrefixChangeRespected;
@@ -187,7 +191,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_separatorPrefixChangeRespected;
@@ -207,7 +211,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_errorPrefixOnSameLineIfLogTextIsEmpty;
@@ -225,7 +229,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_separatorPrefixOnSameLineIfLogTextIsEmpty;
@@ -243,7 +247,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 #pragma mark - Performance Tests
@@ -270,7 +274,7 @@
             [expectation fulfill];
         }];
         
-        [self waitForExpectationsWithTimeout:5.0 handler:nil];
+        [self waitForExpectationsWithTimeout:1.0 handler:nil];
     }];
 }
 

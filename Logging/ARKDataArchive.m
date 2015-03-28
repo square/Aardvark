@@ -18,7 +18,6 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 @interface ARKDataArchive ()
 
 @property (nonatomic, strong, readonly) NSFileHandle *fileHandle;
-
 @property (nonatomic, strong, readonly) NSOperationQueue *fileOperationQueue;
 
 @property (nonatomic) NSUInteger objectCount;
@@ -72,7 +71,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
         [self.fileHandle truncateFileAtOffset:self.fileHandle.offsetInFile];
         
         // If maximumObjectCount is smaller than what was used previously, we may need to trim.
-        [self _trimArchiveIfNecessary];
+        [self _trimArchiveIfNecessary_inFileOperationQueue];
     }];
     
     return self;
@@ -96,7 +95,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
             [self.fileHandle ARK_appendDataBlock:data];
             self.objectCount++;
             
-            [self _trimArchiveIfNecessary];
+            [self _trimArchiveIfNecessary_inFileOperationQueue];
         }];
     }
 }
@@ -161,17 +160,23 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     [self.fileOperationQueue addOperation:readOperation];
 }
 
-- (void)clearArchive;
+- (void)clearArchiveWithCompletionHandler:(dispatch_block_t)completionHandler;
 {
     [self.fileOperationQueue addOperationWithBlock:^{
-        [self _clearArchive];
+        self.objectCount = 0;
+        [self.fileHandle truncateFileAtOffset:0];
+        [self _saveArchive_inFileOperationQueue];
+        
+        if (completionHandler != NULL) {
+            [[NSOperationQueue mainQueue] addOperationWithBlock:completionHandler];
+        }
     }];
 }
 
 - (void)saveArchiveAndWait:(BOOL)wait;
 {
     NSBlockOperation *saveOperation = [NSBlockOperation blockOperationWithBlock:^{
-        [self.fileHandle synchronizeFile];
+        [self _saveArchive_inFileOperationQueue];
     }];
     
     if (wait) {
@@ -199,7 +204,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 
 #pragma mark - Private Methods
 
-- (void)_trimArchiveIfNecessary;
+- (void)_trimArchiveIfNecessary_inFileOperationQueue;
 {
     if (self.maximumObjectCount == 0 || self.maximumObjectCount == NSUIntegerMax) {
         return;
@@ -228,10 +233,9 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     }
 }
 
-- (void)_clearArchive;
+- (void)_saveArchive_inFileOperationQueue;
 {
-    self.objectCount = 0;
-    [self.fileHandle truncateFileAtOffset:0];
+    [self.fileHandle synchronizeFile];
 }
 
 @end

@@ -157,7 +157,7 @@
         [expectation3 fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_appendArchiveOfObject_trimsArchive;
@@ -233,7 +233,7 @@
         [expectation5 fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_appendArchiveOfObject_trimsCorruptedArchive;
@@ -271,7 +271,7 @@
     }];
     
     
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_initWithURL_detectsCorruptedArchive;
@@ -298,7 +298,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_initWithURL_detectsPartiallyCorruptedArchive;
@@ -327,7 +327,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 - (void)test_readObjectsFromArchive_excludesFaultyUnarchives;
@@ -369,7 +369,43 @@
         [expectation2 fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+}
+
+- (void)test_clearArchiveWithCompletionHandler_removesAllDataFromDisk;
+{
+    for (NSUInteger i  = 0; i < self.dataArchive.maximumObjectCount; i++) {
+        [self.dataArchive appendArchiveOfObject:@(i)];
+    }
+
+    [self.dataArchive saveArchiveAndWait:YES];
+    
+    ARKDataArchive *dataArchive = [[ARKDataArchive alloc] initWithURL:self.dataArchive.archiveFileURL maximumObjectCount:self.dataArchive.maximumObjectCount trimmedObjectCount:self.dataArchive.trimmedObjectCount];
+    
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+        XCTAssertEqual(unarchivedObjects.count, self.dataArchive.maximumObjectCount);
+        
+        [dataArchive clearArchiveWithCompletionHandler:^{
+            [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+                XCTAssertEqual(unarchivedObjects.count, 0);
+                [expectation fulfill];
+            }];
+        }];
+    }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+}
+
+- (void)test_clearArchiveWithCompletionHandler_completionHandlerCalledOnMainQueue;
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.dataArchive clearArchiveWithCompletionHandler:^{
+        XCTAssertTrue([NSThread isMainThread]);
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:1.0 handler:nil];
 }
 
 #pragma mark - Performance Tests

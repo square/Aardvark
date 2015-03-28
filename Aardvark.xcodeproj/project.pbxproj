@@ -53,6 +53,7 @@
 		EAD1447619E22E800065A1FF /* ARKScreenshotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1447419E22E800065A1FF /* ARKScreenshotViewController.m */; };
 		EAD1447E19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1447C19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.h */; };
 		EAD1447F19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1447D19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.m */; };
+		EAE2F5741ACA10B4006FFDDC /* ARKLogDistributor_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = EAE2F5731ACA10B4006FFDDC /* ARKLogDistributor_Protected.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +129,7 @@
 		EAD1447419E22E800065A1FF /* ARKScreenshotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKScreenshotViewController.m; path = "Log Viewing/ARKScreenshotViewController.m"; sourceTree = "<group>"; };
 		EAD1447C19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIActivityViewController+ARKAdditions.h"; path = "Categories/UIActivityViewController+ARKAdditions.h"; sourceTree = "<group>"; };
 		EAD1447D19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIActivityViewController+ARKAdditions.m"; path = "Categories/UIActivityViewController+ARKAdditions.m"; sourceTree = "<group>"; };
+		EAE2F5731ACA10B4006FFDDC /* ARKLogDistributor_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogDistributor_Protected.h; path = Logging/ARKLogDistributor_Protected.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +242,7 @@
 				EA7353641A1577200060F54E /* ARKLogStore.h */,
 				EA73536C1A15801D0060F54E /* ARKLogStore_Testing.h */,
 				EA7353651A1577200060F54E /* ARKLogStore.m */,
+				EAE2F5731ACA10B4006FFDDC /* ARKLogDistributor_Protected.h */,
 			);
 			name = Logging;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 				EAD1447119E22E470065A1FF /* ARKIndividualLogViewController.h in Headers */,
 				EA491AFB19E5EAAA00762174 /* ARKLogObserver.h in Headers */,
 				EAAB38A019E28E9B00161A54 /* ARKLogFormatter.h in Headers */,
+				EAE2F5741ACA10B4006FFDDC /* ARKLogDistributor_Protected.h in Headers */,
 				EA6E218E19E84C1D0097BF4F /* UIApplication+ARKAdditions.h in Headers */,
 				EAD1444619E0849D0065A1FF /* AardvarkDefines.h in Headers */,
 				EAD1444519E0849D0065A1FF /* Aardvark-Prefix.pch in Headers */,

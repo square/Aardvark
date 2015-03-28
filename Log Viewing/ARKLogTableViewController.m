@@ -105,7 +105,7 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
     if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        [self.logStore clearLogs];
+        [self.logStore clearLogsWithCompletionHandler:NULL];
         [self _reloadLogs];
     }
 }
