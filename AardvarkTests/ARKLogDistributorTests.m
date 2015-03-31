@@ -223,7 +223,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [[ARKLogDistributor defaultDistributor] distributeAllPendingLogsWithCompletionHandler:^{
-        // Internal log queue should now contain just this operation.
+        // Internal log queue should now be empty.
         XCTAssertEqual([ARKLogDistributor defaultDistributor].internalQueueOperationCount, 0);
         
         [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
