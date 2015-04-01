@@ -14,10 +14,17 @@
 + (instancetype)ARK_fileURLWithApplicationSupportFilename:(NSString *)filename;
 {
     ARKCheckCondition(filename.length > 0, nil, @"Must provide a filename!");
+    ARKCheckCondition([filename pathComponents].count == 1, nil, @"Must provide a filename, not a path!");
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = paths.firstObject;
-    NSString *archivePath = [[applicationSupportDirectory stringByAppendingPathComponent:[NSBundle mainBundle].bundleIdentifier] stringByAppendingPathComponent:filename];
+    NSString *archivePath = [applicationSupportDirectory stringByAppendingPathComponent:filename];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:applicationSupportDirectory]) {
+        NSError *error = nil;
+        ARKCheckCondition([fileManager createDirectoryAtPath:applicationSupportDirectory withIntermediateDirectories:YES attributes:nil error:&error], nil, @"Could not create directory %@ due to error %@", applicationSupportDirectory, error);
+    }
     
     return [self fileURLWithPath:archivePath isDirectory:NO];
 }
