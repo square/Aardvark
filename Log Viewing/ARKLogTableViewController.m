@@ -105,7 +105,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    self.title = @"Logs";
+    self.title = NSLocalizedString(@"Logs", @"Title of log viewing screen.");
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -134,9 +134,11 @@
     }
 #endif
     
-    if (buttonIndex == actionSheet.destructiveButtonIndex) {
-        [self.logStore clearLogsWithCompletionHandler:NULL];
-        [self _reloadLogs];
+    if (actionSheet == self.clearLogsConfirmationActionSheet) {
+        if (buttonIndex == actionSheet.destructiveButtonIndex) {
+            [self.logStore clearLogsWithCompletionHandler:NULL];
+            [self _reloadLogs];
+        }
     }
 }
 
@@ -287,12 +289,12 @@
     // On the simulator, show an action sheet letting the developer write all logs to the console, or to a file on the desktop.
     self.printLogsActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                             delegate:self
-                                                   cancelButtonTitle:@"Cancel"
+                                                   cancelButtonTitle:NSLocalizedString(@"Cancel", @"Action sheet button title to cancel Print/Save Logs action sheet.")
                                               destructiveButtonTitle:nil
                                                    otherButtonTitles:nil];
     
-    self.printLogsToConsoleButtonIndex = [self.printLogsActionSheet addButtonWithTitle:@"Print Logs to Console"];
-    self.saveLogsToFileButtonIndex = [self.printLogsActionSheet addButtonWithTitle:@"Save Logs to File"];
+    self.printLogsToConsoleButtonIndex = [self.printLogsActionSheet addButtonWithTitle:NSLocalizedString(@"Print Logs to Console", @"Action sheet button to write logs to the console.")];
+    self.saveLogsToFileButtonIndex = [self.printLogsActionSheet addButtonWithTitle:NSLocalizedString(@"Save Logs to File", @"Action sheet button to save logs to a file (and NSLog the path to that file).")];
     
     [self.printLogsActionSheet showInView:self.view];
     
@@ -308,12 +310,12 @@
 
 - (IBAction)_clearLogs:(id)sender;
 {
-    UIActionSheet *confirmationSheet = [UIActionSheet new];
-    confirmationSheet.destructiveButtonIndex = [confirmationSheet addButtonWithTitle:@"Delete All Logs"];
-    confirmationSheet.cancelButtonIndex = [confirmationSheet addButtonWithTitle:@"Cancel"];
+    self.clearLogsConfirmationActionSheet = [UIActionSheet new];
+    self.clearLogsConfirmationActionSheet.destructiveButtonIndex = [self.clearLogsConfirmationActionSheet addButtonWithTitle:NSLocalizedString(@"Delete All Logs", @"Action sheet button to clear all logs.")];
+    self.clearLogsConfirmationActionSheet.cancelButtonIndex = [self.clearLogsConfirmationActionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", @"Action sheet button title to cancel clearing logs.")];
     
-    confirmationSheet.delegate = self;
-    [confirmationSheet showInView:self.view];
+    self.clearLogsConfirmationActionSheet.delegate = self;
+    [self.clearLogsConfirmationActionSheet showInView:self.view];
 }
 
 - (void)_applicationDidBecomeActive:(NSNotification *)notification;
