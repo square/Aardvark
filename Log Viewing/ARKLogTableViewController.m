@@ -24,6 +24,14 @@
 @property (nonatomic, assign, readwrite) BOOL viewWillAppearForFirstTimeCalled;
 @property (nonatomic, assign, readwrite) BOOL hasScrolledToBottom;
 
+@property (nonatomic) UIActionSheet *clearLogsConfirmationActionSheet;
+
+#if TARGET_IPHONE_SIMULATOR
+@property (nonatomic) UIActionSheet *printLogsActionSheet;
+@property (nonatomic) NSInteger printLogsToConsoleButtonIndex;
+@property (nonatomic) NSInteger saveLogsToFileButtonIndex;
+#endif
+
 @end
 
 
@@ -104,6 +112,28 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
 {
+#if TARGET_IPHONE_SIMULATOR
+    if (actionSheet == self.printLogsActionSheet) {
+        NSMutableString *logsText = [NSMutableString string];
+        for (ARKLogMessage *logMessage in self.logMessages) {
+            [logsText appendFormat:@"%@\n", [self.logFormatter formattedLogMessage:logMessage]];
+        }
+        
+        if (logsText.length > 0) {
+            if (buttonIndex == self.printLogsToConsoleButtonIndex) {
+                NSLog(@"Logs:\n%@", logsText);
+                
+            } else if (buttonIndex == self.saveLogsToFileButtonIndex) {
+                NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"Logs.txt"];
+                [logsText writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+                NSLog(@"Logs saved to %@", filePath);
+            }
+        }
+        
+        return;
+    }
+#endif
+    
     if (buttonIndex == actionSheet.destructiveButtonIndex) {
         [self.logStore clearLogsWithCompletionHandler:NULL];
         [self _reloadLogs];
@@ -253,9 +283,27 @@
 
 - (IBAction)_openActivitySheet:(id)sender;
 {
+#if TARGET_IPHONE_SIMULATOR
+    // On the simulator, show an action sheet letting the developer write all logs to the console, or to a file on the desktop.
+    self.printLogsActionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                            delegate:self
+                                                   cancelButtonTitle:@"Cancel"
+                                              destructiveButtonTitle:nil
+                                                   otherButtonTitles:nil];
+    
+    self.printLogsToConsoleButtonIndex = [self.printLogsActionSheet addButtonWithTitle:@"Print Logs to Console"];
+    self.saveLogsToFileButtonIndex = [self.printLogsActionSheet addButtonWithTitle:@"Save Logs to File"];
+    
+    [self.printLogsActionSheet showInView:self.view];
+    
+#else
+    
+    // Show a share sheet so the user can email logs.
     NSArray *formattedLogMessages = [self contentForActivitySheet];
     UIActivityViewController *activityViewController = [UIActivityViewController ARK_newAardvarkActivityViewControllerWithItems:formattedLogMessages];
     [self presentViewController:activityViewController animated:YES completion:NULL];
+    
+#endif
 }
 
 - (IBAction)_clearLogs:(id)sender;
