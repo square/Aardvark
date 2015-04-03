@@ -22,6 +22,8 @@ Or manually checkout the submodule with `git submodule add git@github.com:Square
 
 After doing the above, your users can report a bug by making a two-finger long-press gesture. This gesture triggers a UIAlert asking the user what went wrong. When the user enters this information, an email bug report is generated complete with an attached app screenshot and a text file containing the last 2000 logs. Screenshots are created and stored within Aardvark and do not require camera roll access.
 
+[![Bug Report Flow](BugReportFlow.gif)](BugReportFlow.gif)
+
 Want to look at logs on device? Push an instance of [ARKLogTableViewController](Log%20Viewing/ARKLogTableViewController.h) onto the screen to view your logs.
 
 ## Performance
