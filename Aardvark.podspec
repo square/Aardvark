@@ -9,8 +9,5 @@ Pod::Spec.new do |s|
   s.source_files = 'Aardvark/*.{h,m}', 'Categories/*.{h,m}', 'Other/*.{h,m}', 'Logging/*.{h,m}', 'Log Viewing/*.{h,m}', 'Bug Reporting/*.{h,m}'
   s.private_header_files = 'Categories/*.h', '**/*_Testing.h'
   s.prefix_header_file = 'Other/Aardvark-Prefix.pch'
-  s.compiler_flags = '-ObjC'
-  s.requires_arc = true
-
   s.ios.deployment_target = '6.0'
 end
