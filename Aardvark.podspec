@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name     = 'Aardvark'
   s.version  = '1.0.0'
   s.license  = 'Apache'
-  s.summary  = 'Aardvark is a threadsafe library that makes it dead simple to create actionable bug reports within your app without impacting performance.'
+  s.summary  = 'Aardvark is a library that makes it dead simple to create actionable bug reports.'
   s.homepage = 'https://stash.corp.squareup.com/projects/IOS/repos/aardvark/browse'
   s.authors  = { 'Dan Federman' => 'federman@squareup.com' }
   s.source   = { :git => 'https://stash.corp.squareup.com/scm/ios/aardvark.git', :tag => s.version }
