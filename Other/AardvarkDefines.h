@@ -49,7 +49,7 @@
         BOOL const conditionResult = !!(condition); \
         if (!conditionResult) { \
             @try { \
-                NSAssert(conditionResult, (desc), ##__VA_ARGS__); \
+                [NSException raise:@"Aardvark API Misuse" format:(desc), ##__VA_ARGS__]; \
             } @catch (NSException *exception) { \
                 NSLog(@"Aardvark API Misuse: %s %@", __PRETTY_FUNCTION__, exception.reason); \
                 return result;\
