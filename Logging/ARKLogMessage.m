@@ -20,6 +20,8 @@
 
 #import "ARKLogMessage.h"
 
+#import "AardvarkDefines.h"
+
 
 @implementation ARKLogMessage
 

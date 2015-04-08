@@ -21,6 +21,7 @@
 #import "ARKLogDistributor.h"
 #import "ARKLogDistributor_Testing.h"
 
+#import "AardvarkDefines.h"
 #import "ARKLogMessage.h"
 #import "ARKLogObserver.h"
 #import "ARKLogStore.h"

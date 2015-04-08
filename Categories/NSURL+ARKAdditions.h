@@ -18,6 +18,9 @@
 //  limitations under the License.
 //
 
+#import <Foundation/Foundation.h>
+
+
 @interface NSURL (ARKAdditions)
 
 + (NSURL *)ARK_fileURLWithApplicationSupportFilename:(NSString *)filename;

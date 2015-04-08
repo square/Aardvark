@@ -22,6 +22,7 @@
 
 #import "UIApplication+ARKAdditions.h"
 
+#import "AardvarkDefines.h"
 #import "ARKBugReporter.h"
 #import "ARKLogDistributor.h"
 

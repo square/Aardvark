@@ -21,6 +21,7 @@
 #import "ARKLogStore.h"
 #import "ARKLogStore_Testing.h"
 
+#import "AardvarkDefines.h"
 #import "ARKDataArchive.h"
 #import "ARKLogDistributor.h"
 #import "ARKLogDistributor_Protected.h"

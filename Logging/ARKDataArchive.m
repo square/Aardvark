@@ -21,6 +21,7 @@
 #import "ARKDataArchive.h"
 #import "ARKDataArchive_Testing.h"
 
+#import "AardvarkDefines.h"
 #import "NSFileHandle+ARKAdditions.h"
 
 

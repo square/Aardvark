@@ -18,6 +18,9 @@
 //  limitations under the License.
 //
 
+#import <Foundation/Foundation.h>
+
+
 @protocol ARKBugReporter <NSObject>
 
 /// Called when the user has triggered the creation of a bug report.

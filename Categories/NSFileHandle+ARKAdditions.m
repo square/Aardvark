@@ -20,6 +20,8 @@
 
 #import "NSFileHandle+ARKAdditions.h"
 
+#import "AardvarkDefines.h"
+
 
 NSUInteger const ARKInvalidDataBlockLength = NSUIntegerMax;
 

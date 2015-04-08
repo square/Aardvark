@@ -20,6 +20,7 @@
 
 #import "Aardvark.h"
 
+#import "AardvarkDefines.h"
 #import "ARKEmailBugReporter.h"
 #import "ARKLogDistributor.h"
 #import "ARKLogMessage.h"

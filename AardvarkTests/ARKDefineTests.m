@@ -20,6 +20,8 @@
 
 #import <XCTest/XCTest.h>
 
+#import "AardvarkDefines.h"
+
 
 @interface ARKDefineTests : XCTestCase
 @end

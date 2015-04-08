@@ -23,6 +23,7 @@
 #import "ARKLogTableViewController.h"
 #import "ARKLogTableViewController_Testing.h"
 
+#import "AardvarkDefines.h"
 #import "ARKDataArchive.h"
 #import "ARKDataArchive_Testing.h"
 #import "ARKDefaultLogFormatter.h"

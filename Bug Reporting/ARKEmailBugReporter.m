@@ -21,6 +21,7 @@
 #import "ARKEmailBugReporter.h"
 #import "ARKEmailBugReporter_Testing.h"
 
+#import "AardvarkDefines.h"
 #import "ARKDefaultLogFormatter.h"
 #import "ARKLogStore.h"
 #import "ARKLogMessage.h"

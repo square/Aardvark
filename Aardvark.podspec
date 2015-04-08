@@ -8,6 +8,5 @@ Pod::Spec.new do |s|
   s.source   = { :git => 'https://stash.corp.squareup.com/scm/ios/aardvark.git', :tag => s.version }
   s.source_files = 'Aardvark/*.{h,m}', 'Categories/*.{h,m}', 'Other/*.{h,m}', 'Logging/*.{h,m}', 'Log Viewing/*.{h,m}', 'Bug Reporting/*.{h,m}'
   s.private_header_files = 'Categories/*.h', '**/*_Testing.h'
-  s.prefix_header_file = 'Other/Aardvark-Prefix.pch'
   s.ios.deployment_target = '6.0'
 end

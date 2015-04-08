@@ -18,6 +18,9 @@
 //  limitations under the License.
 //
 
+#import <UIKit/UIKit.h>
+
+
 @interface UIActivityViewController (ARKAdditions)
 
 /// Creates an activity sheet that allows for sharing via AirDrop, email, copying to the pasteboard and printing.

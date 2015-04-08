@@ -20,6 +20,8 @@
 
 #import "NSURL+ARKAdditions.h"
 
+#import "AardvarkDefines.h"
+
 
 @implementation NSURL (ARKAdditions)
 

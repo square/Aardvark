@@ -18,6 +18,9 @@
 //  limitations under the License.
 //
 
+#import <Foundation/Foundation.h>
+
+
 extern NSUInteger const ARKInvalidDataBlockLength;
 
 

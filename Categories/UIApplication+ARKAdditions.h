@@ -18,6 +18,9 @@
 //  limitations under the License.
 //
 
+#import <UIKit/UIKit.h>
+
+
 @protocol ARKBugReporter;
 @class ARKLogDistributor;
 

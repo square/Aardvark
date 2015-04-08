@@ -18,6 +18,9 @@
 //  limitations under the License.
 //
 
+#import <Foundation/Foundation.h>
+
+
 /// Incrementally persists data to disk. All methods and properties on this class are threadsafe.
 @interface ARKDataArchive : NSObject
 
