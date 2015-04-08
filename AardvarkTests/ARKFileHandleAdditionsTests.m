@@ -310,13 +310,13 @@
 
 - (void)_test_truncateFileWithData:(NSData *)data toOffset:(unsigned long long)offset;
 {
-    NSData *expectedData = (offset > data.length) ? [NSData data] : [data subdataWithRange:NSMakeRange(offset, data.length - offset)];
+    NSData *expectedData = (offset > data.length) ? [NSData data] : [data subdataWithRange:NSMakeRange((NSUInteger)offset, data.length - (NSUInteger)offset)];
     
     // Test a variety of chunk sizes.
     NSArray *chunkSizes = @[ @(0), @(1), @(2), @(3), @(4), @(8), @(9), @(1023), @(1024), @(NSUIntegerMax) ];
     
     // Test several starting offsets, noting that the parameter is allowed to be past EOF but the file offsets cannot.
-    NSUInteger constrainedOffset = MIN(data.length, offset);
+    NSUInteger constrainedOffset = MIN(data.length, (NSUInteger)offset);
     NSArray *startOffsets = @[ @(0), @(constrainedOffset / 2), @(constrainedOffset), @(constrainedOffset + (data.length - constrainedOffset) / 2), @(data.length) ];
     NSMutableArray *expectedOffsets = [NSMutableArray new];
     for (NSNumber *startOffset in startOffsets) {
