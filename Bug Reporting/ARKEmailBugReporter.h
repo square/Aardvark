@@ -52,4 +52,10 @@
 /// Returns formatted log messages as NSData.
 - (NSData *)formattedLogMessagesAsData:(NSArray *)logMessages;
 
+/// Returns the MIME type of the data returned by formattedLogMessagesAsData:. MIME types are as specified by the IANA: http://www.iana.org/assignments/media-types/
+- (NSString *)formattedLogMessagesDataMIMEType;
+
+/// Returns the extension for the log attachments.
+- (NSString *)formattedLogMessagesAttachmentExtension;
+
 @end

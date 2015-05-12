@@ -199,7 +199,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                             NSArray *logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
                             
                             NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
-                            NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for plaintext logs") stringByAppendingPathExtension:@"txt"];
+                            NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for logs attachments") stringByAppendingPathExtension:[self formattedLogMessagesAttachmentExtension]];
                             NSMutableString *emailBodyForLogStore = [NSMutableString new];
                             BOOL appendToEmailBody = NO;
                             
@@ -226,7 +226,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                             
                             NSData *formattedLogs = [self formattedLogMessagesAsData:logMessages];
                             if (formattedLogs.length) {
-                                [self.mailComposeViewController addAttachmentData:formattedLogs mimeType:@"text/plain" fileName:logsFileName];
+                                [self.mailComposeViewController addAttachmentData:formattedLogs mimeType:[self formattedLogMessagesDataMIMEType] fileName:logsFileName];
                             }
                         }
                         
@@ -293,6 +293,16 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     }
     
     return [[formattedLogMessages componentsJoinedByString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+- (NSString *)formattedLogMessagesDataMIMEType;
+{
+    return @"text/plain";
+}
+
+- (NSString *)formattedLogMessagesAttachmentExtension;
+{
+    return @"txt";
 }
 
 #pragma mark - Private Methods
