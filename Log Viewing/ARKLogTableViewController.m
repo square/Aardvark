@@ -284,16 +284,20 @@
 - (NSArray *)contentForActivitySheet;
 {
     NSMutableArray *formattedLogMessages = [NSMutableArray new];
-    
+    NSMutableArray *contentForActivitySheet = [NSMutableArray new];
     for (ARKLogMessage *logMessage in self.logMessages) {
         [formattedLogMessages addObject:[self.logFormatter formattedLogMessage:logMessage]];
         
         if (logMessage.image != nil) {
-            [formattedLogMessages addObject:logMessage.image];
+            [contentForActivitySheet addObject:logMessage.image];
         }
     }
     
-    return [formattedLogMessages copy];
+    if (formattedLogMessages.count > 0) {
+        [contentForActivitySheet addObject:[formattedLogMessages componentsJoinedByString:@"\n"]];
+    }
+    
+    return contentForActivitySheet;
 }
 
 #pragma mark - Private Methods
