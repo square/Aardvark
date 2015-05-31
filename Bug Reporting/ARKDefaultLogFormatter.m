@@ -57,7 +57,9 @@
             [formattedLogMessage appendFormat:@"%@", self.errorLogPrefix];
             prefixPrepended = YES;
             break;
-        default:
+        case ARKLogTypeScreenshot:
+        case ARKLogTypeDefault:
+            // Do nothing special.
             break;
     }
     

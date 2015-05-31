@@ -234,7 +234,9 @@
             textColor = [UIColor blackColor];
             backgroundColor = [UIColor clearColor];
             break;
-        default:
+        case ARKLogTypeScreenshot:
+            textColor = [UIColor whiteColor];
+            backgroundColor = [UIColor purpleColor];
             break;
     }
     

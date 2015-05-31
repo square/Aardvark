@@ -29,6 +29,8 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
     ARKLogTypeSeparator,
     /// Marks that the log represents an error.
     ARKLogTypeError,
+    /// Marks a log that has a screenshot attached.
+    ARKLogTypeScreenshot,
 };
 
 

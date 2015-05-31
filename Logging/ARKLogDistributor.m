@@ -226,8 +226,8 @@
     UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    NSString *logText = @"⎙ Screenshot!";
-    [self logWithText:logText image:screenshot type:ARKLogTypeDefault userInfo:nil];
+    NSString *logText = @"Screenshot Logged";
+    [self logWithText:logText image:screenshot type:ARKLogTypeScreenshot userInfo:nil];
 }
 
 #pragma mark - Protected Methods
