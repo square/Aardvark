@@ -12,7 +12,7 @@ There are only three steps to get Aardvark logging and bug reporting up and runn
 platform :ios, '6.0'
 pod 'Aardvark'
 ```
-Or manually checkout the submodule with `git submodule add git@github.com:Square/objc-Aardvark.git`, drag Aardvark.xcodeproj to your project, and add Aardvark as a build dependency.
+Or manually checkout the submodule with `git submodule add git@github.com:Square/Aardvark.git`, drag Aardvark.xcodeproj to your project, and add Aardvark as a build dependency.
 
 2) Call `[Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:]` to enable the creation of email bug reports. It is best to do this when you load your application’s UI.
 
@@ -53,6 +53,6 @@ We’re glad you’re interested in Aardvark, and we’d love to see where you t
 
 Any contributors to the master Aardvark repository must sign the [Individual Contributor License Agreement (CLA)](https://spreadsheets.google.com/spreadsheet/viewform?formkey=dDViT2xzUHAwRkI3X3k5Z0lQM091OGc6MQ&ndplr=1). It’s a short form that covers our bases and makes sure you’re eligible to contribute.
 
-When you have a change you’d like to see in the master repository, [send a pull request](https://github.com/square/objc-Aardvark/pulls). Before we merge your request, we’ll make sure you’re in the list of people who have signed a CLA.
+When you have a change you’d like to see in the master repository, [send a pull request](https://github.com/square/Aardvark/pulls). Before we merge your request, we’ll make sure you’re in the list of people who have signed a CLA.
 
 Thanks, and happy logging!
