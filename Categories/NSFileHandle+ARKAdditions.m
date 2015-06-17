@@ -185,7 +185,7 @@ typedef unsigned long long ARKFileOffset;
     
     // The value is stored big-endian in the file.
     uint8_t dataBlockLengthBytes[ARKBlockLengthBytes] = { };
-    [dataBlockLengthData getBytes:&dataBlockLengthBytes];
+    [dataBlockLengthData getBytes:&dataBlockLengthBytes length:ARKBlockLengthBytes];
     return ARKReadBigEndianBlockLength(dataBlockLengthBytes, 0);
 }
 
