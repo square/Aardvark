@@ -38,6 +38,9 @@
 /// Convenience method to store a reference to the default log store. Lazily creates a log store when accessed for the first time if one is not already set.
 @property (atomic, strong, readwrite) ARKLogStore *defaultLogStore;
 
+/// Returns all instances of `ARKLogStore` that are currently registered as observers on this log distributor.
+@property (atomic, strong, readonly) NSSet *logStores;
+
 /// Retains an object that handles logging. Log observers are sent observeLogMessage: every time a log is appended. Allows for easy logging to third party services (i.e. Crashlytics, Mixpanel, etc).
 - (void)addLogObserver:(id <ARKLogObserver>)logObserver;
 

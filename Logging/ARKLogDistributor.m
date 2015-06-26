@@ -127,6 +127,24 @@
     self.internalLogMessageClass = logMessageClass;
 }
 
+- (NSSet *)logStores;
+{
+    NSSet *logObservers = nil;
+
+    @synchronized (self) {
+        logObservers = [self.logObservers copy];
+    }
+
+    NSMutableSet *logStores = [NSMutableSet new];
+    for (id <ARKLogObserver> logObserver in logObservers) {
+        if ([logObserver isKindOfClass:[ARKLogStore class]]) {
+            [logStores addObject:logObserver];
+        }
+    }
+
+    return [logStores copy];
+}
+
 #pragma mark - Private Properties
 
 - (dispatch_once_t)defaultLogStoreAccessOnceToken;
