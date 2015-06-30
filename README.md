@@ -1,9 +1,9 @@
 # Aardvark
 
-[![CI Status](http://img.shields.io/travis/square/Aardvark.svg?style=flat)](https://travis-ci.org/square/Aardvark)
-[![Version](https://img.shields.io/cocoapods/v/Aardvark.svg?style=flat)](http://cocoadocs.org/docsets/Aardvark)
-[![License](https://img.shields.io/cocoapods/l/Aardvark.svg?style=flat)](http://cocoadocs.org/docsets/Aardvark)
-[![Platform](https://img.shields.io/cocoapods/p/Aardvark.svg?style=flat)](http://cocoadocs.org/docsets/Aardvark)
+[![CI Status](https://travis-ci.org/square/Aardvark.svg?branch=master)](https://travis-ci.org/square/Aardvark)
+[![Version](https://img.shields.io/cocoapods/v/Aardvark.svg)](http://cocoadocs.org/docsets/Aardvark)
+[![License](https://img.shields.io/cocoapods/l/Aardvark.svg)](http://cocoadocs.org/docsets/Aardvark)
+[![Platform](https://img.shields.io/cocoapods/p/Aardvark.svg)](http://cocoadocs.org/docsets/Aardvark)
 
 Aardvark is a library that makes it dead simple to create actionable bug reports.
 
