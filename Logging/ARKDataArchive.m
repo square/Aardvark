@@ -30,8 +30,8 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 
 @interface ARKDataArchive ()
 
-@property (nonatomic, strong, readonly) NSFileHandle *fileHandle;
-@property (nonatomic, strong, readonly) NSOperationQueue *fileOperationQueue;
+@property (nonatomic, readonly) NSFileHandle *fileHandle;
+@property (nonatomic, readonly) NSOperationQueue *fileOperationQueue;
 
 @property (nonatomic) NSUInteger objectCount;
 

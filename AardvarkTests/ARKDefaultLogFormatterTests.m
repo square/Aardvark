@@ -32,9 +32,9 @@
 
 @interface ARKDefaultLogFormatterTests : XCTestCase
 
-@property (nonatomic, strong, readwrite) ARKLogDistributor *defaultLogDistributor;
-@property (nonatomic, strong, readwrite) ARKDefaultLogFormatter *logFormatter;
-@property (nonatomic, weak, readwrite) ARKLogStore *logStore;
+@property (nonatomic) ARKLogDistributor *defaultLogDistributor;
+@property (nonatomic) ARKDefaultLogFormatter *logFormatter;
+@property (nonatomic, weak) ARKLogStore *logStore;
 
 @end
 
@@ -84,7 +84,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_separatorLogLineCount;
@@ -103,7 +103,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_defaultLogLineCount;
@@ -121,7 +121,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_errorLogContent;
@@ -142,7 +142,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_separatorLogContent;
@@ -163,7 +163,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_defaultLogContent;
@@ -183,7 +183,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_errorPrefixChangeRespected;
@@ -203,7 +203,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_separatorPrefixChangeRespected;
@@ -223,7 +223,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_errorPrefixOnSameLineIfLogTextIsEmpty;
@@ -241,7 +241,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_separatorPrefixOnSameLineIfLogTextIsEmpty;
@@ -259,7 +259,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 #pragma mark - Performance Tests
@@ -286,7 +286,7 @@
             [expectation fulfill];
         }];
         
-        [self waitForExpectationsWithTimeout:1.0 handler:nil];
+        [self waitForExpectationsWithTimeout:5.0 handler:nil];
     }];
 }
 

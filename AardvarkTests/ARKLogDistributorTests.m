@@ -121,7 +121,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_setLogMessageClass_appendedLogsAreCorrectClass;
@@ -137,7 +137,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_defaultLogStore_lazilyInitializesOnFirstAccess;
@@ -176,7 +176,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
     
     [[ARKLogDistributor defaultDistributor] removeLogObserver:testLogObserver];
 }
@@ -197,7 +197,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_removeLogObserver_removesLogObserver;
@@ -224,7 +224,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_distributeAllPendingLogsWithCompletionHandler_informsLogObserversOfAllPendingLogs;
@@ -257,7 +257,7 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
         }];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 #pragma mark - Performance Tests

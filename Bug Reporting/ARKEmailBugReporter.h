@@ -26,28 +26,31 @@
 @protocol ARKLogFormatter;
 
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 /// Composes a bug report that is sent via email.
 @interface ARKEmailBugReporter : NSObject <ARKBugReporter>
 
 - (instancetype)initWithEmailAddress:(NSString *)emailAddress logStore:(ARKLogStore *)logStore;
 
 /// The email address to which bug reports will be sent. Must be set before composeBugReport is called.
-@property (nonatomic, copy, readwrite) NSString *bugReportRecipientEmailAddress;
+@property (nonatomic, copy) NSString *bugReportRecipientEmailAddress;
 
 /// The email body that will be presented to the user when they compose a report.
-@property (nonatomic, copy, readwrite) NSString *prefilledEmailBody;
+@property (nonatomic, copy) NSString *prefilledEmailBody;
 
 /// The formatter used to prepare the log for entry into an email. Defaults to a vanilla instance of ARKDefaultLogFormatter.
-@property (nonatomic, strong, readwrite) id <ARKLogFormatter> logFormatter;
+@property (nonatomic) id <ARKLogFormatter> logFormatter;
 
 /// Controls the number of recent error logs per log distributor to include in the email body of a bug report composed in a mail client that allows attachments. Defaults to 3.
-@property (nonatomic, assign, readwrite) NSUInteger numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable;
+@property (nonatomic) NSUInteger numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable;
 
 /// Controls the number of recent error logs per log distributor to include in the email body of a bug report composed in a mail client that does not allow attachments. Defaults to 15.
-@property (nonatomic, assign, readwrite) NSUInteger numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable;
+@property (nonatomic) NSUInteger numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable;
 
 /// The window level for the email composer on iOS 7 or later. Defaults to UIWindowLevelStatusBar + 3.0.
-@property (nonatomic, assign, readwrite) UIWindowLevel emailComposeWindowLevel;
+@property (nonatomic) UIWindowLevel emailComposeWindowLevel;
 
 /// Returns formatted log messages as NSData.
 - (NSData *)formattedLogMessagesAsData:(NSArray *)logMessages;
@@ -59,3 +62,6 @@
 - (NSString *)formattedLogMessagesAttachmentExtension;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

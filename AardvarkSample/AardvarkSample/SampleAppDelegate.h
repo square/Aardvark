@@ -20,9 +20,9 @@
 
 @interface SampleAppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, nonatomic, readwrite) UIWindow *window;
+@property (nonatomic) UIWindow *window;
 
-@property (strong, nonatomic, readwrite) ARKEmailBugReporter *bugReporter;
+@property (nonatomic) ARKEmailBugReporter *bugReporter;
 
 @end
 

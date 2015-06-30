@@ -21,6 +21,9 @@
 #import <Foundation/Foundation.h>
 
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 extern NSUInteger const ARKInvalidDataBlockLength;
 
 
@@ -36,9 +39,12 @@ extern NSUInteger const ARKInvalidDataBlockLength;
 - (NSUInteger)ARK_seekToDataBlockAtIndex:(NSUInteger)blockIndex;
 
 /// Reads the length of the data block, followed by the data itself. Returns nil at the end of the file, and passes back NO if corruption was detected (without changing the current offsetInFile).
-- (NSData *)ARK_readDataBlock:(out BOOL *)success;
+- (nullable NSData *)ARK_readDataBlock:(out BOOL *)success;
 
 /// Truncates the file from the beginning to the specified offset, moving data in chunks no larger than maximumChunkSize (to constrain the memory usage of the operation, at the expense of more processor and I/O time). Pass 0 or NSUIntegerMax to impose no limit.
 - (void)ARK_truncateFileToOffset:(unsigned long long)offset maximumChunkSize:(NSUInteger)maximumChunkSize;
 
 @end
+
+
+NS_ASSUME_NONNULL_END
