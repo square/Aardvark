@@ -43,7 +43,7 @@
 @property BOOL printsLogsToConsole;
 
 /// Controls whether, when printing logs to the console, the name of the log store is included. Defaults to YES.
-@property BOOL includesNameInLogMessages;
+@property BOOL prefixNameWhenPrintingToConsole;
 
 /// Block that allows for filtering logs. Return YES if the receiver should observe the supplied log.
 @property (copy) BOOL (^logFilterBlock)(ARKLogMessage *logMessage);

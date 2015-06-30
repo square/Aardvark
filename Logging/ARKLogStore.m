@@ -61,7 +61,7 @@
     _persistedLogFileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:fileName];
     _maximumLogMessageCount = maximumLogMessageCount;
     _dataArchive = [[ARKDataArchive alloc] initWithURL:self.persistedLogFileURL maximumObjectCount:maximumLogMessageCount trimmedObjectCount:0.5 * maximumLogMessageCount];
-    _includesNameInLogMessages = YES;
+    _prefixNameWhenPrintingToConsole = YES;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
     
@@ -88,7 +88,7 @@
     }
     
     if (self.printsLogsToConsole) {
-        if (self.name.length && self.includesNameInLogMessages) {
+        if (self.name.length > 0 && self.prefixNameWhenPrintingToConsole) {
             NSLog(@"%@: %@", self.name, logMessage.text);
         } else {
             NSLog(@"%@", logMessage.text);

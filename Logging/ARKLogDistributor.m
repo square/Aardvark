@@ -95,6 +95,8 @@
         // Lazily create a default log store if none exists.
         if (self.weakDefaultLogStore == nil) {
             self.defaultLogStore = [[ARKLogStore alloc] initWithPersistedLogFileName:[NSStringFromClass([self class]) stringByAppendingString:@"_DefaultLogStore"]];
+            self.defaultLogStore.name = @"Default";
+            self.defaultLogStore.prefixNameWhenPrintingToConsole = NO;
         }
     });
     
