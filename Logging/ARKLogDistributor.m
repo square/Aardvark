@@ -35,8 +35,12 @@
 @property (atomic, assign) Class internalLogMessageClass;
 @property (atomic, weak) ARKLogStore *weakDefaultLogStore;
 
-// This ivar must be accessed directly.
-@property dispatch_once_t defaultLogStoreAccessOnceToken;
+/**
+Set to YES after calling `defaultLogStore`.
+Ensures that we only lazily create the default log store if `defaultLogStore` is nil the very first time it is called,
+and never after that.
+*/
+@property BOOL defaultLogStoreAccessorCalled;
 
 @end
 
@@ -44,7 +48,6 @@
 @implementation ARKLogDistributor
 
 @dynamic defaultLogStore;
-@synthesize defaultLogStoreAccessOnceToken = _defaultLogStoreAccessOnceToken;
 
 #pragma mark - Class Methods
 
@@ -91,14 +94,15 @@
 
 - (ARKLogStore *)defaultLogStore;
 {
-    dispatch_once(&_defaultLogStoreAccessOnceToken, ^{
+    if (!self.defaultLogStoreAccessorCalled && !self.weakDefaultLogStore) {
         // Lazily create a default log store if none exists.
-        if (self.weakDefaultLogStore == nil) {
-            self.defaultLogStore = [[ARKLogStore alloc] initWithPersistedLogFileName:[NSStringFromClass([self class]) stringByAppendingString:@"_DefaultLogStore"]];
-            self.defaultLogStore.name = @"Default";
-            self.defaultLogStore.prefixNameWhenPrintingToConsole = NO;
-        }
-    });
+        ARKLogStore *defaultLogStore = [[ARKLogStore alloc] initWithPersistedLogFileName:[NSStringFromClass([self class]) stringByAppendingString:@"_DefaultLogStore"]];
+        defaultLogStore.name = @"Default";
+        defaultLogStore.prefixNameWhenPrintingToConsole = NO;
+        self.defaultLogStore = defaultLogStore;
+    }
+
+    self.defaultLogStoreAccessorCalled = YES;
     
     return self.weakDefaultLogStore;
 }

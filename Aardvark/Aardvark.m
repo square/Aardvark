@@ -58,9 +58,7 @@ void ARKLogScreenshot()
 {
     ARKCheckCondition([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:)], nil, @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
     
-    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"ARKDefaultLogStore.data"];
-    [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
-    
+    ARKLogStore *logStore = [ARKLogDistributor defaultDistributor].defaultLogStore;
     ARKEmailBugReporter *bugReporter = [[ARKEmailBugReporter alloc] initWithEmailAddress:emailAddress logStore:logStore];
     
     [[UIApplication sharedApplication] ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:bugReporter];

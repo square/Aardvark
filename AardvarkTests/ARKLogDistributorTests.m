@@ -143,7 +143,13 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 - (void)test_defaultLogStore_lazilyInitializesOnFirstAccess;
 {
     ARKLogDistributor *logDistributor = [ARKLogDistributor new];
-    XCTAssertNotNil(logDistributor.defaultLogStore);
+    ARKLogStore *defaultLogStore = logDistributor.defaultLogStore;
+    XCTAssertNotNil(defaultLogStore);
+    XCTAssertEqualObjects(defaultLogStore.name, @"Default");
+    XCTAssertFalse(defaultLogStore.prefixNameWhenPrintingToConsole);
+
+    // Should return the same instance on subsequent property accesses.
+    XCTAssertEqual(logDistributor.defaultLogStore, defaultLogStore);
     
     logDistributor.defaultLogStore = nil;
     XCTAssertNil(logDistributor.defaultLogStore, @"Default log store should not initialize itself lazily twice.");
