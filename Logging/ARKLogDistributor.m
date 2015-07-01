@@ -34,12 +34,12 @@
 
 @property (atomic, assign) Class internalLogMessageClass;
 @property (atomic, weak) ARKLogStore *weakDefaultLogStore;
+@property (atomic, strong, readonly) NSRecursiveLock *defaultLogStorePropertyLock;
 
-/**
-Set to YES after calling `defaultLogStore`.
-Ensures that we only lazily create the default log store if `defaultLogStore` is nil the very first time it is called,
-and never after that.
-*/
+
+/// Set to YES after calling `defaultLogStore`.
+/// Ensures that we only lazily create the default log store if `defaultLogStore` is nil the very first time it is called,
+/// and never after that.
 @property BOOL defaultLogStoreAccessorCalled;
 
 @end
@@ -83,6 +83,9 @@ and never after that.
 #endif
     
     _logObservers = [NSMutableArray new];
+
+    _defaultLogStorePropertyLock = [NSRecursiveLock new];
+    _defaultLogStorePropertyLock.name = @"Default Log Store Property Lock";
     
     // Use setters on public properties to ensure consistency.
     self.logMessageClass = [ARKLogMessage class];
@@ -94,31 +97,43 @@ and never after that.
 
 - (ARKLogStore *)defaultLogStore;
 {
-    if (!self.defaultLogStoreAccessorCalled && !self.weakDefaultLogStore) {
-        // Lazily create a default log store if none exists.
-        ARKLogStore *defaultLogStore = [[ARKLogStore alloc] initWithPersistedLogFileName:[NSStringFromClass([self class]) stringByAppendingString:@"_DefaultLogStore"]];
-        defaultLogStore.name = @"Default";
-        defaultLogStore.prefixNameWhenPrintingToConsole = NO;
-        self.defaultLogStore = defaultLogStore;
-    }
+    /**
+    * Ensure that changes to self.defaultLogStoreAccessorCalled and self.defaultLogStore (via self.weakDefaultLogStore)
+    * are mututally exclusive.
+    */
+    [self.defaultLogStorePropertyLock lock];
+    {
+        if (!self.defaultLogStoreAccessorCalled && self.weakDefaultLogStore == nil) {
+            // Lazily create a default log store if none exists.
+            ARKLogStore *defaultLogStore = [[ARKLogStore alloc] initWithPersistedLogFileName:[NSStringFromClass([self class]) stringByAppendingString:@"_DefaultLogStore"]];
+            defaultLogStore.name = @"Default";
+            defaultLogStore.prefixNameWhenPrintingToConsole = NO;
+            self.defaultLogStore = defaultLogStore;
+        }
 
-    self.defaultLogStoreAccessorCalled = YES;
+        self.defaultLogStoreAccessorCalled = YES;
+    }
+    [self.defaultLogStorePropertyLock unlock];
     
     return self.weakDefaultLogStore;
 }
 
 - (void)setDefaultLogStore:(ARKLogStore *)logStore;
 {
-    // Remove the old log store.
-    [self removeLogObserver:self.weakDefaultLogStore];
-    
-    if (logStore) {
-        // Add the new log store. The logObserver array will hold onto the log store strongly.
-        [self addLogObserver:logStore];
+    [self.defaultLogStorePropertyLock lock];
+    {
+        // Remove the old log store.
+        [self removeLogObserver:self.weakDefaultLogStore];
+
+        if (logStore) {
+            // Add the new log store. The logObserver array will hold onto the log store strongly.
+            [self addLogObserver:logStore];
+        }
+
+        // Store the log store weakly.
+        self.weakDefaultLogStore = logStore;
     }
-    
-    // Store the log store weakly.
-    self.weakDefaultLogStore = logStore;
+    [self.defaultLogStorePropertyLock unlock];
 }
 
 - (Class)logMessageClass;

@@ -109,7 +109,8 @@
     [super viewWillDisappear:animated];
 }
 
-- (void)viewDidLoad; {
+- (void)viewDidLoad;
+{
     [super viewDidLoad];
 
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -117,7 +118,7 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
 
-    if (!self.title) {
+    if (self.title.length == 0) {
         self.title = NSLocalizedString(@"Logs", @"Title of log viewing screen.");
     }
 }
