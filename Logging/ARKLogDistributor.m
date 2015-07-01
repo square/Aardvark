@@ -34,9 +34,13 @@
 
 @property (atomic, assign) Class internalLogMessageClass;
 @property (atomic, weak) ARKLogStore *weakDefaultLogStore;
+@property (atomic, strong, readonly) NSRecursiveLock *defaultLogStorePropertyLock;
 
-// This ivar must be accessed directly.
-@property dispatch_once_t defaultLogStoreAccessOnceToken;
+
+/// Set to YES after calling `defaultLogStore`.
+/// Ensures that we only lazily create the default log store if `defaultLogStore` is nil the very first time it is called,
+/// and never after that.
+@property BOOL defaultLogStoreAccessorCalled;
 
 @end
 
@@ -44,7 +48,6 @@
 @implementation ARKLogDistributor
 
 @dynamic defaultLogStore;
-@synthesize defaultLogStoreAccessOnceToken = _defaultLogStoreAccessOnceToken;
 
 #pragma mark - Class Methods
 
@@ -80,6 +83,9 @@
 #endif
     
     _logObservers = [NSMutableArray new];
+
+    _defaultLogStorePropertyLock = [NSRecursiveLock new];
+    _defaultLogStorePropertyLock.name = @"Default Log Store Property Lock";
     
     // Use setters on public properties to ensure consistency.
     self.logMessageClass = [ARKLogMessage class];
@@ -91,28 +97,43 @@
 
 - (ARKLogStore *)defaultLogStore;
 {
-    dispatch_once(&_defaultLogStoreAccessOnceToken, ^{
-        // Lazily create a default log store if none exists.
-        if (self.weakDefaultLogStore == nil) {
-            self.defaultLogStore = [[ARKLogStore alloc] initWithPersistedLogFileName:[NSStringFromClass([self class]) stringByAppendingString:@"_DefaultLogStore"]];
+    /**
+    * Ensure that changes to self.defaultLogStoreAccessorCalled and self.defaultLogStore (via self.weakDefaultLogStore)
+    * are mututally exclusive.
+    */
+    [self.defaultLogStorePropertyLock lock];
+    {
+        if (!self.defaultLogStoreAccessorCalled && self.weakDefaultLogStore == nil) {
+            // Lazily create a default log store if none exists.
+            ARKLogStore *defaultLogStore = [[ARKLogStore alloc] initWithPersistedLogFileName:[NSStringFromClass([self class]) stringByAppendingString:@"_DefaultLogStore"]];
+            defaultLogStore.name = @"Default";
+            defaultLogStore.prefixNameWhenPrintingToConsole = NO;
+            self.defaultLogStore = defaultLogStore;
         }
-    });
+
+        self.defaultLogStoreAccessorCalled = YES;
+    }
+    [self.defaultLogStorePropertyLock unlock];
     
     return self.weakDefaultLogStore;
 }
 
 - (void)setDefaultLogStore:(ARKLogStore *)logStore;
 {
-    // Remove the old log store.
-    [self removeLogObserver:self.weakDefaultLogStore];
-    
-    if (logStore) {
-        // Add the new log store. The logObserver array will hold onto the log store strongly.
-        [self addLogObserver:logStore];
+    [self.defaultLogStorePropertyLock lock];
+    {
+        // Remove the old log store.
+        [self removeLogObserver:self.weakDefaultLogStore];
+
+        if (logStore) {
+            // Add the new log store. The logObserver array will hold onto the log store strongly.
+            [self addLogObserver:logStore];
+        }
+
+        // Store the log store weakly.
+        self.weakDefaultLogStore = logStore;
     }
-    
-    // Store the log store weakly.
-    self.weakDefaultLogStore = logStore;
+    [self.defaultLogStorePropertyLock unlock];
 }
 
 - (Class)logMessageClass;
@@ -125,6 +146,24 @@
     ARKCheckCondition([logMessageClass isSubclassOfClass:[ARKLogMessage class]], , @"Attempting to set a logMessageClass that is not a subclass of ARKLogMessage!");
     
     self.internalLogMessageClass = logMessageClass;
+}
+
+- (NSSet *)logStores;
+{
+    NSSet *logObservers = nil;
+
+    @synchronized (self) {
+        logObservers = [self.logObservers copy];
+    }
+
+    NSMutableSet *logStores = [NSMutableSet new];
+    for (id <ARKLogObserver> logObserver in logObservers) {
+        if ([logObserver isKindOfClass:[ARKLogStore class]]) {
+            [logStores addObject:logObserver];
+        }
+    }
+
+    return [logStores copy];
 }
 
 #pragma mark - Private Properties

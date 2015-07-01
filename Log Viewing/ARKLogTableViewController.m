@@ -112,13 +112,15 @@
 - (void)viewDidLoad;
 {
     [super viewDidLoad];
-    
+
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.rowHeight = 34.0;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    
-    self.title = NSLocalizedString(@"Logs", @"Title of log viewing screen.");
+
+    if (self.title.length == 0) {
+        self.title = NSLocalizedString(@"Logs", @"Title of log viewing screen.");
+    }
 }
 
 #pragma mark - UIActionSheetDelegate
