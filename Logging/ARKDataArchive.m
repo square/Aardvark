@@ -25,6 +25,9 @@
 #import "NSFileHandle+ARKAdditions.h"
 
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 
 
@@ -42,7 +45,12 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 
 #pragma mark - Initialization
 
-- (instancetype)initWithURL:(NSURL *)fileURL maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount;
+- (nullable instancetype)init NS_UNAVAILABLE;
+{
+    ARKCheckCondition(NO, nil, @"Use initWithURL:maximumObjectCount:trimmedObjectCount:");
+}
+
+- (nullable instancetype)initWithURL:(NSURL *)fileURL maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount;
 {
     ARKCheckCondition([fileURL isFileURL], nil, @"Must provide a file URL!");
     
@@ -173,7 +181,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     [self.fileOperationQueue addOperation:readOperation];
 }
 
-- (void)clearArchiveWithCompletionHandler:(dispatch_block_t)completionHandler;
+- (void)clearArchiveWithCompletionHandler:(nullable dispatch_block_t)completionHandler;
 {
     [self.fileOperationQueue addOperationWithBlock:^{
         self.objectCount = 0;
@@ -252,3 +260,6 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 }
 
 @end
+
+
+NS_ASSUME_NONNULL_END
