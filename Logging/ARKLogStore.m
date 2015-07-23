@@ -32,7 +32,7 @@
 @interface ARKLogStore ()
 
 /// Stores all log messages.
-@property (strong) ARKDataArchive *dataArchive;
+@property ARKDataArchive *dataArchive;
 
 @end
 

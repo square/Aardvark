@@ -95,7 +95,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_dealloc_closesFile;
@@ -169,7 +169,7 @@
         [expectation3 fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_appendArchiveOfObject_trimsArchive;
@@ -245,7 +245,7 @@
         [expectation5 fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_appendArchiveOfObject_trimsCorruptedArchive;
@@ -283,7 +283,7 @@
     }];
     
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_initWithURL_detectsCorruptedArchive;
@@ -310,7 +310,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_initWithURL_detectsPartiallyCorruptedArchive;
@@ -339,7 +339,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_readObjectsFromArchive_excludesFaultyUnarchives;
@@ -381,7 +381,7 @@
         [expectation2 fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_clearArchiveWithCompletionHandler_removesAllDataFromDisk;
@@ -406,7 +406,7 @@
         }];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_clearArchiveWithCompletionHandler_completionHandlerCalledOnMainQueue;
@@ -417,7 +417,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 #pragma mark - Performance Tests

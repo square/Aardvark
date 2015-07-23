@@ -29,13 +29,12 @@
 
 @interface ARKLogDistributor ()
 
-@property (nonatomic, strong, readonly) NSOperationQueue *logDistributingQueue;
-@property (atomic, strong, readonly) NSMutableArray *logObservers;
+@property (nonatomic, readonly) NSOperationQueue *logDistributingQueue;
+@property (copy, readonly) NSMutableArray *logObservers;
 
-@property (atomic, assign) Class internalLogMessageClass;
-@property (atomic, weak) ARKLogStore *weakDefaultLogStore;
-@property (atomic, strong, readonly) NSRecursiveLock *defaultLogStorePropertyLock;
-
+@property Class internalLogMessageClass;
+@property (weak) ARKLogStore *weakDefaultLogStore;
+@property (readonly) NSRecursiveLock *defaultLogStorePropertyLock;
 
 /// Set to YES after calling `defaultLogStore`.
 /// Ensures that we only lazily create the default log store if `defaultLogStore` is nil the very first time it is called,

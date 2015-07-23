@@ -23,6 +23,6 @@
 
 @interface ARKLogStore (Private)
 
-@property (strong) ARKDataArchive *dataArchive;
+@property ARKDataArchive *dataArchive;
 
 @end

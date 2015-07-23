@@ -33,8 +33,8 @@ NSString *const SampleViewControllerTapLogKey = @"SampleViewControllerTapLog";
 
 @interface SampleViewController ()
 
-@property (nonatomic, readwrite, strong) ARKLogStore *tapGestureLogStore;
-@property (nonatomic, strong, readwrite) UITapGestureRecognizer *tapRecognizer;
+@property (nonatomic) ARKLogStore *tapGestureLogStore;
+@property (nonatomic) UITapGestureRecognizer *tapRecognizer;
 
 @end
 

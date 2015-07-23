@@ -29,8 +29,8 @@
 
 @interface UIApplication (ARKAdditions_Private)
 
-@property (nonatomic, strong, readwrite) NSMapTable *ARK_bugReporterToGestureRecognizerMap;
-@property (nonatomic, assign, readwrite, getter=ARK_isObservingKeyWindowNotifications, setter=setARK_ObservingKeyWindowNotifications:) BOOL ARK_observingKeyWindowNotifications;
+@property (nonatomic) NSMapTable *ARK_bugReporterToGestureRecognizerMap;
+@property (nonatomic, getter=ARK_isObservingKeyWindowNotifications, setter=setARK_ObservingKeyWindowNotifications:) BOOL ARK_observingKeyWindowNotifications;
 
 @end
 

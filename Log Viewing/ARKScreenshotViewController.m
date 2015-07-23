@@ -26,10 +26,10 @@
 
 @interface ARKScreenshotViewController ()
 
-@property (nonatomic, strong, readonly) UIImageView *imageView;
-@property (nonatomic, strong, readonly) UITapGestureRecognizer *tapGestureRecognizer;
-@property (nonatomic, strong, readonly) NSDate *date;
-@property (nonatomic, weak, readwrite) UIActivityViewController *activityViewController;
+@property (nonatomic, readonly) UIImageView *imageView;
+@property (nonatomic, readonly) UITapGestureRecognizer *tapGestureRecognizer;
+@property (nonatomic, readonly) NSDate *date;
+@property (nonatomic, weak) UIActivityViewController *activityViewController;
 
 @end
 

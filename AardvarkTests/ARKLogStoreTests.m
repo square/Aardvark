@@ -76,7 +76,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_observeLogMessage_trimsOldestLogs;
@@ -95,7 +95,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_logFilterBlock_preventsLogsFromBeingObserved;
@@ -130,7 +130,7 @@
         }];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_retrieveAllLogMessagesWithCompletionHandler_capturesAllLogsLogged;
@@ -152,7 +152,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_retrieveAllLogMessagesWithCompletionHandler_callsCompletionHandlerIfNoLogDistributor;
@@ -164,7 +164,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_retrieveAllLogMessagesWithCompletionHandler_completionHandlerCalledOnMainQueue;
@@ -175,7 +175,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_clearLogsWithCompletionHandler_removesAllLogMessages;
@@ -194,7 +194,7 @@
         }];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_waitUntilAllOperationsAreFinished_completionHandlerCalledOnMainQueue;
@@ -205,7 +205,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 #pragma mark - Performance Tests
@@ -265,7 +265,7 @@
             [expectation fulfill];
         }];
         
-        [self waitForExpectationsWithTimeout:1.0 handler:nil];
+        [self waitForExpectationsWithTimeout:5.0 handler:nil];
     }];
 }
 

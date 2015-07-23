@@ -33,9 +33,9 @@
 
 @interface ARKEmailBugReporterTests : XCTestCase
 
-@property (nonatomic, strong, readwrite) ARKLogDistributor *defaultLogDistributor;
-@property (nonatomic, strong, readwrite) ARKEmailBugReporter *bugReporter;
-@property (nonatomic, weak, readwrite) ARKLogStore *logStore;
+@property (nonatomic) ARKLogDistributor *defaultLogDistributor;
+@property (nonatomic) ARKEmailBugReporter *bugReporter;
+@property (nonatomic, weak) ARKLogStore *logStore;
 
 @end
 
@@ -91,7 +91,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_recentErrorLogMessagesAsPlainText_returnsNilIfNoErrorLogsPresent;
@@ -114,7 +114,7 @@
         }];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_recentErrorLogMessagesAsPlainText_returnsNilIfRecentErrorLogsIsZero;
@@ -137,7 +137,7 @@
         }];
     }];
     
-    [self waitForExpectationsWithTimeout:1.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)test_addLogStores_enforcesARKLogStoreClass;

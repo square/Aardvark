@@ -125,10 +125,7 @@
     [self.fileHandle ARK_writeDataBlock:self.data_4];
     [self _assertFileContentsMatchDataList:@[ self.block_9, self.block_4, self.block_7 ] failureMessage:@"Failed to over-write data in file."];
     
-    // Write empty-length data.
-    [self.fileHandle ARK_writeDataBlock:nil];
-    [self _assertFileContentsMatchDataList:@[ self.block_9, self.block_4, self.block_7 ] failureMessage:@"Writing nil data shouldn't change the file."];
-    
+    // Write empty-length data.    
     [self.fileHandle ARK_writeDataBlock:[NSData data]];
     [self _assertFileContentsMatchDataList:@[ self.block_9, self.block_4, self.block_7 ] failureMessage:@"Writing empty data shouldn't change the file."];
 }
@@ -158,9 +155,6 @@
     [self _assertFileContentsMatchDataList:@[ self.block_6, self.block_7, self.block_9, self.block_4 ] failureMessage:@"Failed to append to block after seeking to end of file."];
     
     // Append empty data.
-    [self.fileHandle ARK_appendDataBlock:nil];
-    [self _assertFileContentsMatchDataList:@[ self.block_6, self.block_7, self.block_9, self.block_4 ] failureMessage:@"Appending nil data shouldn't change the file."];
-    
     [self.fileHandle ARK_appendDataBlock:[NSData data]];
     [self _assertFileContentsMatchDataList:@[ self.block_6, self.block_7, self.block_9, self.block_4 ] failureMessage:@"Appending empty data shouldn't change the file."];
 }

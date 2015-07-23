@@ -25,12 +25,18 @@
 @class ARKLogMessage;
 
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @protocol ARKLogObserver <NSObject>
 
 /// The log distributor that distributes logs to this observer.
-@property (atomic, weak, readwrite) ARKLogDistributor *logDistributor;
+@property (weak, nullable) ARKLogDistributor *logDistributor;
 
 /// Called on a background operation queue when logs are appended to the log distributor.
 - (void)observeLogMessage:(ARKLogMessage *)logMessage;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

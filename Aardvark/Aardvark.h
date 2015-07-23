@@ -22,6 +22,9 @@
 #import <Aardvark/ARKEmailBugReporter.h>
 
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 typedef NS_ENUM(NSUInteger, ARKLogType) {
     /// Default log type.
     ARKLogTypeDefault,
@@ -38,7 +41,7 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
 OBJC_EXTERN void ARKLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
 
 /// Logs a log with customized type and userInfo to the default log distributor.
-OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary *userInfo, NSString *format, ...) NS_FORMAT_FUNCTION(3,4);
+OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * __nullable userInfo, NSString *format, ...) NS_FORMAT_FUNCTION(3,4);
 
 /// Logs a screenshot to the default log distributor.
 OBJC_EXTERN void ARKLogScreenshot();
@@ -47,9 +50,12 @@ OBJC_EXTERN void ARKLogScreenshot();
 @interface Aardvark : NSObject
 
 /// Sets up a two finger press-and-hold gesture recognizer to trigger email bug reports that will be sent to emailAddress. Returns the created bug reporter for convenience.
-+ (ARKEmailBugReporter *)addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:(NSString *)emailAddress;
++ (nullable ARKEmailBugReporter *)addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:(NSString *)emailAddress;
 
 /// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReport].
-+ (id)addBugReporter:(id <ARKBugReporter>)bugReporter triggeringGestureRecognizerClass:(Class)gestureRecognizerClass;
++ (nullable id)addBugReporter:(id <ARKBugReporter>)bugReporter triggeringGestureRecognizerClass:(Class)gestureRecognizerClass;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

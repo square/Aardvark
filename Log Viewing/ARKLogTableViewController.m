@@ -33,9 +33,9 @@
 
 @interface ARKLogTableViewController () <UIActionSheetDelegate>
 
-@property (nonatomic, copy, readwrite) NSArray *logMessages;
-@property (nonatomic, assign, readwrite) BOOL viewWillAppearForFirstTimeCalled;
-@property (nonatomic, assign, readwrite) BOOL hasScrolledToBottom;
+@property (nonatomic, copy) NSArray *logMessages;
+@property (nonatomic) BOOL viewWillAppearForFirstTimeCalled;
+@property (nonatomic) BOOL hasScrolledToBottom;
 
 @property (nonatomic) UIActionSheet *clearLogsConfirmationActionSheet;
 

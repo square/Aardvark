@@ -23,7 +23,7 @@
 
 @interface ARKDataArchive (Private)
 
-@property (nonatomic, strong, readonly) NSFileHandle *fileHandle;
+@property (nonatomic, readonly) NSFileHandle *fileHandle;
 
 - (void)waitUntilAllOperationsAreFinished;
 

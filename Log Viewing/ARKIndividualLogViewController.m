@@ -26,8 +26,8 @@
 
 @interface ARKIndividualLogViewController ()
 
-@property (nonatomic, strong, readonly) UITextView *textView;
-@property (nonatomic, copy, readwrite) NSString *text;
+@property (nonatomic, readonly) UITextView *textView;
+@property (nonatomic, copy) NSString *text;
 
 @end
 

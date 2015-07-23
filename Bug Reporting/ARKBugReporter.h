@@ -21,6 +21,9 @@
 #import <Foundation/Foundation.h>
 
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @protocol ARKBugReporter <NSObject>
 
 /// Called when the user has triggered the creation of a bug report.
@@ -36,3 +39,5 @@
 - (NSArray *)logStores;
 
 @end
+
+NS_ASSUME_NONNULL_END

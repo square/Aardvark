@@ -24,6 +24,9 @@
 @class ARKLogMessage;
 
 
+NS_ASSUME_NONNULL_BEGIN
+
+
 @protocol ARKLogFormatter <NSObject>
 
 @required
@@ -32,3 +35,6 @@
 - (NSString *)formattedLogMessage:(ARKLogMessage *)logMessage;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

@@ -1,5 +1,7 @@
 language: objective-c
+osx_image: xcode6.4
 before_script:
-    - brew update && brew upgrade xctool
+    - bundle install
 script:
-    - xctool test -project Aardvark.xcodeproj -scheme Aardvark -sdk iphonesimulator
+    - xcodebuild -project Aardvark.xcodeproj -scheme Aardvark -sdk iphonesimulator -configuration Debug -PBXBuildsContinueAfterErrors=0 ACTIVE_ARCH_ONLY=0 build test
+    - pod lib lint --verbose --fail-fast
