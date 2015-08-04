@@ -19,7 +19,6 @@
 //
 
 #import <Aardvark/ARKLogMessage.h>
-#import <Crashlytics/Crashlytics.h>
 
 #import "SampleCrashlyticsLogObserver.h"
 
@@ -32,7 +31,8 @@
 
 - (void)observeLogMessage:(ARKLogMessage *)logMessage;
 {
-    CLSLog(@"%@", logMessage.text);
+    // If we were linking Crashlytics, we'd just uncomment the following line to forward the log to Crashlytics:
+//    CLSLog(@"%@", logMessage.text);
 }
 
 @end
