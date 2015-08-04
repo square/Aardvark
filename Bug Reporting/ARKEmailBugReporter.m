@@ -40,6 +40,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @property (nonatomic) MFMailComposeViewController *mailComposeViewController;
 @property (nonatomic) UIWindow *emailComposeWindow;
+@property (nonatomic, weak) UIWindow *previousKeyWindow;
 
 @property (nonatomic, copy) NSMutableArray *mutableLogStores;
 
@@ -332,6 +333,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)_showEmailComposeWindow;
 {
+    self.previousKeyWindow = [UIApplication sharedApplication].keyWindow;
+    
     [self.mailComposeViewController beginAppearanceTransition:YES animated:YES];
     
     self.emailComposeWindow.rootViewController = self.mailComposeViewController;
@@ -343,6 +346,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)_dismissEmailComposeWindow;
 {
+    // Actually dismiss the mail compose view controller.
     [self.mailComposeViewController beginAppearanceTransition:NO animated:YES];
     
     [self.mailComposeViewController.view removeFromSuperview];
@@ -350,6 +354,18 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     self.emailComposeWindow = nil;
     
     [self.mailComposeViewController endAppearanceTransition];
+    
+    static BOOL iOS9OrLater;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        iOS9OrLater = [[UIDevice currentDevice].systemVersion compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending;
+    });
+    
+    // Work around an iOS 9 bug where we don't get UIWindowDidBecomeKeyNotification when the mail compose view controller dismisses.
+    if (iOS9OrLater) {
+        [self.previousKeyWindow makeKeyAndVisible];
+        self.previousKeyWindow = nil;
+    }
 }
 
 - (NSString *)_recentErrorLogMessagesAsPlainText:(NSArray *)logMessages count:(NSUInteger)errorLogsToInclude;
