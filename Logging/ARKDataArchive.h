@@ -30,6 +30,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// Creates a file at the supplied URL if necessary, or reads in (and validates) the file if it already exists from a previous run.
 - (nullable instancetype)initWithURL:(NSURL *)fileURL maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount NS_DESIGNATED_INITIALIZER;
 
+- (nullable instancetype)init NS_UNAVAILABLE;
++ (nullable instancetype)new NS_UNAVAILABLE;
+
 /// The maximum number of archived objects to store in the file.
 @property (nonatomic, readonly) NSUInteger maximumObjectCount;
 
