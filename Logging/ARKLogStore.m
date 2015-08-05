@@ -68,7 +68,7 @@
     return self;
 }
 
-- (instancetype)initWithPersistedLogFileName:(NSString *)fileName __attribute__((nonnull(1)));
+- (instancetype)initWithPersistedLogFileName:(NSString *)fileName;
 {
     return [self initWithPersistedLogFileName:fileName maximumLogMessageCount:2000];
 }
