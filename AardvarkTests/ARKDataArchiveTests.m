@@ -424,11 +424,8 @@
 
 - (void)test_appendArchiveOfObject_performance;
 {
-    // Start fresh.
     NSURL *fileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"archive-performance.data"];
     ARKDataArchive *dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
-    [dataArchive.fileHandle truncateFileAtOffset:0];
-    [dataArchive saveArchiveAndWait:YES];
     
     NSMutableArray *numbers = [NSMutableArray new];
     for (NSUInteger i  = 0; i < dataArchive.maximumObjectCount; i++) {
@@ -436,6 +433,10 @@
     }
     
     [self measureBlock:^{
+        // Start fresh.
+        [dataArchive.fileHandle truncateFileAtOffset:0];
+        [dataArchive saveArchiveAndWait:YES];
+
         // Concurrently add all of the objects.
         [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
             [dataArchive appendArchiveOfObject:number];
@@ -447,36 +448,32 @@
 
 - (void)test_saveArchive_performance;
 {
-    // Start fresh.
     NSURL *fileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"archive-performance.data"];
     ARKDataArchive *dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
-    [dataArchive.fileHandle truncateFileAtOffset:0];
-    [dataArchive saveArchiveAndWait:YES];
     
     NSMutableArray *numbers = [NSMutableArray new];
     for (NSUInteger i  = 0; i < dataArchive.maximumObjectCount; i++) {
         [numbers addObject:@(i)];
     }
     
-    // Concurrently add all of the objects.
-    [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
-        [dataArchive appendArchiveOfObject:number];
-    }];
-    
-    [dataArchive waitUntilAllOperationsAreFinished];
-    
     [self measureBlock:^{
+        // Start fresh.
+        [dataArchive.fileHandle truncateFileAtOffset:0];
+        [dataArchive saveArchiveAndWait:YES];
+        
+        // Concurrently add all of the objects.
+        [numbers enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(NSNumber *number, NSUInteger idx, BOOL *stop) {
+            [dataArchive appendArchiveOfObject:number];
+        }];
+        
         [dataArchive saveArchiveAndWait:YES];
     }];
 }
 
 - (void)test_appendLogsAndSave_performance;
 {
-    // Start fresh.
     NSURL *fileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"archive-performance.data"];
     ARKDataArchive *dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
-    [dataArchive.fileHandle truncateFileAtOffset:0];
-    [dataArchive saveArchiveAndWait:YES];
     
     NSMutableArray *logMessages = [NSMutableArray new];
     for (NSUInteger i  = 0; i < dataArchive.maximumObjectCount; i++) {
@@ -484,6 +481,10 @@
     }
     
     [self measureBlock:^{
+        // Start fresh.
+        [dataArchive.fileHandle truncateFileAtOffset:0];
+        [dataArchive saveArchiveAndWait:YES];
+        
         // Concurrently add all of the logs.
         [logMessages enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(ARKLogMessage *logMessage, NSUInteger idx, BOOL *stop) {
             [dataArchive appendArchiveOfObject:logMessage];
@@ -514,7 +515,8 @@
     [dataArchive saveArchiveAndWait:YES];
     
     [self measureBlock:^{
-        (void)[[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
+        ARKDataArchive *performanceTestDataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
+        [performanceTestDataArchive waitUntilAllOperationsAreFinished];
     }];
 }
 
