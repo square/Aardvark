@@ -31,7 +31,16 @@ NS_ASSUME_NONNULL_BEGIN
 /// Displays a list of ARKArdvarkLogs in a table.
 @interface ARKLogTableViewController : UITableViewController
 
-- (nullable instancetype)initWithLogStore:(ARKLogStore *)logStore logFormatter:(id <ARKLogFormatter>)logFormatter;
+/**
+ Creates a log table view controller displaying logs from the default `ARKLogDistributor`'s default log store, using a default log formatter.
+ */
+- (instancetype)init;
+
+/**
+ @param logStore The log store from which to display logs. Must not be nil.
+ @param logFormatter A log formatter used to format display of log messages. Must not be nil.
+ */
+- (nullable instancetype)initWithLogStore:(nonnull ARKLogStore *)logStore logFormatter:(nonnull id <ARKLogFormatter>)logFormatter NS_DESIGNATED_INITIALIZER;
 
 /// The log store that provides the data for the table.
 @property (nonatomic, readonly) ARKLogStore *logStore;

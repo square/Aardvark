@@ -38,6 +38,7 @@
 @property (nonatomic) BOOL hasScrolledToBottom;
 
 @property (nonatomic) UIActionSheet *clearLogsConfirmationActionSheet;
+@property (nonatomic, strong) UIBarButtonItem *shareBarButtonItem;
 
 #if TARGET_IPHONE_SIMULATOR
 @property (nonatomic) UIActionSheet *printLogsActionSheet;
@@ -54,7 +55,10 @@
 
 - (instancetype)initWithLogStore:(ARKLogStore *)logStore logFormatter:(id <ARKLogFormatter>)logFormatter;
 {
-    self = [super init];
+    NSAssert(logStore, @"Must pass a log store.");
+    NSAssert(logFormatter, @"Must pass a logFormatter.");
+
+    self = [super initWithNibName:nil bundle:nil];
     if (!self) {
         return nil;
     }
@@ -69,6 +73,23 @@
 - (instancetype)init;
 {
     return [self initWithLogStore:[ARKLogDistributor defaultDistributor].defaultLogStore logFormatter:[ARKDefaultLogFormatter new]];
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+{
+    return [self init];
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+{
+    NSAssert(NO, @"Please use a supported initializer.");
+    return [self init];
+}
+
+- (instancetype)initWithStyle:(UITableViewStyle)style;
+{
+    NSAssert(NO, @"Please use a supported initializer.");
+    return [self init];
 }
 
 - (void)dealloc;
@@ -320,12 +341,19 @@
     [self.printLogsActionSheet showInView:self.view];
     
 #else
-    
     // Show a share sheet so the user can email logs.
     NSArray *formattedLogMessages = [self contentForActivitySheet];
     UIActivityViewController *activityViewController = [UIActivityViewController ARK_newAardvarkActivityViewControllerWithItems:formattedLogMessages];
-    [self presentViewController:activityViewController animated:YES completion:NULL];
-    
+
+    // UIActivityViewController must be presented modally on iPhone, but in a popover on iPad, according to Apple's docs.
+    BOOL const isPhone = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone);
+    if (isPhone) {
+        [self presentViewController:activityViewController animated:YES completion:NULL];
+    } else {
+        // isPad
+        UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
+        [popoverController presentPopoverFromBarButtonItem:self.shareBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+    }
 #endif
 }
 
@@ -375,6 +403,8 @@
 - (void)_viewWillAppearForFirstTime:(BOOL)animated;
 {
     UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(_openActivitySheet:)];
+    self.shareBarButtonItem = shareButton;
+
     UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(_clearLogs:)];
     
     self.navigationItem.rightBarButtonItems = @[shareButton, deleteButton];
