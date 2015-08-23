@@ -75,7 +75,7 @@
     return [self initWithLogStore:[ARKLogDistributor defaultDistributor].defaultLogStore logFormatter:[ARKDefaultLogFormatter new]];
 }
 
-- (nullable instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+- (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil;
 {
     return [self init];
 }
@@ -85,9 +85,9 @@
     ARKCheckCondition(NO, nil, @"Please use a valid initializer.");
 }
 
-- (nullable instancetype)initWithStyle:(UITableViewStyle)style;
+- (instancetype)initWithStyle:(UITableViewStyle)style;
 {
-    ARKCheckCondition(NO, nil, @"Please use a valid initializer.");
+    ARKCheckCondition(NO, [self init], @"Please use a valid initializer.");
 }
 
 - (void)dealloc;

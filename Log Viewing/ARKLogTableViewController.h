@@ -41,16 +41,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)init;
 
 /// @see `init`
-- (nullable instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+- (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil;
 
 /**
  @param logStore The log store from which to display logs. Must not be nil.
  @param logFormatter A log formatter used to format display of log messages. Must not be nil.
  */
-- (nullable instancetype)initWithLogStore:(nonnull ARKLogStore *)logStore logFormatter:(nonnull id <ARKLogFormatter>)logFormatter NS_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithLogStore:(ARKLogStore *)logStore logFormatter:(id <ARKLogFormatter>)logFormatter NS_DESIGNATED_INITIALIZER;
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;
-- (nullable instancetype)initWithStyle:(UITableViewStyle)style NS_UNAVAILABLE;
+- (instancetype)initWithStyle:(UITableViewStyle)style NS_UNAVAILABLE;
 
 //
 // @name Properties
