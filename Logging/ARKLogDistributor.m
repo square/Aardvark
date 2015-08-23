@@ -165,18 +165,6 @@
     return [logStores copy];
 }
 
-#pragma mark - Private Properties
-
-- (dispatch_once_t)defaultLogStoreAccessOnceToken;
-{
-    ARKCheckCondition(NO, 0, @"Should not attempt to access this token via a getter. This property must be used directly.");
-}
-
-- (void)setDefaultLogStoreAccessOnceToken:(dispatch_once_t)defaultLogStoreAccessOnceToken;
-{
-    ARKCheckCondition(NO, , @"Should not attempt to set this token via the setter. This property must be used directly.");
-}
-
 #pragma mark - Public Methods - Log Observers
 
 - (void)addLogObserver:(id <ARKLogObserver>)logObserver;
