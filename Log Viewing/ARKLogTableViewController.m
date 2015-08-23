@@ -38,7 +38,7 @@
 @property (nonatomic) BOOL hasScrolledToBottom;
 
 @property (nonatomic) UIActionSheet *clearLogsConfirmationActionSheet;
-@property (nonatomic, strong) UIBarButtonItem *shareBarButtonItem;
+@property (nonatomic, weak) UIBarButtonItem *shareBarButtonItem;
 
 #if TARGET_IPHONE_SIMULATOR
 @property (nonatomic) UIActionSheet *printLogsActionSheet;
@@ -53,10 +53,10 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithLogStore:(ARKLogStore *)logStore logFormatter:(id <ARKLogFormatter>)logFormatter;
+- (nullable instancetype)initWithLogStore:(ARKLogStore *)logStore logFormatter:(id <ARKLogFormatter>)logFormatter;
 {
-    NSAssert(logStore, @"Must pass a log store.");
-    NSAssert(logFormatter, @"Must pass a logFormatter.");
+    ARKCheckCondition(logStore, nil, @"Must pass a log store.");
+    ARKCheckCondition(logFormatter, nil, @"Must pass a logFormatter.");
 
     self = [super initWithNibName:nil bundle:nil];
     if (!self) {
@@ -70,26 +70,24 @@
     return self;
 }
 
-- (instancetype)init;
+- (nullable instancetype)init;
 {
     return [self initWithLogStore:[ARKLogDistributor defaultDistributor].defaultLogStore logFormatter:[ARKDefaultLogFormatter new]];
 }
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+- (nullable instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 {
     return [self init];
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder;
 {
-    NSAssert(NO, @"Please use a supported initializer.");
-    return [self init];
+    ARKCheckCondition(NO, nil, @"Please use a valid initializer.");
 }
 
-- (instancetype)initWithStyle:(UITableViewStyle)style;
+- (nullable instancetype)initWithStyle:(UITableViewStyle)style;
 {
-    NSAssert(NO, @"Please use a supported initializer.");
-    return [self init];
+    ARKCheckCondition(NO, nil, @"Please use a valid initializer.");
 }
 
 - (void)dealloc;
@@ -351,8 +349,10 @@
         [self presentViewController:activityViewController animated:YES completion:NULL];
     } else {
         // isPad
+        ARKCheckCondition(self.shareBarButtonItem, , @"Missing a share bar button item when that bar button item was clicked.");
+
         UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
-        [popoverController presentPopoverFromBarButtonItem:self.shareBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny  animated:YES];
+        [popoverController presentPopoverFromBarButtonItem:self.shareBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
 #endif
 }
