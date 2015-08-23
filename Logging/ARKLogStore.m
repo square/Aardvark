@@ -32,7 +32,7 @@
 @interface ARKLogStore ()
 
 /// Stores all log messages.
-@property ARKDataArchive *dataArchive;
+@property (nonnull) ARKDataArchive *dataArchive;
 
 @end
 
@@ -43,12 +43,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)init;
-{
-    ARKCheckCondition(NO, nil, @"Must use -initWithPersistedLogFileName: to initialize a ARKLogStore");
-}
-
-- (instancetype)initWithPersistedLogFileName:(NSString *)fileName maximumLogMessageCount:(NSUInteger)maximumLogMessageCount;
+- (nullable instancetype)initWithPersistedLogFileName:(nonnull NSString *)fileName maximumLogMessageCount:(NSUInteger)maximumLogMessageCount;
 {
     ARKCheckCondition(fileName.length > 0, nil, @"Must specify a file name");
     ARKCheckCondition(maximumLogMessageCount > 0, nil, @"maximumLogMessageCount must be greater than zero");
@@ -68,9 +63,14 @@
     return self;
 }
 
-- (instancetype)initWithPersistedLogFileName:(NSString *)fileName;
+- (nullable instancetype)initWithPersistedLogFileName:(NSString *)fileName;
 {
     return [self initWithPersistedLogFileName:fileName maximumLogMessageCount:2000];
+}
+
+- (nullable instancetype)init;
+{
+    ARKCheckCondition(NO, nil, @"Must use -initWithPersistedLogFileName: to initialize an ARKLogStore");
 }
 
 - (void)dealloc;
@@ -80,7 +80,7 @@
 
 #pragma mark - ARKLogDistributor
 
-- (void)observeLogMessage:(ARKLogMessage *)logMessage;
+- (void)observeLogMessage:(nonnull ARKLogMessage *)logMessage;
 {
     if (self.logFilterBlock && !self.logFilterBlock(logMessage)) {
         // Predicate told us we should not observe this log. Bail out.
@@ -100,7 +100,7 @@
 
 #pragma mark - Public Methods
 
-- (void)retrieveAllLogMessagesWithCompletionHandler:(void (^)(NSArray *logMessages))completionHandler;
+- (void)retrieveAllLogMessagesWithCompletionHandler:(nonnull void (^)(NSArray *logMessages))completionHandler;
 {
     ARKCheckCondition(completionHandler != NULL, , @"Can not retrieve log messages without a completion handler");
     if (self.logDistributor == nil) {
@@ -116,7 +116,7 @@
     }];
 }
 
-- (void)clearLogsWithCompletionHandler:(dispatch_block_t)completionHandler;
+- (void)clearLogsWithCompletionHandler:(nullable dispatch_block_t)completionHandler;
 {
     if (self.logDistributor == nil) {
         [self.dataArchive clearArchiveWithCompletionHandler:completionHandler];
@@ -129,7 +129,7 @@
 
 #pragma mark - Private Methods
 
-- (void)_applicationWillTerminate:(NSNotification *)notification;
+- (void)_applicationWillTerminate:(nullable NSNotification *)notification;
 {
     [self.logDistributor waitUntilAllPendingLogsHaveBeenDistributed];
     [self.dataArchive saveArchiveAndWait:YES];
