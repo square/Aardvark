@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property Class logMessageClass;
 
 /// Convenience method to store a reference to the default log store. Lazily creates a log store when accessed for the first time if one is not already set.
-@property (nullable) ARKLogStore *defaultLogStore;
+@property ARKLogStore *defaultLogStore;
 
 /// Returns all instances of `ARKLogStore` that are currently registered as observers on this log distributor.
 @property (atomic, copy, readonly) NSSet *logStores;

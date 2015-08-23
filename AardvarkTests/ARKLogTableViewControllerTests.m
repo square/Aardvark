@@ -120,13 +120,6 @@
     self.logStore = logStore;
 }
 
-- (void)tearDown;
-{
-    self.logDistributor.defaultLogStore = nil;
-    
-    [super tearDown];
-}
-
 #pragma mark - Behavior Tests
 
 - (void)test_logMessagesWithMinuteSeparators_insertsTimestampsBetweenLogs;
