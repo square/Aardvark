@@ -75,11 +75,7 @@
     _logDistributingQueue.name = [NSString stringWithFormat:@"%@ Log Distributing Queue", self];
     _logDistributingQueue.maxConcurrentOperationCount = 1;
 
-#ifdef __IPHONE_8_0
-    if ([_logDistributingQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
-        _logDistributingQueue.qualityOfService = NSQualityOfServiceBackground;
-    }
-#endif
+    [self _setDistributionQualityOfServiceBackground];
     
     _logObservers = [NSMutableArray new];
 
@@ -191,8 +187,10 @@
 {
     ARKCheckCondition(completionHandler != NULL, , @"Must provide a completion handler!");
     
+    [self _setDistributionQualityOfServiceUserInitiated];
     [self.logDistributingQueue addOperationWithBlock:^{
         [[NSOperationQueue mainQueue] addOperationWithBlock:completionHandler];
+        [self _setDistributionQualityOfServiceBackground];
     }];
 }
 
@@ -283,5 +281,30 @@
         [logObserver observeLogMessage:logMessage];
     }
 }
+
+- (void)_setDistributionQualityOfServiceUserInitiated;
+{
+#ifdef __IPHONE_8_0
+    [self _setDistributionQualityOfService:NSQualityOfServiceUserInitiated];
+#endif
+}
+
+- (void)_setDistributionQualityOfServiceBackground;
+{
+#ifdef __IPHONE_8_0
+    [self _setDistributionQualityOfService:NSQualityOfServiceBackground];
+#endif
+}
+
+#ifdef __IPHONE_8_0
+
+- (void)_setDistributionQualityOfService:(NSQualityOfService)qualityOfService;
+{
+    if ([self.logDistributingQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
+        self.logDistributingQueue.qualityOfService = qualityOfService;
+    }
+}
+
+#endif
 
 @end
