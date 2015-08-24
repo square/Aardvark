@@ -196,6 +196,15 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                     // Only attach data once all log messages have been retrieved.
                     if (logStoresToLogMessagesMap.count == logStores.count) {
                         NSMutableString *emailBody = [NSMutableString stringWithFormat:@"%@\n", self.prefilledEmailBody];
+                        
+                        NSDictionary *emailBodyAdditions = [self.emailBodyAdditionsDelegate emailBodyAdditionsForEmailBugReporter:self];
+                        if (emailBodyAdditions.count > 0) {
+                            [emailBody appendString:@"\n"];
+                            for (NSString *emailBodyAdditionKey in emailBodyAdditions.allKeys) {
+                                [emailBody appendFormat:@"%@: %@\n", emailBodyAdditionKey, emailBodyAdditions[emailBodyAdditionKey]];
+                            }
+                        }
+                        
                         for (ARKLogStore *logStore in logStores) {
                             NSArray *logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
                             

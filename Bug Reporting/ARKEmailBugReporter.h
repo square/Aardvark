@@ -22,11 +22,22 @@
 #import <MessageUI/MessageUI.h>
 
 
+@class ARKEmailBugReporter;
 @class ARKLogStore;
 @protocol ARKLogFormatter;
 
 
 NS_ASSUME_NONNULL_BEGIN
+
+
+@protocol ARKEmailBugReporterEmailBodyAdditionsDelegate <NSObject>
+
+@required
+
+/// Called on the main thread when a bug is filed. The key/value pairs in the returned dictionary will be appended to the bug report below the prefilledEmailBody.
+- (nullable NSDictionary *)emailBodyAdditionsForEmailBugReporter:(ARKEmailBugReporter *)emailBugReporter;
+
+@end
 
 
 /// Composes a bug report that is sent via email.
@@ -39,6 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// The email body that will be presented to the user when they compose a report.
 @property (nonatomic, copy) NSString *prefilledEmailBody;
+
+/// The email body delegate, responsible for providing key/value pairs to include in the bug report at the time the bug is filed.
+@property (nullable, nonatomic, weak) id <ARKEmailBugReporterEmailBodyAdditionsDelegate> emailBodyAdditionsDelegate;
 
 /// The formatter used to prepare the log for entry into an email. Defaults to a vanilla instance of ARKDefaultLogFormatter.
 @property (nonatomic) id <ARKLogFormatter> logFormatter;
