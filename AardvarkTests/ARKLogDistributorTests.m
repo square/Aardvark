@@ -103,7 +103,6 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 {
     [self.logDistributor waitUntilAllPendingLogsHaveBeenDistributed];
     
-    self.logDistributor.defaultLogStore = nil;
     self.logDistributor.logMessageClass = [ARKLogMessage class];
     
     [super tearDown];
@@ -152,9 +151,6 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 
     // Should return the same instance on subsequent property accesses.
     XCTAssertEqual(logDistributor.defaultLogStore, defaultLogStore);
-    
-    logDistributor.defaultLogStore = nil;
-    XCTAssertNil(logDistributor.defaultLogStore, @"Default log store should not initialize itself lazily twice.");
 }
 
 - (void)test_addLogObserver_notifiesLogObserverOnLogWithFormat;

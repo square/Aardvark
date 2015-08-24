@@ -59,13 +59,6 @@
     self.logStore = logStore;
 }
 
-- (void)tearDown;
-{
-    [ARKLogDistributor defaultDistributor].defaultLogStore = nil;
-    
-    [super tearDown];
-}
-
 #pragma mark - Behavior Tests
 
 - (void)test_formattedLogMessage_errorLogLineCount;
