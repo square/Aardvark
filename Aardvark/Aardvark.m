@@ -57,13 +57,19 @@ void ARKLogScreenshot()
 + (ARKEmailBugReporter *)addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:(NSString *)emailAddress;
 {
     ARKCheckCondition([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:)], nil, @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
-    
+
     ARKLogStore *logStore = [ARKLogDistributor defaultDistributor].defaultLogStore;
     ARKEmailBugReporter *bugReporter = [[ARKEmailBugReporter alloc] initWithEmailAddress:emailAddress logStore:logStore];
-    
-    [[UIApplication sharedApplication] ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:bugReporter];
-    
+    [self addDefaultBugReportingGestureWithEmailBugReporter:bugReporter];
+
     return bugReporter;
+}
+
++ (void)addDefaultBugReportingGestureWithEmailBugReporter:(ARKEmailBugReporter *)bugReporter;
+{
+    ARKCheckCondition([[UIApplication sharedApplication] respondsToSelector:@selector(ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:)],, @"Add -ObjC to your project's Other Linker Flags to use %s", __PRETTY_FUNCTION__);
+
+    [[UIApplication sharedApplication] ARK_addTwoFingerPressAndHoldGestureRecognizerTriggerWithBugReporter:bugReporter];
 }
 
 + (id)addBugReporter:(id <ARKBugReporter>)bugReporter triggeringGestureRecognizerClass:(Class)gestureRecognizerClass;

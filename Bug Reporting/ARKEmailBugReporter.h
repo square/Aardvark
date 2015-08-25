@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// Composes a bug report that is sent via email.
 @interface ARKEmailBugReporter : NSObject <ARKBugReporter>
 
+/// Returns an instance of a default email bug reporter.
++ (instancetype)defaultReporter;
+
 - (instancetype)initWithEmailAddress:(NSString *)emailAddress logStore:(ARKLogStore *)logStore;
 
 /// The email address to which bug reports will be sent. Must be set before composeBugReport is called.

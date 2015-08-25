@@ -51,6 +51,17 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 #pragma mark - Initialization
 
++ (instancetype)defaultReporter;
+{
+    static dispatch_once_t onceToken;
+    static ARKEmailBugReporter *bugReporter;
+    dispatch_once(&onceToken, ^{
+        bugReporter = [ARKEmailBugReporter new];
+    });
+
+    return bugReporter;
+}
+
 - (instancetype)init;
 {
     self = [super init];

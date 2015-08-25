@@ -52,6 +52,9 @@ OBJC_EXTERN void ARKLogScreenshot();
 /// Sets up a two finger press-and-hold gesture recognizer to trigger email bug reports that will be sent to emailAddress. Returns the created bug reporter for convenience.
 + (nullable ARKEmailBugReporter *)addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:(NSString *)emailAddress;
 
+/// Sets up a two finger press-and-hold gesture recognizer to trigger the passed in email bug reporter.
++ (void)addDefaultBugReportingGestureWithEmailBugReporter:(ARKEmailBugReporter *)bugReporter;
+
 /// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReport].
 + (nullable id)addBugReporter:(id <ARKBugReporter>)bugReporter triggeringGestureRecognizerClass:(Class)gestureRecognizerClass;
 
