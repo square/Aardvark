@@ -182,6 +182,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         NSString *bugTitle = [alertView textFieldAtIndex:0].text;
         NSArray *logStores = [self.logStores copy];
         NSMapTable *logStoresToLogMessagesMap = [NSMapTable new];
+        NSDictionary *emailBodyAdditions = [self.emailBodyAdditionsDelegate emailBodyAdditionsForEmailBugReporter:self];
         
         if ([MFMailComposeViewController canSendMail]) {
             self.mailComposeViewController = [MFMailComposeViewController new];
@@ -195,17 +196,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                     
                     // Only attach data once all log messages have been retrieved.
                     if (logStoresToLogMessagesMap.count == logStores.count) {
-                        NSMutableString *emailBody = [NSMutableString stringWithFormat:@"%@\n", self.prefilledEmailBody];
-                        
-                        NSDictionary *emailBodyAdditions = [self.emailBodyAdditionsDelegate emailBodyAdditionsForEmailBugReporter:self];
-                        if (emailBodyAdditions.count > 0) {
-                            for (NSString *emailBodyAdditionKey in emailBodyAdditions.allKeys) {
-                                [emailBody appendFormat:@"%@: %@\n", emailBodyAdditionKey, emailBodyAdditions[emailBodyAdditionKey]];
-                            }
-                        }
-                        
-                        // Add a newline to separate prefill email body from what comes below.
-                        [emailBody appendString:@"\n"];
+                        NSMutableString *emailBody = [self _prefilledEmailBodyWithEmailBodyAdditions:emailBodyAdditions];
                         
                         for (ARKLogStore *logStore in logStores) {
                             NSArray *logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
@@ -256,11 +247,11 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                     
                     // Only append logs once all log messages have been retrieved.
                     if (logStoresToLogMessagesMap.count == logStores.count) {
-                        NSMutableString *emailBody = [NSMutableString new];
+                        NSMutableString *emailBody = [self _prefilledEmailBodyWithEmailBodyAdditions:emailBodyAdditions];
+                        
                         for (ARKLogStore *logStore in logStores) {
                             NSArray *logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
-                            
-                            [emailBody appendFormat:@"%@\n%@\n", self.prefilledEmailBody, [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
+                            [emailBody appendFormat:@"%@\n", [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
                         }
                         
                         NSURL *composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:bugTitle body:emailBody];
@@ -377,6 +368,22 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         [self.previousKeyWindow makeKeyAndVisible];
         self.previousKeyWindow = nil;
     }
+}
+
+- (NSMutableString *)_prefilledEmailBodyWithEmailBodyAdditions:(nullable NSDictionary *)emailBodyAdditions;
+{
+    NSMutableString *prefilledEmailBodyWithEmailBodyAdditions = [NSMutableString stringWithFormat:@"%@\n", self.prefilledEmailBody];
+    
+    if (emailBodyAdditions.count > 0) {
+        for (NSString *emailBodyAdditionKey in emailBodyAdditions.allKeys) {
+            [prefilledEmailBodyWithEmailBodyAdditions appendFormat:@"%@: %@\n", emailBodyAdditionKey, emailBodyAdditions[emailBodyAdditionKey]];
+        }
+    }
+    
+    // Add a newline to separate prefill email body and additions from what comes after.
+    [prefilledEmailBodyWithEmailBodyAdditions appendString:@"\n"];
+
+    return prefilledEmailBodyWithEmailBodyAdditions;
 }
 
 - (NSString *)_recentErrorLogMessagesAsPlainText:(NSArray *)logMessages count:(NSUInteger)errorLogsToInclude;
