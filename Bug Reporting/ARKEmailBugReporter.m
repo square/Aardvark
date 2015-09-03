@@ -63,7 +63,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                            @"2. \n"
                            @"3. \n"
                            @"\n"
-                           @"System version: %@\n", [[UIDevice currentDevice] systemVersion]];
+                           @"System version: %@", [[UIDevice currentDevice] systemVersion]];
     
     _logFormatter = [ARKDefaultLogFormatter new];
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable = 3;
@@ -199,11 +199,13 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                         
                         NSDictionary *emailBodyAdditions = [self.emailBodyAdditionsDelegate emailBodyAdditionsForEmailBugReporter:self];
                         if (emailBodyAdditions.count > 0) {
-                            [emailBody appendString:@"\n"];
                             for (NSString *emailBodyAdditionKey in emailBodyAdditions.allKeys) {
                                 [emailBody appendFormat:@"%@: %@\n", emailBodyAdditionKey, emailBodyAdditions[emailBodyAdditionKey]];
                             }
                         }
+                        
+                        // Add a newline to separate prefill email body from what comes below.
+                        [emailBody appendString:@"\n"];
                         
                         for (ARKLogStore *logStore in logStores) {
                             NSArray *logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
