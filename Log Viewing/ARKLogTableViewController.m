@@ -31,7 +31,7 @@
 #import "UIActivityViewController+ARKAdditions.h"
 
 
-@interface ARKLogTableViewController () <UIActionSheetDelegate>
+@interface ARKLogTableViewController () <UIActionSheetDelegate, UIPopoverControllerDelegate>
 
 @property (nonatomic, copy) NSArray *logMessages;
 @property (nonatomic) BOOL viewWillAppearForFirstTimeCalled;
@@ -39,6 +39,8 @@
 
 @property (nonatomic) UIActionSheet *clearLogsConfirmationActionSheet;
 @property (nonatomic, weak) UIBarButtonItem *shareBarButtonItem;
+
+@property (nonatomic, strong) UIPopoverController *activitySheetPopoverController;
 
 #if TARGET_IPHONE_SIMULATOR
 @property (nonatomic) UIActionSheet *printLogsActionSheet;
@@ -174,6 +176,13 @@
             [self _reloadLogs];
         }
     }
+}
+
+#pragma mark - UIPopoverControllerDelegate
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController;
+{
+    self.activitySheetPopoverController = nil;
 }
 
 #pragma mark - UITableViewDataSource
@@ -351,8 +360,9 @@
         // isPad
         ARKCheckCondition(self.shareBarButtonItem, , @"Missing a share bar button item when that bar button item was clicked.");
 
-        UIPopoverController *popoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
-        [popoverController presentPopoverFromBarButtonItem:self.shareBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        self.activitySheetPopoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
+        self.activitySheetPopoverController.delegate = self;
+        [self.activitySheetPopoverController presentPopoverFromBarButtonItem:self.shareBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
 #endif
 }
