@@ -187,7 +187,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     if (alertView.firstOtherButtonIndex == buttonIndex) {
         NSString *bugTitle = [alertView textFieldAtIndex:0].text;
         
-        [self _shouldCreateReportWithTitle:bugTitle];
+        [self _createBugReportWithTitle:bugTitle];
     }
 }
 
@@ -253,20 +253,21 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
      */
     [self _stealFirstResponder];
     
-    NSString * const title = @"What Went Wrong?";
-    NSString * const message = @"Please briefly summarize the issue you just encountered. You’ll be asked for more details later.";
-    NSString * const okTitle = @"Compose Report";
-    NSString * const cancelTitle = @"Cancel";
+    NSString * const title = NSLocalizedString(@"What Went Wrong?", nil);
+    NSString * const message = NSLocalizedString(@"Please briefly summarize the issue you just encountered. You’ll be asked for more details later.", nil);
+    NSString * const composeReportButtonTitle = NSLocalizedString(@"Compose Report", nil);
+    NSString * const cancelButtonTitle = NSLocalizedString(@"Cancel", nil);
     
 #ifdef __IPHONE_8_0
+    // iOS 8 and later
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     
-    [alertController addAction:[UIAlertAction actionWithTitle:okTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    [alertController addAction:[UIAlertAction actionWithTitle:composeReportButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UITextField *textfield = [alertController.textFields firstObject];
         [self _createBugReportWithTitle:textfield.text];
     }]];
     
-    [alertController addAction:[UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleDefault handler:NULL]];
+    [alertController addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleDefault handler:NULL]];
     
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         [self _configureAlertTextfield:textField];
@@ -274,7 +275,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:NULL];
 #else
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelTitle otherButtonTitles:okTitle, nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:composeReportButtonTitle, nil];
     alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
     
     UITextField *textField = [alertView textFieldAtIndex:0];
@@ -292,7 +293,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     textField.returnKeyType = UIReturnKeyDone;
 }
 
-- (void)_shouldCreateReportWithTitle:(NSString *)title
+- (void)_createBugReportWithTitle:(NSString *)title
 {
     NSArray *logStores = [self.logStores copy];
     NSMapTable *logStoresToLogMessagesMap = [NSMapTable new];
