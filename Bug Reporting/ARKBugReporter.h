@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)composeBugReport;
 
 /// Called when the user has triggered the creation of a bug report, optionally, logs a screenshot.
-- (void)composeBugReportWithSreenshotLog:(BOOL)logScreenshot;
+- (void)composeBugReportWithScreenshotLog:(BOOL)logScreenshot;
 
 /// Add logs from logStores to future bug reports.
 - (void)addLogStores:(NSArray *)logStores;

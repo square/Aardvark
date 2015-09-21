@@ -94,10 +94,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)composeBugReport;
 {
-    [self composeBugReportWithSreenshotLog:YES];
+    [self composeBugReportWithScreenshotLog:YES];
 }
 
-- (void)composeBugReportWithSreenshotLog:(BOOL)logScreenshot;
+- (void)composeBugReportWithScreenshotLog:(BOOL)logScreenshot;
 {
     ARKCheckCondition(self.bugReportRecipientEmailAddress.length, , @"Attempting to compose a bug report without a recipient email address.");
     ARKCheckCondition(self.mutableLogStores.count > 0, , @"Attempting to compose a bug report without logs.");
