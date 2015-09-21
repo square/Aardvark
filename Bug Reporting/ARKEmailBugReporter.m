@@ -253,10 +253,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
      */
     [self _stealFirstResponder];
     
-    NSString *title = @"What Went Wrong?";
-    NSString *message = @"Please briefly summarize the issue you just encountered. You’ll be asked for more details later.";
-    NSString *okTitle = @"Compose Report";
-    NSString *cancelTitle = @"Cancel";
+    NSString * const title = @"What Went Wrong?";
+    NSString * const message = @"Please briefly summarize the issue you just encountered. You’ll be asked for more details later.";
+    NSString * const okTitle = @"Compose Report";
+    NSString * const cancelTitle = @"Cancel";
     
     if ([UIAlertController class]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
