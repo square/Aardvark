@@ -258,31 +258,30 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     NSString * const okTitle = @"Compose Report";
     NSString * const cancelTitle = @"Cancel";
     
-    if ([UIAlertController class]) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:okTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            UITextField *textfield = [alertController.textFields firstObject];
-            [self _shouldCreateReportWithTitle:textfield.text];
-        }]];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleDefault handler:NULL]];
-        
-        [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-            [self _configureAlertTextfield:textField];
-        }];
-        
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:NULL];
-    }
-    else {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelTitle otherButtonTitles:okTitle, nil];
-        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-        
-        UITextField *textField = [alertView textFieldAtIndex:0];
+#ifdef __IPHONE_8_0
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:okTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UITextField *textfield = [alertController.textFields firstObject];
+        [self _createBugReportWithTitle:textfield.text];
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleDefault handler:NULL]];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         [self _configureAlertTextfield:textField];
-        
-        [alertView show];
-    }
+    }];
+    
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:NULL];
+#else
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelTitle otherButtonTitles:okTitle, nil];
+    alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+    
+    UITextField *textField = [alertView textFieldAtIndex:0];
+    [self _configureAlertTextfield:textField];
+    
+    [alertView show];
+#endif
 }
 
 - (void)_configureAlertTextfield:(UITextField *)textField
