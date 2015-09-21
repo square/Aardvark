@@ -44,7 +44,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @property (nonatomic, copy) NSMutableArray *mutableLogStores;
 
-@property (nonatomic) BOOL skipScreenshot;
+@property (nonatomic) BOOL logScreenshot;
 
 @end
 
@@ -102,9 +102,9 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     ARKCheckCondition(self.bugReportRecipientEmailAddress.length, , @"Attempting to compose a bug report without a recipient email address.");
     ARKCheckCondition(self.mutableLogStores.count > 0, , @"Attempting to compose a bug report without logs.");
     
-    self.skipScreenshot = !logScreenshot;
+    self.logScreenshot = logScreenshot;
     
-    if (!self.screenFlashView && logScreenshot) {
+    if (self.logScreenshot && !self.screenFlashView) {
         // Take a screenshot.
         ARKLogScreenshot();
         
@@ -228,9 +228,12 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                                 [emailBody appendString:emailBodyForLogStore];
                             }
                             
-                            NSData *mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
-                            if (mostRecentImage.length && !self.skipScreenshot) {
-                                [self.mailComposeViewController addAttachmentData:mostRecentImage mimeType:@"image/png" fileName:screenshotFileName];
+                            
+                            if (self.logScreenshot) {
+                                NSData *mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
+                                if (mostRecentImage.length) {
+                                    [self.mailComposeViewController addAttachmentData:mostRecentImage mimeType:@"image/png" fileName:screenshotFileName];
+                                }
                             }
                             
                             NSData *formattedLogs = [self formattedLogMessagesAsData:logMessages];
