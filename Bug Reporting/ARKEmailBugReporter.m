@@ -44,6 +44,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @property (nonatomic, copy) NSMutableArray *mutableLogStores;
 
+@property (nonatomic) BOOL skipScreenshot;
+
 @end
 
 
@@ -92,10 +94,17 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)composeBugReport;
 {
+    [self composeBugReportWithSreenshotLog:YES];
+}
+
+- (void)composeBugReportWithSreenshotLog:(BOOL)logScreenshot;
+{
     ARKCheckCondition(self.bugReportRecipientEmailAddress.length, , @"Attempting to compose a bug report without a recipient email address.");
     ARKCheckCondition(self.mutableLogStores.count > 0, , @"Attempting to compose a bug report without logs.");
     
-    if (!self.screenFlashView) {
+    self.skipScreenshot = !logScreenshot;
+    
+    if (!self.screenFlashView && logScreenshot) {
         // Take a screenshot.
         ARKLogScreenshot();
         
@@ -114,6 +123,9 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         
         // Start the screen flash animation. Once this is done we'll fire up the bug reporter.
         [self.screenFlashView.layer addAnimation:screenFlash forKey:ARKScreenshotFlashAnimationKey];
+    }
+    else {
+        [self _showBugTitleCaptureAlert];
     }
 }
 
@@ -155,12 +167,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     [self.screenFlashView removeFromSuperview];
     self.screenFlashView = nil;
-    
-    /*
-     iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
-     Transfer first responder to an invisble view when a debug screenshot is captured to make bug filing itself bug-free.
-     */
-    [self _stealFirstResponder];
     
     [self _showBugTitleCaptureAlert];
 }
@@ -223,7 +229,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                             }
                             
                             NSData *mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
-                            if (mostRecentImage.length) {
+                            if (mostRecentImage.length && !self.skipScreenshot) {
                                 [self.mailComposeViewController addAttachmentData:mostRecentImage mimeType:@"image/png" fileName:screenshotFileName];
                             }
                             
@@ -321,6 +327,12 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)_showBugTitleCaptureAlert;
 {
+    /*
+     iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
+     Transfer first responder to an invisble view when a debug screenshot is captured to make bug filing itself bug-free.
+     */
+    [self _stealFirstResponder];
+    
     UIAlertView *bugTitleCaptureAlert = [[UIAlertView alloc] initWithTitle:@"What Went Wrong?" message:@"Please briefly summarize the issue you just encountered. You’ll be asked for more details later." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Compose Report", nil];
     bugTitleCaptureAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
     

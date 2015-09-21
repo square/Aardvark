@@ -26,8 +26,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol ARKBugReporter <NSObject>
 
-/// Called when the user has triggered the creation of a bug report.
+/// Called when the user has triggered the creation of a bug report. Logs a screenshot by default.
 - (void)composeBugReport;
+
+/// Called when the user has triggered the creation of a bug report, optionally, logs a screenshot.
+- (void)composeBugReportWithSreenshotLog:(BOOL)logScreenshot;
 
 /// Add logs from logStores to future bug reports.
 - (void)addLogStores:(NSArray *)logStores;
