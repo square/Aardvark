@@ -262,14 +262,14 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     if ([UIAlertController class]) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         
-        [alertController addAction:[UIAlertAction actionWithTitle:composeReportButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [alertController addAction:[UIAlertAction actionWithTitle:composeReportButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             UITextField *textfield = [alertController.textFields firstObject];
             [self _createBugReportWithTitle:textfield.text];
         }]];
         
         [alertController addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleDefault handler:NULL]];
         
-        [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
             [self _configureAlertTextfield:textField];
         }];
         
