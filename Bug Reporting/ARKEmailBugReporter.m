@@ -258,10 +258,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
      */
     [self _stealFirstResponder];
     
-    NSString * const title = NSLocalizedString(@"What Went Wrong?", nil);
-    NSString * const message = NSLocalizedString(@"Please briefly summarize the issue you just encountered. You’ll be asked for more details later.", nil);
-    NSString * const composeReportButtonTitle = NSLocalizedString(@"Compose Report", nil);
-    NSString * const cancelButtonTitle = NSLocalizedString(@"Cancel", nil);
+    NSString * const title = NSLocalizedString(@"What Went Wrong?", @"Title text for alert asking user to describe a bug they just encountered");
+    NSString * const message = NSLocalizedString(@"Please briefly summarize the issue you just encountered. You’ll be asked for more details later.", @"Subtitle text for alert asking user to describe a bug they just encountered");
+    NSString * const composeReportButtonTitle = NSLocalizedString(@"Compose Report", @"Button title to compose bug report");
+    NSString * const cancelButtonTitle = NSLocalizedString(@"Cancel", @"Button title to not compose a bug report");
     
     // iOS 8 and later
     if ([UIAlertController class]) {
