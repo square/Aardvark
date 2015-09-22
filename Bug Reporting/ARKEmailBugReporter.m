@@ -44,7 +44,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @property (nonatomic, copy) NSMutableArray *mutableLogStores;
 
-@property (nonatomic) BOOL logScreenshot;
+@property (nonatomic) BOOL attachScreenshotToNextBugReport;
 
 @end
 
@@ -94,17 +94,22 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)composeBugReport;
 {
-    [self composeBugReportWithScreenshotLog:YES];
+    [self composeBugReportWithScreenshot:YES];
 }
 
-- (void)composeBugReportWithScreenshotLog:(BOOL)logScreenshot;
+- (void)composeBugReportWithoutScreenshot;
+{
+    [self composeBugReportWithScreenshot:NO];
+}
+
+- (void)composeBugReportWithScreenshot:(BOOL)attachScreenshot;
 {
     ARKCheckCondition(self.bugReportRecipientEmailAddress.length, , @"Attempting to compose a bug report without a recipient email address.");
     ARKCheckCondition(self.mutableLogStores.count > 0, , @"Attempting to compose a bug report without logs.");
     
-    self.logScreenshot = logScreenshot;
+    self.attachScreenshotToNextBugReport = attachScreenshot;
     
-    if (self.logScreenshot && !self.screenFlashView) {
+    if (attachScreenshot && !self.screenFlashView) {
         // Take a screenshot.
         ARKLogScreenshot();
         
@@ -339,7 +344,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                         }
                         
                         
-                        if (self.logScreenshot) {
+                        if (self.attachScreenshotToNextBugReport) {
                             NSData *mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
                             if (mostRecentImage.length) {
                                 [self.mailComposeViewController addAttachmentData:mostRecentImage mimeType:@"image/png" fileName:screenshotFileName];
