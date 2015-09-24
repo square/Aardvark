@@ -244,14 +244,23 @@
 
 - (void)logScreenshot;
 {
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 0.0);
-    [window.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *screenshot = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    UIImage *screenshot = nil;
     
-    NSString *logText = @"Screenshot Logged";
-    [self logWithText:logText image:screenshot type:ARKLogTypeScreenshot userInfo:nil];
+    @try {
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 0.0);
+        [window.layer renderInContext:UIGraphicsGetCurrentContext()];
+        screenshot = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    @catch (NSException *exception) {
+        [self logWithType:ARKLogTypeError userInfo:nil format:@"Screenshot capture failed due to %@", exception];
+    }
+    
+    if (screenshot != nil) {
+        NSString *logText = @"Screenshot Logged";
+        [self logWithText:logText image:screenshot type:ARKLogTypeScreenshot userInfo:nil];
+    }
 }
 
 #pragma mark - Protected Methods
