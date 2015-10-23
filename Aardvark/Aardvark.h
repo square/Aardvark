@@ -40,7 +40,6 @@ OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * __nullable userI
 /// Logs a screenshot to the default log distributor.
 OBJC_EXTERN void ARKLogScreenshot();
 
-#import <Aardvark/ARKLogStore.h>
 #import <Aardvark/ARKBugReporter.h>
 #import <Aardvark/ARKDefaultLogFormatter.h>
 #import <Aardvark/ARKEmailBugReporter.h>
@@ -49,6 +48,7 @@ OBJC_EXTERN void ARKLogScreenshot();
 #import <Aardvark/ARKLogFormatter.h>
 #import <Aardvark/ARKLogMessage.h>
 #import <Aardvark/ARKLogObserver.h>
+#import <Aardvark/ARKLogStore.h>
 #import <Aardvark/ARKLogTableViewController.h>
 #import <Aardvark/ARKScreenshotViewController.h>
 #import <Aardvark/UIApplication+ARKAdditions.h>
