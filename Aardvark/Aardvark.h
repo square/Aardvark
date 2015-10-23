@@ -2,14 +2,14 @@
 //  Aardvark.h
 //  Aardvark
 //
-//  Created by Dan Federman on 10/4/14.
-//  Copyright 2014 Square, Inc.
+//  Created by Evan Kimia on 10/22/15.
+//  Copyright © 2015 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
 //
-//    http://www.apache.org/licenses/LICENSE-2.0
+//    http://www.apache.org/licenses/LICENSE-2.0
 //
 //  Unless required by applicable law or agreed to in writing, software
 //  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,23 +18,31 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/ARKBugReporter.h>
-#import <Aardvark/ARKEmailBugReporter.h>
+#import <UIKit/UIKit.h>
 
+
+//! Project version number for Aardvark.
+FOUNDATION_EXPORT double AardvarkVersionNumber;
+
+//! Project version string for Aardvark.
+FOUNDATION_EXPORT const unsigned char AardvarkVersionString[];
+
+
+#import <Aardvark/ARKLogStore.h>
+#import <Aardvark/ARKEmailBugReporter.h>
+#import <Aardvark/ARKLogMessage.h>
+#import <Aardvark/ARKLogDistributor.h>
+#import <Aardvark/ARKDefaultLogFormatter.h>
+#import <Aardvark/ARKIndividualLogViewController.h>
+#import <Aardvark/ARKLogObserver.h>
+#import <Aardvark/ARKLogFormatter.h>
+#import <Aardvark/UIApplication+ARKAdditions.h>
+#import <Aardvark/ARKScreenshotViewController.h>
+#import <Aardvark/ARKLogTableViewController.h>
+#import <Aardvark/ARKBugReporter.h>
+#import <Aardvark/ARKLogType.h>
 
 NS_ASSUME_NONNULL_BEGIN
-
-
-typedef NS_ENUM(NSUInteger, ARKLogType) {
-    /// Default log type.
-    ARKLogTypeDefault,
-    /// Marks the beginning or end of a task.
-    ARKLogTypeSeparator,
-    /// Marks that the log represents an error.
-    ARKLogTypeError,
-    /// Marks a log that has a screenshot attached.
-    ARKLogTypeScreenshot,
-};
 
 
 /// Logs a log with default type to the default log distributor.

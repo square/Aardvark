@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0630"
+   LastUpgradeVersion = "0710"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,39 +14,25 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
+               BlueprintIdentifier = "4551A2851BD9C95F00F216D0"
                BuildableName = "libAardvark.a"
-               BlueprintName = "Aardvark"
-               ReferencedContainer = "container:Aardvark.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAD1442B19E073FB0065A1FF"
-               BuildableName = "AardvarkTests.xctest"
-               BlueprintName = "AardvarkTests"
+               BlueprintName = "Aardvark iOS"
                ReferencedContainer = "container:Aardvark.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAD1442B19E073FB0065A1FF"
+               BlueprintIdentifier = "4551A2361BD9B41000F216D0"
                BuildableName = "AardvarkTests.xctest"
                BlueprintName = "AardvarkTests"
                ReferencedContainer = "container:Aardvark.xcodeproj">
@@ -56,28 +42,31 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
+            BlueprintIdentifier = "4551A2851BD9C95F00F216D0"
             BuildableName = "libAardvark.a"
-            BlueprintName = "Aardvark"
+            BlueprintName = "Aardvark iOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
+            BlueprintIdentifier = "4551A2851BD9C95F00F216D0"
             BuildableName = "libAardvark.a"
-            BlueprintName = "Aardvark"
+            BlueprintName = "Aardvark iOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -85,17 +74,17 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
+            BlueprintIdentifier = "4551A2851BD9C95F00F216D0"
             BuildableName = "libAardvark.a"
-            BlueprintName = "Aardvark"
+            BlueprintName = "Aardvark iOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
