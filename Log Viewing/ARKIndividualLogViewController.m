@@ -19,8 +19,10 @@
 
 //
 
-#import <Aardvark/ARKIndividualLogViewController.h>
-#import <Aardvark/ARKLogMessage.h>
+#import "ARKIndividualLogViewController.h"
+
+#import "ARKLogMessage.h"
+
 
 @interface ARKIndividualLogViewController ()
 
