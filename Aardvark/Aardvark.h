@@ -22,6 +22,7 @@
 
 
 #import <Aardvark/ARKLogTypes.h>
+
 #import <Aardvark/ARKBugReporter.h>
 #import <Aardvark/ARKDefaultLogFormatter.h>
 #import <Aardvark/ARKEmailBugReporter.h>
