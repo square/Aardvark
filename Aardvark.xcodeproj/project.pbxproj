@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4551A2311BD9B41000F216D0 /* Aardvark.h in Headers */ = {isa = PBXBuildFile; fileRef = 4551A2301BD9B41000F216D0 /* Aardvark.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4551A2381BD9B41000F216D0 /* Aardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4551A22E1BD9B41000F216D0 /* Aardvark.framework */; };
-		4551A23D1BD9B41000F216D0 /* AardvarkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A23C1BD9B41000F216D0 /* AardvarkTests.m */; };
 		4551A2451BD9B44900F216D0 /* ARKIndividualLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1447019E22E470065A1FF /* ARKIndividualLogViewController.m */; };
 		4551A2461BD9B47200F216D0 /* ARKIndividualLogViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1446F19E22E470065A1FF /* ARKIndividualLogViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4551A2471BD9B4F500F216D0 /* ARKEmailBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1445E19E211250065A1FF /* ARKEmailBugReporter.m */; };
@@ -44,6 +43,15 @@
 		4551A2641BD9B82200F216D0 /* NSURL+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47F51AB8FD9000A342E9 /* NSURL+ARKAdditions.m */; };
 		4551A2651BD9B82400F216D0 /* NSURL+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D47F41AB8FD9000A342E9 /* NSURL+ARKAdditions.h */; };
 		4551A2681BD9B93B00F216D0 /* ARKLogType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4551A2661BD9B93B00F216D0 /* ARKLogType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A2751BD9BA0F00F216D0 /* ARKDataArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A26B1BD9BA0F00F216D0 /* ARKDataArchiveTests.m */; };
+		4551A2761BD9BA0F00F216D0 /* ARKDefaultLogFormatterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A26C1BD9BA0F00F216D0 /* ARKDefaultLogFormatterTests.m */; };
+		4551A2771BD9BA0F00F216D0 /* ARKDefineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A26D1BD9BA0F00F216D0 /* ARKDefineTests.m */; };
+		4551A2781BD9BA0F00F216D0 /* ARKEmailBugReporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A26E1BD9BA0F00F216D0 /* ARKEmailBugReporterTests.m */; };
+		4551A2791BD9BA0F00F216D0 /* ARKFileHandleAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A26F1BD9BA0F00F216D0 /* ARKFileHandleAdditionsTests.m */; };
+		4551A27A1BD9BA0F00F216D0 /* ARKLogDistributorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A2701BD9BA0F00F216D0 /* ARKLogDistributorTests.m */; };
+		4551A27B1BD9BA0F00F216D0 /* ARKLogStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A2711BD9BA0F00F216D0 /* ARKLogStoreTests.m */; };
+		4551A27C1BD9BA0F00F216D0 /* ARKLogTableViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A2721BD9BA0F00F216D0 /* ARKLogTableViewControllerTests.m */; };
+		4551A27D1BD9BA0F00F216D0 /* ARKURLAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A2731BD9BA0F00F216D0 /* ARKURLAdditionsTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,9 +69,17 @@
 		4551A2301BD9B41000F216D0 /* Aardvark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aardvark.h; sourceTree = "<group>"; };
 		4551A2321BD9B41000F216D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4551A2371BD9B41000F216D0 /* AardvarkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AardvarkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4551A23C1BD9B41000F216D0 /* AardvarkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AardvarkTests.m; sourceTree = "<group>"; };
 		4551A23E1BD9B41000F216D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4551A2661BD9B93B00F216D0 /* ARKLogType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKLogType.h; sourceTree = "<group>"; };
+		4551A26B1BD9BA0F00F216D0 /* ARKDataArchiveTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKDataArchiveTests.m; sourceTree = "<group>"; };
+		4551A26C1BD9BA0F00F216D0 /* ARKDefaultLogFormatterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKDefaultLogFormatterTests.m; sourceTree = "<group>"; };
+		4551A26D1BD9BA0F00F216D0 /* ARKDefineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKDefineTests.m; sourceTree = "<group>"; };
+		4551A26E1BD9BA0F00F216D0 /* ARKEmailBugReporterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKEmailBugReporterTests.m; sourceTree = "<group>"; };
+		4551A26F1BD9BA0F00F216D0 /* ARKFileHandleAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKFileHandleAdditionsTests.m; sourceTree = "<group>"; };
+		4551A2701BD9BA0F00F216D0 /* ARKLogDistributorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKLogDistributorTests.m; sourceTree = "<group>"; };
+		4551A2711BD9BA0F00F216D0 /* ARKLogStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKLogStoreTests.m; sourceTree = "<group>"; };
+		4551A2721BD9BA0F00F216D0 /* ARKLogTableViewControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKLogTableViewControllerTests.m; sourceTree = "<group>"; };
+		4551A2731BD9BA0F00F216D0 /* ARKURLAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKURLAdditionsTests.m; sourceTree = "<group>"; };
 		D04D47E81AB8A09B00A342E9 /* ARKDataArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKDataArchive.h; path = Logging/ARKDataArchive.h; sourceTree = "<group>"; };
 		D04D47E91AB8A09B00A342E9 /* ARKDataArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKDataArchive.m; path = Logging/ARKDataArchive.m; sourceTree = "<group>"; };
 		D04D47EC1AB8A0BA00A342E9 /* ARKDataArchiveTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKDataArchiveTests.m; path = AardvarkTests/ARKDataArchiveTests.m; sourceTree = "<group>"; };
@@ -96,7 +112,6 @@
 		EAC8459D19F60BDB0000F165 /* ARKEmailBugReporter_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKEmailBugReporter_Testing.h; path = "Bug Reporting/ARKEmailBugReporter_Testing.h"; sourceTree = "<group>"; };
 		EAD1442419E073FB0065A1FF /* Aardvark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aardvark.h; sourceTree = "<group>"; };
 		EAD1442619E073FB0065A1FF /* Aardvark.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Aardvark.m; sourceTree = "<group>"; };
-		EAD1442F19E073FB0065A1FF /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Tests-Info.plist"; path = "AardvarkTests/Tests-Info.plist"; sourceTree = "<group>"; };
 		EAD1444419E0849D0065A1FF /* AardvarkDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AardvarkDefines.h; path = Other/AardvarkDefines.h; sourceTree = "<group>"; };
 		EAD1444719E084C40065A1FF /* ARKLogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogMessage.h; path = Logging/ARKLogMessage.h; sourceTree = "<group>"; };
 		EAD1444819E084C40065A1FF /* ARKLogMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKLogMessage.m; path = Logging/ARKLogMessage.m; sourceTree = "<group>"; };
@@ -147,7 +162,15 @@
 		4551A23B1BD9B41000F216D0 /* AardvarkTests */ = {
 			isa = PBXGroup;
 			children = (
-				4551A23C1BD9B41000F216D0 /* AardvarkTests.m */,
+				4551A26B1BD9BA0F00F216D0 /* ARKDataArchiveTests.m */,
+				4551A26C1BD9BA0F00F216D0 /* ARKDefaultLogFormatterTests.m */,
+				4551A26D1BD9BA0F00F216D0 /* ARKDefineTests.m */,
+				4551A26E1BD9BA0F00F216D0 /* ARKEmailBugReporterTests.m */,
+				4551A26F1BD9BA0F00F216D0 /* ARKFileHandleAdditionsTests.m */,
+				4551A2701BD9BA0F00F216D0 /* ARKLogDistributorTests.m */,
+				4551A2711BD9BA0F00F216D0 /* ARKLogStoreTests.m */,
+				4551A2721BD9BA0F00F216D0 /* ARKLogTableViewControllerTests.m */,
+				4551A2731BD9BA0F00F216D0 /* ARKURLAdditionsTests.m */,
 				4551A23E1BD9B41000F216D0 /* Info.plist */,
 			);
 			path = AardvarkTests;
@@ -271,7 +294,6 @@
 			children = (
 				EA09D3C11A2E6CFA004C1125 /* Tests */,
 				EAD1444419E0849D0065A1FF /* AardvarkDefines.h */,
-				EAD1442F19E073FB0065A1FF /* Tests-Info.plist */,
 				EA61D2011B16434300D1AB77 /* module.modulemap */,
 			);
 			name = Other;
@@ -395,7 +417,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = ARK;
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Square, Inc.";
 				TargetAttributes = {
 					4551A22D1BD9B41000F216D0 = {
@@ -467,7 +489,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4551A23D1BD9B41000F216D0 /* AardvarkTests.m in Sources */,
+				4551A2761BD9BA0F00F216D0 /* ARKDefaultLogFormatterTests.m in Sources */,
+				4551A27A1BD9BA0F00F216D0 /* ARKLogDistributorTests.m in Sources */,
+				4551A27C1BD9BA0F00F216D0 /* ARKLogTableViewControllerTests.m in Sources */,
+				4551A27D1BD9BA0F00F216D0 /* ARKURLAdditionsTests.m in Sources */,
+				4551A27B1BD9BA0F00F216D0 /* ARKLogStoreTests.m in Sources */,
+				4551A2771BD9BA0F00F216D0 /* ARKDefineTests.m in Sources */,
+				4551A2781BD9BA0F00F216D0 /* ARKEmailBugReporterTests.m in Sources */,
+				4551A2751BD9BA0F00F216D0 /* ARKDataArchiveTests.m in Sources */,
+				4551A2791BD9BA0F00F216D0 /* ARKFileHandleAdditionsTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +607,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
