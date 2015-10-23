@@ -18,8 +18,17 @@
 //  limitations under the License.
 //
 
+#import <UIKit/UIKit.h>
+
 #import <Aardvark/ARKBugReporter.h>
 #import <Aardvark/ARKEmailBugReporter.h>
+
+
+//! Project version number for Aardvark-iOS.
+FOUNDATION_EXPORT double Aardvark_iOSVersionNumber;
+
+//! Project version string for Aardvark-iOS.
+FOUNDATION_EXPORT const unsigned char Aardvark_iOSVersionString[];
 
 
 NS_ASSUME_NONNULL_BEGIN
