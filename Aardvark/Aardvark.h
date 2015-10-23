@@ -20,6 +20,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 typedef NS_ENUM(NSUInteger, ARKLogType) {
     /// Default log type.
     ARKLogTypeDefault,
@@ -31,6 +32,7 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
     ARKLogTypeScreenshot,
 };
 
+
 /// Logs a log with default type to the default log distributor.
 OBJC_EXTERN void  ARKLog(NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(1,2);
 
@@ -39,6 +41,7 @@ OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * __nullable userI
 
 /// Logs a screenshot to the default log distributor.
 OBJC_EXTERN void ARKLogScreenshot();
+
 
 #import <Aardvark/ARKBugReporter.h>
 #import <Aardvark/ARKDefaultLogFormatter.h>
@@ -59,6 +62,7 @@ FOUNDATION_EXPORT double Aardvark_iOSVersionNumber;
 
 //! Project version string for Aardvark-iOS.
 FOUNDATION_EXPORT const unsigned char Aardvark_iOSVersionString[];
+
 
 NS_ASSUME_NONNULL_BEGIN
 
