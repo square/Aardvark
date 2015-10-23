@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/Aardvark.h>
+#import <Aardvark/ARKLogging.h>
 
 
 @protocol ARKLogObserver;
