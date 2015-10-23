@@ -20,20 +20,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import <Aardvark/ARKBugReporter.h>
-#import <Aardvark/ARKEmailBugReporter.h>
-
-
-//! Project version number for Aardvark-iOS.
-FOUNDATION_EXPORT double Aardvark_iOSVersionNumber;
-
-//! Project version string for Aardvark-iOS.
-FOUNDATION_EXPORT const unsigned char Aardvark_iOSVersionString[];
-
-
-NS_ASSUME_NONNULL_BEGIN
-
-
 typedef NS_ENUM(NSUInteger, ARKLogType) {
     /// Default log type.
     ARKLogTypeDefault,
@@ -45,15 +31,36 @@ typedef NS_ENUM(NSUInteger, ARKLogType) {
     ARKLogTypeScreenshot,
 };
 
-
 /// Logs a log with default type to the default log distributor.
-OBJC_EXTERN void ARKLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2);
+OBJC_EXTERN void  ARKLog(NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(1,2);
 
 /// Logs a log with customized type and userInfo to the default log distributor.
-OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * __nullable userInfo, NSString *format, ...) NS_FORMAT_FUNCTION(3,4);
+OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * __nullable userInfo, NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(3,4);
 
 /// Logs a screenshot to the default log distributor.
 OBJC_EXTERN void ARKLogScreenshot();
+
+#import <Aardvark/ARKLogStore.h>
+#import <Aardvark/ARKBugReporter.h>
+#import <Aardvark/ARKDefaultLogFormatter.h>
+#import <Aardvark/ARKEmailBugReporter.h>
+#import <Aardvark/ARKIndividualLogViewController.h>
+#import <Aardvark/ARKLogDistributor.h>
+#import <Aardvark/ARKLogFormatter.h>
+#import <Aardvark/ARKLogMessage.h>
+#import <Aardvark/ARKLogObserver.h>
+#import <Aardvark/ARKLogTableViewController.h>
+#import <Aardvark/ARKScreenshotViewController.h>
+#import <Aardvark/UIApplication+ARKAdditions.h>
+
+
+//! Project version number for Aardvark-iOS.
+FOUNDATION_EXPORT double Aardvark_iOSVersionNumber;
+
+//! Project version string for Aardvark-iOS.
+FOUNDATION_EXPORT const unsigned char Aardvark_iOSVersionString[];
+
+NS_ASSUME_NONNULL_BEGIN
 
 
 @interface Aardvark : NSObject
