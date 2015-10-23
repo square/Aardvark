@@ -21,20 +21,10 @@
 #import <UIKit/UIKit.h>
 
 
-typedef NS_ENUM(NSUInteger, ARKLogType) {
-    /// Default log type.
-    ARKLogTypeDefault,
-    /// Marks the beginning or end of a task.
-    ARKLogTypeSeparator,
-    /// Marks that the log represents an error.
-    ARKLogTypeError,
-    /// Marks a log that has a screenshot attached.
-    ARKLogTypeScreenshot,
-};
-
+#import <Aardvark/ARKLogTypes.h>
 
 /// Logs a log with default type to the default log distributor.
-OBJC_EXTERN void  ARKLog(NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(1,2);
+OBJC_EXTERN void ARKLog(NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(1,2);
 
 /// Logs a log with customized type and userInfo to the default log distributor.
 OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * __nullable userInfo, NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(3,4);
