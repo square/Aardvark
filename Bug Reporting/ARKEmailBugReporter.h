@@ -18,15 +18,17 @@
 //  limitations under the License.
 //
 
-#import "ARKBugReporter.h"
-#import "ARKLogFormatter.h"
+#import <Aardvark/ARKBugReporter.h>
+#import <MessageUI/MessageUI.h>
 
-@import MessageUI;
 
 @class ARKEmailBugReporter;
 @class ARKLogStore;
+@protocol ARKLogFormatter;
+
 
 NS_ASSUME_NONNULL_BEGIN
+
 
 @protocol ARKEmailBugReporterEmailBodyAdditionsDelegate <NSObject>
 

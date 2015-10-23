@@ -3,7 +3,7 @@
 //  Aardvark
 //
 //  Created by Evan Kimia on 10/22/15.
-//  Copyright © 2015 Square, Inc. All rights reserved.
+//  Copyright © 2015 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -20,11 +20,13 @@
 
 #import <UIKit/UIKit.h>
 
+
 //! Project version number for Aardvark.
 FOUNDATION_EXPORT double AardvarkVersionNumber;
 
 //! Project version string for Aardvark.
 FOUNDATION_EXPORT const unsigned char AardvarkVersionString[];
+
 
 #import <Aardvark/ARKLogStore.h>
 #import <Aardvark/ARKEmailBugReporter.h>

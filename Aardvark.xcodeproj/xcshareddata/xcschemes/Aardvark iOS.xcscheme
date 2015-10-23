@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4551A2851BD9C95F00F216D0"
-               BuildableName = "libAardvark iOS.a"
+               BuildableName = "libAardvark.a"
                BlueprintName = "Aardvark iOS"
                ReferencedContainer = "container:Aardvark.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4551A2851BD9C95F00F216D0"
-            BuildableName = "libAardvark iOS.a"
+            BuildableName = "libAardvark.a"
             BlueprintName = "Aardvark iOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4551A2851BD9C95F00F216D0"
-            BuildableName = "libAardvark iOS.a"
+            BuildableName = "libAardvark.a"
             BlueprintName = "Aardvark iOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
@@ -83,7 +83,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4551A2851BD9C95F00F216D0"
-            BuildableName = "libAardvark iOS.a"
+            BuildableName = "libAardvark.a"
             BlueprintName = "Aardvark iOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>

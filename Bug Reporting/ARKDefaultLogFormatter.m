@@ -18,8 +18,10 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/ARKDefaultLogFormatter.h>
-#import <Aardvark/ARKLogMessage.h>
+#import "ARKDefaultLogFormatter.h"
+
+#import "ARKLogMessage.h"
+
 
 @implementation ARKDefaultLogFormatter
 
