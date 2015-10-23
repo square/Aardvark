@@ -26,7 +26,6 @@
 #import "ARKBugReporter.h"
 #import "ARKLogDistributor.h"
 
-
 @interface UIApplication (ARKAdditions_Private)
 
 @property (nonatomic) NSMapTable *ARK_bugReporterToGestureRecognizerMap;

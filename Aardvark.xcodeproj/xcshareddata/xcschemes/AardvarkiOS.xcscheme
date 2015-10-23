@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4551A22D1BD9B41000F216D0"
-               BuildableName = "Aardvark.framework"
-               BlueprintName = "Aardvark"
+               BuildableName = "AardvarkiOS.framework"
+               BlueprintName = "AardvarkiOS"
                ReferencedContainer = "container:Aardvark.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -57,8 +57,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4551A22D1BD9B41000F216D0"
-            BuildableName = "Aardvark.framework"
-            BlueprintName = "Aardvark"
+            BuildableName = "AardvarkiOS.framework"
+            BlueprintName = "AardvarkiOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -79,8 +79,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4551A22D1BD9B41000F216D0"
-            BuildableName = "Aardvark.framework"
-            BlueprintName = "Aardvark"
+            BuildableName = "AardvarkiOS.framework"
+            BlueprintName = "AardvarkiOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -97,8 +97,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4551A22D1BD9B41000F216D0"
-            BuildableName = "Aardvark.framework"
-            BlueprintName = "Aardvark"
+            BuildableName = "AardvarkiOS.framework"
+            BlueprintName = "AardvarkiOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
