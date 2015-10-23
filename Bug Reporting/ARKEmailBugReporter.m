@@ -25,7 +25,7 @@
 #import "ARKDefaultLogFormatter.h"
 #import "ARKLogStore.h"
 #import "ARKLogMessage.h"
-
+#import "Aardvark.h"
 
 NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 

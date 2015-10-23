@@ -7,66 +7,63 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D04D47EA1AB8A09B00A342E9 /* ARKDataArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D47E81AB8A09B00A342E9 /* ARKDataArchive.h */; };
-		D04D47EB1AB8A09B00A342E9 /* ARKDataArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47E91AB8A09B00A342E9 /* ARKDataArchive.m */; };
-		D04D47ED1AB8A0BA00A342E9 /* ARKDataArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47EC1AB8A0BA00A342E9 /* ARKDataArchiveTests.m */; };
-		D04D47F61AB8FD9000A342E9 /* NSURL+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D47F41AB8FD9000A342E9 /* NSURL+ARKAdditions.h */; };
-		D04D47F71AB8FD9000A342E9 /* NSURL+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47F51AB8FD9000A342E9 /* NSURL+ARKAdditions.m */; };
-		D04D47FF1AB905C900A342E9 /* NSFileHandle+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D47FD1AB905C900A342E9 /* NSFileHandle+ARKAdditions.h */; };
-		D04D48001AB905C900A342E9 /* NSFileHandle+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47FE1AB905C900A342E9 /* NSFileHandle+ARKAdditions.m */; };
-		D04D48021AB908DD00A342E9 /* ARKDataArchive_Testing.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D48011AB908DD00A342E9 /* ARKDataArchive_Testing.h */; };
-		D04D48051AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D48041AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m */; };
-		EA09D3C51A2E6D2F004C1125 /* ARKDefineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA09D3C41A2E6D2F004C1125 /* ARKDefineTests.m */; };
-		EA46F7FA1ACB8448007FC415 /* ARKURLAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA46F7F91ACB8448007FC415 /* ARKURLAdditionsTests.m */; };
-		EA491AFB19E5EAAA00762174 /* ARKLogObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = EA491AF919E5EAAA00762174 /* ARKLogObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EA61D2311B1648DD00D1AB77 /* module.modulemap in Headers */ = {isa = PBXBuildFile; fileRef = EA61D2011B16434300D1AB77 /* module.modulemap */; settings = {ATTRIBUTES = (Public, ); }; };
-		EA6E218E19E84C1D0097BF4F /* UIApplication+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EA6E218C19E84C1D0097BF4F /* UIApplication+ARKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EA6E218F19E84C1D0097BF4F /* UIApplication+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6E218D19E84C1D0097BF4F /* UIApplication+ARKAdditions.m */; };
-		EA6E219119E8682B0097BF4F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4583FD19E65C3C00E44882 /* MessageUI.framework */; };
-		EA6E219219E868320097BF4F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4583FD19E65C3C00E44882 /* MessageUI.framework */; };
-		EA7353661A1577200060F54E /* ARKLogStore.h in Headers */ = {isa = PBXBuildFile; fileRef = EA7353641A1577200060F54E /* ARKLogStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EA7353671A1577200060F54E /* ARKLogStore.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7353651A1577200060F54E /* ARKLogStore.m */; };
-		EA7353701A15C5E70060F54E /* ARKLogStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA73536F1A15C5E70060F54E /* ARKLogStoreTests.m */; };
-		EA82F7931A3F9D6B0043BA42 /* ARKLogTableViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA82F7921A3F9D6B0043BA42 /* ARKLogTableViewControllerTests.m */; };
-		EAAB389119E24DC900161A54 /* Aardvark.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1442419E073FB0065A1FF /* Aardvark.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAAB389D19E28D5200161A54 /* ARKDefaultLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB389B19E28D5200161A54 /* ARKDefaultLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAAB389E19E28D5200161A54 /* ARKDefaultLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAB389C19E28D5200161A54 /* ARKDefaultLogFormatter.m */; };
-		EAAB38A019E28E9B00161A54 /* ARKLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB389F19E28DEB00161A54 /* ARKLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAAB38A419E2929C00161A54 /* ARKDefaultLogFormatterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAB38A319E2929C00161A54 /* ARKDefaultLogFormatterTests.m */; };
-		EAAB38A919E317D000161A54 /* ARKLogMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444719E084C40065A1FF /* ARKLogMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAAB38AA19E3180B00161A54 /* ARKBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB38A519E298ED00161A54 /* ARKBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAAB38AD19E3191D00161A54 /* libAardvark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAD1442119E073FB0065A1FF /* libAardvark.a */; };
-		EAC8459C19F60B820000F165 /* ARKEmailBugReporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8459B19F60B810000F165 /* ARKEmailBugReporterTests.m */; };
-		EAD1442719E073FB0065A1FF /* Aardvark.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1442619E073FB0065A1FF /* Aardvark.m */; };
-		EAD1444619E0849D0065A1FF /* AardvarkDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444419E0849D0065A1FF /* AardvarkDefines.h */; };
-		EAD1444A19E084C40065A1FF /* ARKLogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1444819E084C40065A1FF /* ARKLogMessage.m */; };
-		EAD1444D19E09EEA0065A1FF /* ARKLogDistributor.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444B19E09EEA0065A1FF /* ARKLogDistributor.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAD1444E19E09EEA0065A1FF /* ARKLogDistributor.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1444C19E09EEA0065A1FF /* ARKLogDistributor.m */; };
-		EAD1445419E201C70065A1FF /* ARKLogDistributorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1445319E201C70065A1FF /* ARKLogDistributorTests.m */; };
-		EAD1445F19E211250065A1FF /* ARKEmailBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1445D19E211250065A1FF /* ARKEmailBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAD1446019E211250065A1FF /* ARKEmailBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1445E19E211250065A1FF /* ARKEmailBugReporter.m */; };
-		EAD1446519E22D080065A1FF /* ARKLogTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1446319E22D080065A1FF /* ARKLogTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAD1446619E22D080065A1FF /* ARKLogTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1446419E22D080065A1FF /* ARKLogTableViewController.m */; };
-		EAD1447119E22E470065A1FF /* ARKIndividualLogViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1446F19E22E470065A1FF /* ARKIndividualLogViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAD1447219E22E470065A1FF /* ARKIndividualLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1447019E22E470065A1FF /* ARKIndividualLogViewController.m */; };
-		EAD1447519E22E800065A1FF /* ARKScreenshotViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1447319E22E800065A1FF /* ARKScreenshotViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAD1447619E22E800065A1FF /* ARKScreenshotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1447419E22E800065A1FF /* ARKScreenshotViewController.m */; };
-		EAD1447E19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1447C19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.h */; };
-		EAD1447F19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1447D19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.m */; };
-		EAE2F5741ACA10B4006FFDDC /* ARKLogDistributor_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = EAE2F5731ACA10B4006FFDDC /* ARKLogDistributor_Protected.h */; };
+		4551A2311BD9B41000F216D0 /* Aardvark.h in Headers */ = {isa = PBXBuildFile; fileRef = 4551A2301BD9B41000F216D0 /* Aardvark.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A2381BD9B41000F216D0 /* Aardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4551A22E1BD9B41000F216D0 /* Aardvark.framework */; };
+		4551A23D1BD9B41000F216D0 /* AardvarkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A23C1BD9B41000F216D0 /* AardvarkTests.m */; };
+		4551A2451BD9B44900F216D0 /* ARKIndividualLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1447019E22E470065A1FF /* ARKIndividualLogViewController.m */; };
+		4551A2461BD9B47200F216D0 /* ARKIndividualLogViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1446F19E22E470065A1FF /* ARKIndividualLogViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A2471BD9B4F500F216D0 /* ARKEmailBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1445E19E211250065A1FF /* ARKEmailBugReporter.m */; };
+		4551A2481BD9B4F800F216D0 /* ARKEmailBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1445D19E211250065A1FF /* ARKEmailBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A2491BD9B51100F216D0 /* ARKDefaultLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB389B19E28D5200161A54 /* ARKDefaultLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A24A1BD9B51300F216D0 /* ARKDefaultLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAB389C19E28D5200161A54 /* ARKDefaultLogFormatter.m */; };
+		4551A24B1BD9B51D00F216D0 /* ARKLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB389F19E28DEB00161A54 /* ARKLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A24C1BD9B52700F216D0 /* ARKLogObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = EA491AF919E5EAAA00762174 /* ARKLogObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A24D1BD9B53400F216D0 /* ARKLogStore.h in Headers */ = {isa = PBXBuildFile; fileRef = EA7353641A1577200060F54E /* ARKLogStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A24E1BD9B54000F216D0 /* ARKLogStore.m in Sources */ = {isa = PBXBuildFile; fileRef = EA7353651A1577200060F54E /* ARKLogStore.m */; };
+		4551A24F1BD9B54B00F216D0 /* Aardvark.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1442619E073FB0065A1FF /* Aardvark.m */; };
+		4551A2501BD9B55000F216D0 /* ARKDataArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47E91AB8A09B00A342E9 /* ARKDataArchive.m */; };
+		4551A2511BD9B55100F216D0 /* ARKDataArchive.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D47E81AB8A09B00A342E9 /* ARKDataArchive.h */; };
+		4551A2521BD9B55C00F216D0 /* ARKLogDistributor.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1444C19E09EEA0065A1FF /* ARKLogDistributor.m */; };
+		4551A2531BD9B55D00F216D0 /* ARKLogDistributor.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444B19E09EEA0065A1FF /* ARKLogDistributor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A2541BD9B56200F216D0 /* ARKLogMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1444819E084C40065A1FF /* ARKLogMessage.m */; };
+		4551A2551BD9B56400F216D0 /* ARKLogMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444719E084C40065A1FF /* ARKLogMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A2561BD9B61E00F216D0 /* UIApplication+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EA6E218C19E84C1D0097BF4F /* UIApplication+ARKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A2571BD9B62300F216D0 /* UIApplication+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EA6E218D19E84C1D0097BF4F /* UIApplication+ARKAdditions.m */; };
+		4551A2581BD9B73C00F216D0 /* ARKScreenshotViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1447319E22E800065A1FF /* ARKScreenshotViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A2591BD9B73F00F216D0 /* ARKScreenshotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1447419E22E800065A1FF /* ARKScreenshotViewController.m */; };
+		4551A25A1BD9B74700F216D0 /* ARKLogTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1446419E22D080065A1FF /* ARKLogTableViewController.m */; };
+		4551A25B1BD9B74900F216D0 /* ARKLogTableViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1446319E22D080065A1FF /* ARKLogTableViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A25C1BD9B75100F216D0 /* ARKBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = EAAB38A519E298ED00161A54 /* ARKBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4551A25D1BD9B7F100F216D0 /* ARKDataArchive_Testing.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D48011AB908DD00A342E9 /* ARKDataArchive_Testing.h */; };
+		4551A25E1BD9B80300F216D0 /* UIActivityViewController+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1447D19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.m */; };
+		4551A25F1BD9B80400F216D0 /* UIActivityViewController+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1447C19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.h */; };
+		4551A2601BD9B80B00F216D0 /* NSFileHandle+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47FE1AB905C900A342E9 /* NSFileHandle+ARKAdditions.m */; };
+		4551A2611BD9B80C00F216D0 /* NSFileHandle+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D47FD1AB905C900A342E9 /* NSFileHandle+ARKAdditions.h */; };
+		4551A2621BD9B81500F216D0 /* ARKLogDistributor_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = EAE2F5731ACA10B4006FFDDC /* ARKLogDistributor_Protected.h */; };
+		4551A2631BD9B81C00F216D0 /* AardvarkDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1444419E0849D0065A1FF /* AardvarkDefines.h */; };
+		4551A2641BD9B82200F216D0 /* NSURL+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47F51AB8FD9000A342E9 /* NSURL+ARKAdditions.m */; };
+		4551A2651BD9B82400F216D0 /* NSURL+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D04D47F41AB8FD9000A342E9 /* NSURL+ARKAdditions.h */; };
+		4551A2681BD9B93B00F216D0 /* ARKLogType.h in Headers */ = {isa = PBXBuildFile; fileRef = 4551A2661BD9B93B00F216D0 /* ARKLogType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		EAD1445519E203340065A1FF /* PBXContainerItemProxy */ = {
+		4551A2391BD9B41000F216D0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EAD1441919E073FB0065A1FF /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = EAD1442019E073FB0065A1FF;
+			remoteGlobalIDString = 4551A22D1BD9B41000F216D0;
 			remoteInfo = Aardvark;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4551A22E1BD9B41000F216D0 /* Aardvark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Aardvark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4551A2301BD9B41000F216D0 /* Aardvark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aardvark.h; sourceTree = "<group>"; };
+		4551A2321BD9B41000F216D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4551A2371BD9B41000F216D0 /* AardvarkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AardvarkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4551A23C1BD9B41000F216D0 /* AardvarkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AardvarkTests.m; sourceTree = "<group>"; };
+		4551A23E1BD9B41000F216D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4551A2661BD9B93B00F216D0 /* ARKLogType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKLogType.h; sourceTree = "<group>"; };
 		D04D47E81AB8A09B00A342E9 /* ARKDataArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKDataArchive.h; path = Logging/ARKDataArchive.h; sourceTree = "<group>"; };
 		D04D47E91AB8A09B00A342E9 /* ARKDataArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKDataArchive.m; path = Logging/ARKDataArchive.m; sourceTree = "<group>"; };
 		D04D47EC1AB8A0BA00A342E9 /* ARKDataArchiveTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKDataArchiveTests.m; path = AardvarkTests/ARKDataArchiveTests.m; sourceTree = "<group>"; };
@@ -97,10 +94,8 @@
 		EAAB38A519E298ED00161A54 /* ARKBugReporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKBugReporter.h; path = "Bug Reporting/ARKBugReporter.h"; sourceTree = "<group>"; };
 		EAC8459B19F60B810000F165 /* ARKEmailBugReporterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKEmailBugReporterTests.m; path = AardvarkTests/ARKEmailBugReporterTests.m; sourceTree = "<group>"; };
 		EAC8459D19F60BDB0000F165 /* ARKEmailBugReporter_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKEmailBugReporter_Testing.h; path = "Bug Reporting/ARKEmailBugReporter_Testing.h"; sourceTree = "<group>"; };
-		EAD1442119E073FB0065A1FF /* libAardvark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAardvark.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAD1442419E073FB0065A1FF /* Aardvark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aardvark.h; sourceTree = "<group>"; };
 		EAD1442619E073FB0065A1FF /* Aardvark.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Aardvark.m; sourceTree = "<group>"; };
-		EAD1442C19E073FB0065A1FF /* AardvarkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AardvarkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAD1442F19E073FB0065A1FF /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Tests-Info.plist"; path = "AardvarkTests/Tests-Info.plist"; sourceTree = "<group>"; };
 		EAD1444419E0849D0065A1FF /* AardvarkDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AardvarkDefines.h; path = Other/AardvarkDefines.h; sourceTree = "<group>"; };
 		EAD1444719E084C40065A1FF /* ARKLogMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKLogMessage.h; path = Logging/ARKLogMessage.h; sourceTree = "<group>"; };
@@ -122,26 +117,42 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		EAD1441E19E073FB0065A1FF /* Frameworks */ = {
+		4551A22A1BD9B41000F216D0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA6E219119E8682B0097BF4F /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EAD1442919E073FB0065A1FF /* Frameworks */ = {
+		4551A2341BD9B41000F216D0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EAAB38AD19E3191D00161A54 /* libAardvark.a in Frameworks */,
-				EA6E219219E868320097BF4F /* MessageUI.framework in Frameworks */,
+				4551A2381BD9B41000F216D0 /* Aardvark.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4551A22F1BD9B41000F216D0 /* Aardvark */ = {
+			isa = PBXGroup;
+			children = (
+				4551A2301BD9B41000F216D0 /* Aardvark.h */,
+				4551A2321BD9B41000F216D0 /* Info.plist */,
+			);
+			path = Aardvark;
+			sourceTree = "<group>";
+		};
+		4551A23B1BD9B41000F216D0 /* AardvarkTests */ = {
+			isa = PBXGroup;
+			children = (
+				4551A23C1BD9B41000F216D0 /* AardvarkTests.m */,
+				4551A23E1BD9B41000F216D0 /* Info.plist */,
+			);
+			path = AardvarkTests;
+			sourceTree = "<group>";
+		};
 		D04D48031AB9194A00A342E9 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -193,6 +204,8 @@
 				EAD1446119E21F9D0065A1FF /* Log Viewing */,
 				EAD1443819E074570065A1FF /* Logging */,
 				EAD1444219E0848B0065A1FF /* Other */,
+				4551A22F1BD9B41000F216D0 /* Aardvark */,
+				4551A23B1BD9B41000F216D0 /* AardvarkTests */,
 				EAA6F80119F5933700FF20A8 /* Frameworks */,
 				EAD1442219E073FB0065A1FF /* Products */,
 			);
@@ -201,8 +214,8 @@
 		EAD1442219E073FB0065A1FF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EAD1442119E073FB0065A1FF /* libAardvark.a */,
-				EAD1442C19E073FB0065A1FF /* AardvarkTests.xctest */,
+				4551A22E1BD9B41000F216D0 /* Aardvark.framework */,
+				4551A2371BD9B41000F216D0 /* AardvarkTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,6 +225,7 @@
 			children = (
 				EAD1442419E073FB0065A1FF /* Aardvark.h */,
 				EAD1442619E073FB0065A1FF /* Aardvark.m */,
+				4551A2661BD9B93B00F216D0 /* ARKLogType.h */,
 			);
 			path = Aardvark;
 			sourceTree = "<group>";
@@ -307,51 +321,45 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		EAD1443F19E084300065A1FF /* Headers */ = {
+		4551A22B1BD9B41000F216D0 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA7353661A1577200060F54E /* ARKLogStore.h in Headers */,
-				D04D48021AB908DD00A342E9 /* ARKDataArchive_Testing.h in Headers */,
-				EAAB389119E24DC900161A54 /* Aardvark.h in Headers */,
-				D04D47EA1AB8A09B00A342E9 /* ARKDataArchive.h in Headers */,
-				EAD1445F19E211250065A1FF /* ARKEmailBugReporter.h in Headers */,
-				EAAB38A919E317D000161A54 /* ARKLogMessage.h in Headers */,
-				EAD1447E19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.h in Headers */,
-				EAD1444D19E09EEA0065A1FF /* ARKLogDistributor.h in Headers */,
-				D04D47FF1AB905C900A342E9 /* NSFileHandle+ARKAdditions.h in Headers */,
-				EAAB389D19E28D5200161A54 /* ARKDefaultLogFormatter.h in Headers */,
-				EAD1447119E22E470065A1FF /* ARKIndividualLogViewController.h in Headers */,
-				EA491AFB19E5EAAA00762174 /* ARKLogObserver.h in Headers */,
-				EAAB38A019E28E9B00161A54 /* ARKLogFormatter.h in Headers */,
-				EA61D2311B1648DD00D1AB77 /* module.modulemap in Headers */,
-				EAE2F5741ACA10B4006FFDDC /* ARKLogDistributor_Protected.h in Headers */,
-				EA6E218E19E84C1D0097BF4F /* UIApplication+ARKAdditions.h in Headers */,
-				EAD1444619E0849D0065A1FF /* AardvarkDefines.h in Headers */,
-				EAD1447519E22E800065A1FF /* ARKScreenshotViewController.h in Headers */,
-				EAD1446519E22D080065A1FF /* ARKLogTableViewController.h in Headers */,
-				D04D47F61AB8FD9000A342E9 /* NSURL+ARKAdditions.h in Headers */,
-				EAAB38AA19E3180B00161A54 /* ARKBugReporter.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EAD1445819E203D90065A1FF /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				4551A24B1BD9B51D00F216D0 /* ARKLogFormatter.h in Headers */,
+				4551A25D1BD9B7F100F216D0 /* ARKDataArchive_Testing.h in Headers */,
+				4551A24C1BD9B52700F216D0 /* ARKLogObserver.h in Headers */,
+				4551A2461BD9B47200F216D0 /* ARKIndividualLogViewController.h in Headers */,
+				4551A2491BD9B51100F216D0 /* ARKDefaultLogFormatter.h in Headers */,
+				4551A2681BD9B93B00F216D0 /* ARKLogType.h in Headers */,
+				4551A24D1BD9B53400F216D0 /* ARKLogStore.h in Headers */,
+				4551A2481BD9B4F800F216D0 /* ARKEmailBugReporter.h in Headers */,
+				4551A2631BD9B81C00F216D0 /* AardvarkDefines.h in Headers */,
+				4551A2621BD9B81500F216D0 /* ARKLogDistributor_Protected.h in Headers */,
+				4551A2561BD9B61E00F216D0 /* UIApplication+ARKAdditions.h in Headers */,
+				4551A2651BD9B82400F216D0 /* NSURL+ARKAdditions.h in Headers */,
+				4551A2551BD9B56400F216D0 /* ARKLogMessage.h in Headers */,
+				4551A2531BD9B55D00F216D0 /* ARKLogDistributor.h in Headers */,
+				4551A2511BD9B55100F216D0 /* ARKDataArchive.h in Headers */,
+				4551A2311BD9B41000F216D0 /* Aardvark.h in Headers */,
+				4551A2611BD9B80C00F216D0 /* NSFileHandle+ARKAdditions.h in Headers */,
+				4551A2581BD9B73C00F216D0 /* ARKScreenshotViewController.h in Headers */,
+				4551A25B1BD9B74900F216D0 /* ARKLogTableViewController.h in Headers */,
+				4551A25C1BD9B75100F216D0 /* ARKBugReporter.h in Headers */,
+				4551A25F1BD9B80400F216D0 /* UIActivityViewController+ARKAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		EAD1442019E073FB0065A1FF /* Aardvark */ = {
+		4551A22D1BD9B41000F216D0 /* Aardvark */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EAD1443219E073FB0065A1FF /* Build configuration list for PBXNativeTarget "Aardvark" */;
+			buildConfigurationList = 4551A23F1BD9B41000F216D0 /* Build configuration list for PBXNativeTarget "Aardvark" */;
 			buildPhases = (
-				EAD1443F19E084300065A1FF /* Headers */,
-				EAD1441D19E073FB0065A1FF /* Sources */,
-				EAD1441E19E073FB0065A1FF /* Frameworks */,
+				4551A2291BD9B41000F216D0 /* Sources */,
+				4551A22A1BD9B41000F216D0 /* Frameworks */,
+				4551A22B1BD9B41000F216D0 /* Headers */,
+				4551A22C1BD9B41000F216D0 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -359,26 +367,25 @@
 			);
 			name = Aardvark;
 			productName = Aardvark;
-			productReference = EAD1442119E073FB0065A1FF /* libAardvark.a */;
-			productType = "com.apple.product-type.library.static";
+			productReference = 4551A22E1BD9B41000F216D0 /* Aardvark.framework */;
+			productType = "com.apple.product-type.framework";
 		};
-		EAD1442B19E073FB0065A1FF /* AardvarkTests */ = {
+		4551A2361BD9B41000F216D0 /* AardvarkTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EAD1443519E073FB0065A1FF /* Build configuration list for PBXNativeTarget "AardvarkTests" */;
+			buildConfigurationList = 4551A2421BD9B41000F216D0 /* Build configuration list for PBXNativeTarget "AardvarkTests" */;
 			buildPhases = (
-				EAD1442819E073FB0065A1FF /* Sources */,
-				EAD1442919E073FB0065A1FF /* Frameworks */,
-				EAD1442A19E073FB0065A1FF /* Resources */,
-				EAD1445819E203D90065A1FF /* Headers */,
+				4551A2331BD9B41000F216D0 /* Sources */,
+				4551A2341BD9B41000F216D0 /* Frameworks */,
+				4551A2351BD9B41000F216D0 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				EAD1445619E203340065A1FF /* PBXTargetDependency */,
+				4551A23A1BD9B41000F216D0 /* PBXTargetDependency */,
 			);
 			name = AardvarkTests;
 			productName = AardvarkTests;
-			productReference = EAD1442C19E073FB0065A1FF /* AardvarkTests.xctest */;
+			productReference = 4551A2371BD9B41000F216D0 /* AardvarkTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -391,11 +398,11 @@
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = "Square, Inc.";
 				TargetAttributes = {
-					EAD1442019E073FB0065A1FF = {
-						CreatedOnToolsVersion = 6.0.1;
+					4551A22D1BD9B41000F216D0 = {
+						CreatedOnToolsVersion = 7.1;
 					};
-					EAD1442B19E073FB0065A1FF = {
-						CreatedOnToolsVersion = 6.0.1;
+					4551A2361BD9B41000F216D0 = {
+						CreatedOnToolsVersion = 7.1;
 					};
 				};
 			};
@@ -411,14 +418,21 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EAD1442019E073FB0065A1FF /* Aardvark */,
-				EAD1442B19E073FB0065A1FF /* AardvarkTests */,
+				4551A22D1BD9B41000F216D0 /* Aardvark */,
+				4551A2361BD9B41000F216D0 /* AardvarkTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		EAD1442A19E073FB0065A1FF /* Resources */ = {
+		4551A22C1BD9B41000F216D0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4551A2351BD9B41000F216D0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -428,54 +442,122 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		EAD1441D19E073FB0065A1FF /* Sources */ = {
+		4551A2291BD9B41000F216D0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EAD1442719E073FB0065A1FF /* Aardvark.m in Sources */,
-				EAD1444E19E09EEA0065A1FF /* ARKLogDistributor.m in Sources */,
-				EAD1444A19E084C40065A1FF /* ARKLogMessage.m in Sources */,
-				EAD1446019E211250065A1FF /* ARKEmailBugReporter.m in Sources */,
-				D04D47F71AB8FD9000A342E9 /* NSURL+ARKAdditions.m in Sources */,
-				EAAB389E19E28D5200161A54 /* ARKDefaultLogFormatter.m in Sources */,
-				D04D47EB1AB8A09B00A342E9 /* ARKDataArchive.m in Sources */,
-				D04D48001AB905C900A342E9 /* NSFileHandle+ARKAdditions.m in Sources */,
-				EAD1447F19E22FCF0065A1FF /* UIActivityViewController+ARKAdditions.m in Sources */,
-				EAD1447219E22E470065A1FF /* ARKIndividualLogViewController.m in Sources */,
-				EA7353671A1577200060F54E /* ARKLogStore.m in Sources */,
-				EAD1446619E22D080065A1FF /* ARKLogTableViewController.m in Sources */,
-				EAD1447619E22E800065A1FF /* ARKScreenshotViewController.m in Sources */,
-				EA6E218F19E84C1D0097BF4F /* UIApplication+ARKAdditions.m in Sources */,
+				4551A25E1BD9B80300F216D0 /* UIActivityViewController+ARKAdditions.m in Sources */,
+				4551A24A1BD9B51300F216D0 /* ARKDefaultLogFormatter.m in Sources */,
+				4551A2601BD9B80B00F216D0 /* NSFileHandle+ARKAdditions.m in Sources */,
+				4551A24E1BD9B54000F216D0 /* ARKLogStore.m in Sources */,
+				4551A25A1BD9B74700F216D0 /* ARKLogTableViewController.m in Sources */,
+				4551A2521BD9B55C00F216D0 /* ARKLogDistributor.m in Sources */,
+				4551A2591BD9B73F00F216D0 /* ARKScreenshotViewController.m in Sources */,
+				4551A24F1BD9B54B00F216D0 /* Aardvark.m in Sources */,
+				4551A2571BD9B62300F216D0 /* UIApplication+ARKAdditions.m in Sources */,
+				4551A2451BD9B44900F216D0 /* ARKIndividualLogViewController.m in Sources */,
+				4551A2471BD9B4F500F216D0 /* ARKEmailBugReporter.m in Sources */,
+				4551A2501BD9B55000F216D0 /* ARKDataArchive.m in Sources */,
+				4551A2541BD9B56200F216D0 /* ARKLogMessage.m in Sources */,
+				4551A2641BD9B82200F216D0 /* NSURL+ARKAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EAD1442819E073FB0065A1FF /* Sources */ = {
+		4551A2331BD9B41000F216D0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EAAB38A419E2929C00161A54 /* ARKDefaultLogFormatterTests.m in Sources */,
-				EA46F7FA1ACB8448007FC415 /* ARKURLAdditionsTests.m in Sources */,
-				EA7353701A15C5E70060F54E /* ARKLogStoreTests.m in Sources */,
-				D04D47ED1AB8A0BA00A342E9 /* ARKDataArchiveTests.m in Sources */,
-				EA09D3C51A2E6D2F004C1125 /* ARKDefineTests.m in Sources */,
-				D04D48051AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m in Sources */,
-				EAC8459C19F60B820000F165 /* ARKEmailBugReporterTests.m in Sources */,
-				EA82F7931A3F9D6B0043BA42 /* ARKLogTableViewControllerTests.m in Sources */,
-				EAD1445419E201C70065A1FF /* ARKLogDistributorTests.m in Sources */,
+				4551A23D1BD9B41000F216D0 /* AardvarkTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		EAD1445619E203340065A1FF /* PBXTargetDependency */ = {
+		4551A23A1BD9B41000F216D0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EAD1442019E073FB0065A1FF /* Aardvark */;
-			targetProxy = EAD1445519E203340065A1FF /* PBXContainerItemProxy */;
+			target = 4551A22D1BD9B41000F216D0 /* Aardvark */;
+			targetProxy = 4551A2391BD9B41000F216D0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		4551A2401BD9B41000F216D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = Aardvark/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.Aardvark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		4551A2411BD9B41000F216D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = Aardvark/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.Aardvark;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		4551A2431BD9B41000F216D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = AardvarkTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4551A2441BD9B41000F216D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = AardvarkTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		EAD1443019E073FB0065A1FF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -510,7 +592,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -545,107 +627,37 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		EAD1443319E073FB0065A1FF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		EAD1443419E073FB0065A1FF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INSTALL_PATH = "$(BUILT_PRODUCTS_DIR)";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(PRODUCT_NAME)";
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		EAD1443619E073FB0065A1FF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "AardvarkTests/Tests-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-framework",
-					XCTest,
-					"-ObjC",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		EAD1443719E073FB0065A1FF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "AardvarkTests/Tests-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-framework",
-					XCTest,
-					"-ObjC",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4551A23F1BD9B41000F216D0 /* Build configuration list for PBXNativeTarget "Aardvark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4551A2401BD9B41000F216D0 /* Debug */,
+				4551A2411BD9B41000F216D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4551A2421BD9B41000F216D0 /* Build configuration list for PBXNativeTarget "AardvarkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4551A2431BD9B41000F216D0 /* Debug */,
+				4551A2441BD9B41000F216D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		EAD1441C19E073FB0065A1FF /* Build configuration list for PBXProject "Aardvark" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EAD1443019E073FB0065A1FF /* Debug */,
 				EAD1443119E073FB0065A1FF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		EAD1443219E073FB0065A1FF /* Build configuration list for PBXNativeTarget "Aardvark" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EAD1443319E073FB0065A1FF /* Debug */,
-				EAD1443419E073FB0065A1FF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		EAD1443519E073FB0065A1FF /* Build configuration list for PBXNativeTarget "AardvarkTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EAD1443619E073FB0065A1FF /* Debug */,
-				EAD1443719E073FB0065A1FF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

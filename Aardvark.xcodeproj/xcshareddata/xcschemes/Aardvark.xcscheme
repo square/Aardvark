@@ -14,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
-               BuildableName = "libAardvark.a"
+               BlueprintIdentifier = "4551A22D1BD9B41000F216D0"
+               BuildableName = "Aardvark.framework"
                BlueprintName = "Aardvark"
                ReferencedContainer = "container:Aardvark.xcodeproj">
             </BuildableReference>
@@ -28,7 +28,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAD1442B19E073FB0065A1FF"
+               BlueprintIdentifier = "4551A2361BD9B41000F216D0"
                BuildableName = "AardvarkTests.xctest"
                BlueprintName = "AardvarkTests"
                ReferencedContainer = "container:Aardvark.xcodeproj">
@@ -37,16 +37,16 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAD1442B19E073FB0065A1FF"
+               BlueprintIdentifier = "4551A2361BD9B41000F216D0"
                BuildableName = "AardvarkTests.xctest"
                BlueprintName = "AardvarkTests"
                ReferencedContainer = "container:Aardvark.xcodeproj">
@@ -56,27 +56,30 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
-            BuildableName = "libAardvark.a"
+            BlueprintIdentifier = "4551A22D1BD9B41000F216D0"
+            BuildableName = "Aardvark.framework"
             BlueprintName = "Aardvark"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
-            BuildableName = "libAardvark.a"
+            BlueprintIdentifier = "4551A22D1BD9B41000F216D0"
+            BuildableName = "Aardvark.framework"
             BlueprintName = "Aardvark"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
@@ -85,16 +88,16 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
-            BuildableName = "libAardvark.a"
+            BlueprintIdentifier = "4551A22D1BD9B41000F216D0"
+            BuildableName = "Aardvark.framework"
             BlueprintName = "Aardvark"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>

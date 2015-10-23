@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/ARKLogObserver.h>
+#import "ARKLogObserver.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
