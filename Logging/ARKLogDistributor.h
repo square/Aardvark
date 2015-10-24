@@ -19,9 +19,8 @@
 //
 
 #import <Aardvark/ARKLogging.h>
+#import <Aardvark/ARKLogObserver.h>
 
-
-@protocol ARKLogObserver;
 @class ARKLogMessage;
 @class ARKLogStore;
 
