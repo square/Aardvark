@@ -18,8 +18,8 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
 #import <Aardvark/ARKLogTypes.h>
+
 
 /// Logs a log with default type to the default log distributor.
 OBJC_EXTERN void ARKLog(NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(1,2);
