@@ -1,5 +1,5 @@
 //
-//  ARKLogMessage.h
+//  ARKLogging.h
 //  Aardvark
 //
 //  Created by Dan Federman on 10/4/14.
@@ -18,25 +18,14 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/ARKLogging.h>
+#import <UIKit/UIKit.h>
+#import <Aardvark/ARKLogTypes.h>
 
+/// Logs a log with default type to the default log distributor.
+OBJC_EXTERN void ARKLog(NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(1,2);
 
-NS_ASSUME_NONNULL_BEGIN
+/// Logs a log with customized type and userInfo to the default log distributor.
+OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * __nullable userInfo, NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(3,4);
 
-
-@interface ARKLogMessage : NSObject <NSCopying, NSSecureCoding>
-
-- (instancetype)initWithText:(NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
-
-@property (nonatomic, copy, readonly) NSDate *creationDate;
-@property (nonatomic, copy, readonly) NSString *text;
-@property (nonatomic, readonly) UIImage *image;
-@property (nonatomic, readonly) ARKLogType type;
-
-/// Arbitrary information used by ARKLogBlocks. This data is not persisted
-@property (nonatomic, copy, readonly) NSDictionary *userInfo;
-
-@end
-
-
-NS_ASSUME_NONNULL_END
+/// Logs a screenshot to the default log distributor.
+OBJC_EXTERN void ARKLogScreenshot();
