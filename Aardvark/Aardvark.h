@@ -18,11 +18,6 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
-
-
-#import <Aardvark/ARKLogTypes.h>
-
 #import <Aardvark/ARKBugReporter.h>
 #import <Aardvark/ARKDefaultLogFormatter.h>
 #import <Aardvark/ARKEmailBugReporter.h>
@@ -33,6 +28,7 @@
 #import <Aardvark/ARKLogObserver.h>
 #import <Aardvark/ARKLogStore.h>
 #import <Aardvark/ARKLogTableViewController.h>
+#import <Aardvark/ARKLogTypes.h>
 #import <Aardvark/ARKScreenshotViewController.h>
 #import <Aardvark/UIApplication+ARKAdditions.h>
 

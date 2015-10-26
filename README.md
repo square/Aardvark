@@ -1,6 +1,7 @@
 # Aardvark
 
 [![CI Status](https://travis-ci.org/square/Aardvark.svg?branch=master)](https://travis-ci.org/square/Aardvark)
+[![Carthage Compatibility](https://img.shields.io/badge/carthage-✓-e2c245.svg)](https://github.com/Carthage/Carthage/)
 [![Version](https://img.shields.io/cocoapods/v/Aardvark.svg)](http://cocoadocs.org/docsets/Aardvark)
 [![License](https://img.shields.io/cocoapods/l/Aardvark.svg)](http://cocoadocs.org/docsets/Aardvark)
 [![Platform](https://img.shields.io/cocoapods/p/Aardvark.svg)](http://cocoadocs.org/docsets/Aardvark)
@@ -11,17 +12,31 @@ Aardvark is a library that makes it dead simple to create actionable bug reports
 
 There are only three steps to get Aardvark logging and bug reporting up and running.
 
-1) Install with [CocoaPods](http://cocoapods.org)
+###1) Install Aardvark.
+
+#### Using [CocoaPods](https://cocoapods.org)
 
 ```
 platform :ios, '6.0'
 pod 'Aardvark'
 ```
+
+#### Using [Carthage](https://github.com/Carthage/Carthage)
+
+```
+github "Square/Aardvark"
+```
+
+
+#### Using Git Submodules
+
 Or manually checkout the submodule with `git submodule add git@github.com:Square/Aardvark.git`, drag Aardvark.xcodeproj to your project, and add Aardvark as a build dependency.
 
-2) Call `[Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:]` to enable the creation of email bug reports. It is best to do this when you load your application’s UI.
+###2) Call `[Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:]`
+This enables the creation of email bug reports.  It is best to do this when you load your application’s UI.
 
-3) Replace calls to `NSLog` with `ARKLog`. `ARKLog` has exactly the same syntax as `NSLog`.
+###3) Replace calls to `NSLog` with `ARKLog`.
+`ARKLog` has exactly the same syntax as `NSLog`.
 
 ## Reporting Bugs
 

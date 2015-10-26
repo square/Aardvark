@@ -19,8 +19,8 @@
 //
 
 #import "ARKLogging.h"
-#import "ARKLogDistributor.h"
 
+#import "ARKLogDistributor.h"
 
 
 void ARKLog(NSString *format, ...)

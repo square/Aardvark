@@ -20,6 +20,8 @@
 
 #import <Aardvark/ARKLogging.h>
 #import <Aardvark/ARKLogObserver.h>
+#import <UIKit/UIKit.h>
+
 
 @class ARKLogMessage;
 @class ARKLogStore;
