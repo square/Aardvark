@@ -494,7 +494,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = ARK;
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Square, Inc.";
 				TargetAttributes = {
 					4551A2C11BDACF9000F216D0 = {
@@ -685,6 +685,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -783,6 +784,7 @@
 					XCTest,
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -798,6 +800,7 @@
 					XCTest,
 					"-ObjC",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.squareup.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -812,6 +815,7 @@
 				4551A2D41BDACF9000F216D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EAD1441C19E073FB0065A1FF /* Build configuration list for PBXProject "Aardvark" */ = {
 			isa = XCConfigurationList;
