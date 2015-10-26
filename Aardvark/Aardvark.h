@@ -30,7 +30,6 @@
 #import <Aardvark/ARKLogTableViewController.h>
 #import <Aardvark/ARKLogTypes.h>
 #import <Aardvark/ARKScreenshotViewController.h>
-#import <Aardvark/UIApplication+ARKAdditions.h>
 
 
 //! Project version number for Aardvark-iOS.
