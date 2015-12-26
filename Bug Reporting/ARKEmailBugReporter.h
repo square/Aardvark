@@ -45,8 +45,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithEmailAddress:(NSString *)emailAddress logStore:(ARKLogStore *)logStore;
 
-/// The email address to which bug reports will be sent. Must be set before composeBugReport is called.
-@property (nonatomic, copy) NSString *bugReportRecipientEmailAddress;
+- (instancetype)initWithEmailAddresses:(NSArray<NSString *> *)emailAddress logStore:(ARKLogStore *)logStore;
+
+/// The email addresses to which bug reports will be sent. Must be set before composeBugReport is called.
+@property (nonatomic, copy) NSArray<NSString *> *bugReportRecipientEmailAddresses;
 
 /// The email body that will be presented to the user when they compose a report.
 @property (nonatomic, copy) NSString *prefilledEmailBody;
