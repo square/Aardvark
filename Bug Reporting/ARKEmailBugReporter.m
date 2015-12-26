@@ -84,7 +84,21 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         return nil;
     }
     
-    _bugReportRecipientEmailAddress = [emailAddress copy];
+    NSArray *emailAddresses = nil;
+    if (emailAddress && emailAddress.length > 0) {
+        emailAddresses = @[[emailAddress copy]];
+    }
+    return [self initWithEmailAddresses:emailAddresses logStore:logStore];
+}
+
+- (instancetype)initWithEmailAddresses:(NSArray<NSString *> *)emailAddresses logStore:(ARKLogStore *)logStore;
+{
+    self = [self init];
+    if (!self) {
+        return nil;
+    }
+
+    _bugReportRecipientEmailAddresses = emailAddresses;
     [self addLogStores:@[logStore]];
     
     return self;
@@ -104,7 +118,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)composeBugReportWithScreenshot:(BOOL)attachScreenshot;
 {
-    ARKCheckCondition(self.bugReportRecipientEmailAddress.length, , @"Attempting to compose a bug report without a recipient email address.");
+    ARKCheckCondition(self.bugReportRecipientEmailAddresses.count, , @"Attempting to compose a bug report without a recipient email address.");
     ARKCheckCondition(self.mutableLogStores.count > 0, , @"Attempting to compose a bug report without logs.");
     
     self.attachScreenshotToNextBugReport = attachScreenshot;
@@ -310,7 +324,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     if ([MFMailComposeViewController canSendMail]) {
         self.mailComposeViewController = [MFMailComposeViewController new];
         
-        [self.mailComposeViewController setToRecipients:@[self.bugReportRecipientEmailAddress]];
+        [self.mailComposeViewController setToRecipients:self.bugReportRecipientEmailAddresses];
         [self.mailComposeViewController setSubject:title];
         
         for (ARKLogStore *logStore in logStores) {
@@ -380,7 +394,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                         [emailBody appendFormat:@"%@\n", [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
                     }
                     
-                    NSURL *composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:title body:emailBody];
+                    NSURL *composeEmailURL = [self _emailURLWithRecipients:self.bugReportRecipientEmailAddresses CC:@"" subject:title body:emailBody];
                     if (composeEmailURL != nil) {
                         [[UIApplication sharedApplication] openURL:composeEmailURL];
                     }
