@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
-               BuildableName = "libAardvark.a"
-               BlueprintName = "Aardvark"
-               ReferencedContainer = "container:Aardvark.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAD1442B19E073FB0065A1FF"
-               BuildableName = "AardvarkTests.xctest"
-               BlueprintName = "AardvarkTests"
+               BlueprintIdentifier = "4551A2C11BDACF9000F216D0"
+               BuildableName = "Aardvark.framework"
+               BlueprintName = "Aardvark-iOS"
                ReferencedContainer = "container:Aardvark.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EAD1442B19E073FB0065A1FF"
-               BuildableName = "AardvarkTests.xctest"
-               BlueprintName = "AardvarkTests"
+               BlueprintIdentifier = "4551A2CA1BDACF9000F216D0"
+               BuildableName = "Aardvark-iOSTests.xctest"
+               BlueprintName = "Aardvark-iOSTests"
                ReferencedContainer = "container:Aardvark.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -56,9 +42,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
-            BuildableName = "libAardvark.a"
-            BlueprintName = "Aardvark"
+            BlueprintIdentifier = "4551A2C11BDACF9000F216D0"
+            BuildableName = "Aardvark.framework"
+            BlueprintName = "Aardvark-iOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -78,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
-            BuildableName = "libAardvark.a"
-            BlueprintName = "Aardvark"
+            BlueprintIdentifier = "4551A2C11BDACF9000F216D0"
+            BuildableName = "Aardvark.framework"
+            BlueprintName = "Aardvark-iOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -96,9 +82,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EAD1442019E073FB0065A1FF"
-            BuildableName = "libAardvark.a"
-            BlueprintName = "Aardvark"
+            BlueprintIdentifier = "4551A2C11BDACF9000F216D0"
+            BuildableName = "Aardvark.framework"
+            BlueprintName = "Aardvark-iOS"
             ReferencedContainer = "container:Aardvark.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

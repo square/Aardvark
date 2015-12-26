@@ -23,7 +23,6 @@
 
 #import "AardvarkDefines.h"
 #import "ARKLogMessage.h"
-#import "ARKLogObserver.h"
 #import "ARKLogStore.h"
 
 

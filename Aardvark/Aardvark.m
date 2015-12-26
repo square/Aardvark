@@ -21,33 +21,7 @@
 #import "Aardvark.h"
 
 #import "AardvarkDefines.h"
-#import "ARKEmailBugReporter.h"
-#import "ARKLogDistributor.h"
-#import "ARKLogMessage.h"
-#import "ARKLogStore.h"
 #import "UIApplication+ARKAdditions.h"
-
-
-void ARKLog(NSString *format, ...)
-{
-    va_list argList;
-    va_start(argList, format);
-    [[ARKLogDistributor defaultDistributor] logWithFormat:format arguments:argList];
-    va_end(argList);
-}
-
-void ARKLogWithType(ARKLogType type, NSDictionary *userInfo, NSString *format, ...)
-{
-    va_list argList;
-    va_start(argList, format);
-    [[ARKLogDistributor defaultDistributor] logWithType:type userInfo:userInfo format:format arguments:argList];
-    va_end(argList);
-}
-
-void ARKLogScreenshot()
-{
-    [[ARKLogDistributor defaultDistributor] logScreenshot];
-}
 
 
 @implementation Aardvark

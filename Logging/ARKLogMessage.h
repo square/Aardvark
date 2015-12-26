@@ -18,7 +18,8 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/Aardvark.h>
+#import <Aardvark/ARKLogging.h>
+#import <UIKit/UIKit.h>
 
 
 NS_ASSUME_NONNULL_BEGIN

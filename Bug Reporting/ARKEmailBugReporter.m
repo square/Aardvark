@@ -292,7 +292,9 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             [self _configureAlertTextfield:textField];
         }];
         
-        [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertController animated:YES completion:NULL];
+        UIViewController *const rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+        UIViewController *const viewControllerToPresentAlertController = rootViewController.presentedViewController ?: rootViewController;
+        [viewControllerToPresentAlertController presentViewController:alertController animated:YES completion:NULL];
     }
     else {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:composeReportButtonTitle, nil];
