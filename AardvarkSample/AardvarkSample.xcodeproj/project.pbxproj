@@ -19,6 +19,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6B8FFA071C48B19500393AB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA4583EB19E654FF00E44882 /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4551A2C21BDACF9000F216D0;
+			remoteInfo = "Aardvark-iOS";
+		};
 		EA4583DB19E6549800E44882 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA4583B919E6549800E44882 /* Project object */;
@@ -166,6 +173,7 @@
 			children = (
 				EA4583F119E654FF00E44882 /* libAardvark.a */,
 				EA4583F319E654FF00E44882 /* AardvarkTests.xctest */,
+				6B8FFA081C48B19500393AB9 /* Aardvark.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -253,6 +261,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		6B8FFA081C48B19500393AB9 /* Aardvark.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Aardvark.framework;
+			remoteRef = 6B8FFA071C48B19500393AB9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		EA4583F119E654FF00E44882 /* libAardvark.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -430,7 +445,7 @@
 				);
 				GCC_PREFIX_HEADER = "Other/AardvarkSample-Prefix.pch";
 				INFOPLIST_FILE = AardvarkSample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -448,7 +463,7 @@
 				);
 				GCC_PREFIX_HEADER = "Other/AardvarkSample-Prefix.pch";
 				INFOPLIST_FILE = AardvarkSample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
