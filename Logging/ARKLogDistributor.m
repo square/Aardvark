@@ -246,10 +246,18 @@
     UIImage *screenshot = nil;
     
     @try {
-        CGRect const screenBounds = [UIScreen mainScreen].bounds;
-        UIGraphicsBeginImageContextWithOptions(screenBounds.size, NO, 0.0);
-        for (UIWindow *const window in [UIApplication sharedApplication].windows) {
-            [window drawViewHierarchyInRect:screenBounds afterScreenUpdates:NO];
+        UIWindow *const window = [[UIApplication sharedApplication] keyWindow];
+        if ([window respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+            // iOS 7 and later.
+            CGRect const screenBounds = [UIScreen mainScreen].bounds;
+            UIGraphicsBeginImageContextWithOptions(screenBounds.size, NO, 0.0);
+            for (UIWindow *const window in [UIApplication sharedApplication].windows) {
+                [window drawViewHierarchyInRect:screenBounds afterScreenUpdates:NO];
+            }
+        } else {
+            UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+            UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 0.0);
+            [window.layer renderInContext:UIGraphicsGetCurrentContext()];
         }
         screenshot = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
