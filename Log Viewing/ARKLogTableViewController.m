@@ -31,9 +31,10 @@
 #import "UIActivityViewController+ARKAdditions.h"
 
 
-@interface ARKLogTableViewController () <UIActionSheetDelegate, UIPopoverControllerDelegate>
+@interface ARKLogTableViewController () <UIActionSheetDelegate, UIPopoverControllerDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
 
 @property (nonatomic, copy) NSArray *logMessages;
+@property (nonatomic, copy) NSArray *filteredLogs;
 @property (nonatomic) BOOL viewWillAppearForFirstTimeCalled;
 @property (nonatomic) BOOL hasScrolledToBottom;
 
@@ -41,6 +42,8 @@
 @property (nonatomic, weak) UIBarButtonItem *shareBarButtonItem;
 
 @property (nonatomic, strong) UIPopoverController *activitySheetPopoverController;
+@property (nonatomic, strong) UISearchController *searchController;
+@property (nonatomic, strong) NSString *searchString;
 
 #if TARGET_IPHONE_SIMULATOR
 @property (nonatomic) UIActionSheet *printLogsActionSheet;
@@ -103,7 +106,7 @@
 {
     [super viewDidLayoutSubviews];
     
-    if (!self.hasScrolledToBottom && self.logMessages.count > 0) {
+    if (!self.hasScrolledToBottom && self.filteredLogs.count > 0) {
         [self _scrollTableViewToBottomAnimated:NO];
         self.hasScrolledToBottom = YES;
     }
@@ -138,6 +141,11 @@
     self.tableView.rowHeight = 34.0;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.delegate = self;
+    self.tableView.tableHeaderView = self.searchController.searchBar;
 
     if (self.title.length == 0) {
         self.title = NSLocalizedString(@"Logs", @"Title of log viewing screen.");
@@ -151,7 +159,7 @@
 #if TARGET_IPHONE_SIMULATOR
     if (actionSheet == self.printLogsActionSheet) {
         NSMutableString *logsText = [NSMutableString string];
-        for (ARKLogMessage *logMessage in self.logMessages) {
+        for (ARKLogMessage *logMessage in self.filteredLogs) {
             [logsText appendFormat:@"%@\n", [self.logFormatter formattedLogMessage:logMessage]];
         }
         
@@ -185,6 +193,25 @@
     self.activitySheetPopoverController = nil;
 }
 
+#pragma mark - UISearchResultsUpdating
+
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController;
+{
+    if (searchController.isActive) {
+        self.searchString = searchController.searchBar.text;
+        [self _reloadFilteredLogs];
+        [self.tableView reloadData];
+    }
+}
+
+#pragma mark - UISearchControllerDelegate
+
+- (void)willPresentSearchController:(UISearchController *)searchController;
+{
+    searchController.searchBar.text = self.searchString;
+    [self updateSearchResultsForSearchController:searchController];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
@@ -195,7 +222,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex;
 {
     ARKCheckCondition(sectionIndex == 0, 0, @"There is only one section index!");
-    return self.logMessages.count;
+    return self.filteredLogs.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -209,12 +236,12 @@
     }
     
     NSInteger index = [indexPath row];
-    ARKLogMessage *currentLog = self.logMessages[index];
+    ARKLogMessage *currentLog = self.filteredLogs[index];
     
     // Find the most recent separator log, or the first log in the list.
     ARKLogMessage *logForTimestampDelta = nil;
     for (NSInteger i = index; i >= 0; i--) {
-        logForTimestampDelta = self.logMessages[i];
+        logForTimestampDelta = self.filteredLogs[i];
         if (logForTimestampDelta.type == ARKLogTypeSeparator) {
             break;
         }
@@ -285,7 +312,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    ARKLogMessage *logMessage = self.logMessages[[indexPath row]];
+    ARKLogMessage *logMessage = self.filteredLogs[[indexPath row]];
     if (logMessage.image != nil) {
         ARKScreenshotViewController *screenshotViewer = [[ARKScreenshotViewController alloc] initWithLogMessage:logMessage];
         
@@ -315,7 +342,7 @@
 {
     NSMutableArray *formattedLogMessages = [NSMutableArray new];
     NSMutableArray *contentForActivitySheet = [NSMutableArray new];
-    for (ARKLogMessage *logMessage in self.logMessages) {
+    for (ARKLogMessage *logMessage in self.filteredLogs) {
         [formattedLogMessages addObject:[self.logFormatter formattedLogMessage:logMessage]];
         
         if (logMessage.image != nil) {
@@ -386,8 +413,19 @@
 {
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         self.logMessages = [self _logMessagesWithMinuteSeparators:logMessages];
+        [self _reloadFilteredLogs];
+        
         [self.tableView reloadData];
     }];
+}
+
+- (void)_reloadFilteredLogs;
+{
+    if (self.searchString.length > 0) {
+        self.filteredLogs = [self.filteredLogs filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"text CONTAINS[c] %@", self.searchString]];
+    } else {
+        self.filteredLogs = [self.logMessages copy];
+    }
 }
 
 - (NSArray *)_logMessagesWithMinuteSeparators:(NSArray *)logMessages;
