@@ -142,10 +142,13 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    self.searchController.searchResultsUpdater = self;
-    self.searchController.delegate = self;
-    self.tableView.tableHeaderView = self.searchController.searchBar;
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
+        self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        self.searchController.searchResultsUpdater = self;
+        self.searchController.delegate = self;
+        self.searchController.dimsBackgroundDuringPresentation = NO;
+        self.tableView.tableHeaderView = self.searchController.searchBar;
+    }
 
     if (self.title.length == 0) {
         self.title = NSLocalizedString(@"Logs", @"Title of log viewing screen.");
@@ -199,6 +202,7 @@
 {
     if (searchController.isActive) {
         self.searchString = searchController.searchBar.text;
+        searchController.searchBar.placeholder = (self.searchString.length > 0) ? self.searchString : NSLocalizedString(@"Search", @"The default placeholder text for the search bar");
         [self _reloadFilteredLogs];
         [self.tableView reloadData];
     }
@@ -312,6 +316,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 {
+    if (self.searchController.isActive) {
+        self.searchController.active = NO;
+    }
+    
     ARKLogMessage *logMessage = self.filteredLogs[[indexPath row]];
     if (logMessage.image != nil) {
         ARKScreenshotViewController *screenshotViewer = [[ARKScreenshotViewController alloc] initWithLogMessage:logMessage];
