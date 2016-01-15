@@ -31,7 +31,7 @@
 #import "UIActivityViewController+ARKAdditions.h"
 
 
-@interface ARKLogTableViewController () <UIActionSheetDelegate, UIPopoverControllerDelegate, UISearchResultsUpdating, UISearchControllerDelegate>
+@interface ARKLogTableViewController () <UIActionSheetDelegate, UIPopoverControllerDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 
 @property (nonatomic, copy) NSArray *logMessages;
 @property (nonatomic, copy) NSArray *filteredLogs;
@@ -424,7 +424,7 @@
     if (self.searchString.length > 0) {
         self.filteredLogs = [self.filteredLogs filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"text CONTAINS[c] %@", self.searchString]];
     } else {
-        self.filteredLogs = [self.logMessages copy];
+        self.filteredLogs = self.logMessages;
     }
 }
 
