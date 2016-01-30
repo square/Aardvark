@@ -202,6 +202,7 @@
     }];
 }
 
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 - (void)logWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 {
     Class logMessageClass = self.logMessageClass;
@@ -212,6 +213,20 @@
         [self _logMessage_inLogDistributingQueue:logMessage];
     }];
 }
+#endif
+
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+- (void)logWithText:(NSString *)text image:(NSImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
+{
+    Class logMessageClass = self.logMessageClass;
+    
+    [self.logDistributingQueue addOperationWithBlock:^{
+        ARKLogMessage *logMessage = [[logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
+        
+        [self _logMessage_inLogDistributingQueue:logMessage];
+    }];
+}
+#endif
 
 - (void)logWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 {
@@ -243,6 +258,7 @@
 
 - (void)logScreenshot;
 {
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
     UIImage *screenshot = nil;
     
     @try {
@@ -269,6 +285,12 @@
         NSString *logText = @"Screenshot Logged";
         [self logWithText:logText image:screenshot type:ARKLogTypeScreenshot userInfo:nil];
     }
+#endif
+    
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+    // TODO: Not implemented
+    return;
+#endif
 }
 
 #pragma mark - Protected Methods

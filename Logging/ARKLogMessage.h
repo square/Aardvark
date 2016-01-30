@@ -19,7 +19,14 @@
 //
 
 #import <Aardvark/ARKLogging.h>
+
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
+#endif
+
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+#import <Cocoa/Cocoa.h>
+#endif
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -27,11 +34,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ARKLogMessage : NSObject <NSCopying, NSSecureCoding>
 
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 - (instancetype)initWithText:(NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
+
+@property (nonatomic, readonly) UIImage *image;
+
+#endif
+
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+- (instancetype)initWithText:(NSString *)text image:(nullable NSImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
+
+@property (nonatomic, readonly) NSImage *image;
+
+#endif
 
 @property (nonatomic, copy, readonly) NSDate *creationDate;
 @property (nonatomic, copy, readonly) NSString *text;
-@property (nonatomic, readonly) UIImage *image;
 @property (nonatomic, readonly) ARKLogType type;
 
 /// Arbitrary information used by ARKLogBlocks. This data is not persisted

@@ -58,8 +58,13 @@
     _dataArchive = [[ARKDataArchive alloc] initWithURL:self.persistedLogFileURL maximumObjectCount:maximumLogMessageCount trimmedObjectCount:0.5 * maximumLogMessageCount];
     _prefixNameWhenPrintingToConsole = YES;
 
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
+#endif 
     
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:[NSApplication sharedApplication]];
+#endif
     return self;
 }
 

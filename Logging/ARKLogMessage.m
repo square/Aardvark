@@ -34,6 +34,8 @@
 
 #pragma mark - Initialization
 
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+
 - (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 {
     self = [self init];
@@ -74,6 +76,54 @@
     [aCoder encodeObject:@(self.type) forKey:ARKSelfKeyPath(type)];
     [aCoder encodeObject:self.creationDate forKey:ARKSelfKeyPath(creationDate)];
 }
+
+#endif
+
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+
+- (instancetype)initWithText:(NSString *)text image:(NSImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
+{
+    self = [self init];
+    if (!self) {
+        return nil;
+    }
+    
+    _text = [text copy];
+    _image = image;
+    _type = type;
+    _userInfo = [userInfo copy];
+    _creationDate = [NSDate date];
+    
+    return self;
+}
+
+#pragma mark - NSCoding
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+{
+    self = [self init];
+    if (!self) {
+        return nil;
+    }
+    
+    _text = [aDecoder decodeObjectOfClass:[NSString class] forKey:ARKSelfKeyPath(text)];
+    _image = [aDecoder decodeObjectOfClass:[NSImage class] forKey:ARKSelfKeyPath(image)];
+    _type = (ARKLogType)[[aDecoder decodeObjectOfClass:[NSNumber class] forKey:ARKSelfKeyPath(type)] unsignedIntegerValue];
+    _creationDate = [[aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(creationDate)] copy];
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder;
+{
+    [aCoder encodeObject:self.text forKey:ARKSelfKeyPath(text)];
+    [aCoder encodeObject:self.image forKey:ARKSelfKeyPath(image)];
+    [aCoder encodeObject:@(self.type) forKey:ARKSelfKeyPath(type)];
+    [aCoder encodeObject:self.creationDate forKey:ARKSelfKeyPath(creationDate)];
+}
+
+#endif
+
 
 #pragma mark - NSCopying
 

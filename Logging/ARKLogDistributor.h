@@ -20,7 +20,14 @@
 
 #import <Aardvark/ARKLogging.h>
 #import <Aardvark/ARKLogObserver.h>
+
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 #import <UIKit/UIKit.h>
+#endif
+
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+#import <Cocoa/Cocoa.h>
+#endif
 
 
 @class ARKLogMessage;
@@ -57,8 +64,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// Distributes the log to the log observers.
 - (void)logMessage:(ARKLogMessage *)logMessage;
 
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 /// Creates a log message and distributes the log to the log observers.
 - (void)logWithText:(NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
+#endif
+
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+/// Creates a log message and distributes the log to the log observers.
+- (void)logWithText:(NSString *)text image:(nullable NSImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
+#endif
 
 /// Creates a log message and distributes the log to the log observers.
 - (void)logWithType:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
