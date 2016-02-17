@@ -47,8 +47,14 @@ typedef unsigned long long ARKFileOffset;
     ARKWriteBigEndianBlockLength(dataLengthBytes, 0, dataBlockLength);
     NSData *dataLengthData = [NSData dataWithBytes:dataLengthBytes length:ARKBlockLengthBytes];
     
-    [self writeData:dataLengthData];
-    [self writeData:dataBlock];
+    @try {
+        [self writeData:dataLengthData];
+        [self writeData:dataBlock];
+    }@catch(NSException *e) {
+        // There is the slight possibility that an exception can occur during an application update
+        // because file paths will change with the new app GUID.
+        NSLog(@"Exception Caught: %@", e.description);
+    }
 }
 
 - (void)ARK_appendDataBlock:(NSData *)dataBlock;
