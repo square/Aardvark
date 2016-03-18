@@ -481,10 +481,6 @@
 
 @implementation ARKTimestampLogMessage
 
-@synthesize text = _text;
-@synthesize type = _type;
-@synthesize creationDate = _creationDate;
-
 #pragma mark - Class Methods
 
 + (NSDateFormatter *)sharedDateFormatter;
@@ -505,26 +501,13 @@
 
 - (instancetype)initWithDate:(NSDate *)date;
 {
-    self = [self init];
-    if (!self) {
-        return nil;
-    }
-    
-    _type = ARKLogTypeSeparator;
-    _creationDate = date;
-    
-    return self;
+    NSString *text = [[[self class] sharedDateFormatter] stringFromDate:date];
+    return [super initWithText:text image:nil type:ARKLogTypeSeparator userInfo:nil creationDate:date];
 }
 
-#pragma mark - Properties
-
-- (NSString *)text;
+- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo creationDate:(nonnull NSDate *)date;
 {
-    if (!_text) {
-        _text = [[[self class] sharedDateFormatter] stringFromDate:self.creationDate];
-    }
-    
-    return _text;
+    return [self initWithDate:date];
 }
 
 @end

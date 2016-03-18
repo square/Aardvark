@@ -46,47 +46,16 @@
 
 @implementation ARKFakeLogMessage
 
-@synthesize creationDate = _creationDate;
-
 #pragma mark - Initialization
 
 - (instancetype)initWithDate:(NSDate *)date;
 {
-    self = [self init];
+    self = [super initWithText:@"Fake Log" image:nil type:ARKLogTypeDefault userInfo:nil creationDate:date];
     if (!self) {
         return nil;
     }
     
-    _creationDate = date;
-    
     return self;
-}
-
-#pragma mark - NSObject
-
-- (NSString *)description;
-{
-    NSString *dateString = [NSDateFormatter localizedStringFromDate:self.creationDate dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterMediumStyle];
-    return [NSString stringWithFormat:@"[%@] Fake Log", dateString];
-}
-
-#pragma mark - NSCoding
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder;
-{
-    self = [self init];
-    if (!self) {
-        return nil;
-    }
-    
-    _creationDate = [[aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(creationDate)] copy];
-    
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder;
-{
-    [aCoder encodeObject:self.creationDate forKey:ARKSelfKeyPath(creationDate)];
 }
 
 @end

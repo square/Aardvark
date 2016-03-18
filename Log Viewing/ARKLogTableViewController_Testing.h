@@ -32,6 +32,12 @@
 
 @interface ARKTimestampLogMessage : ARKLogMessage
 
-- (instancetype)initWithDate:(NSDate *)date;
+- (instancetype)initWithDate:(NSDate *)date NS_DESIGNATED_INITIALIZER;
+
++ (instancetype)new NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo NS_UNAVAILABLE;
+- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo creationDate:(NSDate *)date NS_UNAVAILABLE;
+
 
 @end
