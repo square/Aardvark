@@ -27,15 +27,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ARKLogMessage : NSObject <NSCopying, NSSecureCoding>
 
++ (instancetype)new NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
+
+/// Creates an ARKLogMessage with the provided parameters, created at the current date.
+/// @see initWithText:image:type:userInfo:creationDate:
 - (instancetype)initWithText:(NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
+
+- (instancetype)initWithText:(NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo creationDate:(NSDate *)date NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic, copy, readonly) NSDate *creationDate;
 @property (nonatomic, copy, readonly) NSString *text;
-@property (nonatomic, readonly) UIImage *image;
+@property (nonatomic, readonly, nullable) UIImage *image;
 @property (nonatomic, readonly) ARKLogType type;
 
-/// Arbitrary information used by ARKLogBlocks. This data is not persisted
-@property (nonatomic, copy, readonly) NSDictionary *userInfo;
+/// Arbitrary information used by ARKLogBlocks. This data is not persisted.
+@property (nonatomic, copy, readonly, nullable) NSDictionary *userInfo;
 
 @end
 

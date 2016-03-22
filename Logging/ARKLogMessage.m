@@ -36,17 +36,22 @@
 
 - (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
 {
-    self = [self init];
+    return [self initWithText:text image:image type:type userInfo:userInfo creationDate:[NSDate date]];
+}
+
+- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo creationDate:(nonnull NSDate *)date;
+{
+    self = [super init];
     if (!self) {
         return nil;
     }
-    
+
     _text = [text copy];
     _image = image;
     _type = type;
     _userInfo = [userInfo copy];
-    _creationDate = [NSDate date];
-    
+    _creationDate = date;
+
     return self;
 }
 
@@ -54,17 +59,12 @@
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder;
 {
-    self = [self init];
-    if (!self) {
-        return nil;
-    }
+    NSString *text = [aDecoder decodeObjectOfClass:[NSString class] forKey:ARKSelfKeyPath(text)];
+    UIImage *image = [aDecoder decodeObjectOfClass:[UIImage class] forKey:ARKSelfKeyPath(image)];
+    ARKLogType type = (ARKLogType)[[aDecoder decodeObjectOfClass:[NSNumber class] forKey:ARKSelfKeyPath(type)] unsignedIntegerValue];
+    NSDate *creationDate = [[aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(creationDate)] copy];
     
-    _text = [aDecoder decodeObjectOfClass:[NSString class] forKey:ARKSelfKeyPath(text)];
-    _image = [aDecoder decodeObjectOfClass:[UIImage class] forKey:ARKSelfKeyPath(image)];
-    _type = (ARKLogType)[[aDecoder decodeObjectOfClass:[NSNumber class] forKey:ARKSelfKeyPath(type)] unsignedIntegerValue];
-    _creationDate = [[aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(creationDate)] copy];
-    
-    return self;
+    return [self initWithText:text image:image type:type userInfo:nil creationDate:creationDate];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder;
