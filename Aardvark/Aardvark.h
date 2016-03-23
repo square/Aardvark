@@ -18,15 +18,7 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/ARKBugReporter.h>
-#import <Aardvark/ARKDefaultLogFormatter.h>
-#import <Aardvark/ARKLogDistributor+UIAdditions.h>
-#import <Aardvark/ARKEmailBugReporter.h>
-#import <Aardvark/ARKIndividualLogViewController.h>
-#import <Aardvark/ARKLogFormatter.h>
-#import <Aardvark/ARKLogTableViewController.h>
-#import <Aardvark/ARKScreenshotLogging.h>
-#import <Aardvark/ARKScreenshotViewController.h>
+@import UIKit;
 
 
 //! Project version number for Aardvark-iOS.
@@ -36,12 +28,12 @@ FOUNDATION_EXPORT double Aardvark_iOSVersionNumber;
 FOUNDATION_EXPORT const unsigned char Aardvark_iOSVersionString[];
 
 
-@interface Aardvark : NSObject
-
-/// Sets up a two finger press-and-hold gesture recognizer to trigger email bug reports that will be sent to emailAddress. Returns the created bug reporter for convenience.
-+ (nullable ARKEmailBugReporter *)addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:(nonnull NSString *)emailAddress;
-
-/// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReport].
-+ (nullable id)addBugReporter:(nonnull id <ARKBugReporter>)bugReporter triggeringGestureRecognizerClass:(nonnull Class)gestureRecognizerClass;
-
-@end
+#import <Aardvark/ARKBugReporter.h>
+#import <Aardvark/ARKDefaultLogFormatter.h>
+#import <Aardvark/ARKLogDistributor+UIAdditions.h>
+#import <Aardvark/ARKEmailBugReporter.h>
+#import <Aardvark/ARKIndividualLogViewController.h>
+#import <Aardvark/ARKLogFormatter.h>
+#import <Aardvark/ARKLogTableViewController.h>
+#import <Aardvark/ARKScreenshotLogging.h>
+#import <Aardvark/ARKScreenshotViewController.h>

@@ -18,12 +18,12 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
-#import <CoreAardvark/ARKLogging.h>
-#import <CoreAardvark/ARKLogObserver.h>
+#import <CoreAardvark/ARKLogTypes.h>
 
 
+@protocol ARKLogObserver;
 @class ARKLogMessage;
 @class ARKLogStore;
 

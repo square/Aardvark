@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 #import "ARKDataArchive.h"
 #import "ARKDataArchive_Testing.h"

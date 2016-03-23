@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 #import "NSURL+ARKAdditions.h"
 
@@ -42,22 +42,28 @@
     self.sampleFileName = NSStringFromClass([self class]);
     
     // Create the URL manually so we don't have any side effects.
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-    NSString *applicationSupportDirectory = paths.firstObject;
-    NSString *archivePath = [applicationSupportDirectory stringByAppendingPathComponent:self.sampleFileName];
+    NSArray *const paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *const applicationSupportDirectory = paths.firstObject;
+    NSString *const archivePath = [applicationSupportDirectory stringByAppendingPathComponent:self.sampleFileName];
     self.sampleFileURL = [NSURL fileURLWithPath:archivePath isDirectory:NO];
     
     // Ensure we start with a clean slate.
-    [[NSFileManager defaultManager] removeItemAtPath:[self.sampleFileURL.path stringByDeletingLastPathComponent] error:NULL];
+    NSString *const filePathToDelete = [self.sampleFileURL.path stringByDeletingLastPathComponent];
+    if (filePathToDelete != nil) {
+        [[NSFileManager defaultManager] removeItemAtPath:filePathToDelete error:NULL];
+    }
 }
 
 #pragma mark - Behavior Tests
 
 - (void)test_fileURLWithApplicationSupportFilename_createsApplicationSupportDirectoryIfItDoesNotExist;
 {
-    XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:[self.sampleFileURL.path stringByDeletingLastPathComponent]]);
+    NSString *const filePathToDelete = [self.sampleFileURL.path stringByDeletingLastPathComponent];
+    XCTAssertNotNil(filePathToDelete);
+    
+    XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:filePathToDelete]);
     XCTAssertEqualObjects([NSURL ARK_fileURLWithApplicationSupportFilename:self.sampleFileName], self.sampleFileURL);
-    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:[self.sampleFileURL.path stringByDeletingLastPathComponent]]);
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:filePathToDelete]);
 }
 
 - (void)test_fileURLWithApplicationSupportFilename_returnsSamePathWhenCalledTwiceSequentially;

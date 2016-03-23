@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 #import "ARKLogStore.h"
 #import "ARKLogStore_Testing.h"
@@ -58,7 +58,10 @@
 
 - (void)tearDown;
 {
-    [self.logDistributor removeLogObserver:self.logStore];
+    ARKLogStore *const logStoreToRemove = self.logStore;
+    if (logStoreToRemove != nil) {
+        [self.logDistributor removeLogObserver:logStoreToRemove];
+    }
     
     [super tearDown];
 }
@@ -319,8 +322,11 @@
     [self.logStore.dataArchive saveArchiveAndWait:YES];
     
     [self measureBlock:^{
-        ARKDataArchive *loadingDataArchive = [[ARKDataArchive alloc] initWithURL:self.logStore.dataArchive.archiveFileURL maximumObjectCount:self.logStore.dataArchive.maximumObjectCount trimmedObjectCount:self.logStore.dataArchive.trimmedObjectCount];
-        [loadingDataArchive waitUntilAllOperationsAreFinished];
+        NSURL *const archiveFileURL = self.logStore.dataArchive.archiveFileURL;
+        if (archiveFileURL != nil) {
+            ARKDataArchive *const loadingDataArchive = [[ARKDataArchive alloc] initWithURL:archiveFileURL maximumObjectCount:self.logStore.dataArchive.maximumObjectCount trimmedObjectCount:self.logStore.dataArchive.trimmedObjectCount];
+            [loadingDataArchive waitUntilAllOperationsAreFinished];
+        }
     }];
 }
 

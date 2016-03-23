@@ -30,8 +30,8 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 
 @interface ARKDataArchive ()
 
-@property (nonatomic, readonly) NSFileHandle *fileHandle;
-@property (nonatomic, readonly) NSOperationQueue *fileOperationQueue;
+@property (nonnull, nonatomic, readonly) NSFileHandle *fileHandle;
+@property (nonnull, nonatomic, readonly) NSOperationQueue *fileOperationQueue;
 
 @property (nonatomic) NSUInteger objectCount;
 
@@ -45,14 +45,16 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 - (nullable instancetype)initWithURL:(nonnull NSURL *)fileURL maximumObjectCount:(NSUInteger)maximumObjectCount trimmedObjectCount:(NSUInteger)trimmedObjectCount;
 {
     ARKCheckCondition([fileURL isFileURL], nil, @"Must provide a file URL!");
+    NSString *const fileURLPath = fileURL.path;
+    ARKCheckCondition(fileURLPath.length > 0, nil, @"No path at file URL");
     
     self = [super init];
     if (!self) {
         return nil;
     }
     
-    if (![[NSFileManager defaultManager] fileExistsAtPath:fileURL.path]) {
-        [[NSFileManager defaultManager] createFileAtPath:fileURL.path contents:nil attributes:nil];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:fileURLPath]) {
+        [[NSFileManager defaultManager] createFileAtPath:fileURLPath contents:nil attributes:nil];
     }
     
     NSError *error = nil;
@@ -70,11 +72,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     _fileOperationQueue.name = [NSString stringWithFormat:@"%@ File Operation Queue", self];
     _fileOperationQueue.maxConcurrentOperationCount = 1;
     
-#ifdef __IPHONE_8_0
-    if ([_fileOperationQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
-        _fileOperationQueue.qualityOfService = NSQualityOfServiceBackground;
-    }
-#endif
+    _fileOperationQueue.qualityOfService = NSQualityOfServiceBackground;
     
     [_fileOperationQueue addOperationWithBlock:^{
         // Count the number of (valid) archived objects.
@@ -164,11 +162,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     }];
     
     // Set the QoS of this operation to be high, since objects are typically requested in order to fulfill a user operation.
-#ifdef __IPHONE_8_0
-    if ([readOperation respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
-        readOperation.qualityOfService = NSQualityOfServiceUserInitiated;
-    }
-#endif
+    readOperation.qualityOfService = NSQualityOfServiceUserInitiated;
     
     [self.fileOperationQueue addOperation:readOperation];
 }
@@ -181,7 +175,9 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
         [self _saveArchive_inFileOperationQueue];
         
         if (completionHandler != NULL) {
-            [[NSOperationQueue mainQueue] addOperationWithBlock:completionHandler];
+            // Declare completionHandler as a non-optional to satisfy the compiler.
+            dispatch_block_t const operationBlock = completionHandler;
+            [[NSOperationQueue mainQueue] addOperationWithBlock:operationBlock];
         }
     }];
 }
@@ -194,11 +190,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     
     if (wait) {
         // Set the QoS of this operation to be high if the calling code is waiting for it.
-#ifdef __IPHONE_8_0
-        if ([saveOperation respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
-            saveOperation.qualityOfService = NSQualityOfServiceUserInitiated;
-        }
-#endif
+        saveOperation.qualityOfService = NSQualityOfServiceUserInitiated;
     }
     
     if (wait) {

@@ -18,8 +18,8 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
-#import <MessageUI/MessageUI.h>
+@import MessageUI;
+@import UIKit;
 
 #import <Aardvark/ARKBugReporter.h>
 
@@ -42,7 +42,10 @@
 /// Composes a bug report that is sent via email.
 @interface ARKEmailBugReporter : NSObject <ARKBugReporter>
 
-- (nonnull instancetype)initWithEmailAddress:(nonnull NSString *)emailAddress logStore:(nonnull ARKLogStore *)logStore;
+- (nonnull instancetype)initWithEmailAddress:(nonnull NSString *)emailAddress logStore:(nonnull ARKLogStore *)logStore NS_DESIGNATED_INITIALIZER;
+
+- (nonnull instancetype)init NS_UNAVAILABLE;
++ (nonnull instancetype)new NS_UNAVAILABLE;
 
 /// The email address to which bug reports will be sent. Must be set before composeBugReport is called.
 @property (nonnull, nonatomic, copy) NSString *bugReportRecipientEmailAddress;

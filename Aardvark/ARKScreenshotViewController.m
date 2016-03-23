@@ -47,7 +47,7 @@
     }
     
     _imageView = [[UIImageView alloc] initWithImage:logMessage.image];
-    _date = logMessage.creationDate;
+    _date = logMessage.date;
     _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_tapDetected:)];
     _tapGestureRecognizer.cancelsTouchesInView = NO;
     
@@ -90,12 +90,8 @@
         
         // Make sure the user isn't tapping on the navigation bar.
         BOOL userTappedImage = NO;
-        if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)] /* iOS 7 or later */) {
-            CGRect navBarFrame = CGRectMake(0.0, 0.0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height + 20.0);
-            userTappedImage = !CGRectContainsPoint(navBarFrame, where);
-        } else {
-            userTappedImage = (where.y > 0.0);
-        }
+        CGRect const navBarFrame = CGRectMake(0.0, 0.0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height + 20.0);
+        userTappedImage = !CGRectContainsPoint(navBarFrame, where);
         
         if (userTappedImage) {
             [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:YES];

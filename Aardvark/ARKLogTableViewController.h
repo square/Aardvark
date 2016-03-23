@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 
 @protocol ARKLogFormatter;
@@ -35,7 +35,7 @@
 /**
  Creates a log table view controller displaying logs from the default `ARKLogDistributor`'s default log store, using a default log formatter.
  */
-- (nullable instancetype)init;
+- (nonnull instancetype)init;
 
 /// @see `init`
 - (nonnull instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil;

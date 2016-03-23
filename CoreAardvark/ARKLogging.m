@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import "ARKLogging.h"
+#import <CoreAardvark/ARKLogging.h>
 
 #import "ARKLogDistributor.h"
 

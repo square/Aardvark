@@ -7,173 +7,153 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EA4583C719E6549800E44882 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4583C619E6549800E44882 /* main.m */; };
-		EA4583CA19E6549800E44882 /* SampleAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4583C919E6549800E44882 /* SampleAppDelegate.m */; };
-		EA4583D019E6549800E44882 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA4583CE19E6549800E44882 /* Main.storyboard */; };
-		EA4583D219E6549800E44882 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA4583D119E6549800E44882 /* Images.xcassets */; };
-		EA4583D519E6549800E44882 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA4583D319E6549800E44882 /* LaunchScreen.xib */; };
-		EA4583E119E6549800E44882 /* AardvarkSampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA4583E019E6549800E44882 /* AardvarkSampleTests.m */; };
-		EA4583FC19E65C0D00E44882 /* libAardvark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4583F119E654FF00E44882 /* libAardvark.a */; };
-		EA8FA2EC19EA345C00ACF7E1 /* SampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EA8FA2EB19EA345C00ACF7E1 /* SampleViewController.m */; };
-		EABB585619F09227004DD7DA /* SampleCrashlyticsLogObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = EABB585519F09227004DD7DA /* SampleCrashlyticsLogObserver.m */; };
+		EA3C1DDD1D93696D0048C4CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3C1DDC1D93696D0048C4CD /* AppDelegate.swift */; };
+		EA3C1DE21D93696D0048C4CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1DE01D93696D0048C4CD /* Main.storyboard */; };
+		EA3C1DE41D93696D0048C4CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1DE31D93696D0048C4CD /* Assets.xcassets */; };
+		EA3C1E091D936A1C0048C4CD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1E071D936A1C0048C4CD /* LaunchScreen.xib */; };
+		EA3C1E0B1D936B7B0048C4CD /* SampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3C1E0A1D936B7B0048C4CD /* SampleViewController.swift */; };
+		EA3C1E141D93744A0048C4CD /* SampleCrashlyticsLogObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = EA3C1E131D93744A0048C4CD /* SampleCrashlyticsLogObserver.m */; };
+		EA3C1E281D93750D0048C4CD /* Aardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA3C1E211D9375060048C4CD /* Aardvark.framework */; };
+		EA3C1E291D93750D0048C4CD /* Aardvark.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EA3C1E211D9375060048C4CD /* Aardvark.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EA3C1E2C1D93750D0048C4CD /* CoreAardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA3C1E251D9375060048C4CD /* CoreAardvark.framework */; };
+		EA3C1E2D1D93750D0048C4CD /* CoreAardvark.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EA3C1E251D9375060048C4CD /* CoreAardvark.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6B8FFA071C48B19500393AB9 /* PBXContainerItemProxy */ = {
+		EA3C1E201D9375060048C4CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = EA4583EB19E654FF00E44882 /* Aardvark.xcodeproj */;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4551A2C21BDACF9000F216D0;
-			remoteInfo = "Aardvark-iOS";
-		};
-		EA4583DB19E6549800E44882 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = EA4583B919E6549800E44882 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = EA4583C019E6549800E44882;
-			remoteInfo = AardvarkSample;
-		};
-		EA4583F019E654FF00E44882 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = EA4583EB19E654FF00E44882 /* Aardvark.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EAD1442119E073FB0065A1FF;
 			remoteInfo = Aardvark;
 		};
-		EA4583F219E654FF00E44882 /* PBXContainerItemProxy */ = {
+		EA3C1E221D9375060048C4CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = EA4583EB19E654FF00E44882 /* Aardvark.xcodeproj */;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = EAD1442C19E073FB0065A1FF;
+			remoteGlobalIDString = EA3C1DA01D934A260048C4CD;
 			remoteInfo = AardvarkTests;
 		};
-		EA4583F419E6551200E44882 /* PBXContainerItemProxy */ = {
+		EA3C1E241D9375060048C4CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = EA4583EB19E654FF00E44882 /* Aardvark.xcodeproj */;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EAF2FEA01D47172400931663;
+			remoteInfo = CoreAardvark;
+		};
+		EA3C1E261D9375060048C4CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EA3C1D911D934A210048C4CD;
+			remoteInfo = CoreAardvarkTests;
+		};
+		EA3C1E2A1D93750D0048C4CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = EAD1442019E073FB0065A1FF;
+			remoteGlobalIDString = 4551A2C11BDACF9000F216D0;
 			remoteInfo = Aardvark;
+		};
+		EA3C1E2E1D93750D0048C4CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = EAF2FE9F1D47172400931663;
+			remoteInfo = CoreAardvark;
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		EA3C1E061D9369C80048C4CD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EA3C1E291D93750D0048C4CD /* Aardvark.framework in Embed Frameworks */,
+				EA3C1E2D1D93750D0048C4CD /* CoreAardvark.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		EA4583C119E6549800E44882 /* AardvarkSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AardvarkSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA4583C519E6549800E44882 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EA4583C619E6549800E44882 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		EA4583C819E6549800E44882 /* SampleAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleAppDelegate.h; sourceTree = "<group>"; };
-		EA4583C919E6549800E44882 /* SampleAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SampleAppDelegate.m; sourceTree = "<group>"; };
-		EA4583CF19E6549800E44882 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		EA4583D119E6549800E44882 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		EA4583D419E6549800E44882 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		EA4583DA19E6549800E44882 /* AardvarkSampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AardvarkSampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA4583DF19E6549800E44882 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EA4583E019E6549800E44882 /* AardvarkSampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AardvarkSampleTests.m; sourceTree = "<group>"; };
-		EA4583EB19E654FF00E44882 /* Aardvark.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Aardvark.xcodeproj; path = ../Aardvark.xcodeproj; sourceTree = "<group>"; };
-		EA4583FF19E65C5000E44882 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		EA45840319E65CA400E44882 /* AardvarkSample-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AardvarkSample-Prefix.pch"; path = "Other/AardvarkSample-Prefix.pch"; sourceTree = SOURCE_ROOT; };
-		EA8FA2EA19EA345C00ACF7E1 /* SampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleViewController.h; sourceTree = "<group>"; };
-		EA8FA2EB19EA345C00ACF7E1 /* SampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleViewController.m; sourceTree = "<group>"; };
-		EABB585419F09227004DD7DA /* SampleCrashlyticsLogObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleCrashlyticsLogObserver.h; sourceTree = "<group>"; };
-		EABB585519F09227004DD7DA /* SampleCrashlyticsLogObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleCrashlyticsLogObserver.m; sourceTree = "<group>"; };
+		EA3C1DD91D93696D0048C4CD /* AardvarkSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AardvarkSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA3C1DDC1D93696D0048C4CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		EA3C1DE11D93696D0048C4CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		EA3C1DE31D93696D0048C4CD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		EA3C1DE81D93696D0048C4CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EA3C1E081D936A1C0048C4CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		EA3C1E0A1D936B7B0048C4CD /* SampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleViewController.swift; sourceTree = "<group>"; };
+		EA3C1E111D9374490048C4CD /* AardvarkSample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AardvarkSample-Bridging-Header.h"; sourceTree = "<group>"; };
+		EA3C1E121D93744A0048C4CD /* SampleCrashlyticsLogObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleCrashlyticsLogObserver.h; sourceTree = "<group>"; };
+		EA3C1E131D93744A0048C4CD /* SampleCrashlyticsLogObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleCrashlyticsLogObserver.m; sourceTree = "<group>"; };
+		EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Aardvark.xcodeproj; path = ../Aardvark.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		EA4583BE19E6549800E44882 /* Frameworks */ = {
+		EA3C1DD61D93696D0048C4CD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA4583FC19E65C0D00E44882 /* libAardvark.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EA4583D719E6549800E44882 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				EA3C1E281D93750D0048C4CD /* Aardvark.framework in Frameworks */,
+				EA3C1E2C1D93750D0048C4CD /* CoreAardvark.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		EA4583B819E6549800E44882 = {
+		EA3C1DD01D93696D0048C4CD = {
 			isa = PBXGroup;
 			children = (
-				EA4583C319E6549800E44882 /* AardvarkSample */,
-				EA4583DD19E6549800E44882 /* AardvarkSampleTests */,
-				EA4583EA19E654F000E44882 /* Frameworks */,
-				EA4583C219E6549800E44882 /* Products */,
+				EA3C1DDB1D93696D0048C4CD /* AardvarkSample */,
+				EA3C1DEE1D9369990048C4CD /* Frameworks */,
+				EA3C1DDA1D93696D0048C4CD /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		EA4583C219E6549800E44882 /* Products */ = {
+		EA3C1DDA1D93696D0048C4CD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EA4583C119E6549800E44882 /* AardvarkSample.app */,
-				EA4583DA19E6549800E44882 /* AardvarkSampleTests.xctest */,
+				EA3C1DD91D93696D0048C4CD /* AardvarkSample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		EA4583C319E6549800E44882 /* AardvarkSample */ = {
+		EA3C1DDB1D93696D0048C4CD /* AardvarkSample */ = {
 			isa = PBXGroup;
 			children = (
-				EA4583C819E6549800E44882 /* SampleAppDelegate.h */,
-				EA4583C919E6549800E44882 /* SampleAppDelegate.m */,
-				EABB585419F09227004DD7DA /* SampleCrashlyticsLogObserver.h */,
-				EABB585519F09227004DD7DA /* SampleCrashlyticsLogObserver.m */,
-				EA8FA2EA19EA345C00ACF7E1 /* SampleViewController.h */,
-				EA8FA2EB19EA345C00ACF7E1 /* SampleViewController.m */,
-				EA45840319E65CA400E44882 /* AardvarkSample-Prefix.pch */,
-				EA4583CE19E6549800E44882 /* Main.storyboard */,
-				EA4583D119E6549800E44882 /* Images.xcassets */,
-				EA4583D319E6549800E44882 /* LaunchScreen.xib */,
-				EA4583C419E6549800E44882 /* Supporting Files */,
+				EA3C1E111D9374490048C4CD /* AardvarkSample-Bridging-Header.h */,
+				EA3C1DDC1D93696D0048C4CD /* AppDelegate.swift */,
+				EA3C1DE01D93696D0048C4CD /* Main.storyboard */,
+				EA3C1DE31D93696D0048C4CD /* Assets.xcassets */,
+				EA3C1E071D936A1C0048C4CD /* LaunchScreen.xib */,
+				EA3C1DE81D93696D0048C4CD /* Info.plist */,
+				EA3C1E0A1D936B7B0048C4CD /* SampleViewController.swift */,
+				EA3C1E121D93744A0048C4CD /* SampleCrashlyticsLogObserver.h */,
+				EA3C1E131D93744A0048C4CD /* SampleCrashlyticsLogObserver.m */,
 			);
 			path = AardvarkSample;
 			sourceTree = "<group>";
 		};
-		EA4583C419E6549800E44882 /* Supporting Files */ = {
+		EA3C1DEE1D9369990048C4CD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EA4583C519E6549800E44882 /* Info.plist */,
-				EA4583C619E6549800E44882 /* main.m */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		EA4583DD19E6549800E44882 /* AardvarkSampleTests */ = {
-			isa = PBXGroup;
-			children = (
-				EA4583E019E6549800E44882 /* AardvarkSampleTests.m */,
-				EA4583DE19E6549800E44882 /* Supporting Files */,
-			);
-			path = AardvarkSampleTests;
-			sourceTree = "<group>";
-		};
-		EA4583DE19E6549800E44882 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				EA4583DF19E6549800E44882 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		EA4583EA19E654F000E44882 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				EA4583FF19E65C5000E44882 /* MessageUI.framework */,
-				EA4583EB19E654FF00E44882 /* Aardvark.xcodeproj */,
+				EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EA4583EC19E654FF00E44882 /* Products */ = {
+		EA3C1E1A1D9375060048C4CD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EA4583F119E654FF00E44882 /* libAardvark.a */,
-				EA4583F319E654FF00E44882 /* AardvarkTests.xctest */,
-				6B8FFA081C48B19500393AB9 /* Aardvark.framework */,
+				EA3C1E211D9375060048C4CD /* Aardvark.framework */,
+				EA3C1E231D9375060048C4CD /* AardvarkTests.xctest */,
+				EA3C1E251D9375060048C4CD /* CoreAardvark.framework */,
+				EA3C1E271D9375060048C4CD /* CoreAardvarkTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -181,61 +161,45 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EA4583C019E6549800E44882 /* AardvarkSample */ = {
+		EA3C1DD81D93696D0048C4CD /* AardvarkSample */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EA4583E419E6549800E44882 /* Build configuration list for PBXNativeTarget "AardvarkSample" */;
+			buildConfigurationList = EA3C1DEB1D93696D0048C4CD /* Build configuration list for PBXNativeTarget "AardvarkSample" */;
 			buildPhases = (
-				EA4583BD19E6549800E44882 /* Sources */,
-				EA4583BE19E6549800E44882 /* Frameworks */,
-				EA4583BF19E6549800E44882 /* Resources */,
+				EA3C1DD51D93696D0048C4CD /* Sources */,
+				EA3C1DD61D93696D0048C4CD /* Frameworks */,
+				EA3C1DD71D93696D0048C4CD /* Resources */,
+				EA3C1E061D9369C80048C4CD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				EA4583F519E6551200E44882 /* PBXTargetDependency */,
+				EA3C1E2B1D93750D0048C4CD /* PBXTargetDependency */,
+				EA3C1E2F1D93750D0048C4CD /* PBXTargetDependency */,
 			);
 			name = AardvarkSample;
 			productName = AardvarkSample;
-			productReference = EA4583C119E6549800E44882 /* AardvarkSample.app */;
+			productReference = EA3C1DD91D93696D0048C4CD /* AardvarkSample.app */;
 			productType = "com.apple.product-type.application";
-		};
-		EA4583D919E6549800E44882 /* AardvarkSampleTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = EA4583E719E6549800E44882 /* Build configuration list for PBXNativeTarget "AardvarkSampleTests" */;
-			buildPhases = (
-				EA4583D619E6549800E44882 /* Sources */,
-				EA4583D719E6549800E44882 /* Frameworks */,
-				EA4583D819E6549800E44882 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				EA4583DC19E6549800E44882 /* PBXTargetDependency */,
-			);
-			name = AardvarkSampleTests;
-			productName = AardvarkSampleTests;
-			productReference = EA4583DA19E6549800E44882 /* AardvarkSampleTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		EA4583B919E6549800E44882 /* Project object */ = {
+		EA3C1DD11D93696D0048C4CD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastSwiftUpdateCheck = 0800;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Square, Inc.";
 				TargetAttributes = {
-					EA4583C019E6549800E44882 = {
-						CreatedOnToolsVersion = 6.0.1;
-					};
-					EA4583D919E6549800E44882 = {
-						CreatedOnToolsVersion = 6.0.1;
-						TestTargetID = EA4583C019E6549800E44882;
+					EA3C1DD81D93696D0048C4CD = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = EYF346PHUG;
+						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = EA4583BC19E6549800E44882 /* Build configuration list for PBXProject "AardvarkSample" */;
+			buildConfigurationList = EA3C1DD41D93696D0048C4CD /* Build configuration list for PBXProject "AardvarkSample" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -243,115 +207,105 @@
 				en,
 				Base,
 			);
-			mainGroup = EA4583B819E6549800E44882;
-			productRefGroup = EA4583C219E6549800E44882 /* Products */;
+			mainGroup = EA3C1DD01D93696D0048C4CD;
+			productRefGroup = EA3C1DDA1D93696D0048C4CD /* Products */;
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = EA4583EC19E654FF00E44882 /* Products */;
-					ProjectRef = EA4583EB19E654FF00E44882 /* Aardvark.xcodeproj */;
+					ProductGroup = EA3C1E1A1D9375060048C4CD /* Products */;
+					ProjectRef = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
 				},
 			);
 			projectRoot = "";
 			targets = (
-				EA4583C019E6549800E44882 /* AardvarkSample */,
-				EA4583D919E6549800E44882 /* AardvarkSampleTests */,
+				EA3C1DD81D93696D0048C4CD /* AardvarkSample */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		6B8FFA081C48B19500393AB9 /* Aardvark.framework */ = {
+		EA3C1E211D9375060048C4CD /* Aardvark.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Aardvark.framework;
-			remoteRef = 6B8FFA071C48B19500393AB9 /* PBXContainerItemProxy */;
+			remoteRef = EA3C1E201D9375060048C4CD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		EA4583F119E654FF00E44882 /* libAardvark.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libAardvark.a;
-			remoteRef = EA4583F019E654FF00E44882 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		EA4583F319E654FF00E44882 /* AardvarkTests.xctest */ = {
+		EA3C1E231D9375060048C4CD /* AardvarkTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = AardvarkTests.xctest;
-			remoteRef = EA4583F219E654FF00E44882 /* PBXContainerItemProxy */;
+			remoteRef = EA3C1E221D9375060048C4CD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EA3C1E251D9375060048C4CD /* CoreAardvark.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CoreAardvark.framework;
+			remoteRef = EA3C1E241D9375060048C4CD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EA3C1E271D9375060048C4CD /* CoreAardvarkTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CoreAardvarkTests.xctest;
+			remoteRef = EA3C1E261D9375060048C4CD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		EA4583BF19E6549800E44882 /* Resources */ = {
+		EA3C1DD71D93696D0048C4CD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA4583D019E6549800E44882 /* Main.storyboard in Resources */,
-				EA4583D519E6549800E44882 /* LaunchScreen.xib in Resources */,
-				EA4583D219E6549800E44882 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EA4583D819E6549800E44882 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				EA3C1DE41D93696D0048C4CD /* Assets.xcassets in Resources */,
+				EA3C1E091D936A1C0048C4CD /* LaunchScreen.xib in Resources */,
+				EA3C1DE21D93696D0048C4CD /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		EA4583BD19E6549800E44882 /* Sources */ = {
+		EA3C1DD51D93696D0048C4CD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA4583CA19E6549800E44882 /* SampleAppDelegate.m in Sources */,
-				EA8FA2EC19EA345C00ACF7E1 /* SampleViewController.m in Sources */,
-				EA4583C719E6549800E44882 /* main.m in Sources */,
-				EABB585619F09227004DD7DA /* SampleCrashlyticsLogObserver.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EA4583D619E6549800E44882 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				EA4583E119E6549800E44882 /* AardvarkSampleTests.m in Sources */,
+				EA3C1E141D93744A0048C4CD /* SampleCrashlyticsLogObserver.m in Sources */,
+				EA3C1DDD1D93696D0048C4CD /* AppDelegate.swift in Sources */,
+				EA3C1E0B1D936B7B0048C4CD /* SampleViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		EA4583DC19E6549800E44882 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = EA4583C019E6549800E44882 /* AardvarkSample */;
-			targetProxy = EA4583DB19E6549800E44882 /* PBXContainerItemProxy */;
-		};
-		EA4583F519E6551200E44882 /* PBXTargetDependency */ = {
+		EA3C1E2B1D93750D0048C4CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Aardvark;
-			targetProxy = EA4583F419E6551200E44882 /* PBXContainerItemProxy */;
+			targetProxy = EA3C1E2A1D93750D0048C4CD /* PBXContainerItemProxy */;
+		};
+		EA3C1E2F1D93750D0048C4CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CoreAardvark;
+			targetProxy = EA3C1E2E1D93750D0048C4CD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		EA4583CE19E6549800E44882 /* Main.storyboard */ = {
+		EA3C1DE01D93696D0048C4CD /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				EA4583CF19E6549800E44882 /* Base */,
+				EA3C1DE11D93696D0048C4CD /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		EA4583D319E6549800E44882 /* LaunchScreen.xib */ = {
+		EA3C1E071D936A1C0048C4CD /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				EA4583D419E6549800E44882 /* Base */,
+				EA3C1E081D936A1C0048C4CD /* Base */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
@@ -359,10 +313,11 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		EA4583E219E6549800E44882 /* Debug */ = {
+		EA3C1DE91D93696D0048C4CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -370,23 +325,28 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -397,13 +357,16 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		EA4583E319E6549800E44882 /* Release */ = {
+		EA3C1DEA1D93696D0048C4CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -411,17 +374,22 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -431,111 +399,66 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
-		EA4583E519E6549800E44882 /* Debug */ = {
+		EA3C1DEC1D93696D0048C4CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-				);
-				GCC_PREFIX_HEADER = "Other/AardvarkSample-Prefix.pch";
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = AardvarkSample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_OBJC_BRIDGING_HEADER = "AardvarkSample/AardvarkSample-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
-		EA4583E619E6549800E44882 /* Release */ = {
+		EA3C1DED1D93696D0048C4CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks",
-				);
-				GCC_PREFIX_HEADER = "Other/AardvarkSample-Prefix.pch";
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = AardvarkSample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		EA4583E819E6549800E44882 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = AardvarkSampleTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AardvarkSample.app/AardvarkSample";
-			};
-			name = Debug;
-		};
-		EA4583E919E6549800E44882 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = AardvarkSampleTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AardvarkSample.app/AardvarkSample";
+				SWIFT_OBJC_BRIDGING_HEADER = "AardvarkSample/AardvarkSample-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		EA4583BC19E6549800E44882 /* Build configuration list for PBXProject "AardvarkSample" */ = {
+		EA3C1DD41D93696D0048C4CD /* Build configuration list for PBXProject "AardvarkSample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EA4583E219E6549800E44882 /* Debug */,
-				EA4583E319E6549800E44882 /* Release */,
+				EA3C1DE91D93696D0048C4CD /* Debug */,
+				EA3C1DEA1D93696D0048C4CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EA4583E419E6549800E44882 /* Build configuration list for PBXNativeTarget "AardvarkSample" */ = {
+		EA3C1DEB1D93696D0048C4CD /* Build configuration list for PBXNativeTarget "AardvarkSample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				EA4583E519E6549800E44882 /* Debug */,
-				EA4583E619E6549800E44882 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		EA4583E719E6549800E44882 /* Build configuration list for PBXNativeTarget "AardvarkSampleTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EA4583E819E6549800E44882 /* Debug */,
-				EA4583E919E6549800E44882 /* Release */,
+				EA3C1DEC1D93696D0048C4CD /* Debug */,
+				EA3C1DED1D93696D0048C4CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = EA4583B919E6549800E44882 /* Project object */;
+	rootObject = EA3C1DD11D93696D0048C4CD /* Project object */;
 }

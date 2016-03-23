@@ -21,11 +21,11 @@
 #import "ARKLogStore.h"
 #import "ARKLogStore_Testing.h"
 
-#import "AardvarkDefines.h"
 #import "ARKDataArchive.h"
 #import "ARKLogDistributor.h"
 #import "ARKLogDistributor_Protected.h"
 #import "ARKLogMessage.h"
+#import "AardvarkDefines.h"
 #import "NSURL+ARKAdditions.h"
 
 
@@ -48,14 +48,20 @@
     ARKCheckCondition(fileName.length > 0, nil, @"Must specify a file name");
     ARKCheckCondition(maximumLogMessageCount > 0, nil, @"maximumLogMessageCount must be greater than zero");
     
+    NSURL *const persistedLogFileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:fileName];
+    ARKCheckCondition(persistedLogFileURL != nil, nil, @"Could not create persisted log file URL with file name %@", fileName);
+    
+    ARKDataArchive *const dataArchive = [[ARKDataArchive alloc] initWithURL:persistedLogFileURL maximumObjectCount:maximumLogMessageCount trimmedObjectCount:0.5 * maximumLogMessageCount];
+    ARKCheckCondition(dataArchive != nil, nil, @"Could not instantiate data archive with persisted log file URL %@", persistedLogFileURL);
+    
     self = [super init];
     if (!self) {
         return nil;
     }
     
-    _persistedLogFileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:fileName];
+    _persistedLogFileURL = persistedLogFileURL;
     _maximumLogMessageCount = maximumLogMessageCount;
-    _dataArchive = [[ARKDataArchive alloc] initWithURL:self.persistedLogFileURL maximumObjectCount:maximumLogMessageCount trimmedObjectCount:0.5 * maximumLogMessageCount];
+    _dataArchive = dataArchive;
     _prefixNameWhenPrintingToConsole = YES;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
@@ -66,11 +72,6 @@
 - (nullable instancetype)initWithPersistedLogFileName:(NSString *)fileName;
 {
     return [self initWithPersistedLogFileName:fileName maximumLogMessageCount:2000];
-}
-
-- (nullable instancetype)init;
-{
-    ARKCheckCondition(NO, nil, @"Must use -initWithPersistedLogFileName: to initialize an ARKLogStore");
 }
 
 - (void)dealloc;

@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 #import "ARKLogTableViewController.h"
 #import "ARKLogTableViewController_Testing.h"
@@ -50,7 +50,7 @@
 
 - (instancetype)initWithDate:(NSDate *)date;
 {
-    self = [super initWithText:@"Fake Log" image:nil type:ARKLogTypeDefault userInfo:nil creationDate:date];
+    self = [super initWithText:@"Fake Log" image:nil type:ARKLogTypeDefault userInfo:nil date:date];
     if (!self) {
         return nil;
     }
@@ -110,15 +110,15 @@
         XCTAssertEqual([self.logTableViewController.logMessages[0] class], [ARKTimestampLogMessage class]);
         
         XCTAssertEqual([self.logTableViewController.logMessages[1] class], [ARKFakeLogMessage class]);
-        XCTAssertEqualObjects([self.logTableViewController.logMessages[1] creationDate], threeMinutesFiveSecondsAgo);
+        XCTAssertEqualObjects([self.logTableViewController.logMessages[1] date], threeMinutesFiveSecondsAgo);
         
         XCTAssertEqual([self.logTableViewController.logMessages[2] class], [ARKFakeLogMessage class]);
-        XCTAssertEqualObjects([self.logTableViewController.logMessages[2] creationDate], twoMinutesFiftyFiveSecondsAgo);
+        XCTAssertEqualObjects([self.logTableViewController.logMessages[2] date], twoMinutesFiftyFiveSecondsAgo);
         
         XCTAssertEqual([self.logTableViewController.logMessages[3] class], [ARKTimestampLogMessage class]);
         
         XCTAssertEqual([self.logTableViewController.logMessages[4] class], [ARKFakeLogMessage class]);
-        XCTAssertEqualObjects([self.logTableViewController.logMessages[4] creationDate], now);
+        XCTAssertEqualObjects([self.logTableViewController.logMessages[4] date], now);
         
         [expectation fulfill];
     }];

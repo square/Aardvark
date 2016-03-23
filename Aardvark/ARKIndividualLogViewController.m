@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <CoreAardvark/ARKLogMessage.h>
+@import CoreAardvark;
 
 #import "ARKIndividualLogViewController.h"
 
@@ -40,7 +40,7 @@
     self = [super init];
     
     _textView = [[UITextView alloc] initWithFrame:CGRectZero];
-    _text = [NSString stringWithFormat:@"%@\n%@", logMessage.creationDate, logMessage.text];
+    _text = [NSString stringWithFormat:@"%@\n%@", logMessage.date, logMessage.text];
     
     return self;
 }

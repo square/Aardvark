@@ -1,9 +1,9 @@
 //
-//  main.m
-//  AardvarkSample
+//  Logging.swift
+//  Aardvark
 //
-//  Created by Dan Federman on 10/8/14.
-//  Copyright 2014 Square, Inc.
+//  Created by Dan Federman on 3/22/16.
+//  Copyright © 2016 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -18,11 +18,9 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
-#import "SampleAppDelegate.h"
+import Foundation
 
-int main(int argc, char * argv[]) {
-    @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([SampleAppDelegate class]));
-    }
+
+public func log(_ text: String, type: ARKLogType = .`default`, image: UIImage? = nil, userInfo: [NSObject : AnyObject]? = nil) {
+    ARKLogDistributor.default().log(withText: text, image: image, type: type, userInfo: userInfo);
 }

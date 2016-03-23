@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 #import "ARKEmailBugReporter.h"
 #import "ARKEmailBugReporter_Testing.h"
@@ -50,8 +50,6 @@
     
     self.defaultLogDistributor = [ARKLogDistributor defaultDistributor];
     
-    self.bugReporter = [ARKEmailBugReporter new];
-    
     ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
     [logStore clearLogsWithCompletionHandler:NULL];
     [logStore.dataArchive waitUntilAllOperationsAreFinished];
@@ -59,6 +57,8 @@
     [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     
     self.logStore = logStore;
+    
+    self.bugReporter = [[ARKEmailBugReporter alloc] initWithEmailAddress:@"ARKEmailBugReporterTests@squareup.com" logStore:logStore];
 }
 
 #pragma mark - Behavior Tests
@@ -94,14 +94,14 @@
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         __block NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
         
-        XCTAssertEqualObjects(recentErrorLogs, nil);
+        XCTAssertEqualObjects(recentErrorLogs, @"");
         
         ARKLog(@"This is not an error");
         
         [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
             recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
             
-            XCTAssertEqualObjects(recentErrorLogs, nil);
+            XCTAssertEqualObjects(recentErrorLogs, @"");
             
             [expectation fulfill];
         }];
@@ -117,14 +117,14 @@
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         __block NSString *recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
         
-        XCTAssertEqualObjects(recentErrorLogs, nil);
+        XCTAssertEqualObjects(recentErrorLogs, @"");
         
         ARKLog(@"This is not an error");
         
         [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
             recentErrorLogs = [self.bugReporter _recentErrorLogMessagesAsPlainText:logMessages count:numberOfRecentErrorLogs];
             
-            XCTAssertEqualObjects(recentErrorLogs, nil);
+            XCTAssertEqualObjects(recentErrorLogs, @"");
             
             [expectation fulfill];
         }];
@@ -135,11 +135,11 @@
 
 - (void)test_addLogStores_enforcesARKLogStoreClass;
 {
-    XCTAssertEqual(self.bugReporter.logStores.count, 0);
+    XCTAssertEqualObjects(self.bugReporter.logStores, @[self.logStore]);
     
     [self.bugReporter addLogStores:@[[NSObject new]]];
     
-    XCTAssertEqual(self.bugReporter.logStores.count, 0);
+    XCTAssertEqualObjects(self.bugReporter.logStores, @[self.logStore]);
 }
 
 @end

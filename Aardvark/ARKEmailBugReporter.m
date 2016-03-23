@@ -18,14 +18,16 @@
 //  limitations under the License.
 //
 
+@import MessageUI;
+
 #import "ARKEmailBugReporter.h"
 #import "ARKEmailBugReporter_Testing.h"
 
 #import "AardvarkDefines.h"
 #import "ARKDefaultLogFormatter.h"
 #import "ARKScreenshotLogging.h"
-#import "ARKLogStore.h"
 #import "ARKLogMessage.h"
+#import "ARKLogStore.h"
 
 
 NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
@@ -35,7 +37,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 @end
 
 
-@interface ARKEmailBugReporter () <MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
+@interface ARKEmailBugReporter () <CAAnimationDelegate, MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic) UIView *screenFlashView;
 
@@ -43,7 +45,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 @property (nonatomic) UIWindow *emailComposeWindow;
 @property (nonatomic, weak) UIWindow *previousKeyWindow;
 
-@property (nonatomic, copy) NSMutableArray *mutableLogStores;
+@property (nonatomic, copy, readonly) NSMutableArray *mutableLogStores;
 
 @property (nonatomic) BOOL attachScreenshotToNextBugReport;
 
@@ -54,12 +56,9 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 #pragma mark - Initialization
 
-- (instancetype)init;
+- (instancetype)initWithEmailAddress:(NSString *)emailAddress logStore:(ARKLogStore *)logStore;
 {
     self = [super init];
-    if (!self) {
-        return nil;
-    }
     
     _prefilledEmailBody = [NSString stringWithFormat:@"Reproduction Steps:\n"
                            @"1. \n"
@@ -75,14 +74,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     
     _mutableLogStores = [NSMutableArray new];
     
-    return self;
-}
-
-- (instancetype)initWithEmailAddress:(NSString *)emailAddress logStore:(ARKLogStore *)logStore;
-{
-    self = [self init];
-    
-    _bugReportRecipientEmailAddress = [emailAddress copy];
     [self addLogStores:@[logStore]];
     
     return self;
@@ -102,7 +93,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)composeBugReportWithScreenshot:(BOOL)attachScreenshot;
 {
-    ARKCheckCondition(self.bugReportRecipientEmailAddress.length, , @"Attempting to compose a bug report without a recipient email address.");
+    ARKCheckCondition(self.bugReportRecipientEmailAddress.length > 0, , @"Attempting to compose a bug report without a recipient email address.");
     ARKCheckCondition(self.mutableLogStores.count > 0, , @"Attempting to compose a bug report without logs.");
     
     self.attachScreenshotToNextBugReport = attachScreenshot;
@@ -205,11 +196,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     if (!_emailComposeWindow) {
         _emailComposeWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        
-        if ([_emailComposeWindow respondsToSelector:@selector(tintColor)] /* iOS 7 or later */) {
-            // The keyboard won't show up on iOS 6 with a high windowLevel, but iOS 7+ will.
-            _emailComposeWindow.windowLevel = self.emailComposeWindowLevel;
-        }
+        _emailComposeWindow.windowLevel = self.emailComposeWindowLevel;
     }
     
     return _emailComposeWindow;
@@ -219,12 +206,17 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (NSData *)formattedLogMessagesAsData:(NSArray *)logMessages;
 {
-    NSMutableArray *formattedLogMessages = [NSMutableArray new];
-    for (ARKLogMessage *logMessage in logMessages) {
+    NSMutableArray *const formattedLogMessages = [NSMutableArray new];
+    for (ARKLogMessage *const logMessage in logMessages) {
         [formattedLogMessages addObject:[self.logFormatter formattedLogMessage:logMessage]];
     }
     
-    return [[formattedLogMessages componentsJoinedByString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *const formattedLogMessagesAsData = [[formattedLogMessages componentsJoinedByString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding];
+    if (formattedLogMessagesAsData != nil) {
+        return formattedLogMessagesAsData;
+    } else {
+        return [NSData new];
+    }
 }
 
 - (NSString *)formattedLogMessagesDataMIMEType;
@@ -261,34 +253,23 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     NSString * const composeReportButtonTitle = NSLocalizedString(@"Compose Report", @"Button title to compose bug report");
     NSString * const cancelButtonTitle = NSLocalizedString(@"Cancel", @"Button title to not compose a bug report");
     
-    // iOS 8 and later
-    if ([UIAlertController class]) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:composeReportButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            UITextField *textfield = [alertController.textFields firstObject];
-            [self _createBugReportWithTitle:textfield.text];
-        }]];
-        
-        [alertController addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleDefault handler:NULL]];
-        
-        [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
-            [self _configureAlertTextfield:textField];
-        }];
-        
-        UIViewController *const rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-        UIViewController *const viewControllerToPresentAlertController = rootViewController.presentedViewController ?: rootViewController;
-        [viewControllerToPresentAlertController presentViewController:alertController animated:YES completion:NULL];
-    }
-    else {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:cancelButtonTitle otherButtonTitles:composeReportButtonTitle, nil];
-        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-        
-        UITextField *textField = [alertView textFieldAtIndex:0];
+    UIAlertController *const alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:composeReportButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        UITextField *textfield = [alertController.textFields firstObject];
+        [self _createBugReportWithTitle:textfield.text];
+    }]];
+    
+    [alertController addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleDefault handler:NULL]];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         [self _configureAlertTextfield:textField];
-        
-        [alertView show];
-    }
+    }];
+    
+    UIViewController *const rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *const viewControllerToPresentAlertController = rootViewController.presentedViewController ?: rootViewController;
+    [viewControllerToPresentAlertController presentViewController:alertController animated:YES completion:NULL];
+
 }
 
 - (void)_configureAlertTextfield:(UITextField *)textField
@@ -455,19 +436,20 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         }
     }
     
-    if (recentErrorLogs.length) {
+    if (recentErrorLogs.length > 0 ) {
         // Remove the final newline and create an immutable string.
         return [recentErrorLogs stringByReplacingCharactersInRange:NSMakeRange(recentErrorLogs.length - 1, 1) withString:@""];
     } else {
-        return nil;
+        return @"";
     }
 }
 
 - (NSData *)_mostRecentImageAsPNG:(NSArray *)logMessages;
 {
     for (ARKLogMessage *logMessage in [logMessages reverseObjectEnumerator]) {
-        if (logMessage.image) {
-            return UIImagePNGRepresentation(logMessage.image);
+        UIImage *const logImage = logMessage.image;
+        if (logImage != nil) {
+            return UIImagePNGRepresentation(logImage);
         }
     }
     

@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 #import "ARKLogDistributor.h"
 #import "ARKLogDistributor_Protected.h"
@@ -38,9 +38,6 @@
 @property (nonatomic, weak) ARKLogStore *logStore;
 
 @end
-
-
-typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 
 
 @interface ARKTestLogObserver : NSObject <ARKLogObserver>

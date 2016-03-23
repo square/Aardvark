@@ -30,8 +30,8 @@
 /// Creates an ARKLogStore with persistedLogsFileURL set to the supplied fileName within the application support directory that keeps a maximum of 2000 logs persisted.
 - (nullable instancetype)initWithPersistedLogFileName:(nonnull NSString *)fileName;
 
-- (nullable instancetype)init NS_UNAVAILABLE;
-+ (nullable instancetype)new NS_UNAVAILABLE;
+- (nonnull instancetype)init NS_UNAVAILABLE;
++ (nonnull instancetype)new NS_UNAVAILABLE;
 
 /// Path to the file on disk that contains peristed logs.
 @property (nonnull, nonatomic, copy, readonly) NSURL *persistedLogFileURL;
