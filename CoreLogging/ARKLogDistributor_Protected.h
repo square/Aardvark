@@ -1,9 +1,9 @@
 //
-//  SampleCrashlyticsLogObserver.h
-//  AardvarkSample
+//  ARKLogDistributor_Protected.h
+//  CoreAardvark
 //
-//  Created by Dan Federman on 10/16/14.
-//  Copyright 2014 Square, Inc.
+//  Created by Dan Federman on 3/30/15.
+//  Copyright 2015 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@
 //  limitations under the License.
 //
 
-#import <CoreAardvark/ARKLogObserver.h>
+@interface ARKLogDistributor (Protected)
 
+- (void)waitUntilAllPendingLogsHaveBeenDistributed;
 
-@interface SampleCrashlyticsLogObserver : NSObject <ARKLogObserver>
 @end

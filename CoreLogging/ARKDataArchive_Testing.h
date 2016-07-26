@@ -1,8 +1,8 @@
 //
-//  ARKLogTypes.h
-//  Aardvark
+//  ARKDataArchive_Testing.h
+//  CoreAardvark
 //
-//  Created by Evan Kimia on 10/23/15.
+//  Created by Peter Westen on 3/17/15.
 //  Copyright 2015 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +18,13 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+#import "ARKDataArchive.h"
 
 
-typedef NS_ENUM(NSUInteger, ARKLogType) {
-    /// Default log type.
-    ARKLogTypeDefault,
-    /// Marks the beginning or end of a task.
-    ARKLogTypeSeparator,
-    /// Marks that the log represents an error.
-    ARKLogTypeError,
-    /// Marks a log that has a screenshot attached.
-    ARKLogTypeScreenshot,
-};
+@interface ARKDataArchive (Private)
+
+@property (nonatomic, readonly) NSFileHandle *fileHandle;
+
+- (void)waitUntilAllOperationsAreFinished;
+
+@end

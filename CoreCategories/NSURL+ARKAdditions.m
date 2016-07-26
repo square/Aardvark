@@ -1,6 +1,6 @@
 //
 //  NSURL+ARKAdditions.m
-//  Aardvark
+//  CoreAardvark
 //
 //  Created by Peter Westen on 3/17/15.
 //  Copyright 2015 Square, Inc.

@@ -1,6 +1,6 @@
 //
 //  ARKLogStore.h
-//  Aardvark
+//  CoreAardvark
 //
 //  Created by Dan Federman on 11/13/14.
 //  Copyright 2014 Square, Inc.
@@ -18,7 +18,11 @@
 //  limitations under the License.
 //
 
+#if COCOAPODS
 #import <Aardvark/ARKLogObserver.h>
+#else
+#import <CoreAardvark/ARKLogObserver.h>
+#endif
 
 
 NS_ASSUME_NONNULL_BEGIN

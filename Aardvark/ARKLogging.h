@@ -18,14 +18,12 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/ARKLogTypes.h>
+#if COCOAPODS
+#import <Aardvark/ARKCoreLogging.h>
+#else
+#import <CoreAardvark/ARKCoreLogging.h>
+#endif
 
-
-/// Logs a log with default type to the default log distributor.
-OBJC_EXTERN void ARKLog(NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(1,2);
-
-/// Logs a log with customized type and userInfo to the default log distributor.
-OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * __nullable userInfo, NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(3,4);
 
 /// Logs a screenshot to the default log distributor.
 OBJC_EXTERN void ARKLogScreenshot();

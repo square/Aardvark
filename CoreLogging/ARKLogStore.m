@@ -1,6 +1,6 @@
 //
 //  ARKLogStore.m
-//  Aardvark
+//  CoreAardvark
 //
 //  Created by Dan Federman on 11/13/14.
 //  Copyright 2014 Square, Inc.
@@ -58,7 +58,7 @@
     _dataArchive = [[ARKDataArchive alloc] initWithURL:self.persistedLogFileURL maximumObjectCount:maximumLogMessageCount trimmedObjectCount:0.5 * maximumLogMessageCount];
     _prefixNameWhenPrintingToConsole = YES;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
     
     return self;
 }

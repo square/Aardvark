@@ -18,9 +18,14 @@
 //  limitations under the License.
 //
 
+#if COCOAPODS
+#import "ARKLogMessage.h"
+#else
+#import <CoreAardvark/ARKLogMessage.h>
+#endif
+
 #import "ARKScreenshotViewController.h"
 
-#import "ARKLogMessage.h"
 #import "UIActivityViewController+ARKAdditions.h"
 
 

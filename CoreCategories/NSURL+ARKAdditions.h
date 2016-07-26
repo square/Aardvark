@@ -1,6 +1,6 @@
 //
-//  ARKDataArchive_Testing.h
-//  Aardvark
+//  NSURL+ARKAdditions.h
+//  CoreAardvark
 //
 //  Created by Peter Westen on 3/17/15.
 //  Copyright 2015 Square, Inc.
@@ -18,13 +18,17 @@
 //  limitations under the License.
 //
 
-#import "ARKDataArchive.h"
+#import <Foundation/Foundation.h>
 
 
-@interface ARKDataArchive (Private)
+NS_ASSUME_NONNULL_BEGIN
 
-@property (nonatomic, readonly) NSFileHandle *fileHandle;
 
-- (void)waitUntilAllOperationsAreFinished;
+@interface NSURL (ARKAdditions)
+
++ (nullable NSURL *)ARK_fileURLWithApplicationSupportFilename:(NSString *)filename;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

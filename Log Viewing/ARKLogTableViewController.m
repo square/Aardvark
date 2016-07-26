@@ -18,15 +18,23 @@
 //  limitations under the License.
 //
 
+#if COCOAPODS
+#import <Aardvark/AardvarkDefines.h>
+#import <Aardvark/ARKLogDistributor.h>
+#import <Aardvark/ARKLogMessage.h>
+#import <Aardvark/ARKLogStore.h>
+#else
+#import <CoreAardvark/AardvarkDefines.h>
+#import <CoreAardvark/ARKLogDistributor.h>
+#import <CoreAardvark/ARKLogMessage.h>
+#import <CoreAardvark/ARKLogStore.h>
+#endif
+
 #import "ARKLogTableViewController.h"
 #import "ARKLogTableViewController_Testing.h"
 
-#import "AardvarkDefines.h"
 #import "ARKIndividualLogViewController.h"
 #import "ARKDefaultLogFormatter.h"
-#import "ARKLogDistributor.h"
-#import "ARKLogMessage.h"
-#import "ARKLogStore.h"
 #import "ARKScreenshotViewController.h"
 #import "UIActivityViewController+ARKAdditions.h"
 

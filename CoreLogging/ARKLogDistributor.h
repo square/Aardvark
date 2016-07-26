@@ -1,6 +1,6 @@
 //
 //  ARKLogDistributor.h
-//  Aardvark
+//  CoreAardvark
 //
 //  Created by Dan Federman on 10/4/14.
 //  Copyright 2014 Square, Inc.
@@ -18,8 +18,13 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/ARKLogging.h>
+#if COCOAPODS
+#import <Aardvark/ARKCoreLogging.h>
 #import <Aardvark/ARKLogObserver.h>
+#else
+#import <CoreAardvark/ARKCoreLogging.h>
+#import <CoreAardvark/ARKLogObserver.h>
+#endif
 #import <UIKit/UIKit.h>
 
 
@@ -71,9 +76,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Creates a log message with ARKLogTypeDefault and distributes the log to the log observers.
 - (void)logWithFormat:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
-
-/// Creates a log message with a screenshot and distributes the log to the log observers.
-- (void)logScreenshot;
 
 @end
 

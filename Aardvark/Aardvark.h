@@ -22,14 +22,22 @@
 #import <Aardvark/ARKDefaultLogFormatter.h>
 #import <Aardvark/ARKEmailBugReporter.h>
 #import <Aardvark/ARKIndividualLogViewController.h>
-#import <Aardvark/ARKLogDistributor.h>
 #import <Aardvark/ARKLogFormatter.h>
+#import <Aardvark/ARKLogTableViewController.h>
+#import <Aardvark/ARKScreenshotViewController.h>
+#if COCOAPODS
+#import <Aardvark/ARKLogDistributor.h>
 #import <Aardvark/ARKLogMessage.h>
 #import <Aardvark/ARKLogObserver.h>
 #import <Aardvark/ARKLogStore.h>
-#import <Aardvark/ARKLogTableViewController.h>
 #import <Aardvark/ARKLogTypes.h>
-#import <Aardvark/ARKScreenshotViewController.h>
+#else
+#import <CoreAardvark/ARKLogDistributor.h>
+#import <CoreAardvark/ARKLogMessage.h>
+#import <CoreAardvark/ARKLogObserver.h>
+#import <CoreAardvark/ARKLogStore.h>
+#import <CoreAardvark/ARKLogTypes.h>
+#endif
 
 
 //! Project version number for Aardvark-iOS.

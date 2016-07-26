@@ -18,9 +18,14 @@
 //  limitations under the License.
 //
 
+#if COCOAPODS
+#import "AardvarkDefines.h"
+#else
+#import <CoreAardvark/AardvarkDefines.h>
+#endif
+
 #import "Aardvark.h"
 
-#import "AardvarkDefines.h"
 #import "UIApplication+ARKAdditions.h"
 
 
