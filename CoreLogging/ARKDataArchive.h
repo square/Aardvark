@@ -1,6 +1,6 @@
 //
 //  ARKDataArchive.h
-//  Aardvark
+//  CoreAardvark
 //
 //  Created by Peter Westen on 3/16/15.
 //  Copyright 2015 Square, Inc.

@@ -1,6 +1,6 @@
 //
 //  ARKLogMessage.h
-//  Aardvark
+//  CoreAardvark
 //
 //  Created by Dan Federman on 10/4/14.
 //  Copyright 2014 Square, Inc.
@@ -18,7 +18,11 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/ARKLogging.h>
+#if COCOAPODS
+#import <Aardvark/ARKCoreLogging.h>
+#else
+#import <CoreAardvark/ARKCoreLogging.h>
+#endif
 #import <UIKit/UIKit.h>
 
 

@@ -1,9 +1,9 @@
 //
-//  NSURL+ARKAdditions.h
-//  Aardvark
+//  ARKLogDistributor_Testing.h
+//  CoreAardvark
 //
-//  Created by Peter Westen on 3/17/15.
-//  Copyright 2015 Square, Inc.
+//  Created by Dan Federman on 10/6/14.
+//  Copyright 2014 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -18,15 +18,13 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
-
-
 NS_ASSUME_NONNULL_BEGIN
 
 
-@interface NSURL (ARKAdditions)
+@interface ARKLogDistributor (Private)
 
-+ (nullable NSURL *)ARK_fileURLWithApplicationSupportFilename:(NSString *)filename;
+- (NSMutableSet *)logObservers;
+- (NSUInteger)internalQueueOperationCount;
 
 @end
 

@@ -21,8 +21,8 @@
 #import <Aardvark/ARKDefaultLogFormatter.h>
 #import <Aardvark/ARKEmailBugReporter.h>
 #import <Aardvark/ARKLogTableViewController.h>
-#import <Aardvark/ARKLogMessage.h>
-#import <Aardvark/ARKLogStore.h>
+#import <CoreAardvark/ARKLogMessage.h>
+#import <CoreAardvark/ARKLogStore.h>
 
 #import "SampleAppDelegate.h"
 #import "SampleViewController.h"

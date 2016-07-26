@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <Aardvark/ARKLogMessage.h>
+#import <CoreAardvark/ARKLogMessage.h>
 
 #import "SampleCrashlyticsLogObserver.h"
 

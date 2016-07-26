@@ -1,8 +1,8 @@
 //
-//  ARKLogDistributor_Testing.h
-//  Aardvark
+//  ARKLogStore_Testing.h
+//  CoreAardvark
 //
-//  Created by Dan Federman on 10/6/14.
+//  Created by Dan Federman on 11/13/14.
 //  Copyright 2014 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,15 +18,11 @@
 //  limitations under the License.
 //
 
-NS_ASSUME_NONNULL_BEGIN
+@class ARKDataArchive;
 
 
-@interface ARKLogDistributor (Private)
+@interface ARKLogStore (Private)
 
-- (NSMutableSet *)logObservers;
-- (NSUInteger)internalQueueOperationCount;
+@property ARKDataArchive *dataArchive;
 
 @end
-
-
-NS_ASSUME_NONNULL_END

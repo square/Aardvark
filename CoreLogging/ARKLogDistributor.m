@@ -1,6 +1,6 @@
 //
 //  ARKLogDistributor.m
-//  Aardvark
+//  CoreAardvark
 //
 //  Created by Dan Federman on 10/4/14.
 //  Copyright 2014 Square, Inc.
@@ -239,36 +239,6 @@
     va_start(argList, format);
     [self logWithFormat:format arguments:argList];
     va_end(argList);
-}
-
-- (void)logScreenshot;
-{
-    UIImage *screenshot = nil;
-    
-    @try {
-        UIWindow *const keyWindow = [[UIApplication sharedApplication] keyWindow];
-        if ([keyWindow respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-            // iOS 7 and later.
-            CGRect const screenBounds = [UIScreen mainScreen].bounds;
-            UIGraphicsBeginImageContextWithOptions(screenBounds.size, NO, 0.0);
-            for (UIWindow *const window in [UIApplication sharedApplication].windows) {
-                [window drawViewHierarchyInRect:screenBounds afterScreenUpdates:NO];
-            }
-        } else {
-            UIGraphicsBeginImageContextWithOptions(keyWindow.bounds.size, YES, 0.0);
-            [keyWindow.layer renderInContext:UIGraphicsGetCurrentContext()];
-        }
-        screenshot = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-    }
-    @catch (NSException *exception) {
-        [self logWithType:ARKLogTypeError userInfo:nil format:@"Screenshot capture failed due to %@", exception];
-    }
-    
-    if (screenshot != nil) {
-        NSString *logText = @"Screenshot Logged";
-        [self logWithText:logText image:screenshot type:ARKLogTypeScreenshot userInfo:nil];
-    }
 }
 
 #pragma mark - Protected Methods
