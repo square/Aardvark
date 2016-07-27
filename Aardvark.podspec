@@ -11,8 +11,8 @@ Pod::Spec.new do |s|
   
   s.subspec 'Aardvark' do |a|
     a.source_files = 'Aardvark/*.{h,m}', 'Categories/*.{h,m}', 'Other/*.{h,m}', 'Logging/*.{h,m}', 'Log Viewing/*.{h,m}', 'Bug Reporting/*.{h,m}'
-	# a.private_header_files = 'Aardvark/*_Testing.h', 'Categories/*.h', 'Other/*_Testing.h', 'Logging/*_Testing.h', 'Log Viewing/*_Testing.h', 'Bug Reporting/*_Testing.h'
-	a.dependency 'Aardvark/AardvarkCore'
+    a.private_header_files = 'Aardvark/*_Testing.h', 'Categories/*.h', 'Other/*_Testing.h', 'Logging/*_Testing.h', 'Log Viewing/*_Testing.h', 'Bug Reporting/*_Testing.h'
+    a.dependency 'Aardvark/AardvarkCore'
   end
 
   s.subspec 'AardvarkCore' do |ac|
