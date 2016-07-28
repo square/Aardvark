@@ -43,7 +43,7 @@
 - (void)appendArchiveOfObject:(nonnull id <NSSecureCoding>)object;
 
 /// Reads in all contents of the archive, unarchives each object, and returns them on the main thread.
-- (void)readObjectsFromArchiveWithCompletionHandler:(nonnull void (^)(NSArray * __nonnull unarchivedObjects))completionHandler;
+- (void)readObjectsFromArchiveWithCompletionHandler:(nonnull void (^)(NSArray * _Nonnull unarchivedObjects))completionHandler;
 
 /// Empties the archive (but does not remove the file). Completion handler is called on the main queue.
 - (void)clearArchiveWithCompletionHandler:(nullable dispatch_block_t)completionHandler;

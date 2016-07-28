@@ -113,7 +113,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     }
 }
 
-- (void)readObjectsFromArchiveWithCompletionHandler:(nonnull void (^)(NSArray * __nonnull unarchivedObjects))completionHandler;
+- (void)readObjectsFromArchiveWithCompletionHandler:(nonnull void (^)(NSArray * _Nonnull unarchivedObjects))completionHandler;
 {
     ARKCheckCondition(completionHandler != NULL, , @"Must provide a completionHandler!");
     

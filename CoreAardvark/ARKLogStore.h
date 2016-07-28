@@ -49,10 +49,10 @@
 @property (atomic) BOOL prefixNameWhenPrintingToConsole;
 
 /// Block that allows for filtering logs. Return YES if the receiver should observe the supplied log.
-@property (nullable, atomic, copy) BOOL (^logFilterBlock)(ARKLogMessage * __nonnull logMessage);
+@property (nullable, atomic, copy) BOOL (^logFilterBlock)(ARKLogMessage * _Nonnull logMessage);
 
 /// Retrieves an array of ARKLogMessage objects. Completion handler is called on the main queue.
-- (void)retrieveAllLogMessagesWithCompletionHandler:(nonnull void (^)(NSArray * __nonnull logMessages))completionHandler;
+- (void)retrieveAllLogMessagesWithCompletionHandler:(nonnull void (^)(NSArray * _Nonnull logMessages))completionHandler;
 
 /// Removes all logs. Completion handler is called on the main queue.
 - (void)clearLogsWithCompletionHandler:(nullable dispatch_block_t)completionHandler;

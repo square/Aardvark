@@ -22,7 +22,7 @@
 
 
 /// Logs a log with default type to the default log distributor.
-OBJC_EXTERN void ARKLog(NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(1,2);
+OBJC_EXTERN void ARKLog(NSString * _Nonnull format, ...) NS_FORMAT_FUNCTION(1,2);
 
 /// Logs a log with customized type and userInfo to the default log distributor.
-OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * __nullable userInfo, NSString * __nonnull format, ...) NS_FORMAT_FUNCTION(3,4);
+OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * _Nullable userInfo, NSString * _Nonnull format, ...) NS_FORMAT_FUNCTION(3,4);
