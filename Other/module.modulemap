@@ -1,7 +1,0 @@
-module Aardvark {
-    // Normally, modules have umbrella headers, but Aardvark.h is already taken
-    umbrella "."
-    
-    export *
-    module * { export * }
-}

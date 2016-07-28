@@ -1,17 +1,17 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.6)
+    activesupport (4.2.7)
       i18n (~> 0.7)
       json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     claide (1.0.0)
-    cocoapods (1.0.0)
+    cocoapods (1.0.1)
       activesupport (>= 4.0.2)
       claide (>= 1.0.0, < 2.0)
-      cocoapods-core (= 1.0.0)
+      cocoapods-core (= 1.0.1)
       cocoapods-deintegrate (>= 1.0.0, < 2.0)
       cocoapods-downloader (>= 1.0.0, < 2.0)
       cocoapods-plugins (>= 1.0.0, < 2.0)
@@ -24,8 +24,8 @@ GEM
       fourflusher (~> 0.3.0)
       molinillo (~> 0.4.5)
       nap (~> 1.0)
-      xcodeproj (>= 1.0.0, < 2.0)
-    cocoapods-core (1.0.0)
+      xcodeproj (>= 1.1.0, < 2.0)
+    cocoapods-core (1.0.1)
       activesupport (>= 4.0.2)
       fuzzy_match (~> 2.0.4)
       nap (~> 1.0)
@@ -61,8 +61,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport (~> 4.0)!
-  cocoapods (= 1.0.0)!
+  cocoapods (= 1.0.1)!
 
 BUNDLED WITH
    1.12.5
