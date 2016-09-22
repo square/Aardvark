@@ -46,14 +46,18 @@
 {
     [super setUp];
     
-    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
-    [logStore clearLogsWithCompletionHandler:NULL];
-    [logStore.dataArchive waitUntilAllOperationsAreFinished];
+    ARKLogStore *const logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
 
     self.logDistributor = [ARKLogDistributor new];
     [self.logDistributor addLogObserver:logStore];
     
     self.logStore = logStore;
+    
+    XCTestExpectation *const expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [logStore clearLogsWithCompletionHandler:^{
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)tearDown;

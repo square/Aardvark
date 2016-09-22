@@ -52,12 +52,16 @@
     
     self.logFormatter = [ARKDefaultLogFormatter new];
     
-    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
-    [logStore clearLogsWithCompletionHandler:NULL];
-    [logStore.dataArchive waitUntilAllOperationsAreFinished];
+    ARKLogStore *const logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
     
     [ARKLogDistributor defaultDistributor].defaultLogStore = logStore;
     self.logStore = logStore;
+    
+    XCTestExpectation *const expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [logStore clearLogsWithCompletionHandler:^{
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 #pragma mark - Behavior Tests
@@ -66,7 +70,7 @@
 {
     ARKLogWithType(ARKLogTypeError, nil, @"Fake Error Log");
     
-    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    XCTestExpectation *const expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(logMessages.count, 1);
         
