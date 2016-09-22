@@ -74,6 +74,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     
     _mutableLogStores = [NSMutableArray new];
     
+    _bugReportRecipientEmailAddress = [emailAddress copy];
     [self addLogStores:@[logStore]];
     
     return self;
@@ -359,7 +360,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                         [emailBody appendFormat:@"%@\n", [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
                     }
                     
-                    NSURL *composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:title body:emailBody];
+                    NSURL *const composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:title body:emailBody];
                     if (composeEmailURL != nil) {
                         [[UIApplication sharedApplication] openURL:composeEmailURL];
                     }
@@ -458,34 +459,41 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (NSURL *)_emailURLWithRecipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText;
 {
-    NSArray *prefixes = @[@"sparrow://", @"googlegmail:///co", @"mailto:"];
+    NSString *const defaultPrefix = @"mailto:";
+    NSArray *const prefixes = @[@"sparrow://", @"googlegmail:///co", defaultPrefix];
     
     NSURL *URL = nil;
     for (NSString *prefix in prefixes) {
-        URL = [self _emailURLWithPrefix:prefix recipients:recipients CC:CCLine subject:subjectLine body:bodyText];
+        URL = [self _emailURLWithPrefix:prefix recipients:recipients CC:CCLine subject:subjectLine body:bodyText shouldCheckCanOpenURL:YES];
         
         if (URL != nil) {
             break;
         }
     }
     
+    ARKCheckCondition(URL != nil, [self _emailURLWithPrefix:defaultPrefix recipients:recipients CC:CCLine subject:subjectLine body:bodyText shouldCheckCanOpenURL:NO], @"iOS prevented us from querying for URLs with %@. Defaulting to %@", prefixes, defaultPrefix);
+    
     return URL;
 }
 
-- (NSURL *)_emailURLWithPrefix:(NSString *)prefix recipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText;
+- (NSURL *)_emailURLWithPrefix:(NSString *)prefix recipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText shouldCheckCanOpenURL:(BOOL)shouldCheckCanOpenURL;
 {
-    NSString *recipientsEscapedString = [[recipients componentsJoinedByString:@","] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *const recipientsEscapedString = [[recipients componentsJoinedByString:@","] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *toArgument = (recipients.count > 0) ? [NSString stringWithFormat:@"to=%@&", recipientsEscapedString] : @"";
-    NSString *URLString = [NSString stringWithFormat:@"%@?%@cc=%@&subject=%@&body=%@",
-                           prefix,
-                           toArgument,
-                           [CCLine stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                           [subjectLine stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                           [bodyText stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    NSString *const toArgument = (recipients.count > 0) ? [NSString stringWithFormat:@"to=%@&", recipientsEscapedString] : @"";
+    NSString *const URLString = [NSString stringWithFormat:@"%@?%@cc=%@&subject=%@&body=%@",
+                                 prefix,
+                                 toArgument,
+                                 [CCLine stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+                                 [subjectLine stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+                                 [bodyText stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     
-    NSURL *URL = [NSURL URLWithString:URLString];
-    return [[UIApplication sharedApplication] canOpenURL:URL] ? URL : nil;
+    NSURL *const URL = [NSURL URLWithString:URLString];
+    if (shouldCheckCanOpenURL) {
+        return [[UIApplication sharedApplication] canOpenURL:URL] ? URL : nil;
+    } else {
+        return URL;
+    }
 }
 
 
