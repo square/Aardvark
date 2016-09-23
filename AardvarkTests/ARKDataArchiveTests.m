@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 #import "ARKDataArchive.h"
 #import "ARKDataArchive_Testing.h"
@@ -96,25 +96,6 @@
     }];
     
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
-}
-
-- (void)test_dealloc_closesFile;
-{
-    int fileDescriptor = -1;
-    
-    @autoreleasepool {
-        // Create and destroy and instance within an autorelease pool to ensure ARC cleans it up.
-        NSURL *tempArchiveURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"testfile.data"];
-        ARKDataArchive *tempArchive = [[ARKDataArchive alloc] initWithURL:tempArchiveURL maximumObjectCount:10 trimmedObjectCount:5];
-        
-        fileDescriptor = tempArchive.fileHandle.fileDescriptor;
-        XCTAssertGreaterThanOrEqual(fileDescriptor, 0, @"Didn't get file descriptor!");
-        
-        [tempArchive saveArchiveAndWait:YES];
-        tempArchive = nil;
-    }
-    
-    XCTAssertEqual(fcntl(fileDescriptor, F_GETFD), -1, @"File descriptor should be closed after deallocating data archive!");
 }
 
 - (void)test_initWithURL_preservesExistingData;

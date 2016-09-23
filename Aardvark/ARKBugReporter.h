@@ -18,8 +18,8 @@
 //  limitations under the License.
 //
 
-#import <CoreAardvark/ARKLogStore.h>
-#import <Foundation/Foundation.h>
+@import CoreAardvark;
+@import Foundation;
 
 
 @protocol ARKBugReporter <NSObject>

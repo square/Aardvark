@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 #import "ARKLogStore.h"
 #import "ARKLogStore_Testing.h"
@@ -46,19 +46,26 @@
 {
     [super setUp];
     
-    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
-    [logStore clearLogsWithCompletionHandler:NULL];
-    [logStore.dataArchive waitUntilAllOperationsAreFinished];
+    ARKLogStore *const logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
 
     self.logDistributor = [ARKLogDistributor new];
     [self.logDistributor addLogObserver:logStore];
     
     self.logStore = logStore;
+    
+    XCTestExpectation *const expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [logStore clearLogsWithCompletionHandler:^{
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)tearDown;
 {
-    [self.logDistributor removeLogObserver:self.logStore];
+    ARKLogStore *const logStoreToRemove = self.logStore;
+    if (logStoreToRemove != nil) {
+        [self.logDistributor removeLogObserver:logStoreToRemove];
+    }
     
     [super tearDown];
 }
@@ -319,8 +326,11 @@
     [self.logStore.dataArchive saveArchiveAndWait:YES];
     
     [self measureBlock:^{
-        ARKDataArchive *loadingDataArchive = [[ARKDataArchive alloc] initWithURL:self.logStore.dataArchive.archiveFileURL maximumObjectCount:self.logStore.dataArchive.maximumObjectCount trimmedObjectCount:self.logStore.dataArchive.trimmedObjectCount];
-        [loadingDataArchive waitUntilAllOperationsAreFinished];
+        NSURL *const archiveFileURL = self.logStore.dataArchive.archiveFileURL;
+        if (archiveFileURL != nil) {
+            ARKDataArchive *const loadingDataArchive = [[ARKDataArchive alloc] initWithURL:archiveFileURL maximumObjectCount:self.logStore.dataArchive.maximumObjectCount trimmedObjectCount:self.logStore.dataArchive.trimmedObjectCount];
+            [loadingDataArchive waitUntilAllOperationsAreFinished];
+        }
     }];
 }
 

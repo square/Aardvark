@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 #import "NSFileHandle+ARKAdditions.h"
 
@@ -78,9 +78,12 @@
     }
     
     [[NSFileManager defaultManager] removeItemAtURL:self.fileURL error:NULL];
-    [[NSFileManager defaultManager] createFileAtPath:self.fileURL.path contents:nil attributes:nil];
-    
-    self.fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.fileURL.path];
+    NSString *const filePath = self.fileURL.path;
+    if (filePath.length > 0) {
+        [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
+        
+        self.fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:filePath];
+    }
 }
 
 - (void)tearDown;

@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 
 /// Incrementally persists data to disk. All methods and properties on this class are threadsafe.

@@ -18,25 +18,19 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 
 @class ARKLogDistributor;
 @class ARKLogMessage;
 
 
-NS_ASSUME_NONNULL_BEGIN
-
-
 @protocol ARKLogObserver <NSObject>
 
 /// The log distributor that distributes logs to this observer.
-@property (weak, nullable) ARKLogDistributor *logDistributor;
+@property (nullable, weak) ARKLogDistributor *logDistributor;
 
 /// Called on a background operation queue when logs are appended to the log distributor.
-- (void)observeLogMessage:(ARKLogMessage *)logMessage;
+- (void)observeLogMessage:(nonnull ARKLogMessage *)logMessage;
 
 @end
-
-
-NS_ASSUME_NONNULL_END

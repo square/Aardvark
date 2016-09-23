@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <CoreAardvark/CoreAardvark.h>
+@import CoreAardvark;
 
 #import "ARKScreenshotLogging.h"
 

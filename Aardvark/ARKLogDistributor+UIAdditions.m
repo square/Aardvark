@@ -18,18 +18,12 @@
     UIImage *screenshot = nil;
     
     @try {
-        UIWindow *const keyWindow = [[UIApplication sharedApplication] keyWindow];
-        if ([keyWindow respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-            // iOS 7 and later.
-            CGRect const screenBounds = [UIScreen mainScreen].bounds;
-            UIGraphicsBeginImageContextWithOptions(screenBounds.size, NO, 0.0);
-            for (UIWindow *const window in [UIApplication sharedApplication].windows) {
-                [window drawViewHierarchyInRect:screenBounds afterScreenUpdates:NO];
-            }
-        } else {
-            UIGraphicsBeginImageContextWithOptions(keyWindow.bounds.size, YES, 0.0);
-            [keyWindow.layer renderInContext:UIGraphicsGetCurrentContext()];
+        CGRect const screenBounds = [UIScreen mainScreen].bounds;
+        UIGraphicsBeginImageContextWithOptions(screenBounds.size, NO, 0.0);
+        for (UIWindow *const window in [UIApplication sharedApplication].windows) {
+            [window drawViewHierarchyInRect:screenBounds afterScreenUpdates:NO];
         }
+        
         screenshot = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
     }
@@ -42,5 +36,4 @@
         [self logWithText:logText image:screenshot type:ARKLogTypeScreenshot userInfo:nil];
     }
 }
-
 @end

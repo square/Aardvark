@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 
 extern NSUInteger const ARKInvalidDataBlockLength;
@@ -42,4 +42,3 @@ extern NSUInteger const ARKInvalidDataBlockLength;
 - (void)ARK_truncateFileToOffset:(unsigned long long)offset maximumChunkSize:(NSUInteger)maximumChunkSize;
 
 @end
-

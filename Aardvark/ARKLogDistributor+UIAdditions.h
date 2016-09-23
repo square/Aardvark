@@ -6,9 +6,8 @@
 //  Copyright © 2016 Square, Inc. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
-#import <CoreAardvark/ARKLogDistributor.h>
+@import CoreAardvark;
+@import Foundation;
 
 
 @interface ARKLogDistributor (UIAdditions)

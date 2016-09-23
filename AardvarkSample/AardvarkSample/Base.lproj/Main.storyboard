@@ -1,38 +1,40 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="zxa-eh-PZB">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zxa-eh-PZB">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Aardvark Sample-->
         <scene sceneID="SHB-Z8-dG3">
             <objects>
-                <viewController id="QwD-ZR-IeX" customClass="SampleViewController" sceneMemberID="viewController">
+                <viewController id="QwD-ZR-IeX" customClass="SampleViewController" customModule="AardvarkSample" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="wFh-87-9Xb"/>
                         <viewControllerLayoutGuide type="bottom" id="E9r-9n-cl6"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="5kJ-Ey-mZ5">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8DI-Cm-Xf7">
-                                <rect key="frame" x="216" y="163" width="167" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8DI-Cm-Xf7">
+                                <frame key="frameInset" minX="216" minY="163" width="167" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="xUg-7R-0vM"/>
                                     <constraint firstAttribute="width" constant="167" id="yx0-Le-Lwk"/>
                                 </constraints>
                                 <state key="normal" title="View ARKLog Messages">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="viewARKLogMessages:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="LMF-Xu-tHJ"/>
+                                    <action selector="viewARKLogMessages:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="v8f-Un-MNy"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" text="Press and hold with two fingers to compose a bug report." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uhp-Xv-mxi">
-                                <rect key="frame" x="16" y="80" width="568" height="67"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" misplaced="YES" text="Press and hold with two fingers to compose a bug report." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uhp-Xv-mxi">
+                                <frame key="frameInset" minX="16" minY="80" width="568" height="67"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="jIA-ym-G8U"/>
                                 </constraints>
@@ -45,83 +47,81 @@
                                     </mask>
                                 </variation>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4fO-Rt-3uO">
-                                <rect key="frame" x="250" y="201" width="101" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4fO-Rt-3uO">
+                                <frame key="frameInset" minX="250" minY="201" width="101" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="5Sk-Uu-iM7"/>
                                     <constraint firstAttribute="width" constant="101" id="tFs-vV-mIN"/>
                                 </constraints>
                                 <state key="normal" title="View Tap Logs">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="viewTapLogs:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="4Jp-Fd-8Gt"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="SWh-dm-Gjt">
-                                <rect key="frame" x="32" y="247" width="520" height="337"/>
+                            <view contentMode="scaleToFill" horizontalHuggingPriority="751" verticalHuggingPriority="751" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SWh-dm-Gjt">
+                                <frame key="frameInset" minX="36" minY="247" width="512" height="337"/>
                                 <subviews>
-                                    <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XZk-Z0-MBi" userLabel="Button Container">
-                                        <rect key="frame" x="92" y="0.0" width="337" height="337"/>
+                                    <view multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XZk-Z0-MBi" userLabel="Button Container">
+                                        <frame key="frameInset" minX="87.5" width="337" height="337"/>
                                         <subviews>
-                                            <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FhU-Qc-T56">
-                                                <rect key="frame" x="173" y="173" width="164" height="164"/>
-                                                <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FhU-Qc-T56">
+                                                <frame key="frameInset" minX="173" minY="173" width="164" height="164"/>
+                                                <color key="backgroundColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal">
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="blueButtonPressed:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="1bU-e4-2FL"/>
-                                                    <action selector="yellowButtonPressed:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="TSk-qd-I9A"/>
+                                                    <action selector="yellowButtonPressed:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="gs5-Vw-kpX"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jgA-aC-g4p">
-                                                <rect key="frame" x="173" y="0.0" width="164" height="165"/>
-                                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jgA-aC-g4p">
+                                                <frame key="frameInset" minX="173" width="164" height="165"/>
+                                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal">
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="redButtonPressed:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="ng0-Fi-TOs"/>
+                                                    <action selector="redButtonPressed:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="8bk-Mg-YPi"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p7h-1L-zFS">
-                                                <rect key="frame" x="0.0" y="173" width="165" height="164"/>
-                                                <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p7h-1L-zFS">
+                                                <frame key="frameInset" minY="173" width="165" height="164"/>
+                                                <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal">
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="blueButtonPressed:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="v69-pn-fZN"/>
-                                                    <action selector="greenButtonPressed:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="MTu-3t-f9S"/>
+                                                    <action selector="greenButtonPressed:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="Wfv-Wk-SYT"/>
                                                 </connections>
                                             </button>
-                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c8f-18-uL5" userLabel="Horizontal Spacer">
-                                                <rect key="frame" x="165" y="0.0" width="8" height="337"/>
-                                                <color key="backgroundColor" red="0.49737682481751827" green="0.0" blue="0.48868042883211676" alpha="0.5" colorSpace="calibratedRGB"/>
+                                            <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c8f-18-uL5" userLabel="Horizontal Spacer">
+                                                <frame key="frameInset" minX="165" width="8" height="337"/>
+                                                <color key="backgroundColor" red="0.49737682481751827" green="0.0" blue="0.48868042883211676" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="8" id="o1U-te-P7i"/>
                                                 </constraints>
                                             </view>
-                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3QB-FK-SbD" userLabel="Veritcal Spacer">
-                                                <rect key="frame" x="0.0" y="165" width="337" height="8"/>
-                                                <color key="backgroundColor" red="0.49093293795620441" green="1" blue="1" alpha="0.5" colorSpace="calibratedRGB"/>
+                                            <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3QB-FK-SbD" userLabel="Veritcal Spacer">
+                                                <frame key="frameInset" minY="165" width="337" height="8"/>
+                                                <color key="backgroundColor" red="0.49093293795620441" green="1" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="8" id="hqH-Ql-iyv"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qry-qF-GME">
-                                                <rect key="frame" x="0.0" y="0.0" width="165" height="165"/>
-                                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qry-qF-GME">
+                                                <frame key="frameInset" width="165" height="165"/>
+                                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal">
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="blueButtonPressed:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="amK-4R-ODP"/>
+                                                    <action selector="blueButtonPressed:" destination="QwD-ZR-IeX" eventType="touchUpInside" id="mJK-Hg-mSi"/>
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="c8f-18-uL5" firstAttribute="leading" secondItem="p7h-1L-zFS" secondAttribute="trailing" id="3il-8E-aef"/>
                                             <constraint firstAttribute="centerY" secondItem="3QB-FK-SbD" secondAttribute="centerY" id="76F-Eb-0O3"/>
@@ -149,7 +149,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="XZk-Z0-MBi" firstAttribute="leading" secondItem="SWh-dm-Gjt" secondAttribute="leading" priority="750" id="31a-J0-XaK"/>
                                     <constraint firstAttribute="centerX" secondItem="XZk-Z0-MBi" secondAttribute="centerX" id="GYS-Sd-KqU"/>
@@ -160,7 +160,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="4fO-Rt-3uO" firstAttribute="top" secondItem="8DI-Cm-Xf7" secondAttribute="bottom" constant="8" id="6K7-ae-i2H"/>
                             <constraint firstItem="8DI-Cm-Xf7" firstAttribute="top" secondItem="uhp-Xv-mxi" secondAttribute="bottom" constant="16" id="89S-pQ-e8b"/>

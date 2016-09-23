@@ -1,3 +1,4 @@
+
 //
 //  ARKLogMessage.h
 //  CoreAardvark
@@ -18,28 +19,27 @@
 //  limitations under the License.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 #import <CoreAardvark/ARKLogTypes.h>
 
 
 @interface ARKLogMessage : NSObject <NSCopying, NSSecureCoding>
 
-+ (nonnull instancetype)new NS_UNAVAILABLE;
-- (nonnull instancetype)init NS_UNAVAILABLE;
-
 /// Creates an ARKLogMessage with the provided parameters, created at the current date.
-/// @see initWithText:image:type:userInfo:creationDate:
+/// @see initWithText:image:type:userInfo:date:
 - (nonnull instancetype)initWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
+- (nonnull instancetype)initWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo date:(nonnull NSDate *)date NS_DESIGNATED_INITIALIZER;
 
-- (nonnull instancetype)initWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo creationDate:(nonnull NSDate *)date NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init NS_UNAVAILABLE;
++ (nonnull instancetype)new NS_UNAVAILABLE;
 
-@property (nonnull, nonatomic, copy, readonly) NSDate *creationDate;
+@property (nonnull, nonatomic, copy, readonly) NSDate *date;
 @property (nonnull, nonatomic, copy, readonly) NSString *text;
 @property (nullable, nonatomic, readonly) UIImage *image;
 @property (nonatomic, readonly) ARKLogType type;
 
-/// Arbitrary information used by ARKLogBlocks. This data is not persisted.
+/// Arbitrary information that can be used by ARKLogObserver objects. This data is not persisted.
 @property (nonnull, nonatomic, copy, readonly) NSDictionary *userInfo;
 
 @end

@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 #import "ARKLogDistributor.h"
 #import "ARKLogDistributor_Protected.h"
@@ -38,9 +38,6 @@
 @property (nonatomic, weak) ARKLogStore *logStore;
 
 @end
-
-
-typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
 
 
 @interface ARKTestLogObserver : NSObject <ARKLogObserver>
@@ -91,17 +88,25 @@ typedef void (^LogHandlingBlock)(ARKLogMessage *logMessage);
     
     self.logDistributor = [ARKLogDistributor new];
     
-    ARKLogStore *logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
-    [logStore clearLogsWithCompletionHandler:NULL];
-    [logStore.dataArchive waitUntilAllOperationsAreFinished];
+    ARKLogStore *const logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromClass([self class])];
     
     self.logDistributor.defaultLogStore = logStore;
     self.logStore = logStore;
+    
+    XCTestExpectation *const expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [logStore clearLogsWithCompletionHandler:^{
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)tearDown;
 {
-    [self.logDistributor waitUntilAllPendingLogsHaveBeenDistributed];
+    XCTestExpectation *const expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.logStore clearLogsWithCompletionHandler:^{
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
     
     self.logDistributor.logMessageClass = [ARKLogMessage class];
     

@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
 #import <Aardvark/ARKLogFormatter.h>
 
@@ -26,9 +26,9 @@
 @interface ARKDefaultLogFormatter : NSObject <ARKLogFormatter>
 
 /// The string that is prepended to error logs.
-@property (nullable, nonatomic, copy) NSString *errorLogPrefix;
+@property (nonnull, nonatomic, copy) NSString *errorLogPrefix;
 
 /// The string that is prepended to separator logs.
-@property (nullable, nonatomic, copy) NSString *separatorLogPrefix;
+@property (nonnull, nonatomic, copy) NSString *separatorLogPrefix;
 
 @end

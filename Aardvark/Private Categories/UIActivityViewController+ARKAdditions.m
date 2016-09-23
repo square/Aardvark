@@ -25,7 +25,7 @@
 
 + (instancetype)ARK_newAardvarkActivityViewControllerWithItems:(NSArray *)items;
 {
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
+    UIActivityViewController *const activityViewController = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
     [activityViewController setExcludedActivityTypes:@[UIActivityTypeMessage, UIActivityTypePostToFacebook, UIActivityTypePostToTwitter, UIActivityTypePostToWeibo, UIActivityTypeAssignToContact]];
     
     return activityViewController;

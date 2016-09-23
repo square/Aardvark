@@ -17,7 +17,7 @@ There are only three steps to get Aardvark logging and bug reporting up and runn
 #### Using [CocoaPods](https://cocoapods.org)
 
 ```
-platform :ios, '6.0'
+platform :ios, '8.0'
 pod 'Aardvark'
 ```
 
@@ -32,11 +32,23 @@ github "Square/Aardvark"
 
 Or manually checkout the submodule with `git submodule add git@github.com:Square/Aardvark.git`, drag Aardvark.xcodeproj to your project, and add Aardvark as a build dependency.
 
-###2) Call `[Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:]`
-This enables the creation of email bug reports.  It is best to do this when you load your application’s UI.
+###2) Setup email bug reporting with a single method call
+It is best to do this when you load your application’s UI.
 
-###3) Replace calls to `NSLog` with `ARKLog`.
-`ARKLog` has exactly the same syntax as `NSLog`.
+In Swift:
+
+```swift
+Aardvark.addDefaultBugReportingGestureWithEmailBugReporter(withRecipient:)
+```
+
+In Objective-C:
+
+```objc
+[Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:]
+```
+
+###3) Replace calls to `print` with `log`.
+In Objective-C, replace calls to `NSLog` with `ARKLog`.
 
 ## Reporting Bugs
 
@@ -64,8 +76,8 @@ Want to log with Aardvark but don’t want to use Aardvark’s bug reporting too
 
 ## Requirements
 
-* Xcode 7.0 or later
-* iOS 6 or later
+* Xcode 8.0 or later
+* iOS 8 or later
 
 ## Contributing
 

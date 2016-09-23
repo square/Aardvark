@@ -26,6 +26,7 @@
 #import "ARKLogStore.h"
 
 
+
 @interface ARKLogDistributor ()
 
 @property (nonatomic, readonly) NSOperationQueue *logDistributingQueue;
@@ -181,8 +182,6 @@
 
 - (void)distributeAllPendingLogsWithCompletionHandler:(dispatch_block_t)completionHandler;
 {
-    ARKCheckCondition(completionHandler != NULL, , @"Must provide a completion handler!");
-    
     [self _setDistributionQualityOfServiceUserInitiated];
     [self.logDistributingQueue addOperationWithBlock:^{
         [[NSOperationQueue mainQueue] addOperationWithBlock:completionHandler];
@@ -268,27 +267,12 @@
 
 - (void)_setDistributionQualityOfServiceUserInitiated;
 {
-#ifdef __IPHONE_8_0
-    [self _setDistributionQualityOfService:NSQualityOfServiceUserInitiated];
-#endif
+    self.logDistributingQueue.qualityOfService = NSQualityOfServiceUserInitiated;
 }
 
 - (void)_setDistributionQualityOfServiceBackground;
 {
-#ifdef __IPHONE_8_0
-    [self _setDistributionQualityOfService:NSQualityOfServiceBackground];
-#endif
+    self.logDistributingQueue.qualityOfService = NSQualityOfServiceBackground;
 }
-
-#ifdef __IPHONE_8_0
-
-- (void)_setDistributionQualityOfService:(NSQualityOfService)qualityOfService;
-{
-    if ([self.logDistributingQueue respondsToSelector:@selector(setQualityOfService:)] /* iOS 8 or later */) {
-        self.logDistributingQueue.qualityOfService = qualityOfService;
-    }
-}
-
-#endif
 
 @end
