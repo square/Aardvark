@@ -460,7 +460,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (NSURL *)_emailURLWithRecipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText;
 {
     NSString *const defaultPrefix = @"mailto:";
-    NSArray *const prefixes = @[@"sparrow://", @"googlegmail:///co", defaultPrefix];
+    NSArray *const prefixes = @[@"inbox-gmail://co", @"sparrow://", @"googlegmail:///co", defaultPrefix];
     
     NSURL *URL = nil;
     for (NSString *prefix in prefixes) {
