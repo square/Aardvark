@@ -130,17 +130,17 @@
     }
 }
 
-- (void)waitForPendingLogsThenSaveAndWait:(BOOL)wait;
+- (void)waitUntilAllLogsAreConsumedAndArchiveSaved;
 {
     [self.logDistributor waitUntilAllPendingLogsHaveBeenDistributed];
-    [self.dataArchive saveArchiveAndWait:wait];
+    [self.dataArchive saveArchiveAndWait:YES];
 }
 
 #pragma mark - Private Methods
 
 - (void)_applicationWillTerminate:(nullable NSNotification *)notification;
 {
-    [self waitForPendingLogsThenSaveAndWait:YES];
+    [self waitUntilAllLogsAreConsumedAndArchiveSaved];
 }
 
 @end
