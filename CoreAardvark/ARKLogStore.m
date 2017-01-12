@@ -64,7 +64,9 @@
     _dataArchive = dataArchive;
     _prefixNameWhenPrintingToConsole = YES;
 
+#if !TARGET_OS_WATCH
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
+#endif
     
     return self;
 }
@@ -128,12 +130,17 @@
     }
 }
 
+- (void)waitUntilAllLogsAreConsumedAndArchiveSaved;
+{
+    [self.logDistributor waitUntilAllPendingLogsHaveBeenDistributed];
+    [self.dataArchive saveArchiveAndWait:YES];
+}
+
 #pragma mark - Private Methods
 
 - (void)_applicationWillTerminate:(nullable NSNotification *)notification;
 {
-    [self.logDistributor waitUntilAllPendingLogsHaveBeenDistributed];
-    [self.dataArchive saveArchiveAndWait:YES];
+    [self waitUntilAllLogsAreConsumedAndArchiveSaved];
 }
 
 @end

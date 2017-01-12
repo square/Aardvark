@@ -57,4 +57,7 @@
 /// Removes all logs. Completion handler is called on the main queue.
 - (void)clearLogsWithCompletionHandler:(nullable dispatch_block_t)completionHandler;
 
+/// Waits for all of the pending logs to distribute from the log distributor, then saves the archive. This is done automatically when platform=ios in applicationWillTerminate;, but must be done manually in platform=watchos, preferably in WKExtensionDelegate applicationWillResignActive.
+- (void)waitUntilAllLogsAreConsumedAndArchiveSaved;
+
 @end
