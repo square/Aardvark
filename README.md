@@ -32,7 +32,7 @@ github "Square/Aardvark"
 
 Or manually checkout the submodule with `git submodule add git@github.com:Square/Aardvark.git`, drag Aardvark.xcodeproj to your project, and add Aardvark as a build dependency.
 
-###2) Setup email bug reporting with a single method call
+### Setup email bug reporting with a single method call
 It is best to do this when you load your application’s UI.
 
 In Swift:
@@ -47,7 +47,7 @@ In Objective-C:
 [Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:]
 ```
 
-###3) Replace calls to `print` with `log`.
+### Replace calls to `print` with `log`.
 In Objective-C, replace calls to `NSLog` with `ARKLog`.
 
 ## Reporting Bugs
