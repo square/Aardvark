@@ -12,7 +12,7 @@ Aardvark is a library that makes it dead simple to create actionable bug reports
 
 There are only three steps to get Aardvark logging and bug reporting up and running.
 
-###1) Install Aardvark.
+### 1) Install Aardvark.
 
 #### Using [CocoaPods](https://cocoapods.org)
 
@@ -32,7 +32,7 @@ github "Square/Aardvark"
 
 Or manually checkout the submodule with `git submodule add git@github.com:Square/Aardvark.git`, drag Aardvark.xcodeproj to your project, and add Aardvark as a build dependency.
 
-###2) Setup email bug reporting with a single method call
+### 2) Setup email bug reporting with a single method call
 It is best to do this when you load your application’s UI.
 
 In Swift:
@@ -47,7 +47,7 @@ In Objective-C:
 [Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:]
 ```
 
-###3) Replace calls to `print` with `log`.
+### 3) Replace calls to `print` with `log`.
 In Objective-C, replace calls to `NSLog` with `ARKLog`.
 
 ## Reporting Bugs
