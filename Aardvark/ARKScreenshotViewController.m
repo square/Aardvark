@@ -102,7 +102,10 @@
 - (IBAction)_openActivitySheet:(id)sender;
 {
     UIImage *image = self.imageView.image;
-    if (!image) { return; }
+    if (!image) {
+        return;
+    }
+
     UIActivityViewController *activityViewController = [UIActivityViewController ARK_newAardvarkActivityViewControllerWithItems:@[image]];
     self.activityViewController = activityViewController;
     
