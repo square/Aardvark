@@ -25,7 +25,7 @@
 #import "ARKLogDistributor+UIAdditions.h"
 
 
-void ARKLogScreenshot()
+void ARKLogScreenshot(void)
 {
     [[ARKLogDistributor defaultDistributor] logScreenshot];
 }

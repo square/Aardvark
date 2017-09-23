@@ -22,4 +22,4 @@
 
 
 /// Logs a screenshot to the default log distributor.
-OBJC_EXTERN void ARKLogScreenshot();
+OBJC_EXTERN void ARKLogScreenshot(void);
