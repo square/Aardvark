@@ -152,7 +152,8 @@ class SampleViewController : UIViewController {
     
     // MARK: – Private Methods
     
-    @objc private func tapDetected(tapRecognizer: UITapGestureRecognizer) {
+    @objc
+    private func tapDetected(tapRecognizer: UITapGestureRecognizer) {
         guard tapRecognizer == self.tapRecognizer && tapRecognizer.state == .ended else {
             return
         }

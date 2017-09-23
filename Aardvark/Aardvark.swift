@@ -24,9 +24,10 @@ import Foundation
 
 public typealias EmailAddress = String
 
-@objc public class Aardvark : NSObject {
+public class Aardvark: NSObject {
     
     /// Sets up a two finger press-and-hold gesture recognizer to trigger email bug reports that will be sent to emailAddress. Returns the created bug reporter for convenience.
+    @objc
     public static func addDefaultBugReportingGestureWithEmailBugReporter(withRecipient emailAddress: EmailAddress) -> ARKEmailBugReporter {
         let logStore = ARKLogDistributor.default().defaultLogStore
         let bugReporter = ARKEmailBugReporter(emailAddress: emailAddress, logStore: logStore)
@@ -37,12 +38,14 @@ public typealias EmailAddress = String
     }
     
     /// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReport].
-    @nonobjc public static func add<GestureRecognizer: UIGestureRecognizer>(bugReporter: ARKBugReporter, triggeringGestureRecognizerClass: GestureRecognizer.Type) -> GestureRecognizer? {
+    @nonobjc
+    public static func add<GestureRecognizer: UIGestureRecognizer>(bugReporter: ARKBugReporter, triggeringGestureRecognizerClass: GestureRecognizer.Type) -> GestureRecognizer? {
         return UIApplication.shared.add(bugReporter: bugReporter, triggeringGestureRecognizerClass: triggeringGestureRecognizerClass)
     }
     
     /// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReport].
-    @objc(addBugReporter:gestureRecognizerClass:) public static func objc_add(bugReporter: ARKBugReporter, triggeringGestureRecognizerClass gestureRecognizerClass: AnyClass) -> AnyObject? {
+    @objc(addBugReporter:gestureRecognizerClass:)
+    public static func objc_add(bugReporter: ARKBugReporter, triggeringGestureRecognizerClass gestureRecognizerClass: AnyClass) -> AnyObject? {
         guard let triggeringGestureRecognizerClass = gestureRecognizerClass as? UIGestureRecognizer.Type else {
             noteImproperAPIUse("\(gestureRecognizerClass) is not a gesture recognizer class!")
             return nil
