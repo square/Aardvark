@@ -40,7 +40,7 @@
 
 
 /// Composes a bug report that is sent via email.
-@interface ARKEmailBugReporter : NSObject <ARKBugReporter>
+@interface ARKEmailBugReporter : NSObject <ARKBugReporter, CAAnimationDelegate>
 
 - (nonnull instancetype)initWithEmailAddress:(nonnull NSString *)emailAddress logStore:(nonnull ARKLogStore *)logStore;
 
