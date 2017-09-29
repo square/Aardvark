@@ -137,7 +137,7 @@
 {
     XCTAssertEqual(self.bugReporter.logStores.count, 0);
     
-    [self.bugReporter addLogStores:@[[NSObject new]]];
+    [self.bugReporter addLogStores:@[(ARKLogStore *)[NSObject new]]];
     
     XCTAssertEqual(self.bugReporter.logStores.count, 0);
 }
