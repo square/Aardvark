@@ -267,8 +267,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         [self _configureAlertTextfield:textField];
     }];
     
-    UIViewController *const rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-    UIViewController *const viewControllerToPresentAlertController = rootViewController.presentedViewController ?: rootViewController;
+    UIViewController *viewControllerToPresentAlertController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (viewControllerToPresentAlertController.presentedViewController != nil) {
+        viewControllerToPresentAlertController = viewControllerToPresentAlertController.presentedViewController;
+    }
     [viewControllerToPresentAlertController presentViewController:alertController animated:YES completion:NULL];
 
 }
