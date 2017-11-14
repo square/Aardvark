@@ -38,7 +38,6 @@ public class Aardvark: NSObject {
     }
     
     /// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReport].
-    @nonobjc
     public static func add<GestureRecognizer: UIGestureRecognizer>(bugReporter: ARKBugReporter, triggeringGestureRecognizerClass: GestureRecognizer.Type) -> GestureRecognizer? {
         return UIApplication.shared.add(bugReporter: bugReporter, triggeringGestureRecognizerClass: triggeringGestureRecognizerClass)
     }
