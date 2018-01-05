@@ -39,27 +39,24 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @interface CALayer (HierarchyDescription)
 
-- (NSString *)_recursiveLayerHierarchyDescriptionWithIndentationLevel:(int)indentationLevel;
+- (NSString *)_ARK_appendRecursiveLayerHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel;
 
 @end
 
 
 @implementation CALayer (HierarchyDescription)
 
-- (NSString *)_recursiveLayerHierarchyDescriptionWithIndentationLevel:(int)indentationLevel;
+- (NSString *)_ARK_appendRecursiveLayerHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel;
 {
-    NSMutableString *const mutableDescription = [NSMutableString new];
     for (int i = 0 ; i < indentationLevel ; i++) {
         [mutableDescription appendString:@"   | "];
     }
     
-    [mutableDescription appendFormat:@"%@\n", [self description]];
+    [mutableDescription appendFormat:@"%@\n", self];
     
     for (CALayer *sublayer in self.sublayers) {
-        [mutableDescription appendString:[sublayer _recursiveLayerHierarchyDescriptionWithIndentationLevel:(indentationLevel + 1)]];
+        [mutableDescription appendString:[sublayer _ARK_recursiveLayerHierarchyDescriptionWithIndentationLevel:(indentationLevel + 1)]];
     }
-    
-    return mutableDescription;
 }
 
 @end
@@ -67,35 +64,35 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @interface UIView (HierarchyDescription)
 
-/// Re-implementation of `-[UIView recursiveDescription]` to avoid calling private API.
-- (NSString *)recursiveViewHierarchyDescription;
+/// Description of the view hierarchy starting with the current view. Similar to the private `-[UIView recursiveDescription]` method.
+- (NSString *)ARK_recursiveViewHierarchyDescription;
 
 @end
 
 
 @implementation UIView (HierarchyDescription)
 
-- (NSString *)recursiveViewHierarchyDescription;
+- (NSString *)ARK_recursiveViewHierarchyDescription;
 {
-    return [self _recursiveViewHierarchyDescriptionWithIndentationLevel:0];
+    return [self _ARK_recursiveViewHierarchyDescriptionWithIndentationLevel:0];
 }
 
 #pragma mark - Private Methods
 
-- (NSString *)_recursiveViewHierarchyDescriptionWithIndentationLevel:(int)indentationLevel;
+- (NSString *)_ARK_recursiveViewHierarchyDescriptionWithIndentationLevel:(NSUInteger)indentationLevel;
 {
     NSMutableString *const mutableDescription = [NSMutableString new];
     for (int i = 0 ; i < indentationLevel ; i++) {
         [mutableDescription appendString:@"   | "];
     }
     
-    [mutableDescription appendFormat:@"%@\n", [self description]];
+    [mutableDescription appendFormat:@"%@\n", self];
     
     // Each subview's layer is also a sublayer, but we should only include it in the hierarchy once (with the subview).
-    NSMutableSet<CALayer *> *sublayersToSkip = [NSMutableSet<CALayer *> setWithCapacity:self.subviews.count];
+    NSMutableSet<CALayer *> *const sublayersToSkip = [NSMutableSet<CALayer *> setWithCapacity:self.subviews.count];
     
     for (UIView *subview in self.subviews) {
-        [mutableDescription appendString:[subview _recursiveViewHierarchyDescriptionWithIndentationLevel:(indentationLevel + 1)]];
+        [mutableDescription appendString:[subview _ARK_recursiveViewHierarchyDescriptionWithIndentationLevel:(indentationLevel + 1)]];
         [sublayersToSkip addObject:subview.layer];
     }
     
@@ -104,7 +101,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             continue;
         }
         
-        [mutableDescription appendString:[sublayer _recursiveLayerHierarchyDescriptionWithIndentationLevel:(indentationLevel + 1)]];
+        [sublayer _ARK_appendRecursiveLayerHierarchyDescriptionToString:mutableDescription withIndentationLevel:(indentationLevel + 1)];
     }
     
     return mutableDescription;
@@ -149,7 +146,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable = 3;
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable = 15;
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
-    _attachesViewHierarchyWithScreenshot = YES;
+    _attachesViewHierarchyDescriptionWithScreenshot = YES;
     
     _mutableLogStores = [NSMutableArray new];
     
@@ -184,7 +181,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         
-        if (self.attachesViewHierarchyWithScreenshot) {
+        if (self.attachesViewHierarchyDescriptionWithScreenshot) {
             self.viewHierarchyDescription = [keyWindow recursiveViewHierarchyDescription];
         }
         
@@ -414,15 +411,15 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                         
                         
                         if (self.attachScreenshotToNextBugReport) {
-                            NSData *mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
-                            if (mostRecentImage.length) {
+                            NSData *const mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
+                            if (mostRecentImage.length > 0) {
                                 [self.mailComposeViewController addAttachmentData:mostRecentImage mimeType:@"image/png" fileName:screenshotFileName];
                             }
                         }
                         
                         if (self.viewHierarchyDescription != nil) {
-                            NSData *viewHierarchyData = [self.viewHierarchyDescription dataUsingEncoding:NSUTF8StringEncoding];
-                            if (viewHierarchyData.length) {
+                            NSData *const viewHierarchyData = [self.viewHierarchyDescription dataUsingEncoding:NSUTF8StringEncoding];
+                            if (viewHierarchyData.length > 0) {
                                 [self.mailComposeViewController addAttachmentData:viewHierarchyData mimeType:@"text/plain" fileName:viewHierarchyFileName];
                             }
                             self.viewHierarchyDescription = nil;

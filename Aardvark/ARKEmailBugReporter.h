@@ -69,7 +69,7 @@
 @property (nonatomic) UIWindowLevel emailComposeWindowLevel;
 
 /// If this bug report includes a screenshot, also attach a description of the view hierarchy. Defaults to YES.
-@property (nonatomic) BOOL attachesViewHierarchyWithScreenshot;
+@property (nonatomic) BOOL attachesViewHierarchyDescriptionWithScreenshot;
 
 /// Returns formatted log messages as NSData.
 - (nonnull NSData *)formattedLogMessagesAsData:(nonnull NSArray *)logMessages;
