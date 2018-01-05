@@ -68,6 +68,9 @@
 /// The window level for the email composer on iOS 7 or later. Defaults to UIWindowLevelStatusBar + 3.0.
 @property (nonatomic) UIWindowLevel emailComposeWindowLevel;
 
+/// If this bug report includes a screenshot, also attach a description of the view hierarchy. Defaults to YES.
+@property (nonatomic) BOOL attachesViewHierarchyWithScreenshot;
+
 /// Returns formatted log messages as NSData.
 - (nonnull NSData *)formattedLogMessagesAsData:(nonnull NSArray *)logMessages;
 

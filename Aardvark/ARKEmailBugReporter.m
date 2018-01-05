@@ -37,6 +37,82 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 @end
 
 
+@interface CALayer (HierarchyDescription)
+
+- (NSString *)_recursiveLayerHierarchyDescriptionWithIndentationLevel:(int)indentationLevel;
+
+@end
+
+
+@implementation CALayer (HierarchyDescription)
+
+- (NSString *)_recursiveLayerHierarchyDescriptionWithIndentationLevel:(int)indentationLevel;
+{
+    NSMutableString *const mutableDescription = [NSMutableString new];
+    for (int i = 0 ; i < indentationLevel ; i++) {
+        [mutableDescription appendString:@"   | "];
+    }
+    
+    [mutableDescription appendFormat:@"%@\n", [self description]];
+    
+    for (CALayer *sublayer in self.sublayers) {
+        [mutableDescription appendString:[sublayer _recursiveLayerHierarchyDescriptionWithIndentationLevel:(indentationLevel + 1)]];
+    }
+    
+    return mutableDescription;
+}
+
+@end
+
+
+@interface UIView (HierarchyDescription)
+
+/// Re-implementation of `-[UIView recursiveDescription]` to avoid calling private API.
+- (NSString *)recursiveViewHierarchyDescription;
+
+@end
+
+
+@implementation UIView (HierarchyDescription)
+
+- (NSString *)recursiveViewHierarchyDescription;
+{
+    return [self _recursiveViewHierarchyDescriptionWithIndentationLevel:0];
+}
+
+#pragma mark - Private Methods
+
+- (NSString *)_recursiveViewHierarchyDescriptionWithIndentationLevel:(int)indentationLevel;
+{
+    NSMutableString *const mutableDescription = [NSMutableString new];
+    for (int i = 0 ; i < indentationLevel ; i++) {
+        [mutableDescription appendString:@"   | "];
+    }
+    
+    [mutableDescription appendFormat:@"%@\n", [self description]];
+    
+    // Each subview's layer is also a sublayer, but we should only include it in the hierarchy once (with the subview).
+    NSMutableSet<CALayer *> *sublayersToSkip = [NSMutableSet<CALayer *> setWithCapacity:self.subviews.count];
+    
+    for (UIView *subview in self.subviews) {
+        [mutableDescription appendString:[subview _recursiveViewHierarchyDescriptionWithIndentationLevel:(indentationLevel + 1)]];
+        [sublayersToSkip addObject:subview.layer];
+    }
+    
+    for (CALayer *sublayer in self.layer.sublayers) {
+        if ([sublayersToSkip containsObject:sublayer]) {
+            continue;
+        }
+        
+        [mutableDescription appendString:[sublayer _recursiveLayerHierarchyDescriptionWithIndentationLevel:(indentationLevel + 1)]];
+    }
+    
+    return mutableDescription;
+}
+
+@end
+
+
 @interface ARKEmailBugReporter () <CAAnimationDelegate, MFMailComposeViewControllerDelegate, UIAlertViewDelegate>
 
 @property (nonatomic) UIView *screenFlashView;
@@ -48,6 +124,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 @property (nonatomic, copy, readonly) NSMutableArray *mutableLogStores;
 
 @property (nonatomic) BOOL attachScreenshotToNextBugReport;
+
+@property (nonatomic) NSString *viewHierarchyDescription;
 
 @end
 
@@ -71,6 +149,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable = 3;
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable = 15;
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
+    _attachesViewHierarchyWithScreenshot = YES;
     
     _mutableLogStores = [NSMutableArray new];
     
@@ -103,8 +182,13 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         // Take a screenshot.
         ARKLogScreenshot();
         
-        // Flash the screen to simulate a screenshot being taken.
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        
+        if (self.attachesViewHierarchyWithScreenshot) {
+            self.viewHierarchyDescription = [keyWindow recursiveViewHierarchyDescription];
+        }
+        
+        // Flash the screen to simulate a screenshot being taken.
         self.screenFlashView = [[UIView alloc] initWithFrame:keyWindow.frame];
         self.screenFlashView.layer.opacity = 0.0f;
         self.screenFlashView.layer.backgroundColor = [[UIColor whiteColor] CGColor];
@@ -308,6 +392,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                         
                         NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
                         NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for logs attachments") stringByAppendingPathExtension:[self formattedLogMessagesAttachmentExtension]];
+                        NSString *viewHierarchyFileName = [NSLocalizedString(@"view_hierarchy", @"File name for view hierarchy attachment") stringByAppendingPathExtension:@"txt"];
                         NSMutableString *emailBodyForLogStore = [NSMutableString new];
                         BOOL appendToEmailBody = NO;
                         
@@ -333,6 +418,14 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                             if (mostRecentImage.length) {
                                 [self.mailComposeViewController addAttachmentData:mostRecentImage mimeType:@"image/png" fileName:screenshotFileName];
                             }
+                        }
+                        
+                        if (self.viewHierarchyDescription != nil) {
+                            NSData *viewHierarchyData = [self.viewHierarchyDescription dataUsingEncoding:NSUTF8StringEncoding];
+                            if (viewHierarchyData.length) {
+                                [self.mailComposeViewController addAttachmentData:viewHierarchyData mimeType:@"text/plain" fileName:viewHierarchyFileName];
+                            }
+                            self.viewHierarchyDescription = nil;
                         }
                         
                         NSData *formattedLogs = [self formattedLogMessagesAsData:logMessages];
