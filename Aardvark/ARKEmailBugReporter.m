@@ -39,14 +39,14 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @interface CALayer (HierarchyDescription)
 
-- (NSString *)_ARK_appendRecursiveLayerHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel;
+- (void)_ARK_appendRecursiveLayerHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel;
 
 @end
 
 
 @implementation CALayer (HierarchyDescription)
 
-- (NSString *)_ARK_appendRecursiveLayerHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel;
+- (void)_ARK_appendRecursiveLayerHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel;
 {
     for (int i = 0 ; i < indentationLevel ; i++) {
         [mutableDescription appendString:@"   | "];
@@ -55,7 +55,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     [mutableDescription appendFormat:@"%@\n", self];
     
     for (CALayer *sublayer in self.sublayers) {
-        [mutableDescription appendString:[sublayer _ARK_recursiveLayerHierarchyDescriptionWithIndentationLevel:(indentationLevel + 1)]];
+        [sublayer _ARK_appendRecursiveLayerHierarchyDescriptionToString:mutableDescription withIndentationLevel:(indentationLevel + 1)];
     }
 }
 
@@ -64,24 +64,32 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @interface UIView (HierarchyDescription)
 
-/// Description of the view hierarchy starting with the current view. Similar to the private `-[UIView recursiveDescription]` method.
-- (NSString *)ARK_recursiveViewHierarchyDescription;
+/// Appends the recursive description of the view hierarchy starting with the current view to the provided mutable string. Description is similar to the private `-[UIView recursiveDescription]` method.
+- (void)ARK_appendRecursiveViewHierarchyDescriptionToString:(NSMutableString *)mutableDescription usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap;
 
 @end
 
 
 @implementation UIView (HierarchyDescription)
 
-- (NSString *)ARK_recursiveViewHierarchyDescription;
+- (void)ARK_appendRecursiveViewHierarchyDescriptionToString:(NSMutableString *)mutableDescription usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap;
 {
-    return [self _ARK_recursiveViewHierarchyDescriptionWithIndentationLevel:0];
+    return [self _ARK_appendRecursiveViewHierarchyDescriptionToString:mutableDescription withIndentationLevel:0 usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap];
 }
 
 #pragma mark - Private Methods
 
-- (NSString *)_ARK_recursiveViewHierarchyDescriptionWithIndentationLevel:(NSUInteger)indentationLevel;
+- (void)_ARK_appendRecursiveViewHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap;
 {
-    NSMutableString *const mutableDescription = [NSMutableString new];
+    UIViewController *const viewController = [viewControllerMap objectForKey:self];
+    if (viewController != nil) {
+        for (int i = 0 ; i < indentationLevel ; i++) {
+            [mutableDescription appendString:@"   | "];
+        }
+        
+        [mutableDescription appendFormat:@"VC: %@\n", viewController];
+    }
+    
     for (int i = 0 ; i < indentationLevel ; i++) {
         [mutableDescription appendString:@"   | "];
     }
@@ -92,7 +100,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     NSMutableSet<CALayer *> *const sublayersToSkip = [NSMutableSet<CALayer *> setWithCapacity:self.subviews.count];
     
     for (UIView *subview in self.subviews) {
-        [mutableDescription appendString:[subview _ARK_recursiveViewHierarchyDescriptionWithIndentationLevel:(indentationLevel + 1)]];
+        [subview _ARK_appendRecursiveViewHierarchyDescriptionToString:mutableDescription withIndentationLevel:(indentationLevel + 1) usingViewControllerMap:viewControllerMap];
         [sublayersToSkip addObject:subview.layer];
     }
     
@@ -103,8 +111,27 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         
         [sublayer _ARK_appendRecursiveLayerHierarchyDescriptionToString:mutableDescription withIndentationLevel:(indentationLevel + 1)];
     }
+}
+
+@end
+
+
+@interface UIViewController (HierarchyDescription)
+
+- (void)ARK_appendRecursiveViewControllerMappingToMapTable:(NSMapTable<UIView *, UIViewController *> *)mapTable;
+
+@end
+
+
+@implementation UIViewController (HierarchyDescription)
+
+- (void)ARK_appendRecursiveViewControllerMappingToMapTable:(NSMapTable<UIView *, UIViewController *> *)mapTable;
+{
+    [mapTable setObject:self forKey:self.viewIfLoaded];
     
-    return mutableDescription;
+    for (UIViewController *childViewController in self.childViewControllers) {
+        [childViewController ARK_appendRecursiveViewControllerMappingToMapTable:mapTable];
+    }
 }
 
 @end
@@ -179,13 +206,19 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         // Take a screenshot.
         ARKLogScreenshot();
         
-        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-        
         if (self.attachesViewHierarchyDescriptionWithScreenshot) {
-            self.viewHierarchyDescription = [keyWindow recursiveViewHierarchyDescription];
+            NSMutableString *mutableViewHierarchyDescription = [NSMutableString new];
+            for (UIWindow *window in [UIApplication sharedApplication].windows) {
+                NSMapTable<UIView *, UIViewController *> *const viewControllerMap = [NSMapTable<UIView *, UIViewController *> weakToWeakObjectsMapTable];
+                [window.rootViewController ARK_appendRecursiveViewControllerMappingToMapTable:viewControllerMap];
+                
+                [window ARK_appendRecursiveViewHierarchyDescriptionToString:mutableViewHierarchyDescription usingViewControllerMap:viewControllerMap];
+            }
+            self.viewHierarchyDescription = mutableViewHierarchyDescription;
         }
         
         // Flash the screen to simulate a screenshot being taken.
+        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
         self.screenFlashView = [[UIView alloc] initWithFrame:keyWindow.frame];
         self.screenFlashView.layer.opacity = 0.0f;
         self.screenFlashView.layer.backgroundColor = [[UIColor whiteColor] CGColor];
