@@ -65,19 +65,12 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 @interface UIView (HierarchyDescription)
 
 /// Appends the recursive description of the view hierarchy starting with the current view to the provided mutable string. Description is similar to the private `-[UIView recursiveDescription]` method.
-- (void)ARK_appendRecursiveViewHierarchyDescriptionToString:(NSMutableString *)mutableDescription usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap;
+- (void)_ARK_appendRecursiveViewHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap;
 
 @end
 
 
 @implementation UIView (HierarchyDescription)
-
-- (void)ARK_appendRecursiveViewHierarchyDescriptionToString:(NSMutableString *)mutableDescription usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap;
-{
-    return [self _ARK_appendRecursiveViewHierarchyDescriptionToString:mutableDescription withIndentationLevel:0 usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap];
-}
-
-#pragma mark - Private Methods
 
 - (void)_ARK_appendRecursiveViewHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap;
 {
@@ -118,19 +111,19 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @interface UIViewController (HierarchyDescription)
 
-- (void)ARK_appendRecursiveViewControllerMappingToMapTable:(NSMapTable<UIView *, UIViewController *> *)mapTable;
+- (void)_ARK_appendRecursiveViewControllerMappingToMapTable:(NSMapTable<UIView *, UIViewController *> *)mapTable;
 
 @end
 
 
 @implementation UIViewController (HierarchyDescription)
 
-- (void)ARK_appendRecursiveViewControllerMappingToMapTable:(NSMapTable<UIView *, UIViewController *> *)mapTable;
+- (void)_ARK_appendRecursiveViewControllerMappingToMapTable:(NSMapTable<UIView *, UIViewController *> *)mapTable;
 {
     [mapTable setObject:self forKey:self.viewIfLoaded];
     
     for (UIViewController *childViewController in self.childViewControllers) {
-        [childViewController ARK_appendRecursiveViewControllerMappingToMapTable:mapTable];
+        [childViewController _ARK_appendRecursiveViewControllerMappingToMapTable:mapTable];
     }
 }
 
@@ -209,10 +202,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         if (self.attachesViewHierarchyDescriptionWithScreenshot) {
             NSMutableString *mutableViewHierarchyDescription = [NSMutableString new];
             for (UIWindow *window in [UIApplication sharedApplication].windows) {
-                NSMapTable<UIView *, UIViewController *> *const viewControllerMap = [NSMapTable<UIView *, UIViewController *> weakToWeakObjectsMapTable];
-                [window.rootViewController ARK_appendRecursiveViewControllerMappingToMapTable:viewControllerMap];
+                NSMapTable<UIView *, UIViewController *> *const viewControllerMap = [NSMapTable<UIView *, UIViewController *> strongToStrongObjectsMapTable];
+                [window.rootViewController _ARK_appendRecursiveViewControllerMappingToMapTable:viewControllerMap];
                 
-                [window ARK_appendRecursiveViewHierarchyDescriptionToString:mutableViewHierarchyDescription usingViewControllerMap:viewControllerMap];
+                [window _ARK_appendRecursiveViewHierarchyDescriptionToString:mutableViewHierarchyDescription withIndentationLevel:0 usingViewControllerMap:viewControllerMap];
             }
             self.viewHierarchyDescription = mutableViewHierarchyDescription;
         }
