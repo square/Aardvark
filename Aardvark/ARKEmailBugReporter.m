@@ -390,9 +390,22 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     textField.returnKeyType = UIReturnKeyDone;
 }
 
-- (void)_createBugReportWithTitle:(NSString *)title
+- (void)_createBugReportWithTitle:(NSString *)title;
 {
-    NSArray *logStores = [self.logStores copy];
+    NSArray *logStores;
+    if ([self.emailAttachmentAdditionsDelegate respondsToSelector:@selector(bugReporter:shouldIncludeLogStoreInBugReport:)]) {
+        NSMutableArray *const mutableLogStores = [NSMutableArray arrayWithCapacity:self.logStores.count];
+        for (ARKLogStore *logStore in self.logStores) {
+            if ([self.emailAttachmentAdditionsDelegate bugReporter:self shouldIncludeLogStoreInBugReport:logStore]) {
+                [mutableLogStores addObject:logStore];
+            }
+        }
+        logStores = mutableLogStores;
+    } else {
+        logStores = [self.logStores copy];
+    }
+    
+    
     NSMapTable *logStoresToLogMessagesMap = [NSMapTable new];
     NSDictionary *emailBodyAdditions = [self.emailBodyAdditionsDelegate emailBodyAdditionsForEmailBugReporter:self];
     
@@ -454,6 +467,13 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                         NSData *formattedLogs = [self formattedLogMessagesAsData:logMessages];
                         if (formattedLogs.length) {
                             [self.mailComposeViewController addAttachmentData:formattedLogs mimeType:[self formattedLogMessagesDataMIMEType] fileName:logsFileName];
+                        }
+                    }
+                    
+                    if ([self.emailAttachmentAdditionsDelegate respondsToSelector:@selector(additionalEmailAttachmentsForEmailBugReporter:)]) {
+                        NSArray *const additionalAttachments = [self.emailAttachmentAdditionsDelegate additionalEmailAttachmentsForEmailBugReporter:self];
+                        for (ARKEmailAttachment *attachment in additionalAttachments) {
+                            [self.mailComposeViewController addAttachmentData:attachment.data mimeType:attachment.dataMIMEType fileName:attachment.fileName];
                         }
                     }
                     
@@ -623,6 +643,22 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (BOOL)canBecomeFirstResponder;
 {
     return YES;
+}
+
+@end
+
+
+@implementation ARKEmailAttachment
+
+- (instancetype)initWithFileName:(NSString *)fileName data:(NSData *)data dataMIMEType:(NSString *)dataMIMEType;
+{
+    self = [super init];
+    
+    _fileName = fileName;
+    _data = data;
+    _dataMIMEType = dataMIMEType;
+    
+    return self;
 }
 
 @end

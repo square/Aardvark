@@ -39,6 +39,37 @@
 @end
 
 
+@interface ARKEmailAttachment : NSObject
+
+- (nonnull instancetype)initWithFileName:(nonnull NSString *)fileName data:(nonnull NSData *)data dataMIMEType:(nonnull NSString *)dataMIMEType;
+
+- (nonnull instancetype)init NS_UNAVAILABLE;
++ (nonnull instancetype)new NS_UNAVAILABLE;
+
+@property (nonnull, nonatomic) NSString *fileName;
+
+@property (nonnull, nonatomic) NSData *data;
+
+@property (nonnull, nonatomic) NSString *dataMIMEType;
+
+@end
+
+
+@protocol ARKEmailBugReporterEmailAttachmentAdditionsDelegate <NSObject>
+
+@optional
+
+/// Called on the main thread when a bug is filed. When not implemented, all log stores added to the bug reporter will be included.
+- (BOOL)bugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter shouldIncludeLogStoreInBugReport:(nonnull ARKLogStore *)logStore;
+
+@optional
+
+/// Called on the main thread when a bug is filed. The attachments in the returned array will be attached to the bug report email.
+- (nullable NSArray<ARKEmailAttachment *> *)additionalEmailAttachmentsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter;
+
+@end
+
+
 /// Composes a bug report that is sent via email.
 @interface ARKEmailBugReporter : NSObject <ARKBugReporter>
 
@@ -55,6 +86,9 @@
 
 /// The email body delegate, responsible for providing key/value pairs to include in the bug report at the time the bug is filed.
 @property (nullable, nonatomic, weak) id <ARKEmailBugReporterEmailBodyAdditionsDelegate> emailBodyAdditionsDelegate;
+
+/// The email attachment delegate, responsible for providing additional attachments and filtering which log stores to include in the bug report at the time the bug is filed.
+@property (nullable, nonatomic, weak) id <ARKEmailBugReporterEmailAttachmentAdditionsDelegate> emailAttachmentAdditionsDelegate;
 
 /// The formatter used to prepare the log for entry into an email. Defaults to a vanilla instance of ARKDefaultLogFormatter.
 @property (nonnull, nonatomic) id <ARKLogFormatter> logFormatter;
