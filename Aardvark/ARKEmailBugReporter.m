@@ -25,6 +25,7 @@
 
 #import "AardvarkDefines.h"
 #import "ARKDefaultLogFormatter.h"
+#import "ARKEmailAttachment.h"
 #import "ARKScreenshotLogging.h"
 #import "ARKLogMessage.h"
 #import "ARKLogStore.h"
@@ -393,7 +394,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (void)_createBugReportWithTitle:(NSString *)title;
 {
     NSArray *logStores;
-    if ([self.emailAttachmentAdditionsDelegate respondsToSelector:@selector(bugReporter:shouldIncludeLogStoreInBugReport:)]) {
+    if (self.emailAttachmentAdditionsDelegate != nil) {
         NSMutableArray *const mutableLogStores = [NSMutableArray arrayWithCapacity:self.logStores.count];
         for (ARKLogStore *logStore in self.logStores) {
             if ([self.emailAttachmentAdditionsDelegate bugReporter:self shouldIncludeLogStoreInBugReport:logStore]) {
@@ -470,7 +471,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                         }
                     }
                     
-                    if ([self.emailAttachmentAdditionsDelegate respondsToSelector:@selector(additionalEmailAttachmentsForEmailBugReporter:)]) {
+                    if (self.emailAttachmentAdditionsDelegate != nil) {
                         NSArray *const additionalAttachments = [self.emailAttachmentAdditionsDelegate additionalEmailAttachmentsForEmailBugReporter:self];
                         for (ARKEmailAttachment *attachment in additionalAttachments) {
                             [self.mailComposeViewController addAttachmentData:attachment.data mimeType:attachment.dataMIMEType fileName:attachment.fileName];
@@ -643,22 +644,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (BOOL)canBecomeFirstResponder;
 {
     return YES;
-}
-
-@end
-
-
-@implementation ARKEmailAttachment
-
-- (instancetype)initWithFileName:(NSString *)fileName data:(NSData *)data dataMIMEType:(NSString *)dataMIMEType;
-{
-    self = [super init];
-    
-    _fileName = fileName;
-    _data = data;
-    _dataMIMEType = dataMIMEType;
-    
-    return self;
 }
 
 @end

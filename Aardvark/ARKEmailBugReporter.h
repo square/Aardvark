@@ -24,6 +24,7 @@
 #import <Aardvark/ARKBugReporter.h>
 
 
+@class ARKEmailAttachment;
 @class ARKEmailBugReporter;
 @class ARKLogStore;
 @protocol ARKLogFormatter;
@@ -39,30 +40,12 @@
 @end
 
 
-@interface ARKEmailAttachment : NSObject
-
-- (nonnull instancetype)initWithFileName:(nonnull NSString *)fileName data:(nonnull NSData *)data dataMIMEType:(nonnull NSString *)dataMIMEType;
-
-- (nonnull instancetype)init NS_UNAVAILABLE;
-+ (nonnull instancetype)new NS_UNAVAILABLE;
-
-@property (nonnull, nonatomic) NSString *fileName;
-
-@property (nonnull, nonatomic) NSData *data;
-
-@property (nonnull, nonatomic) NSString *dataMIMEType;
-
-@end
-
-
 @protocol ARKEmailBugReporterEmailAttachmentAdditionsDelegate <NSObject>
 
-@optional
+@required
 
 /// Called on the main thread when a bug is filed. When not implemented, all log stores added to the bug reporter will be included.
 - (BOOL)bugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter shouldIncludeLogStoreInBugReport:(nonnull ARKLogStore *)logStore;
-
-@optional
 
 /// Called on the main thread when a bug is filed. The attachments in the returned array will be attached to the bug report email.
 - (nullable NSArray<ARKEmailAttachment *> *)additionalEmailAttachmentsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter;
