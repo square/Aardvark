@@ -395,17 +395,16 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     NSArray *logStores;
     if (self.emailAttachmentAdditionsDelegate != nil) {
-        NSMutableArray *const mutableLogStores = [NSMutableArray arrayWithCapacity:self.logStores.count];
+        NSMutableArray *const filteredLogStores = [NSMutableArray arrayWithCapacity:self.logStores.count];
         for (ARKLogStore *logStore in self.logStores) {
-            if ([self.emailAttachmentAdditionsDelegate bugReporter:self shouldIncludeLogStoreInBugReport:logStore]) {
-                [mutableLogStores addObject:logStore];
+            if ([self.emailAttachmentAdditionsDelegate emailBugReporter:self shouldIncludeLogStoreInBugReport:logStore]) {
+                [filteredLogStores addObject:logStore];
             }
         }
-        logStores = mutableLogStores;
+        logStores = filteredLogStores;
     } else {
         logStores = [self.logStores copy];
     }
-    
     
     NSMapTable *logStoresToLogMessagesMap = [NSMapTable new];
     NSDictionary *emailBodyAdditions = [self.emailBodyAdditionsDelegate emailBodyAdditionsForEmailBugReporter:self];

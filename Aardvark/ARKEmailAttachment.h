@@ -29,12 +29,12 @@
 + (nonnull instancetype)new NS_UNAVAILABLE;
 
 /// File name (including extension) to use when attaching to the email. This does not need to be unique among attachments, but should not be empty.
-@property (nonnull, nonatomic) NSString *fileName;
+@property (nonnull, nonatomic, copy, readonly) NSString *fileName;
 
 /// Contents of the attachment. Attachments with empty data will be dropped.
-@property (nonnull, nonatomic) NSData *data;
+@property (nonnull, nonatomic, copy, readonly) NSData *data;
 
 /// MIME type of `data` property. MIME types are as specified by the IANA: http://www.iana.org/assignments/media-types/
-@property (nonnull, nonatomic) NSString *dataMIMEType;
+@property (nonnull, nonatomic, copy, readonly) NSString *dataMIMEType;
 
 @end

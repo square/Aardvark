@@ -27,9 +27,9 @@
 {
     self = [super init];
     
-    _fileName = fileName;
-    _data = data;
-    _dataMIMEType = dataMIMEType;
+    _fileName = [fileName copy];
+    _data = [data copy];
+    _dataMIMEType = [dataMIMEType copy];
     
     return self;
 }

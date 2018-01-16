@@ -45,7 +45,7 @@
 @required
 
 /// Called on the main thread when a bug is filed. When not implemented, all log stores added to the bug reporter will be included.
-- (BOOL)bugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter shouldIncludeLogStoreInBugReport:(nonnull ARKLogStore *)logStore;
+- (BOOL)emailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter shouldIncludeLogStoreInBugReport:(nonnull ARKLogStore *)logStore;
 
 /// Called on the main thread when a bug is filed. The attachments in the returned array will be attached to the bug report email.
 - (nullable NSArray<ARKEmailAttachment *> *)additionalEmailAttachmentsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter;
