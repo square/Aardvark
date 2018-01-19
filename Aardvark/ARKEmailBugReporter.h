@@ -24,6 +24,7 @@
 #import <Aardvark/ARKBugReporter.h>
 
 
+@class ARKEmailAttachment;
 @class ARKEmailBugReporter;
 @class ARKLogStore;
 @protocol ARKLogFormatter;
@@ -35,6 +36,19 @@
 
 /// Called on the main thread when a bug is filed. The key/value pairs in the returned dictionary will be appended to the bug report below the prefilledEmailBody.
 - (nullable NSDictionary *)emailBodyAdditionsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter;
+
+@end
+
+
+@protocol ARKEmailBugReporterEmailAttachmentAdditionsDelegate <NSObject>
+
+@required
+
+/// Called on the main thread when a bug is filed. When not implemented, all log stores added to the bug reporter will be included.
+- (BOOL)emailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter shouldIncludeLogStoreInBugReport:(nonnull ARKLogStore *)logStore;
+
+/// Called on the main thread when a bug is filed. The attachments in the returned array will be attached to the bug report email.
+- (nullable NSArray<ARKEmailAttachment *> *)additionalEmailAttachmentsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter;
 
 @end
 
@@ -55,6 +69,9 @@
 
 /// The email body delegate, responsible for providing key/value pairs to include in the bug report at the time the bug is filed.
 @property (nullable, nonatomic, weak) id <ARKEmailBugReporterEmailBodyAdditionsDelegate> emailBodyAdditionsDelegate;
+
+/// The email attachment delegate, responsible for providing additional attachments and filtering which log stores to include in the bug report at the time the bug is filed.
+@property (nullable, nonatomic, weak) id <ARKEmailBugReporterEmailAttachmentAdditionsDelegate> emailAttachmentAdditionsDelegate;
 
 /// The formatter used to prepare the log for entry into an email. Defaults to a vanilla instance of ARKDefaultLogFormatter.
 @property (nonnull, nonatomic) id <ARKLogFormatter> logFormatter;

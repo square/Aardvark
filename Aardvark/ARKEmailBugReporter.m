@@ -25,6 +25,7 @@
 
 #import "AardvarkDefines.h"
 #import "ARKDefaultLogFormatter.h"
+#import "ARKEmailAttachment.h"
 #import "ARKScreenshotLogging.h"
 #import "ARKLogMessage.h"
 #import "ARKLogStore.h"
@@ -390,9 +391,21 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     textField.returnKeyType = UIReturnKeyDone;
 }
 
-- (void)_createBugReportWithTitle:(NSString *)title
+- (void)_createBugReportWithTitle:(NSString *)title;
 {
-    NSArray *logStores = [self.logStores copy];
+    NSArray *logStores;
+    if (self.emailAttachmentAdditionsDelegate != nil) {
+        NSMutableArray *const filteredLogStores = [NSMutableArray arrayWithCapacity:self.logStores.count];
+        for (ARKLogStore *logStore in self.logStores) {
+            if ([self.emailAttachmentAdditionsDelegate emailBugReporter:self shouldIncludeLogStoreInBugReport:logStore]) {
+                [filteredLogStores addObject:logStore];
+            }
+        }
+        logStores = filteredLogStores;
+    } else {
+        logStores = [self.logStores copy];
+    }
+    
     NSMapTable *logStoresToLogMessagesMap = [NSMapTable new];
     NSDictionary *emailBodyAdditions = [self.emailBodyAdditionsDelegate emailBodyAdditionsForEmailBugReporter:self];
     
@@ -454,6 +467,13 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                         NSData *formattedLogs = [self formattedLogMessagesAsData:logMessages];
                         if (formattedLogs.length) {
                             [self.mailComposeViewController addAttachmentData:formattedLogs mimeType:[self formattedLogMessagesDataMIMEType] fileName:logsFileName];
+                        }
+                    }
+                    
+                    if (self.emailAttachmentAdditionsDelegate != nil) {
+                        NSArray *const additionalAttachments = [self.emailAttachmentAdditionsDelegate additionalEmailAttachmentsForEmailBugReporter:self];
+                        for (ARKEmailAttachment *attachment in additionalAttachments) {
+                            [self.mailComposeViewController addAttachmentData:attachment.data mimeType:attachment.dataMIMEType fileName:attachment.fileName];
                         }
                     }
                     
