@@ -18,7 +18,7 @@
 //  limitations under the License.
 //
 
-#import "ARKLogMessage.h"
+#import <CoreAardvark/ARKLogMessage.h>
 
 
 @interface ARKLogTableViewController (Private)
