@@ -18,16 +18,12 @@
 //  limitations under the License.
 //
 
-#if COCOAPODS
-#import "ARKLogDistributor.h"
-#else
+#import <CoreAardvark/AardvarkDefines.h>
 #import <CoreAardvark/ARKLogDistributor.h>
-#endif
 #import <objc/runtime.h>
 
 #import "UIApplication+ARKAdditions.h"
 
-#import "AardvarkDefines.h"
 #import "ARKBugReporter.h"
 
 
