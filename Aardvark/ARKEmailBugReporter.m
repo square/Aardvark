@@ -18,14 +18,15 @@
 //  limitations under the License.
 //
 
+#import <CoreAardvark/AardvarkDefines.h>
+#import <CoreAardvark/ARKLogStore.h>
+#import <CoreAardvark/ARKLogMessage.h>
+
 #import "ARKEmailBugReporter.h"
 #import "ARKEmailBugReporter_Testing.h"
 
-#import "AardvarkDefines.h"
 #import "ARKDefaultLogFormatter.h"
 #import "ARKScreenshotLogging.h"
-#import "ARKLogStore.h"
-#import "ARKLogMessage.h"
 
 
 NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
