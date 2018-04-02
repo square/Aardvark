@@ -121,10 +121,12 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)_ARK_appendRecursiveViewControllerMappingToMapTable:(NSMapTable<UIView *, UIViewController *> *)mapTable;
 {
-    [mapTable setObject:self forKey:self.viewIfLoaded];
-    
-    for (UIViewController *childViewController in self.childViewControllers) {
-        [childViewController _ARK_appendRecursiveViewControllerMappingToMapTable:mapTable];
+    if (@available(iOS 9.0, *)) {
+        [mapTable setObject:self forKey:self.viewIfLoaded];
+
+        for (UIViewController *childViewController in self.childViewControllers) {
+            [childViewController _ARK_appendRecursiveViewControllerMappingToMapTable:mapTable];
+        }
     }
 }
 
