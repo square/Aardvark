@@ -381,7 +381,11 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     while (viewControllerToPresentAlertController.presentedViewController != nil) {
         viewControllerToPresentAlertController = viewControllerToPresentAlertController.presentedViewController;
     }
-    [viewControllerToPresentAlertController presentViewController:alertController animated:YES completion:NULL];
+
+    /*
+     Disabling animations here to avoid potential crashes resulting from unexpected view state in UIKit
+     */
+    [viewControllerToPresentAlertController presentViewController:alertController animated:NO completion:NULL];
 
 }
 
