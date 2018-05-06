@@ -32,6 +32,7 @@ FOUNDATION_EXPORT const unsigned char Aardvark_iOSVersionString[];
 #import <Aardvark/ARKDefaultLogFormatter.h>
 #import <Aardvark/ARKLogDistributor+UIAdditions.h>
 #import <Aardvark/ARKEmailBugReporter.h>
+#import <Aardvark/ARKEmailBugReportConfiguration.h>
 #import <Aardvark/ARKIndividualLogViewController.h>
 #import <Aardvark/ARKLogFormatter.h>
 #import <Aardvark/ARKLogTableViewController.h>
