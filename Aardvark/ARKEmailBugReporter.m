@@ -373,23 +373,23 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     NSMapTable *logStoresToLogMessagesMap = [NSMapTable new];
     NSDictionary *emailBodyAdditions = [self.emailBodyAdditionsDelegate emailBodyAdditionsForEmailBugReporter:self];
     
+    dispatch_group_t logStoreRetrievalDispatchGroup = dispatch_group_create();
+    dispatch_group_enter(logStoreRetrievalDispatchGroup);
+    
+    NSArray<ARKLogStore *> *const logStores = configuration.logStores;
+    for (ARKLogStore *logStore in logStores) {
+        dispatch_group_enter(logStoreRetrievalDispatchGroup);
+        [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+            [logStoresToLogMessagesMap setObject:logMessages forKey:logStore];
+            dispatch_group_leave(logStoreRetrievalDispatchGroup);
+        }];
+    }
+    
     if ([MFMailComposeViewController canSendMail]) {
         self.mailComposeViewController = [MFMailComposeViewController new];
         
         [self.mailComposeViewController setToRecipients:@[self.bugReportRecipientEmailAddress]];
         [self.mailComposeViewController setSubject:configuration.prefilledEmailSubject];
-        
-        dispatch_group_t logStoreRetrievalDispatchGroup = dispatch_group_create();
-        dispatch_group_enter(logStoreRetrievalDispatchGroup);
-        
-        NSArray<ARKLogStore *> *const logStores = configuration.logStores;
-        for (ARKLogStore *logStore in logStores) {
-            dispatch_group_enter(logStoreRetrievalDispatchGroup);
-            [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
-                [logStoresToLogMessagesMap setObject:logMessages forKey:logStore];
-                dispatch_group_leave(logStoreRetrievalDispatchGroup);
-            }];
-        }
         
         // Once all log messages have been retrieved, attach the data and show the compose window.
         dispatch_group_notify(logStoreRetrievalDispatchGroup, dispatch_get_main_queue(), ^{
@@ -400,7 +400,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                 
                 NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
                 NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for logs attachments") stringByAppendingPathExtension:[self formattedLogMessagesAttachmentExtension]];
-                NSMutableString *emailBodyForLogStore = [NSMutableString new];
+                NSMutableString *const emailBodyForLogStore = [NSMutableString new];
                 BOOL appendToEmailBody = NO;
                 
                 if (logStore.name.length) {
@@ -450,31 +450,23 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             [self _showEmailComposeWindow];
         });
         
-        dispatch_group_leave(logStoreRetrievalDispatchGroup);
-        
     } else {
-        NSArray<ARKLogStore *> *const logStores = configuration.logStores;
-        for (ARKLogStore *logStore in logStores) {
-            [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
-                [logStoresToLogMessagesMap setObject:logMessages forKey:logStore];
-                
-                // Only append logs once all log messages have been retrieved.
-                if (logStoresToLogMessagesMap.count == logStores.count) {
-                    NSMutableString *const emailBody = [self _prefilledEmailBodyWithEmailBodyAdditions:emailBodyAdditions];
-                    
-                    for (ARKLogStore *logStore in logStores) {
-                        NSArray *const logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
-                        [emailBody appendFormat:@"%@\n", [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
-                    }
-                    
-                    NSURL *const composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:configuration.prefilledEmailSubject body:emailBody];
-                    if (composeEmailURL != nil) {
-                        [[UIApplication sharedApplication] openURL:composeEmailURL];
-                    }
-                }
-            }];
-        }
+        dispatch_group_notify(logStoreRetrievalDispatchGroup, dispatch_get_main_queue(), ^{
+            NSMutableString *const emailBody = [self _prefilledEmailBodyWithEmailBodyAdditions:emailBodyAdditions];
+            
+            for (ARKLogStore *logStore in logStores) {
+                NSArray *const logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
+                [emailBody appendFormat:@"%@\n", [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
+            }
+            
+            NSURL *const composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:configuration.prefilledEmailSubject body:emailBody];
+            if (composeEmailURL != nil) {
+                [[UIApplication sharedApplication] openURL:composeEmailURL];
+            }
+        });
     }
+    
+    dispatch_group_leave(logStoreRetrievalDispatchGroup);
 }
 
 - (void)_showEmailComposeWindow;
