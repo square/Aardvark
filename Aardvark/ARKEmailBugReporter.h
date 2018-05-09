@@ -63,7 +63,7 @@ typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReport
 /// Called on the main thread when a bug is filed to signal that a bug report prompt should be presented to the user.
 /// The `completion` should be called with either an updated configuration to present the email dialog, or `nil` to signal that the prompt was cancelled.
 /// When the initial `configuration` has `includesScreenshot` or `includesViewHierarchyDescription` false, setting the field to true will have no effect.
-- (void)showBugReportingPromptForConfiguration:(nonnull ARKEmailBugReportConfiguration *)configuration completion:(nonnull ARKEmailBugReporterCustomPromptCompletionBlock)completion;
+- (void)showBugReportingPromptForConfiguration:(ARKEmailBugReportConfiguration *_Nonnull)configuration completion:(ARKEmailBugReporterCustomPromptCompletionBlock _Nonnull)completion;
 
 @end
 

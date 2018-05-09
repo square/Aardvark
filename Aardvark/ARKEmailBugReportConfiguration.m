@@ -23,4 +23,17 @@
 
 @implementation ARKEmailBugReportConfiguration
 
+- (instancetype)init;
+{
+    self = [super init];
+    
+    _prefilledEmailSubject = @"";
+    _logStores = @[];
+    _includesScreenshot = NO;
+    _includesViewHierarchyDescription = NO;
+    _additionalAttachments = nil;
+    
+    return self;
+}
+
 @end

@@ -24,21 +24,22 @@
 @class ARKEmailAttachment;
 
 
+/// Configuration object describing the contents of an email bug report.
 @interface ARKEmailBugReportConfiguration : NSObject
 
-/// The email subject that will be prefilled when the email dialog is presented to the user.
+/// The email subject that will be prefilled when the email dialog is presented to the user. Defaults to an empty string.
 @property (nonnull, nonatomic, copy) NSString *prefilledEmailSubject;
 
-/// The log stores that will be included as attachments on the email.
+/// The log stores that will be included as attachments on the email. Defaults to an empty array.
 @property (nonnull, nonatomic, copy) NSArray<ARKLogStore *> *logStores;
 
-/// Controls whether or not a screenshot should be attached to the email, when available.
+/// Controls whether or not a screenshot should be attached to the email, when available. Defaults to NO.
 @property (nonatomic) BOOL includesScreenshot;
 
-/// Controls whether or not a view hierarchy description should be attached to the email, when available.
+/// Controls whether or not a view hierarchy description should be attached to the email, when available. Defaults to NO.
 @property (nonatomic) BOOL includesViewHierarchyDescription;
 
-/// Additional attachments to include on the email.
+/// Additional attachments to include on the email. Defaults to nil.
 @property (nullable, nonatomic, copy) NSArray<ARKEmailAttachment *> *additionalAttachments;
 
 @end
