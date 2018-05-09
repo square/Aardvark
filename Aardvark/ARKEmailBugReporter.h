@@ -61,7 +61,7 @@ typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReport
 @required
 
 /// Called on the main thread when a bug is filed to signal that a bug report prompt should be presented to the user.
-/// The `completion` should be called with either an updated configuration to present the email dialog, or `nil` to signal that the prompt was cancelled.
+/// The `completion` should be called on the main thread with either an updated configuration to present the email dialog, or `nil` to signal that the prompt was cancelled.
 /// When the initial `configuration` has `includesScreenshot` or `includesViewHierarchyDescription` false, setting the field to true will have no effect.
 - (void)showBugReportingPromptForConfiguration:(ARKEmailBugReportConfiguration *_Nonnull)configuration completion:(ARKEmailBugReporterCustomPromptCompletionBlock _Nonnull)completion;
 
@@ -88,7 +88,7 @@ typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReport
 /// The email attachment delegate, responsible for providing additional attachments and filtering which log stores to include in the bug report at the time the bug is filed.
 @property (nullable, nonatomic, weak) id <ARKEmailBugReporterEmailAttachmentAdditionsDelegate> emailAttachmentAdditionsDelegate;
 
-/// The prompting delegate, responsible for showing a prompt to file a bug report.
+/// The prompting delegate, responsible for showing a prompt to file a bug report. When nil, an alert view will be shown prompting the user to input a title for the bug report. Defaults to nil.
 @property (nullable, nonatomic, weak) id <ARKEmailBugReporterPromptingDelegate> promptingDelegate;
 
 /// The formatter used to prepare the log for entry into an email. Defaults to a vanilla instance of ARKDefaultLogFormatter.

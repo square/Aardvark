@@ -136,9 +136,9 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @interface ARKDefaultPromptPresenter : NSObject <ARKEmailBugReporterPromptingDelegate>
 
-@property (nonatomic) ARKEmailBugReportConfiguration *configuration;
+@property (nonatomic, nonnull) ARKEmailBugReportConfiguration *configuration;
 
-@property (nonatomic) ARKEmailBugReporterCustomPromptCompletionBlock completion;
+@property (nonatomic, nullable) ARKEmailBugReporterCustomPromptCompletionBlock completion;
 
 @end
 
@@ -342,13 +342,15 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     [promptPresenter showBugReportingPromptForConfiguration:[self _configurationWithCurrentSettings] completion:^(ARKEmailBugReportConfiguration * _Nullable configuration) {
         if (configuration != nil) {
             [self _createBugReportWithConfiguration:configuration];
+        } else {
+            // If the configuration is nil, the callee has signaled that we should not show a bug report. In the future, we can clean up any persisted state here as necessary.
         }
     }];
 }
 
 - (ARKEmailBugReportConfiguration *)_configurationWithCurrentSettings;
 {
-    ARKEmailBugReportConfiguration *const configuration = [[ARKEmailBugReportConfiguration alloc] init];
+    ARKEmailBugReportConfiguration *const configuration = [ARKEmailBugReportConfiguration new];
     
     if (self.emailAttachmentAdditionsDelegate != nil) {
         NSMutableArray *const filteredLogStores = [NSMutableArray arrayWithCapacity:self.logStores.count];
