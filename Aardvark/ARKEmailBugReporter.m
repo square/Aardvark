@@ -136,10 +136,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @interface ARKDefaultPromptPresenter : NSObject <ARKEmailBugReporterPromptingDelegate>
 
-@property (nonatomic, nonnull) ARKEmailBugReportConfiguration *configuration;
-
-@property (nonatomic, nullable) ARKEmailBugReporterCustomPromptCompletionBlock completion;
-
 @end
 
 
@@ -340,10 +336,9 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     id <ARKEmailBugReporterPromptingDelegate> const promptPresenter = (self.promptingDelegate ?: [ARKDefaultPromptPresenter new]);
     [promptPresenter showBugReportingPromptForConfiguration:[self _configurationWithCurrentSettings] completion:^(ARKEmailBugReportConfiguration * _Nullable configuration) {
+        // If the configuration is nil, the callee has signaled that we should not show a bug report. In the future, we can clean up any persisted state here as necessary.
         if (configuration != nil) {
             [self _createBugReportWithConfiguration:configuration];
-        } else {
-            // If the configuration is nil, the callee has signaled that we should not show a bug report. In the future, we can clean up any persisted state here as necessary.
         }
     }];
 }
@@ -625,17 +620,9 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 @implementation ARKDefaultPromptPresenter
 
 - (void)showBugReportingPromptForConfiguration:(nonnull ARKEmailBugReportConfiguration *)configuration completion:(nonnull ARKEmailBugReporterCustomPromptCompletionBlock)completion {
-    self.configuration = configuration;
-    self.completion = completion;
-    
-    [self _showBugTitleCaptureAlert];
-}
-
-- (void)_showBugTitleCaptureAlert;
-{
     /*
      iOS 8 often fails to transfer the keyboard from a focused text field to a UIAlertView's text field.
-     Transfer first responder to an invisble view when a debug screenshot is captured to make bug filing itself bug-free.
+     Transfer first responder to an invisible view when a debug screenshot is captured to make bug filing itself bug-free.
      */
     [self _stealFirstResponder];
     
@@ -648,12 +635,12 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     
     [alertController addAction:[UIAlertAction actionWithTitle:composeReportButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         UITextField *textfield = [alertController.textFields firstObject];
-        [self _createBugReportWithTitle:textfield.text];
+        configuration.prefilledEmailSubject = textfield.text ?: @"";
+        completion(configuration);
     }]];
     
     [alertController addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        self.completion(nil);
-        self.completion = nil;
+        completion(nil);
     }]];
     
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
@@ -686,13 +673,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     textField.autocorrectionType = UITextAutocorrectionTypeYes;
     textField.spellCheckingType = UITextSpellCheckingTypeYes;
     textField.returnKeyType = UIReturnKeyDone;
-}
-
-- (void)_createBugReportWithTitle:(NSString *)title;
-{
-    self.configuration.prefilledEmailSubject = title;
-    self.completion(self.configuration);
-    self.completion = nil;
 }
 
 @end
