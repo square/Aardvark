@@ -27,8 +27,8 @@
 /// Configuration object describing the contents of an email bug report.
 @interface ARKEmailBugReportConfiguration : NSObject
 
-- (instancetype)init NS_UNAVAILABLE;
-+ (instancetype)new NS_UNAVAILABLE;
+- (nonnull instancetype)init NS_UNAVAILABLE;
++ (nonnull instancetype)new NS_UNAVAILABLE;
 
 /// The email subject that will be prefilled when the email dialog is presented to the user. Defaults to an empty string.
 @property (nonnull, nonatomic, copy) NSString *prefilledEmailSubject;

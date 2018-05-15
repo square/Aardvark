@@ -25,6 +25,6 @@
 
 @interface ARKEmailBugReportConfiguration (Protected)
 
-- (instancetype)initWithScreenshot:(BOOL)includesScreenshot viewHierarchyDescription:(BOOL)includesViewHierarchyDescription;
+- (nonnull instancetype)initWithScreenshot:(BOOL)includesScreenshot viewHierarchyDescription:(BOOL)includesViewHierarchyDescription;
 
 @end
