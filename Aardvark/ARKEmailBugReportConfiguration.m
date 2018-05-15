@@ -19,21 +19,40 @@
 //
 
 #import "ARKEmailBugReportConfiguration.h"
+#import "ARKEmailBugReportConfiguration_Protected.h"
+
+
+@interface ARKEmailBugReportConfiguration ()
+
+@property (nonatomic, readwrite) BOOL includesScreenshot;
+@property (nonatomic, readwrite) BOOL includesViewHierarchyDescription;
+
+@end
 
 
 @implementation ARKEmailBugReportConfiguration
 
-- (instancetype)init;
+- (instancetype)initWithScreenshot:(BOOL)includesScreenshot viewHierarchyDescription:(BOOL)includesViewHierarchyDescription;
 {
     self = [super init];
     
     _prefilledEmailSubject = @"";
     _logStores = @[];
-    _includesScreenshot = NO;
-    _includesViewHierarchyDescription = NO;
+    _includesScreenshot = includesScreenshot;
+    _includesViewHierarchyDescription = includesViewHierarchyDescription;
     _additionalAttachments = nil;
     
     return self;
+}
+
+- (void)removeScreenshot;
+{
+    self.includesScreenshot = NO;
+}
+
+- (void)removeViewHierarchyDescription;
+{
+    self.includesViewHierarchyDescription = NO;
 }
 
 @end

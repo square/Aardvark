@@ -27,6 +27,7 @@
 #import "ARKDefaultLogFormatter.h"
 #import "ARKEmailAttachment.h"
 #import "ARKEmailBugReportConfiguration.h"
+#import "ARKEmailBugReportConfiguration_Protected.h"
 #import "ARKScreenshotLogging.h"
 #import "ARKLogMessage.h"
 #import "ARKLogStore.h"
@@ -345,7 +346,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (ARKEmailBugReportConfiguration *)_configurationWithCurrentSettings;
 {
-    ARKEmailBugReportConfiguration *const configuration = [ARKEmailBugReportConfiguration new];
+    ARKEmailBugReportConfiguration *const configuration = [[ARKEmailBugReportConfiguration alloc] initWithScreenshot:self.attachScreenshotToNextBugReport
+                                                                                            viewHierarchyDescription:(self.attachScreenshotToNextBugReport && self.attachesViewHierarchyDescriptionWithScreenshot)];
     
     if (self.emailAttachmentAdditionsDelegate != nil) {
         NSMutableArray *const filteredLogStores = [NSMutableArray arrayWithCapacity:self.logStores.count];
@@ -361,9 +363,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     } else {
         configuration.logStores = [self.logStores copy];
     }
-    
-    configuration.includesScreenshot = self.attachScreenshotToNextBugReport;
-    configuration.includesViewHierarchyDescription = (self.attachScreenshotToNextBugReport && self.attachesViewHierarchyDescriptionWithScreenshot);
     
     return configuration;
 }

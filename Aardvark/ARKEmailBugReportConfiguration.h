@@ -27,6 +27,9 @@
 /// Configuration object describing the contents of an email bug report.
 @interface ARKEmailBugReportConfiguration : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
 /// The email subject that will be prefilled when the email dialog is presented to the user. Defaults to an empty string.
 @property (nonnull, nonatomic, copy) NSString *prefilledEmailSubject;
 
@@ -34,12 +37,18 @@
 @property (nonnull, nonatomic, copy) NSArray<ARKLogStore *> *logStores;
 
 /// Controls whether or not a screenshot should be attached to the email, when available. Defaults to NO.
-@property (nonatomic) BOOL includesScreenshot;
+@property (nonatomic, readonly) BOOL includesScreenshot;
 
 /// Controls whether or not a view hierarchy description should be attached to the email, when available. Defaults to NO.
-@property (nonatomic) BOOL includesViewHierarchyDescription;
+@property (nonatomic, readonly) BOOL includesViewHierarchyDescription;
 
 /// Additional attachments to include on the email. Defaults to nil.
 @property (nullable, nonatomic, copy) NSArray<ARKEmailAttachment *> *additionalAttachments;
+
+/// Removes the screenshot from the bug report, if one is included.
+- (void)removeScreenshot;
+
+/// Removes the view hierarchy description from the bug report, if one is included.
+- (void)removeViewHierarchyDescription;
 
 @end
