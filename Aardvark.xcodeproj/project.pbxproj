@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D6E2D0E20868335007B8013 /* ARKEmailBugReportConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */; };
+		3D6E2D0F20868335007B8013 /* ARKEmailBugReportConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6E2D0D20868335007B8013 /* ARKEmailBugReportConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D90DEBA20AAABAB006D4924 /* ARKEmailBugReportConfiguration_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */; };
 		3DED97142006D35B007FC95C /* ARKEmailAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DED97122006D35B007FC95C /* ARKEmailAttachment.h */; };
 		3DED97152006D35B007FC95C /* ARKEmailAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DED97132006D35B007FC95C /* ARKEmailAttachment.m */; };
 		4551A2D91BDAD10E00F216D0 /* Aardvark.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1442419E073FB0065A1FF /* Aardvark.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -94,6 +97,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ARKEmailBugReportConfiguration.m; path = Aardvark/ARKEmailBugReportConfiguration.m; sourceTree = "<group>"; };
+		3D6E2D0D20868335007B8013 /* ARKEmailBugReportConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ARKEmailBugReportConfiguration.h; path = Aardvark/ARKEmailBugReportConfiguration.h; sourceTree = "<group>"; };
+		3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKEmailBugReportConfiguration_Protected.h; path = Aardvark/ARKEmailBugReportConfiguration_Protected.h; sourceTree = "<group>"; };
 		3DED97122006D35B007FC95C /* ARKEmailAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ARKEmailAttachment.h; path = Aardvark/ARKEmailAttachment.h; sourceTree = "<group>"; };
 		3DED97132006D35B007FC95C /* ARKEmailAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ARKEmailAttachment.m; path = Aardvark/ARKEmailAttachment.m; sourceTree = "<group>"; };
 		4551A2C21BDACF9000F216D0 /* Aardvark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Aardvark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -295,6 +301,9 @@
 				EA98B9311D4BEB6E00B3A390 /* ARKDefaultLogFormatter.h */,
 				EA98B9321D4BEB6E00B3A390 /* ARKDefaultLogFormatter.m */,
 				EA98B9331D4BEB6E00B3A390 /* ARKEmailBugReporter_Testing.h */,
+				3D6E2D0D20868335007B8013 /* ARKEmailBugReportConfiguration.h */,
+				3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */,
+				3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */,
 				EA98B9341D4BEB6E00B3A390 /* ARKEmailBugReporter.h */,
 				EA98B9351D4BEB6E00B3A390 /* ARKEmailBugReporter.m */,
 				3DED97122006D35B007FC95C /* ARKEmailAttachment.h */,
@@ -411,6 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4551A2D91BDAD10E00F216D0 /* Aardvark.h in Headers */,
+				3D90DEBA20AAABAB006D4924 /* ARKEmailBugReportConfiguration_Protected.h in Headers */,
 				3DED97142006D35B007FC95C /* ARKEmailAttachment.h in Headers */,
 				EA98B9401D4BEB6E00B3A390 /* ARKEmailBugReporter.h in Headers */,
 				4551A30A1BDAF93A00F216D0 /* ARKScreenshotLogging.h in Headers */,
@@ -419,6 +429,7 @@
 				EA98B9161D4BEB4900B3A390 /* ARKIndividualLogViewController.h in Headers */,
 				EA98B9181D4BEB4900B3A390 /* ARKLogTableViewController.h in Headers */,
 				EA98B93A1D4BEB6E00B3A390 /* ARKDefaultLogFormatter.h in Headers */,
+				3D6E2D0F20868335007B8013 /* ARKEmailBugReportConfiguration.h in Headers */,
 				EA98B93E1D4BEB6E00B3A390 /* ARKEmailBugReporter_Testing.h in Headers */,
 				EA98B9141D4BEB4100B3A390 /* ARKLogDistributor+UIAdditions.h in Headers */,
 				EA98B9381D4BEB6E00B3A390 /* ARKBugReporter.h in Headers */,
@@ -622,6 +633,7 @@
 				EA98B9121D4BEB3D00B3A390 /* ARKLogDistributor+UIAdditions.m in Sources */,
 				EA98B94E1D4BF37000B3A390 /* UIApplication+ARKAdditions.swift in Sources */,
 				EA98B9621D4BFA1700B3A390 /* Aardvark.swift in Sources */,
+				3D6E2D0E20868335007B8013 /* ARKEmailBugReportConfiguration.m in Sources */,
 				EA98B91A1D4BEB4900B3A390 /* ARKLogTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
