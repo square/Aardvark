@@ -358,7 +358,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         }
         configuration.logStores = filteredLogStores;
         
-        configuration.additionalAttachments = [self.emailAttachmentAdditionsDelegate additionalEmailAttachmentsForEmailBugReporter:self];
+        configuration.additionalAttachments = [self.emailAttachmentAdditionsDelegate additionalEmailAttachmentsForEmailBugReporter:self] ?: @[];
         
     } else {
         configuration.logStores = [self.logStores copy];

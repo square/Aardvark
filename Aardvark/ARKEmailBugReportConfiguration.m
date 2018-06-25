@@ -40,17 +40,17 @@
     _logStores = @[];
     _includesScreenshot = includesScreenshot;
     _includesViewHierarchyDescription = includesViewHierarchyDescription;
-    _additionalAttachments = nil;
+    _additionalAttachments = @[];
     
     return self;
 }
 
-- (void)removeScreenshot;
+- (void)excludeScreenshot;
 {
     self.includesScreenshot = NO;
 }
 
-- (void)removeViewHierarchyDescription;
+- (void)excludeViewHierarchyDescription;
 {
     self.includesViewHierarchyDescription = NO;
 }

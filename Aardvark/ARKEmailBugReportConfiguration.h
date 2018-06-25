@@ -42,13 +42,13 @@
 /// Controls whether or not a view hierarchy description should be attached to the email, when available. Defaults to NO.
 @property (nonatomic, readonly) BOOL includesViewHierarchyDescription;
 
-/// Additional attachments to include on the email. Defaults to nil.
-@property (nullable, nonatomic, copy) NSArray<ARKEmailAttachment *> *additionalAttachments;
+/// Additional attachments to include on the email. Defaults to an empty array.
+@property (nonnull, nonatomic, copy) NSArray<ARKEmailAttachment *> *additionalAttachments;
 
-/// Removes the screenshot from the bug report, if one is included.
-- (void)removeScreenshot;
+/// Excludes the screenshot from the bug report, if one is included.
+- (void)excludeScreenshot;
 
-/// Removes the view hierarchy description from the bug report, if one is included.
-- (void)removeViewHierarchyDescription;
+/// Excludes the view hierarchy description from the bug report, if one is included.
+- (void)excludeViewHierarchyDescription;
 
 @end
