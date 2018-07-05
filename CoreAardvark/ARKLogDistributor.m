@@ -72,7 +72,7 @@
     _logDistributingQueue.name = [NSString stringWithFormat:@"%@ Log Distributing Queue", self];
     _logDistributingQueue.maxConcurrentOperationCount = 1;
 
-    [self _setDistributionQualityOfServiceBackground];
+    [self _setDistributionQualityOfServiceUtility];
     
     _logObservers = [NSMutableArray new];
 
@@ -185,7 +185,7 @@
     [self _setDistributionQualityOfServiceUserInitiated];
     [self.logDistributingQueue addOperationWithBlock:^{
         [[NSOperationQueue mainQueue] addOperationWithBlock:completionHandler];
-        [self _setDistributionQualityOfServiceBackground];
+        [self _setDistributionQualityOfServiceUtility];
     }];
 }
 
@@ -270,9 +270,9 @@
     self.logDistributingQueue.qualityOfService = NSQualityOfServiceUserInitiated;
 }
 
-- (void)_setDistributionQualityOfServiceBackground;
+- (void)_setDistributionQualityOfServiceUtility;
 {
-    self.logDistributingQueue.qualityOfService = NSQualityOfServiceBackground;
+    self.logDistributingQueue.qualityOfService = NSQualityOfServiceUtility;
 }
 
 @end

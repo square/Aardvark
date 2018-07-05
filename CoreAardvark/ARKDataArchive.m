@@ -72,7 +72,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     _fileOperationQueue.name = [NSString stringWithFormat:@"%@ File Operation Queue", self];
     _fileOperationQueue.maxConcurrentOperationCount = 1;
     
-    _fileOperationQueue.qualityOfService = NSQualityOfServiceBackground;
+    _fileOperationQueue.qualityOfService = NSQualityOfServiceUtility;
     
     [_fileOperationQueue addOperationWithBlock:^{
         // Count the number of (valid) archived objects.
