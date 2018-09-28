@@ -39,6 +39,10 @@ class SampleAppDelegate: UIResponder, UIApplicationDelegate {
         
         log("Hello World", type: .separator)
         
+        NSSetUncaughtExceptionHandler(existingUncaughtExceptionHandler)
+        
+        ARKEnableLogOnUncaughtException()
+        
         return true
     }
 
@@ -53,4 +57,11 @@ class SampleAppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         log("\(#function)", type: .error)
     }
+
+}
+
+// MARK: - Uncaught Exception Handling
+
+func existingUncaughtExceptionHandler(exception: NSException) {
+    print("Existing uncaught exception handler got called")
 }

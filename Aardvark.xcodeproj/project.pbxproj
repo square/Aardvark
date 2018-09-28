@@ -12,8 +12,8 @@
 		3D90DEBA20AAABAB006D4924 /* ARKEmailBugReportConfiguration_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */; };
 		3DED97142006D35B007FC95C /* ARKEmailAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DED97122006D35B007FC95C /* ARKEmailAttachment.h */; };
 		3DED97152006D35B007FC95C /* ARKEmailAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DED97132006D35B007FC95C /* ARKEmailAttachment.m */; };
-		3D15E02E1F9D38B1001DE13A /* ARKExceptionLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D15E02C1F9D38B1001DE13A /* ARKExceptionLogging.h */; };
-		3D15E02F1F9D38B1001DE13A /* ARKExceptionLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D15E02D1F9D38B1001DE13A /* ARKExceptionLogging.m */; };
+		3D15E0311F9D4E13001DE13A /* ARKExceptionLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D15E02C1F9D38B1001DE13A /* ARKExceptionLogging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DA743201F9D4EE500ADB183 /* ARKExceptionLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D15E02D1F9D38B1001DE13A /* ARKExceptionLogging.m */; };
 		4551A2D91BDAD10E00F216D0 /* Aardvark.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1442419E073FB0065A1FF /* Aardvark.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4551A30A1BDAF93A00F216D0 /* ARKScreenshotLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = 4551A3071BDAF93A00F216D0 /* ARKScreenshotLogging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA3C1D961D934A210048C4CD /* CoreAardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAF2FEA01D47172400931663 /* CoreAardvark.framework */; };
@@ -432,7 +432,6 @@
 				4551A30A1BDAF93A00F216D0 /* ARKScreenshotLogging.h in Headers */,
 				EA98B9441D4BEB6E00B3A390 /* ARKLogFormatter.h in Headers */,
 				EA98B91B1D4BEB4900B3A390 /* ARKScreenshotViewController.h in Headers */,
-				3D15E02E1F9D38B1001DE13A /* ARKExceptionLogging.h in Headers */,
 				EA98B9161D4BEB4900B3A390 /* ARKIndividualLogViewController.h in Headers */,
 				EA98B9181D4BEB4900B3A390 /* ARKLogTableViewController.h in Headers */,
 				EA98B93A1D4BEB6E00B3A390 /* ARKDefaultLogFormatter.h in Headers */,
@@ -464,6 +463,7 @@
 				EA98B8DA1D4BE83300B3A390 /* ARKLogDistributor_Protected.h in Headers */,
 				EA98B8F01D4BE85400B3A390 /* AardvarkDefines.h in Headers */,
 				EA98B8F21D4BE85400B3A390 /* CoreAardvark.h in Headers */,
+				3D15E0311F9D4E13001DE13A /* ARKExceptionLogging.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -638,7 +638,6 @@
 				3DED97152006D35B007FC95C /* ARKEmailAttachment.m in Sources */,
 				EA98B9421D4BEB6E00B3A390 /* ARKEmailBugReporter.m in Sources */,
 				EA98B9121D4BEB3D00B3A390 /* ARKLogDistributor+UIAdditions.m in Sources */,
-				3D15E02F1F9D38B1001DE13A /* ARKExceptionLogging.m in Sources */,
 				EA98B94E1D4BF37000B3A390 /* UIApplication+ARKAdditions.swift in Sources */,
 				EA98B9621D4BFA1700B3A390 /* Aardvark.swift in Sources */,
 				3D6E2D0E20868335007B8013 /* ARKEmailBugReportConfiguration.m in Sources */,
@@ -678,6 +677,7 @@
 				EA98B8E41D4BE83300B3A390 /* ARKLogMessage.m in Sources */,
 				EA98B8C51D4BE82100B3A390 /* NSURL+ARKAdditions.m in Sources */,
 				EA98B95A1D4BF88600B3A390 /* ARKLogging.m in Sources */,
+				3DA743201F9D4EE500ADB183 /* ARKExceptionLogging.m in Sources */,
 				EA98B95F1D4BFA0900B3A390 /* Logging.swift in Sources */,
 				EA98B8E01D4BE83300B3A390 /* ARKLogDistributor.m in Sources */,
 				EA98B8EC1D4BE83300B3A390 /* ARKLogStore.m in Sources */,

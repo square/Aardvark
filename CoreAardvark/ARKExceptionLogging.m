@@ -18,9 +18,11 @@
 //  limitations under the License.
 //
 
-@import CoreAardvark;
-
 #import "ARKExceptionLogging.h"
+
+#import "ARKLogDistributor.h"
+#import "ARKLogDistributor_Protected.h"
+#import "ARKLogging.h"
 
 
 NSUncaughtExceptionHandler *_Nullable ARKPreviousUncaughtExceptionHandler = nil;
@@ -28,13 +30,8 @@ NSUncaughtExceptionHandler *_Nullable ARKPreviousUncaughtExceptionHandler = nil;
 void ARKHandleUncaughtException(NSException *exception)
 {
     ARKLogWithType(ARKLogTypeError, nil, @"Uncaught exception '%@':\n%@", exception.name, exception.debugDescription);
-    dispatch_semaphore_t logDistributionSemaphore = dispatch_semaphore_create(0);
-    [[ARKLogDistributor defaultDistributor] distributeAllPendingLogsWithCompletionHandler:^{
-        dispatch_semaphore_signal(logDistributionSemaphore);
-    }];
-    while (dispatch_semaphore_wait(logDistributionSemaphore, DISPATCH_TIME_NOW)) {
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
+    [[ARKLogDistributor defaultDistributor] distributeAllPendingLogsWithCompletionHandler:^{}];
+    [[ARKLogDistributor defaultDistributor] waitUntilAllPendingLogsHaveBeenDistributed];
     
     if (ARKPreviousUncaughtExceptionHandler != nil) {
         ARKPreviousUncaughtExceptionHandler(exception);
