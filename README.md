@@ -61,6 +61,9 @@ Want to look at logs on device? Push an instance of [ARKLogTableViewController](
 ## Performance
 Logs are distributed to loggers on an internal background queue that will never slow down your app. Logs observed by the log store are incrementally appended to disk and not stored in memory.
 
+## Exception Logging
+To turn on logging of uncaught exceptions, call `ARKEnableLogOnUncaughtException()`. When an uncaught exception occurs, the stack trace will be logged to the default log distributor. To test this out in the sample app, hold one finger down on the screen for at least 5 seconds.
+
 ## Customize Aardvark
 Want to customize how bug reports are filed? Pass your own object conforming to the [ARKBugReporter](Aardvark/ARKBugReporter.h) protocol and the desired subclass of `UIGestureRecognizer` to `[Aardvark addBugReporter:triggeringGestureRecognizerClass:]`. You can further customize how bug reports will be triggered by modifying the returned gesture recognizer.
 
