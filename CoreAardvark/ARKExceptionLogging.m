@@ -27,11 +27,15 @@
 
 NSUncaughtExceptionHandler *_Nullable ARKPreviousUncaughtExceptionHandler = nil;
 
+NSMutableArray *_Nullable ARKUncaughtExceptionLogDistributors = nil;
+
 void ARKHandleUncaughtException(NSException *exception)
 {
-    ARKLogWithType(ARKLogTypeError, nil, @"Uncaught exception '%@':\n%@", exception.name, exception.debugDescription);
-    [[ARKLogDistributor defaultDistributor] distributeAllPendingLogsWithCompletionHandler:^{}];
-    [[ARKLogDistributor defaultDistributor] waitUntilAllPendingLogsHaveBeenDistributed];
+    for (ARKLogDistributor *logDistributor in ARKUncaughtExceptionLogDistributors) {
+        [logDistributor logWithType:ARKLogTypeError userInfo:nil format:@"Uncaught exception '%@':\n%@", exception.name, exception.debugDescription];
+        [logDistributor distributeAllPendingLogsWithCompletionHandler:^{}];
+        [logDistributor waitUntilAllPendingLogsHaveBeenDistributed];
+    }
     
     if (ARKPreviousUncaughtExceptionHandler != nil) {
         ARKPreviousUncaughtExceptionHandler(exception);
@@ -40,11 +44,35 @@ void ARKHandleUncaughtException(NSException *exception)
 
 void ARKEnableLogOnUncaughtException()
 {
-    ARKPreviousUncaughtExceptionHandler = NSGetUncaughtExceptionHandler();
-    NSSetUncaughtExceptionHandler(&ARKHandleUncaughtException);
+    ARKEnableLogOnUncaughtExceptionToLogDistributor([ARKLogDistributor defaultDistributor]);
+}
+
+void ARKEnableLogOnUncaughtExceptionToLogDistributor(ARKLogDistributor *_Nonnull logDistributor)
+{
+    if (ARKUncaughtExceptionLogDistributors == nil) {
+        ARKUncaughtExceptionLogDistributors = [NSMutableArray arrayWithObject:logDistributor];
+
+        ARKPreviousUncaughtExceptionHandler = NSGetUncaughtExceptionHandler();
+        NSSetUncaughtExceptionHandler(&ARKHandleUncaughtException);
+
+    } else {
+        [ARKUncaughtExceptionLogDistributors addObject:logDistributor];
+    }
 }
 
 void ARKDisableLogOnUncaughtException()
 {
-    NSSetUncaughtExceptionHandler(ARKPreviousUncaughtExceptionHandler);
+    ARKDisableLogOnUncaughtExceptionToLogDistributor([ARKLogDistributor defaultDistributor]);
+}
+
+void ARKDisableLogOnUncaughtExceptionToLogDistributor(ARKLogDistributor *_Nonnull logDistributor)
+{
+    [ARKUncaughtExceptionLogDistributors removeObject:logDistributor];
+
+    // If that was the last log distributor, clean up the handler.
+    if ([ARKUncaughtExceptionLogDistributors count] == 0) {
+        NSSetUncaughtExceptionHandler(ARKPreviousUncaughtExceptionHandler);
+        ARKPreviousUncaughtExceptionHandler = nil;
+        ARKUncaughtExceptionLogDistributors = nil;
+    }
 }

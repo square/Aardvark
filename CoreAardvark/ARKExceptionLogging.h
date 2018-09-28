@@ -20,9 +20,17 @@
 
 @import Foundation;
 
+@class ARKLogDistributor;
 
-/// Enables logging uncaught exceptions. Calls into previously-set uncaught exception handler after logging if one has been set.
+
+/// Enables logging uncaught exceptions to the default log distributor. Calls into previously-set uncaught exception handler after logging if one has been set.
 OBJC_EXTERN void ARKEnableLogOnUncaughtException(void);
 
-/// Disables logging uncaught exceptions. Restores the uncaught exception handler set prior to enabling Aardvark exception logging if one was set.
+/// Enables logging uncaught exceptions to the specified log distributor. Calls into previously-set uncaught exception handler after logging if one has been set.
+OBJC_EXTERN void ARKEnableLogOnUncaughtExceptionToLogDistributor(ARKLogDistributor *_Nonnull logDistributor);
+
+/// Disables logging uncaught exceptions to the default log distributor. Restores the uncaught exception handler set prior to enabling Aardvark exception logging if one was set.
 OBJC_EXTERN void ARKDisableLogOnUncaughtException(void);
+
+/// Disables logging uncaught exceptions to the specified log distributor.  Restores the uncaught exception handler set prior to enabling Aardvark exception logging if one was set.
+OBJC_EXTERN void ARKDisableLogOnUncaughtExceptionToLogDistributor(ARKLogDistributor *_Nonnull logDistributor);
