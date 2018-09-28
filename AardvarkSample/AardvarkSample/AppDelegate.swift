@@ -63,5 +63,5 @@ class SampleAppDelegate: UIResponder, UIApplicationDelegate {
 // MARK: - Uncaught Exception Handling
 
 func existingUncaughtExceptionHandler(exception: NSException) {
-    print("Existing uncaught exception handler got called")
+    print("Existing uncaught exception handler got called for exception: \(exception)")
 }
