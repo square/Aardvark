@@ -45,7 +45,7 @@ NSLock * ARKGetUncaughtExceptionLogDistributorsLock()
     return ARKUncaughtExceptionLogDistributorsLock;
 }
 
-void ARKHandleUncaughtException(NSException *exception)
+void ARKHandleUncaughtException(NSException *_Nonnull exception)
 {
     NSLock *const logDistributorsLock = ARKGetUncaughtExceptionLogDistributorsLock();
     [logDistributorsLock lock];

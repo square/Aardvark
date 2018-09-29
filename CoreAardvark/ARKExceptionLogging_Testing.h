@@ -22,12 +22,12 @@
 
 
 typedef NSUncaughtExceptionHandler *_Nullable (*ARKUncaughtExceptionHandlerGetter)(void);
-OBJC_EXTERN ARKUncaughtExceptionHandlerGetter ARKGetUncaughtExceptionHandler;
+OBJC_EXTERN ARKUncaughtExceptionHandlerGetter _Nonnull ARKGetUncaughtExceptionHandler;
 
 typedef void (*ARKUncaughtExceptionHandlerSetter)(NSUncaughtExceptionHandler *_Nullable);
-OBJC_EXTERN ARKUncaughtExceptionHandlerSetter ARKSetUncaughtExceptionHandler;
+OBJC_EXTERN ARKUncaughtExceptionHandlerSetter _Nonnull ARKSetUncaughtExceptionHandler;
 
-OBJC_EXTERN void ARKHandleUncaughtException(NSException *exception);
+OBJC_EXTERN void ARKHandleUncaughtException(NSException *_Nonnull exception);
 
 OBJC_EXTERN NSUncaughtExceptionHandler *_Nullable ARKPreviousUncaughtExceptionHandler;
 
