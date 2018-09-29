@@ -19,6 +19,7 @@
 //
 
 #import "ARKExceptionLogging.h"
+#import "ARKExceptionLogging_Testing.h"
 
 #import "ARKLogDistributor.h"
 #import "ARKLogDistributor_Protected.h"
@@ -31,24 +32,33 @@ NSLock *_Nullable ARKUncaughtExceptionLogDistributorsLock = nil;
 
 NSMutableArray *_Nullable ARKUncaughtExceptionLogDistributors = nil;
 
+// Use aliases for getting/setting the uncaught exception handler so we can replace these in unit tests.
+ARKUncaughtExceptionHandlerGetter ARKGetUncaughtExceptionHandler = NSGetUncaughtExceptionHandler;
+ARKUncaughtExceptionHandlerSetter ARKSetUncaughtExceptionHandler = NSSetUncaughtExceptionHandler;
+
 NSLock * ARKGetUncaughtExceptionLogDistributorsLock()
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        ARKUncaughtExceptionLogDistributorsLock = [[NSLock alloc] init];
+        ARKUncaughtExceptionLogDistributorsLock = [NSLock new];
     });
     return ARKUncaughtExceptionLogDistributorsLock;
 }
 
 void ARKHandleUncaughtException(NSException *exception)
 {
+    NSLock *const logDistributorsLock = ARKGetUncaughtExceptionLogDistributorsLock();
+    [logDistributorsLock lock];
+
     for (ARKLogDistributor *const logDistributor in ARKUncaughtExceptionLogDistributors) {
         [logDistributor logWithType:ARKLogTypeError userInfo:nil format:@"Uncaught exception '%@':\n%@", exception.name, exception.debugDescription];
         [logDistributor distributeAllPendingLogsWithCompletionHandler:^{}];
         [logDistributor waitUntilAllPendingLogsHaveBeenDistributed];
     }
-    
-    if (ARKPreviousUncaughtExceptionHandler != nil) {
+
+    [logDistributorsLock unlock];
+
+    if (ARKPreviousUncaughtExceptionHandler != NULL) {
         ARKPreviousUncaughtExceptionHandler(exception);
     }
 }
@@ -67,13 +77,13 @@ void ARKEnableLogOnUncaughtExceptionToLogDistributor(ARKLogDistributor *_Nonnull
     if (ARKUncaughtExceptionLogDistributors == nil) {
         ARKUncaughtExceptionLogDistributors = [NSMutableArray arrayWithObject:logDistributor];
 
-        ARKPreviousUncaughtExceptionHandler = NSGetUncaughtExceptionHandler();
-        NSSetUncaughtExceptionHandler(&ARKHandleUncaughtException);
+        ARKPreviousUncaughtExceptionHandler = ARKGetUncaughtExceptionHandler();
+        ARKSetUncaughtExceptionHandler(&ARKHandleUncaughtException);
 
     } else {
         [ARKUncaughtExceptionLogDistributors addObject:logDistributor];
     }
-    
+
     [logDistributorsLock unlock];
 }
 
@@ -86,15 +96,15 @@ void ARKDisableLogOnUncaughtExceptionToLogDistributor(ARKLogDistributor *_Nonnul
 {
     NSLock *const logDistributorsLock = ARKGetUncaughtExceptionLogDistributorsLock();
     [logDistributorsLock lock];
-    
+
     [ARKUncaughtExceptionLogDistributors removeObject:logDistributor];
 
     // If that was the last log distributor, clean up the handler.
     if ([ARKUncaughtExceptionLogDistributors count] == 0) {
-        NSSetUncaughtExceptionHandler(ARKPreviousUncaughtExceptionHandler);
-        ARKPreviousUncaughtExceptionHandler = nil;
+        ARKSetUncaughtExceptionHandler(ARKPreviousUncaughtExceptionHandler);
+        ARKPreviousUncaughtExceptionHandler = NULL;
         ARKUncaughtExceptionLogDistributors = nil;
     }
-    
+
     [logDistributorsLock unlock];
 }
