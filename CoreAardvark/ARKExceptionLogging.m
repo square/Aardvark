@@ -56,10 +56,12 @@ void ARKHandleUncaughtException(NSException *_Nonnull exception)
         [logDistributor waitUntilAllPendingLogsHaveBeenDistributed];
     }
 
+    NSUncaughtExceptionHandler *const previousHandler = ARKPreviousUncaughtExceptionHandler;
+
     [logDistributorsLock unlock];
 
-    if (ARKPreviousUncaughtExceptionHandler != NULL) {
-        ARKPreviousUncaughtExceptionHandler(exception);
+    if (previousHandler != NULL) {
+        previousHandler(exception);
     }
 }
 
