@@ -30,12 +30,17 @@ class SampleViewController : UIViewController {
     private var tapRecognizer: UITapGestureRecognizer?
     private var tapGestureLogStore: ARKLogStore?
     
+    private var longPressRecognizer: UILongPressGestureRecognizer?
+    
     // MARK: – Initialization
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapDetected(tapRecognizer:)))
+        
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressDetected(longPressRecognizer:)))
+        longPressRecognizer?.minimumPressDuration = 5
     }
     
     // MARK: – UIViewController
@@ -91,11 +96,13 @@ class SampleViewController : UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         log("\(#function)")
         
-        guard let tapRecognizer = tapRecognizer else {
+        guard let tapRecognizer = tapRecognizer, let longPressRecognizer = longPressRecognizer else {
             return
         }
         
         view.addGestureRecognizer(tapRecognizer)
+        
+        view.addGestureRecognizer(longPressRecognizer)
         
         super.viewDidAppear(animated)
     }
@@ -103,11 +110,13 @@ class SampleViewController : UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         log("\(#function)")
         
-        guard let tapRecognizer = tapRecognizer else {
+        guard let tapRecognizer = tapRecognizer, let longPressRecognizer = longPressRecognizer else {
             return
         }
         
         tapRecognizer.view?.removeGestureRecognizer(tapRecognizer)
+        
+        longPressRecognizer.view?.removeGestureRecognizer(longPressRecognizer)
         
         super.viewDidAppear(animated)
     }
@@ -158,5 +167,13 @@ class SampleViewController : UIViewController {
         }
         
         log("Tapped \(NSStringFromCGPoint(tapRecognizer.location(in: nil)))", userInfo: [tapLogKey : true as NSNumber])
+    }
+    
+    @objc private func longPressDetected(longPressRecognizer: UITapGestureRecognizer) {
+        guard longPressRecognizer == self.longPressRecognizer && longPressRecognizer.state == .ended else {
+            return
+        }
+        
+        NSException(name: NSExceptionName.genericException, reason: "Debug Exception", userInfo: nil).raise()
     }
 }
