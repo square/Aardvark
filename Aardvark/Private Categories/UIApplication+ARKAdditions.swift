@@ -24,6 +24,7 @@ import Foundation
 extension UIApplication {
     @nonobjc
     private static var observingKeyWindowNotifications = false
+
     @nonobjc
     private static let bugReporterToGestureRecognizerMap: NSMapTable<ARKBugReporter, UIGestureRecognizer> = NSMapTable.strongToStrongObjects()
 
