@@ -22,16 +22,20 @@ import Foundation
 
 
 extension UIApplication {
-    @nonobjc private static var observingKeyWindowNotifications = false
-    @nonobjc private static let bugReporterToGestureRecognizerMap: NSMapTable<ARKBugReporter, UIGestureRecognizer> = NSMapTable.strongToStrongObjects()
-    
-    @nonobjc func addTwoFingerPressAndHoldGestureRecognizerTrigger(with bugReporter: ARKBugReporter) {
+    @nonobjc
+    private static var observingKeyWindowNotifications = false
+    @nonobjc
+    private static let bugReporterToGestureRecognizerMap: NSMapTable<ARKBugReporter, UIGestureRecognizer> = NSMapTable.strongToStrongObjects()
+
+    @nonobjc
+    func addTwoFingerPressAndHoldGestureRecognizerTrigger(with bugReporter: ARKBugReporter) {
         let bugReportingGestureRecognizer = add(bugReporter: bugReporter, triggeringGestureRecognizerClass: UILongPressGestureRecognizer.self)
         bugReportingGestureRecognizer?.numberOfTouchesRequired = 2
     }
     
     /// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReport]. Must be called from the main thread.
-    @nonobjc func add<GestureRecognizer: UIGestureRecognizer>(bugReporter: ARKBugReporter, triggeringGestureRecognizerClass: GestureRecognizer.Type) -> GestureRecognizer? {
+    @nonobjc
+    func add<GestureRecognizer: UIGestureRecognizer>(bugReporter: ARKBugReporter, triggeringGestureRecognizerClass: GestureRecognizer.Type) -> GestureRecognizer? {
         guard Thread.isMainThread else {
             noteImproperAPIUse("Must call \(#function) from the main thread!")
             return nil
@@ -56,8 +60,9 @@ extension UIApplication {
         
         return bugReportingGestureRecognizer
     }
-    
-    @nonobjc func remove(bugReporter: ARKBugReporter) {
+
+    @nonobjc
+    func remove(bugReporter: ARKBugReporter) {
         if let gestureRecognizerToRemove: UIGestureRecognizer = UIApplication.bugReporterToGestureRecognizerMap.object(forKey: bugReporter) {
             gestureRecognizerToRemove.view?.removeGestureRecognizer(gestureRecognizerToRemove)
             
@@ -65,7 +70,8 @@ extension UIApplication {
         }
     }
     
-    @objc(ARK_didFireBugReportGestureRecognizer:) private func didFire(bugReportGestureRecognizer: UIGestureRecognizer) {
+    @objc(ARK_didFireBugReportGestureRecognizer:)
+    private func didFire(bugReportGestureRecognizer: UIGestureRecognizer) {
         guard bugReportGestureRecognizer.state == .began else {
             return
         }
@@ -91,7 +97,8 @@ extension UIApplication {
         }
     }
     
-    @objc(ARK_windowDidBecomeKeyNotification:) private func windowDidBecomeKey(notification: Notification) {
+    @objc(ARK_windowDidBecomeKeyNotification:)
+    private func windowDidBecomeKey(notification: Notification) {
         guard let window = notification.object as? UIWindow else {
             return
         }
@@ -106,7 +113,8 @@ extension UIApplication {
         }
     }
     
-    @objc(ARK_windowDidResignKeyNotification:) private func windowDidResignKey(notification: Notification) {
+    @objc(ARK_windowDidResignKeyNotification:)
+    private func windowDidResignKey(notification: Notification) {
         guard let window = notification.object as? UIWindow else {
             return
         }
