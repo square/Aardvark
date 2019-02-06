@@ -186,9 +186,11 @@
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController;
 {
     if (searchController.isActive) {
+        BOOL isSubset = self.searchString != nil && [searchController.searchBar.text containsString:self.searchString];
+
         self.searchString = searchController.searchBar.text;
         searchController.searchBar.placeholder = (self.searchString.length > 0) ? self.searchString : NSLocalizedString(@"Search", @"The default placeholder text for the search bar");
-        [self _reloadFilteredLogs];
+        [self _reloadFilteredLogs:isSubset];
         [self.tableView reloadData];
     }
 }
@@ -402,16 +404,18 @@
 {
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         self.logMessages = [self _logMessagesWithMinuteSeparators:logMessages];
-        [self _reloadFilteredLogs];
+        [self _reloadFilteredLogs:false];
         
         [self.tableView reloadData];
     }];
 }
 
-- (void)_reloadFilteredLogs;
+- (void)_reloadFilteredLogs:(BOOL)subsetOfPreviousFilter;
 {
-    if (self.searchString.length > 0) {
+    if (self.searchString.length > 0 && subsetOfPreviousFilter) {
         self.filteredLogs = [self.filteredLogs filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"text CONTAINS[c] %@", self.searchString]];
+    } else if (self.searchString.length > 0) {
+        self.filteredLogs = [self.logMessages filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"text CONTAINS[c] %@", self.searchString]];
     } else {
         self.filteredLogs = self.logMessages;
     }
