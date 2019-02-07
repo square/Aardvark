@@ -33,6 +33,7 @@
 
 @property (nonatomic, copy) NSArray *logMessages;
 @property (nonatomic, copy) NSArray *filteredLogs;
+@property (nonatomic, copy) NSString *searchStringForFilteredLogs;
 @property (nonatomic) BOOL viewWillAppearForFirstTimeCalled;
 @property (nonatomic) BOOL hasScrolledToBottom;
 
@@ -186,11 +187,9 @@
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController;
 {
     if (searchController.isActive) {
-        BOOL isSubset = self.searchString != nil && [searchController.searchBar.text containsString:self.searchString];
-
         self.searchString = searchController.searchBar.text;
         searchController.searchBar.placeholder = (self.searchString.length > 0) ? self.searchString : NSLocalizedString(@"Search", @"The default placeholder text for the search bar");
-        [self _reloadFilteredLogs:isSubset];
+        [self _reloadFilteredLogs];
         [self.tableView reloadData];
     }
 }
@@ -404,15 +403,18 @@
 {
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         self.logMessages = [self _logMessagesWithMinuteSeparators:logMessages];
-        [self _reloadFilteredLogs:false];
+        [self _reloadFilteredLogs];
         
         [self.tableView reloadData];
     }];
 }
 
-- (void)_reloadFilteredLogs:(BOOL)subsetOfPreviousFilter;
+- (void)_reloadFilteredLogs;
 {
-    if (self.searchString.length > 0 && subsetOfPreviousFilter) {
+    BOOL isSubsetOfPreviousFilter = self.searchStringForFilteredLogs != nil && [self.searchString containsString:self.searchStringForFilteredLogs];
+    self.searchStringForFilteredLogs = self.searchString;
+
+    if (self.searchString.length > 0 && isSubsetOfPreviousFilter) {
         self.filteredLogs = [self.filteredLogs filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"text CONTAINS[c] %@", self.searchString]];
     } else if (self.searchString.length > 0) {
         self.filteredLogs = [self.logMessages filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"text CONTAINS[c] %@", self.searchString]];
