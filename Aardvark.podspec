@@ -9,6 +9,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.source_files = 'Aardvark/**/*.{h,m}'
   s.private_header_files = 'Aardvark/*_Testing.h', 'Aardvark/Private Categories/*.h'
+  s.frameworks = ['MessageUI']
 
   s.dependency 'CoreAardvark', '~> 1.0'
 end
