@@ -46,9 +46,22 @@ typedef unsigned long long ARKFileOffset;
     uint8_t dataLengthBytes[ARKBlockLengthBytes] = { };
     ARKWriteBigEndianBlockLength(dataLengthBytes, 0, dataBlockLength);
     NSData *dataLengthData = [NSData dataWithBytes:dataLengthBytes length:ARKBlockLengthBytes];
-    
-    [self writeData:dataLengthData];
-    [self writeData:dataBlock];
+
+    // `writeData:error:` was added in iOS 13, we need to catch
+    // an exception in earlier version to prevent apps from crashing
+    // if writeData fails (e.g. on devices with low storage)
+    if (@available(iOS 13.0, *)) {
+        NSError *error;
+        [self writeData:dataLengthData error:&error];
+        [self writeData:dataBlock error:&error];
+    } else {
+        @try {
+            [self writeData:dataLengthData];
+            [self writeData:dataBlock];
+        }
+        @catch ( NSException *e ) {
+        }
+    }
 }
 
 - (void)ARK_appendDataBlock:(NSData *)dataBlock;
