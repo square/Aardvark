@@ -46,9 +46,12 @@ typedef unsigned long long ARKFileOffset;
     uint8_t dataLengthBytes[ARKBlockLengthBytes] = { };
     ARKWriteBigEndianBlockLength(dataLengthBytes, 0, dataBlockLength);
     NSData *dataLengthData = [NSData dataWithBytes:dataLengthBytes length:ARKBlockLengthBytes];
-    
-    [self writeData:dataLengthData];
-    [self writeData:dataBlock];
+
+    @try {
+        [self writeData:dataLengthData];
+        [self writeData:dataBlock];
+    } @catch (NSException *exception) {
+    }
 }
 
 - (void)ARK_appendDataBlock:(NSData *)dataBlock;
