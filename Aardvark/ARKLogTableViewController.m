@@ -278,7 +278,8 @@
             backgroundColor = [UIColor redColor];
             break;
         case ARKLogTypeDefault:
-            textColor = [UIColor blackColor];
+            // Set the text color to `nil`, which causes it to be reset to the default label text color.
+            textColor = nil;
             backgroundColor = [UIColor clearColor];
             break;
         case ARKLogTypeScreenshot:
