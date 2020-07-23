@@ -1,6 +1,6 @@
 # Aardvark
 
-[![CI Status](https://travis-ci.org/square/Aardvark.svg?branch=master)](https://travis-ci.org/square/Aardvark)
+[![CI Status](https://github.com/square/Aardvark/workflows/CI/badge.svg)](https://github.com/square/Aardvark/actions)
 [![Carthage Compatibility](https://img.shields.io/badge/carthage-✓-e2c245.svg)](https://github.com/Carthage/Carthage/)
 [![Version](https://img.shields.io/cocoapods/v/Aardvark.svg)](https://cocoapods.org/pods/Aardvark)
 [![License](https://img.shields.io/cocoapods/l/Aardvark.svg)](https://cocoapods.org/pods/Aardvark)
