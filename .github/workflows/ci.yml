@@ -21,7 +21,7 @@ jobs:
             -project Aardvark.xcodeproj \
             -scheme Aardvark \
             -sdk iphonesimulator \
-            -destination "platform=iOS Simulator,name=iPhone SE" \
+            -destination "platform=iOS Simulator,name=iPhone 11 Pro" \
             test
       - name: Build Sample App
         run: |
