@@ -170,7 +170,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                            @"2. \n"
                            @"3. \n"
                            @"\n"
-                           @"System version: %@", [[UIDevice currentDevice] systemVersion]];
+                           @"System: %@", [[NSProcessInfo processInfo] operatingSystemVersionString]];
     
     _logFormatter = [ARKDefaultLogFormatter new];
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable = 3;
