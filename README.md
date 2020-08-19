@@ -17,7 +17,7 @@ There are only three steps to get Aardvark logging and bug reporting up and runn
 #### Using [CocoaPods](https://cocoapods.org)
 
 ```
-platform :ios, '8.0'
+platform :ios, '9.0'
 pod 'Aardvark'
 ```
 
@@ -82,7 +82,7 @@ Want to log with Aardvark but don’t want to use Aardvark’s bug reporting too
 ## Requirements
 
 * Xcode 8.0 or later
-* iOS 8 or later
+* iOS 9 or later
 
 ## Contributing
 
