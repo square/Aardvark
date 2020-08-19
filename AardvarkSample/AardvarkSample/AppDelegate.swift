@@ -29,7 +29,7 @@ class SampleAppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var bugReporter: ARKBugReporter?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         // This line is all you'll need to get started.
         bugReporter = Aardvark.addDefaultBugReportingGestureWithEmailBugReporter(withRecipient: "fake-email@aardvarkbugreporting.src")
