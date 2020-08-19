@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage = 'https://github.com/square/Aardvark'
   s.authors  = 'Square'
   s.source   = { :git => 'https://github.com/square/Aardvark.git', :tag => s.version }
-  s.swift_version = '4.0'
+  s.swift_version = '5.0'
   s.ios.deployment_target = '9.0'
   s.source_files = 'Aardvark/**/*.{h,m,swift}'
   s.private_header_files = 'Aardvark/*_Testing.h', 'Aardvark/Private Categories/*.h'
