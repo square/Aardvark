@@ -20,17 +20,18 @@
 
 @import MessageUI;
 
+#import <CoreAardvark/AardvarkDefines.h>
+#import <CoreAardvark/ARKLogMessage.h>
+#import <CoreAardvark/ARKLogStore.h>
+
 #import "ARKEmailBugReporter.h"
 #import "ARKEmailBugReporter_Testing.h"
 
-#import "AardvarkDefines.h"
 #import "ARKDefaultLogFormatter.h"
 #import "ARKEmailAttachment.h"
 #import "ARKEmailBugReportConfiguration.h"
 #import "ARKEmailBugReportConfiguration_Protected.h"
 #import "ARKScreenshotLogging.h"
-#import "ARKLogMessage.h"
-#import "ARKLogStore.h"
 
 
 NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
