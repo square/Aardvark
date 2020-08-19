@@ -569,18 +569,15 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (NSURL *)_emailURLWithPrefix:(NSString *)prefix recipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText shouldCheckCanOpenURL:(BOOL)shouldCheckCanOpenURL;
 {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
-    NSString *const recipientsEscapedString = [[recipients componentsJoinedByString:@","] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *const recipientsEscapedString = [[recipients componentsJoinedByString:@","] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
     
     NSString *const toArgument = (recipients.count > 0) ? [NSString stringWithFormat:@"to=%@&", recipientsEscapedString] : @"";
     NSString *const URLString = [NSString stringWithFormat:@"%@?%@cc=%@&subject=%@&body=%@",
                                  prefix,
                                  toArgument,
-                                 [CCLine stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                                 [subjectLine stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                                 [bodyText stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-#pragma clang diagnostic pop
+                                 [CCLine stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet],
+                                 [subjectLine stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet],
+                                 [bodyText stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
     
     NSURL *const URL = [NSURL URLWithString:URLString];
     if (shouldCheckCanOpenURL) {
