@@ -1,9 +1,0 @@
-language: objective-c
-osx_image: xcode9
-before_script:
-    - bundle install
-script:
-    - bundle exec pod repo update --silent
-    - bundle exec pod lib lint --verbose --fail-fast CoreAardvark.podspec
-    - bundle exec pod lib lint --verbose --fail-fast Aardvark.podspec
-    - xcodebuild -project Aardvark.xcodeproj -scheme Aardvark -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone SE" test
