@@ -106,7 +106,7 @@
     [self.logStore clearLogsWithCompletionHandler:^{
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:10.0 handler:nil];
     
     self.logDistributor.logMessageClass = [ARKLogMessage class];
     
