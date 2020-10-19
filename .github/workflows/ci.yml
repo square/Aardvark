@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+
+jobs:
+  xcode-build:
+    name: Xcode Build
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Bundle Install
+        run: bundle install
+      - name: Build and Test Framework
+        run: |
+          xcodebuild \
+            -project Aardvark.xcodeproj \
+            -scheme Aardvark \
+            -sdk iphonesimulator \
+            -destination "platform=iOS Simulator,name=iPhone 11 Pro" \
+            test
+      - name: Build Sample App
+        run: |
+          xcodebuild \
+            -project AardvarkSample/AardvarkSample.xcodeproj \
+            -scheme AardvarkSample \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -PBXBuildsContinueAfterErrors=0 \
+            ACTIVE_ARCH_ONLY=0 \
+            build
+  pod-lint:
+    name: Pod Lint
+    runs-on: macOS-latest
+    strategy:
+      matrix:
+        pod: ['Aardvark', 'CoreAardvark']
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Bundle Install
+        run: bundle install
+      - name: Lint Podspec
+        run: bundle exec pod lib lint --verbose --fail-fast ${{ matrix.pod }}.podspec
