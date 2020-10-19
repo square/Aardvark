@@ -184,8 +184,8 @@
 {
     [self _setDistributionQualityOfServiceUserInitiated];
     [self.logDistributingQueue addOperationWithBlock:^{
-        [self _setDistributionQualityOfServiceBackground];
         [[NSOperationQueue mainQueue] addOperationWithBlock:completionHandler];
+        [self _setDistributionQualityOfServiceBackground];
     }];
 }
 
