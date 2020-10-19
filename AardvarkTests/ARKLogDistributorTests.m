@@ -246,6 +246,8 @@
 
 #pragma mark - Performance Tests
 
+// This test is disabled because it has been observed to be flaky on CI builds. Specifically, the `tearDown` method
+// times out while trying to clear the log store after running this test.
 - (void)disabled_test_logDistribution_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
