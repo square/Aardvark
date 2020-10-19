@@ -246,7 +246,7 @@
 
 #pragma mark - Performance Tests
 
-- (void)test_logDistribution_performance;
+- (void)disabled_test_logDistribution_performance;
 {
     NSMutableArray *numbers = [NSMutableArray new];
     for (NSUInteger i  = 0; i < 3 * self.logStore.maximumLogMessageCount; i++) {
