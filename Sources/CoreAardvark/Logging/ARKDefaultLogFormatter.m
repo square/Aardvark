@@ -18,9 +18,9 @@
 //  limitations under the License.
 //
 
-@import CoreAardvark;
-
 #import "ARKDefaultLogFormatter.h"
+#import "ARKLogTypes.h"
+#import "ARKLogMessage.h"
 
 
 @implementation ARKDefaultLogFormatter

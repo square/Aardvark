@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D046DD8254D5ACB0045A06C /* AardvarkLoggingUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D046DD5254D5ACB0045A06C /* AardvarkLoggingUI.framework */; };
+		3D046DD9254D5ACB0045A06C /* AardvarkLoggingUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D046DD5254D5ACB0045A06C /* AardvarkLoggingUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EA3C1DDD1D93696D0048C4CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3C1DDC1D93696D0048C4CD /* AppDelegate.swift */; };
 		EA3C1DE21D93696D0048C4CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1DE01D93696D0048C4CD /* Main.storyboard */; };
 		EA3C1DE41D93696D0048C4CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1DE31D93696D0048C4CD /* Assets.xcassets */; };
@@ -20,6 +22,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3D046DD4254D5ACB0045A06C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D046DB4254D5A840045A06C;
+			remoteInfo = AardvarkLoggingUI;
+		};
+		3D046DD6254D5ACB0045A06C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D046DBC254D5A840045A06C;
+			remoteInfo = AardvarkLoggingUITests;
+		};
 		EA3C1E201D9375060048C4CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
@@ -73,6 +89,7 @@
 			files = (
 				EA3C1E291D93750D0048C4CD /* Aardvark.framework in Embed Frameworks */,
 				EA3C1E2D1D93750D0048C4CD /* CoreAardvark.framework in Embed Frameworks */,
+				3D046DD9254D5ACB0045A06C /* AardvarkLoggingUI.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,6 +117,7 @@
 			files = (
 				EA3C1E281D93750D0048C4CD /* Aardvark.framework in Frameworks */,
 				EA3C1E2C1D93750D0048C4CD /* CoreAardvark.framework in Frameworks */,
+				3D046DD8254D5ACB0045A06C /* AardvarkLoggingUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +172,8 @@
 				EA3C1E231D9375060048C4CD /* AardvarkTests.xctest */,
 				EA3C1E251D9375060048C4CD /* CoreAardvark.framework */,
 				EA3C1E271D9375060048C4CD /* CoreAardvarkTests.xctest */,
+				3D046DD5254D5ACB0045A06C /* AardvarkLoggingUI.framework */,
+				3D046DD7254D5ACB0045A06C /* AardvarkLoggingUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -225,6 +245,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		3D046DD5254D5ACB0045A06C /* AardvarkLoggingUI.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AardvarkLoggingUI.framework;
+			remoteRef = 3D046DD4254D5ACB0045A06C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3D046DD7254D5ACB0045A06C /* AardvarkLoggingUITests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AardvarkLoggingUITests.xctest;
+			remoteRef = 3D046DD6254D5ACB0045A06C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		EA3C1E211D9375060048C4CD /* Aardvark.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
