@@ -42,6 +42,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3DA5BF362556602000B6D148"
+               BuildableName = "AardvarkMailUI.framework"
+               BlueprintName = "AardvarkMailUI"
+               ReferencedContainer = "container:Aardvark.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "EAF2FE9F1D47172400931663"
                BuildableName = "CoreAardvark.framework"
                BlueprintName = "CoreAardvark"
@@ -83,6 +97,16 @@
                BlueprintIdentifier = "EA3C1D901D934A210048C4CD"
                BuildableName = "CoreAardvarkTests.xctest"
                BlueprintName = "CoreAardvarkTests"
+               ReferencedContainer = "container:Aardvark.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3DA5BF3E2556602100B6D148"
+               BuildableName = "AardvarkMailUITests.xctest"
+               BlueprintName = "AardvarkMailUITests"
                ReferencedContainer = "container:Aardvark.xcodeproj">
             </BuildableReference>
          </TestableReference>

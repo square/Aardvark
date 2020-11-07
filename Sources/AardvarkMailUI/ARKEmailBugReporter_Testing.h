@@ -20,7 +20,7 @@
 
 @import Foundation;
 
-#import <Aardvark/ARKEmailBugReporter.h>
+#import <AardvarkMailUI/ARKEmailBugReporter.h>
 
 
 @interface ARKEmailBugReporter ()

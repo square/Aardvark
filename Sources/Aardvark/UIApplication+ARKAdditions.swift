@@ -27,12 +27,6 @@ extension UIApplication {
 
     @nonobjc
     private static let bugReporterToGestureRecognizerMap: NSMapTable<ARKBugReporter, UIGestureRecognizer> = NSMapTable.strongToStrongObjects()
-
-    @nonobjc
-    func addTwoFingerPressAndHoldGestureRecognizerTrigger(with bugReporter: ARKBugReporter) {
-        let bugReportingGestureRecognizer = add(bugReporter: bugReporter, triggeringGestureRecognizerClass: UILongPressGestureRecognizer.self)
-        bugReportingGestureRecognizer?.numberOfTouchesRequired = 2
-    }
     
     /// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReport]. Must be called from the main thread.
     @nonobjc
