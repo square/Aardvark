@@ -36,13 +36,14 @@ jobs:
   pod-lint:
     name: Pod Lint
     runs-on: macOS-latest
-    strategy:
-      matrix:
-        pod: ['Aardvark', 'CoreAardvark', 'AardvarkLoggingUI']
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Bundle Install
         run: bundle install
-      - name: Lint Podspec
-        run: bundle exec pod lib lint --verbose --fail-fast ${{ matrix.pod }}.podspec --include-podspecs="*.podspec"
+      - name: Lint CoreAardvark Podspec
+        run: bundle exec pod lib lint --verbose --fail-fast CoreAardvark.podspec
+      - name: Lint Aardvark Podspec
+        run: bundle exec pod lib lint --verbose --fail-fast Aardvark.podspec --include-podspecs=CoreAardvark.podspec
+      - name: Lint AardvarkLoggingUI Podspec
+        run: bundle exec pod lib lint --verbose --fail-fast AardvarkLoggingUI.podspec --include-podspecs=CoreAardvark.podspec
