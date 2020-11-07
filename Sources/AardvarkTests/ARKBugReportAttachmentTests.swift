@@ -1,5 +1,5 @@
 //
-//  ARKEmailAttachmentTests.swift
+//  ARKBugReportAttachmentTests.swift
 //  AardvarkTests
 //
 //  Created by Nick Entin on 11/6/20.
@@ -21,14 +21,14 @@
 import Aardvark
 import XCTest
 
-final class ARKEmailAttachmentTests: XCTestCase {
+final class ARKBugReportAttachmentTests: XCTestCase {
 
     func testInitialization() {
         let fileName = "FILE_NAME"
         let data = Data(base64Encoded: "SGVsbG8gd29ybGQK")!
         let dataMIMEType = "MIME_TYPE"
 
-        let attachment = ARKEmailAttachment(fileName: fileName, data: data, dataMIMEType: dataMIMEType)
+        let attachment = ARKBugReportAttachment(fileName: fileName, data: data, dataMIMEType: dataMIMEType)
 
         XCTAssertEqual(attachment.fileName, fileName)
         XCTAssertEqual(attachment.data, data)
