@@ -53,3 +53,5 @@ jobs:
         run: bundle exec pod lib lint --verbose --fail-fast AardvarkLoggingUI.podspec --include-podspecs=CoreAardvark.podspec
       - name: Lint AardvarkMailUI Podspec
         run: bundle exec pod lib lint --verbose --fail-fast AardvarkMailUI.podspec --include-podspecs="{CoreAardvark,Aardvark}.podspec"
+      - name: Lint AardvarkReveal Podspec
+        run: bundle exec pod lib lint --verbose --fail-fast AardvarkReveal.podspec --include-podspecs="{CoreAardvark,Aardvark}.podspec"

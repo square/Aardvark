@@ -56,9 +56,37 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3D083F7E2559D7C000F1A408"
+               BuildableName = "AardvarkReveal.framework"
+               BlueprintName = "AardvarkReveal"
+               ReferencedContainer = "container:Aardvark.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "EAF2FE9F1D47172400931663"
                BuildableName = "CoreAardvark.framework"
                BlueprintName = "CoreAardvark"
+               ReferencedContainer = "container:Aardvark.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3D083F862559D7C000F1A408"
+               BuildableName = "AardvarkRevealTests.xctest"
+               BlueprintName = "AardvarkRevealTests"
                ReferencedContainer = "container:Aardvark.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -107,6 +135,16 @@
                BlueprintIdentifier = "3DA5BF3E2556602100B6D148"
                BuildableName = "AardvarkMailUITests.xctest"
                BlueprintName = "AardvarkMailUITests"
+               ReferencedContainer = "container:Aardvark.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3D083F862559D7C000F1A408"
+               BuildableName = "AardvarkRevealTests.xctest"
+               BlueprintName = "AardvarkRevealTests"
                ReferencedContainer = "container:Aardvark.xcodeproj">
             </BuildableReference>
          </TestableReference>
