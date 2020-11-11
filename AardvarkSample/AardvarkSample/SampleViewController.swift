@@ -19,6 +19,7 @@
 //
 
 import Aardvark
+import AardvarkLoggingUI
 import CoreAardvark
 import UIKit
 

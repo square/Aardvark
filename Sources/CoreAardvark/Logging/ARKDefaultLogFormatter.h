@@ -20,7 +20,7 @@
 
 @import Foundation;
 
-#import <Aardvark/ARKLogFormatter.h>
+#import <CoreAardvark/ARKLogFormatter.h>
 
 
 @interface ARKDefaultLogFormatter : NSObject <ARKLogFormatter>

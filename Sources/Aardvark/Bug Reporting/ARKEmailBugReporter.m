@@ -21,13 +21,13 @@
 @import MessageUI;
 
 #import <CoreAardvark/AardvarkDefines.h>
+#import <CoreAardvark/ARKDefaultLogFormatter.h>
 #import <CoreAardvark/ARKLogMessage.h>
 #import <CoreAardvark/ARKLogStore.h>
 
 #import "ARKEmailBugReporter.h"
 #import "ARKEmailBugReporter_Testing.h"
 
-#import "ARKDefaultLogFormatter.h"
 #import "ARKEmailAttachment.h"
 #import "ARKEmailBugReportConfiguration.h"
 #import "ARKEmailBugReportConfiguration_Protected.h"
