@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'CoreAardvark'
-  s.version  = '2.2.1'
+  s.version  = '3.0.0'
   s.license  = 'Apache License, Version 2.0'
   s.summary  = 'Aardvark is a library that makes it dead simple to create actionable bug reports. Usable by extensions.'
   s.homepage = 'https://github.com/square/Aardvark'
