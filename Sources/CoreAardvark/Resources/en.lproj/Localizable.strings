@@ -1,0 +1,5 @@
+/* File name for plaintext logs */
+"logs" = "logs";
+
+/* File name of a screenshot */
+"screenshot" = "screenshot";
