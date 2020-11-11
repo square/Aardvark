@@ -24,7 +24,7 @@
 #import <Aardvark/ARKBugReporter.h>
 
 
-@class ARKEmailAttachment;
+@class ARKBugReportAttachment;
 @class ARKEmailBugReportConfiguration;
 @class ARKEmailBugReporter;
 @class ARKLogStore;
@@ -49,7 +49,7 @@
 - (BOOL)emailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter shouldIncludeLogStoreInBugReport:(nonnull ARKLogStore *)logStore;
 
 /// Called on the main thread when a bug is filed. The attachments in the returned array will be attached to the bug report email.
-- (nullable NSArray<ARKEmailAttachment *> *)additionalEmailAttachmentsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter;
+- (nullable NSArray<ARKBugReportAttachment *> *)additionalEmailAttachmentsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter;
 
 @end
 

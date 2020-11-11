@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,16 +26,27 @@
 		3D404FAA2556410500CE4B83 /* UIActivityViewController+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D404FA82556410500CE4B83 /* UIActivityViewController+ARKAdditions.m */; };
 		3D404FAD25564CE700CE4B83 /* ARKFileHandleAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D48041AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m */; };
 		3D404FAE25564CE700CE4B83 /* ARKURLAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA46F7F91ACB8448007FC415 /* ARKURLAdditionsTests.m */; };
-		3D6E2D0E20868335007B8013 /* ARKEmailBugReportConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */; };
-		3D6E2D0F20868335007B8013 /* ARKEmailBugReportConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6E2D0D20868335007B8013 /* ARKEmailBugReportConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D850497215EF21100B3957C /* ARKExceptionLogging_Testing.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D850496215EF20800B3957C /* ARKExceptionLogging_Testing.h */; };
 		3D850499215EF6F500B3957C /* ARKExceptionLoggingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D850498215EF6F500B3957C /* ARKExceptionLoggingTests.m */; };
-		3D90DEBA20AAABAB006D4924 /* ARKEmailBugReportConfiguration_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */; };
+		3D9F0A15255BC728000E63D7 /* ARKEmailAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F0A14255BC728000E63D7 /* ARKEmailAttachment.swift */; };
 		3DA5BF31255657C100B6D148 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3DA5BF2F255657C100B6D148 /* Localizable.strings */; };
+		3DA5BF402556602100B6D148 /* AardvarkMailUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA5BF372556602000B6D148 /* AardvarkMailUI.framework */; };
+		3DA5BF472556602100B6D148 /* AardvarkMailUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DA5BF392556602000B6D148 /* AardvarkMailUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DA5BF4E2556602C00B6D148 /* Aardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4551A2C21BDACF9000F216D0 /* Aardvark.framework */; };
+		3DA5BF532556604F00B6D148 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA4583FD19E65C3C00E44882 /* MessageUI.framework */; platformFilter = ios; };
+		3DA5BF54255660E100B6D148 /* ARKEmailBugReportConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */; };
+		3DA5BF55255660E900B6D148 /* ARKEmailBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = EA98B9351D4BEB6E00B3A390 /* ARKEmailBugReporter.m */; };
+		3DA5BF562556610D00B6D148 /* ARKEmailBugReporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8459B19F60B810000F165 /* ARKEmailBugReporterTests.m */; };
+		3DA5BF582556617000B6D148 /* Aardvark+EmailBugReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA5BF572556617000B6D148 /* Aardvark+EmailBugReporting.swift */; };
+		3DA5BF59255661F700B6D148 /* ARKEmailBugReportConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D6E2D0D20868335007B8013 /* ARKEmailBugReportConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DA5BF5A255661FE00B6D148 /* ARKEmailBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = EA98B9341D4BEB6E00B3A390 /* ARKEmailBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DA5BF5B2556620500B6D148 /* ARKEmailBugReportConfiguration_Protected.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */; };
+		3DA5BF5D2556626800B6D148 /* UIApplication+ARKAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA98B94B1D4BF00600B3A390 /* UIApplication+ARKAdditions.swift */; };
+		3DA5BF602556640100B6D148 /* ARKBugReportAttachmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA5BF5F2556640100B6D148 /* ARKBugReportAttachmentTests.swift */; };
 		3DA743201F9D4EE500ADB183 /* ARKExceptionLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D15E02D1F9D38B1001DE13A /* ARKExceptionLogging.m */; };
 		3DD020DF2556502E00E6400A /* ARKDefaultLogFormatterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAB38A319E2929C00161A54 /* ARKDefaultLogFormatterTests.m */; };
-		3DED97142006D35B007FC95C /* ARKEmailAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DED97122006D35B007FC95C /* ARKEmailAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3DED97152006D35B007FC95C /* ARKEmailAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DED97132006D35B007FC95C /* ARKEmailAttachment.m */; };
+		3DED97142006D35B007FC95C /* ARKBugReportAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DED97122006D35B007FC95C /* ARKBugReportAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3DED97152006D35B007FC95C /* ARKBugReportAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DED97132006D35B007FC95C /* ARKBugReportAttachment.m */; };
 		4551A2D91BDAD10E00F216D0 /* Aardvark.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1442419E073FB0065A1FF /* Aardvark.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4551A30A1BDAF93A00F216D0 /* ARKScreenshotLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = 4551A3071BDAF93A00F216D0 /* ARKScreenshotLogging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA3C1D961D934A210048C4CD /* CoreAardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAF2FEA01D47172400931663 /* CoreAardvark.framework */; };
@@ -43,7 +54,6 @@
 		EA3C1DAC1D934B1D0048C4CD /* ARKDataArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47EC1AB8A0BA00A342E9 /* ARKDataArchiveTests.m */; };
 		EA3C1DAD1D934B1D0048C4CD /* ARKLogDistributorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAD1445319E201C70065A1FF /* ARKLogDistributorTests.m */; };
 		EA3C1DAE1D934B1D0048C4CD /* ARKLogStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA73536F1A15C5E70060F54E /* ARKLogStoreTests.m */; };
-		EA3C1DB31D934B3E0048C4CD /* ARKEmailBugReporterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8459B19F60B810000F165 /* ARKEmailBugReporterTests.m */; };
 		EA3C1DB41D934B460048C4CD /* ARKDefineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA09D3C41A2E6D2F004C1125 /* ARKDefineTests.m */; };
 		EA98B8B91D4BE80F00B3A390 /* ARKLogTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = EA98B8B31D4BE80F00B3A390 /* ARKLogTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA98B8BF1D4BE82100B3A390 /* NSFileHandle+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EA98B8BA1D4BE82100B3A390 /* NSFileHandle+ARKAdditions.h */; };
@@ -68,10 +78,6 @@
 		EA98B9121D4BEB3D00B3A390 /* ARKLogDistributor+UIAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EA98B8F81D4BEADF00B3A390 /* ARKLogDistributor+UIAdditions.m */; };
 		EA98B9141D4BEB4100B3A390 /* ARKLogDistributor+UIAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EA98B8F71D4BEADF00B3A390 /* ARKLogDistributor+UIAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA98B9381D4BEB6E00B3A390 /* ARKBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = EA98B9301D4BEB6E00B3A390 /* ARKBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EA98B93E1D4BEB6E00B3A390 /* ARKEmailBugReporter_Testing.h in Headers */ = {isa = PBXBuildFile; fileRef = EA98B9331D4BEB6E00B3A390 /* ARKEmailBugReporter_Testing.h */; };
-		EA98B9401D4BEB6E00B3A390 /* ARKEmailBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = EA98B9341D4BEB6E00B3A390 /* ARKEmailBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EA98B9421D4BEB6E00B3A390 /* ARKEmailBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = EA98B9351D4BEB6E00B3A390 /* ARKEmailBugReporter.m */; };
-		EA98B94E1D4BF37000B3A390 /* UIApplication+ARKAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA98B94B1D4BF00600B3A390 /* UIApplication+ARKAdditions.swift */; };
 		EA98B9531D4BF43400B3A390 /* ARKScreenshotLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 4551A3081BDAF93A00F216D0 /* ARKScreenshotLogging.m */; };
 		EA98B9581D4BF88600B3A390 /* ARKLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = EA98B9551D4BF88600B3A390 /* ARKLogging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA98B95A1D4BF88600B3A390 /* ARKLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = EA98B9561D4BF88600B3A390 /* ARKLogging.m */; };
@@ -94,6 +100,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3D046DB3254D5A840045A06C;
 			remoteInfo = AardvarkLoggingUI;
+		};
+		3DA5BF412556602100B6D148 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAD1441919E073FB0065A1FF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DA5BF362556602000B6D148;
+			remoteInfo = AardvarkMailUI;
+		};
+		3DA5BF502556602C00B6D148 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAD1441919E073FB0065A1FF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4551A2C11BDACF9000F216D0;
+			remoteInfo = Aardvark;
 		};
 		EA3C1D971D934A210048C4CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -133,9 +153,17 @@
 		3D850496215EF20800B3957C /* ARKExceptionLogging_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKExceptionLogging_Testing.h; sourceTree = "<group>"; };
 		3D850498215EF6F500B3957C /* ARKExceptionLoggingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARKExceptionLoggingTests.m; sourceTree = "<group>"; };
 		3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKEmailBugReportConfiguration_Protected.h; sourceTree = "<group>"; };
+		3D9F0A14255BC728000E63D7 /* ARKEmailAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKEmailAttachment.swift; sourceTree = "<group>"; };
 		3DA5BF30255657C100B6D148 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Resources/en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		3DED97122006D35B007FC95C /* ARKEmailAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKEmailAttachment.h; sourceTree = "<group>"; };
-		3DED97132006D35B007FC95C /* ARKEmailAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARKEmailAttachment.m; sourceTree = "<group>"; };
+		3DA5BF372556602000B6D148 /* AardvarkMailUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AardvarkMailUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DA5BF392556602000B6D148 /* AardvarkMailUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AardvarkMailUI.h; sourceTree = "<group>"; };
+		3DA5BF3A2556602000B6D148 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3DA5BF3F2556602100B6D148 /* AardvarkMailUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AardvarkMailUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3DA5BF462556602100B6D148 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3DA5BF572556617000B6D148 /* Aardvark+EmailBugReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Aardvark+EmailBugReporting.swift"; sourceTree = "<group>"; };
+		3DA5BF5F2556640100B6D148 /* ARKBugReportAttachmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKBugReportAttachmentTests.swift; sourceTree = "<group>"; };
+		3DED97122006D35B007FC95C /* ARKBugReportAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKBugReportAttachment.h; sourceTree = "<group>"; };
+		3DED97132006D35B007FC95C /* ARKBugReportAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARKBugReportAttachment.m; sourceTree = "<group>"; };
 		4551A2C21BDACF9000F216D0 /* Aardvark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Aardvark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4551A3071BDAF93A00F216D0 /* ARKScreenshotLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKScreenshotLogging.h; sourceTree = "<group>"; };
 		4551A3081BDAF93A00F216D0 /* ARKScreenshotLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKScreenshotLogging.m; sourceTree = "<group>"; };
@@ -213,6 +241,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D046DBD254D5A840045A06C /* AardvarkLoggingUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DA5BF342556602000B6D148 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DA5BF532556604F00B6D148 /* MessageUI.framework in Frameworks */,
+				3DA5BF4E2556602C00B6D148 /* Aardvark.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DA5BF3C2556602100B6D148 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DA5BF402556602100B6D148 /* AardvarkMailUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,11 +345,38 @@
 		3D404FB025564D2300CE4B83 /* AardvarkTests */ = {
 			isa = PBXGroup;
 			children = (
-				EAC8459B19F60B810000F165 /* ARKEmailBugReporterTests.m */,
+				3DA5BF5F2556640100B6D148 /* ARKBugReportAttachmentTests.swift */,
 				EAD1442F19E073FB0065A1FF /* Info.plist */,
 			);
 			name = AardvarkTests;
 			path = Sources/AardvarkTests;
+			sourceTree = "<group>";
+		};
+		3DA5BF382556602000B6D148 /* AardvarkMailUI */ = {
+			isa = PBXGroup;
+			children = (
+				3DA5BF572556617000B6D148 /* Aardvark+EmailBugReporting.swift */,
+				3D6E2D0D20868335007B8013 /* ARKEmailBugReportConfiguration.h */,
+				3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */,
+				3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */,
+				EA98B9341D4BEB6E00B3A390 /* ARKEmailBugReporter.h */,
+				EA98B9331D4BEB6E00B3A390 /* ARKEmailBugReporter_Testing.h */,
+				EA98B9351D4BEB6E00B3A390 /* ARKEmailBugReporter.m */,
+				3DA5BF392556602000B6D148 /* AardvarkMailUI.h */,
+				3DA5BF3A2556602000B6D148 /* Info.plist */,
+			);
+			name = AardvarkMailUI;
+			path = Sources/AardvarkMailUI;
+			sourceTree = "<group>";
+		};
+		3DA5BF432556602100B6D148 /* AardvarkMailUITests */ = {
+			isa = PBXGroup;
+			children = (
+				EAC8459B19F60B810000F165 /* ARKEmailBugReporterTests.m */,
+				3DA5BF462556602100B6D148 /* Info.plist */,
+			);
+			name = AardvarkMailUITests;
+			path = Sources/AardvarkMailUITests;
 			sourceTree = "<group>";
 		};
 		EAA6F80119F5933700FF20A8 /* Frameworks */ = {
@@ -324,6 +396,8 @@
 				3D404FB025564D2300CE4B83 /* AardvarkTests */,
 				3D046DB5254D5A840045A06C /* AardvarkLoggingUI */,
 				3D046DC0254D5A850045A06C /* AardvarkLoggingUITests */,
+				3DA5BF382556602000B6D148 /* AardvarkMailUI */,
+				3DA5BF432556602100B6D148 /* AardvarkMailUITests */,
 				EAA6F80119F5933700FF20A8 /* Frameworks */,
 				EAD1442219E073FB0065A1FF /* Products */,
 			);
@@ -338,6 +412,8 @@
 				EA3C1DA01D934A260048C4CD /* AardvarkTests.xctest */,
 				3D046DB4254D5A840045A06C /* AardvarkLoggingUI.framework */,
 				3D046DBC254D5A840045A06C /* AardvarkLoggingUITests.xctest */,
+				3DA5BF372556602000B6D148 /* AardvarkMailUI.framework */,
+				3DA5BF3F2556602100B6D148 /* AardvarkMailUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -370,14 +446,9 @@
 			isa = PBXGroup;
 			children = (
 				EA98B9301D4BEB6E00B3A390 /* ARKBugReporter.h */,
-				3D6E2D0D20868335007B8013 /* ARKEmailBugReportConfiguration.h */,
-				3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */,
-				3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */,
-				EA98B9341D4BEB6E00B3A390 /* ARKEmailBugReporter.h */,
-				EA98B9331D4BEB6E00B3A390 /* ARKEmailBugReporter_Testing.h */,
-				EA98B9351D4BEB6E00B3A390 /* ARKEmailBugReporter.m */,
-				3DED97122006D35B007FC95C /* ARKEmailAttachment.h */,
-				3DED97132006D35B007FC95C /* ARKEmailAttachment.m */,
+				3DED97122006D35B007FC95C /* ARKBugReportAttachment.h */,
+				3DED97132006D35B007FC95C /* ARKBugReportAttachment.m */,
+				3D9F0A14255BC728000E63D7 /* ARKEmailAttachment.swift */,
 			);
 			path = "Bug Reporting";
 			sourceTree = "<group>";
@@ -485,17 +556,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3DA5BF322556602000B6D148 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DA5BF5A255661FE00B6D148 /* ARKEmailBugReporter.h in Headers */,
+				3DA5BF5B2556620500B6D148 /* ARKEmailBugReportConfiguration_Protected.h in Headers */,
+				3DA5BF59255661F700B6D148 /* ARKEmailBugReportConfiguration.h in Headers */,
+				3DA5BF472556602100B6D148 /* AardvarkMailUI.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4551A2BF1BDACF9000F216D0 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				4551A2D91BDAD10E00F216D0 /* Aardvark.h in Headers */,
-				3D90DEBA20AAABAB006D4924 /* ARKEmailBugReportConfiguration_Protected.h in Headers */,
-				3DED97142006D35B007FC95C /* ARKEmailAttachment.h in Headers */,
-				EA98B9401D4BEB6E00B3A390 /* ARKEmailBugReporter.h in Headers */,
+				3DED97142006D35B007FC95C /* ARKBugReportAttachment.h in Headers */,
 				4551A30A1BDAF93A00F216D0 /* ARKScreenshotLogging.h in Headers */,
-				3D6E2D0F20868335007B8013 /* ARKEmailBugReportConfiguration.h in Headers */,
-				EA98B93E1D4BEB6E00B3A390 /* ARKEmailBugReporter_Testing.h in Headers */,
 				EA98B9141D4BEB4100B3A390 /* ARKLogDistributor+UIAdditions.h in Headers */,
 				EA98B9381D4BEB6E00B3A390 /* ARKBugReporter.h in Headers */,
 			);
@@ -565,6 +643,43 @@
 			name = AardvarkLoggingUITests;
 			productName = AardvarkLoggingUITests;
 			productReference = 3D046DBC254D5A840045A06C /* AardvarkLoggingUITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		3DA5BF362556602000B6D148 /* AardvarkMailUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3DA5BF482556602100B6D148 /* Build configuration list for PBXNativeTarget "AardvarkMailUI" */;
+			buildPhases = (
+				3DA5BF322556602000B6D148 /* Headers */,
+				3DA5BF332556602000B6D148 /* Sources */,
+				3DA5BF342556602000B6D148 /* Frameworks */,
+				3DA5BF352556602000B6D148 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3DA5BF512556602C00B6D148 /* PBXTargetDependency */,
+			);
+			name = AardvarkMailUI;
+			productName = AardvarkMailUI;
+			productReference = 3DA5BF372556602000B6D148 /* AardvarkMailUI.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		3DA5BF3E2556602100B6D148 /* AardvarkMailUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3DA5BF4B2556602100B6D148 /* Build configuration list for PBXNativeTarget "AardvarkMailUITests" */;
+			buildPhases = (
+				3DA5BF3B2556602100B6D148 /* Sources */,
+				3DA5BF3C2556602100B6D148 /* Frameworks */,
+				3DA5BF3D2556602100B6D148 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3DA5BF422556602100B6D148 /* PBXTargetDependency */,
+			);
+			name = AardvarkMailUITests;
+			productName = AardvarkMailUITests;
+			productReference = 3DA5BF3F2556602100B6D148 /* AardvarkMailUITests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		4551A2C11BDACF9000F216D0 /* Aardvark */ = {
@@ -659,6 +774,13 @@
 						CreatedOnToolsVersion = 11.6;
 						ProvisioningStyle = Automatic;
 					};
+					3DA5BF362556602000B6D148 = {
+						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1160;
+					};
+					3DA5BF3E2556602100B6D148 = {
+						CreatedOnToolsVersion = 11.6;
+					};
 					4551A2C11BDACF9000F216D0 = {
 						CreatedOnToolsVersion = 7.1;
 						LastSwiftMigration = 0800;
@@ -671,6 +793,7 @@
 					EA3C1D9F1D934A260048C4CD = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = EYF346PHUG;
+						LastSwiftMigration = 1160;
 						ProvisioningStyle = Automatic;
 					};
 					EAF2FE9F1D47172400931663 = {
@@ -698,6 +821,8 @@
 				EA3C1D901D934A210048C4CD /* CoreAardvarkTests */,
 				3D046DB3254D5A840045A06C /* AardvarkLoggingUI */,
 				3D046DBB254D5A840045A06C /* AardvarkLoggingUITests */,
+				3DA5BF362556602000B6D148 /* AardvarkMailUI */,
+				3DA5BF3E2556602100B6D148 /* AardvarkMailUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -711,6 +836,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3D046DBA254D5A840045A06C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DA5BF352556602000B6D148 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DA5BF3D2556602100B6D148 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -768,17 +907,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3DA5BF332556602000B6D148 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DA5BF54255660E100B6D148 /* ARKEmailBugReportConfiguration.m in Sources */,
+				3DA5BF55255660E900B6D148 /* ARKEmailBugReporter.m in Sources */,
+				3DA5BF582556617000B6D148 /* Aardvark+EmailBugReporting.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3DA5BF3B2556602100B6D148 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DA5BF562556610D00B6D148 /* ARKEmailBugReporterTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4551A2BD1BDACF9000F216D0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				EA98B9531D4BF43400B3A390 /* ARKScreenshotLogging.m in Sources */,
-				3DED97152006D35B007FC95C /* ARKEmailAttachment.m in Sources */,
-				EA98B9421D4BEB6E00B3A390 /* ARKEmailBugReporter.m in Sources */,
+				3DED97152006D35B007FC95C /* ARKBugReportAttachment.m in Sources */,
+				3D9F0A15255BC728000E63D7 /* ARKEmailAttachment.swift in Sources */,
 				EA98B9121D4BEB3D00B3A390 /* ARKLogDistributor+UIAdditions.m in Sources */,
-				EA98B94E1D4BF37000B3A390 /* UIApplication+ARKAdditions.swift in Sources */,
+				3DA5BF5D2556626800B6D148 /* UIApplication+ARKAdditions.swift in Sources */,
 				EA98B9621D4BFA1700B3A390 /* Aardvark.swift in Sources */,
-				3D6E2D0E20868335007B8013 /* ARKEmailBugReportConfiguration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -801,7 +957,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EA3C1DB31D934B3E0048C4CD /* ARKEmailBugReporterTests.m in Sources */,
+				3DA5BF602556640100B6D148 /* ARKBugReportAttachmentTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -834,6 +990,16 @@
 			isa = PBXTargetDependency;
 			target = EAF2FE9F1D47172400931663 /* CoreAardvark */;
 			targetProxy = 3D046DCD254D5AA70045A06C /* PBXContainerItemProxy */;
+		};
+		3DA5BF422556602100B6D148 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3DA5BF362556602000B6D148 /* AardvarkMailUI */;
+			targetProxy = 3DA5BF412556602100B6D148 /* PBXContainerItemProxy */;
+		};
+		3DA5BF512556602C00B6D148 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4551A2C11BDACF9000F216D0 /* Aardvark */;
+			targetProxy = 3DA5BF502556602C00B6D148 /* PBXContainerItemProxy */;
 		};
 		EA3C1D981D934A210048C4CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -882,7 +1048,11 @@
 				INFOPLIST_FILE = Sources/AardvarkLoggingUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkLoggingUI;
@@ -916,7 +1086,11 @@
 				INFOPLIST_FILE = Sources/AardvarkLoggingUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkLoggingUI;
 				PRODUCT_NAME = AardvarkLoggingUI;
@@ -940,7 +1114,11 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Sources/AardvarkLoggingUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkLoggingUITests;
@@ -965,9 +1143,143 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Sources/AardvarkLoggingUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkLoggingUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3DA5BF492556602100B6D148 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Sources/AardvarkMailUI/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkMailUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		3DA5BF4A2556602100B6D148 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Sources/AardvarkMailUI/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkMailUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		3DA5BF4C2556602100B6D148 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Sources/AardvarkMailUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkMailUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3DA5BF4D2556602100B6D148 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Sources/AardvarkMailUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkMailUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -989,7 +1301,11 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Aardvark/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.Aardvark;
 				PRODUCT_NAME = Aardvark;
 				SKIP_INSTALL = YES;
@@ -1015,11 +1331,16 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Aardvark/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.Aardvark;
 				PRODUCT_NAME = Aardvark;
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1037,7 +1358,11 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = Sources/CoreAardvarkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.CoreAardvarkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1056,7 +1381,11 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = Sources/CoreAardvarkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.CoreAardvarkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1068,16 +1397,23 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = Sources/AardvarkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1086,6 +1422,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1093,10 +1430,15 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = Sources/AardvarkTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -1204,7 +1546,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1226,7 +1569,11 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/CoreAardvark/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.CoreAardvark;
 				PRODUCT_NAME = CoreAardvark;
 				SKIP_INSTALL = YES;
@@ -1255,7 +1602,11 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/CoreAardvark/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.CoreAardvark;
 				PRODUCT_NAME = CoreAardvark;
 				SKIP_INSTALL = YES;
@@ -1283,6 +1634,24 @@
 			buildConfigurations = (
 				3D046DC7254D5A850045A06C /* Debug */,
 				3D046DC8254D5A850045A06C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3DA5BF482556602100B6D148 /* Build configuration list for PBXNativeTarget "AardvarkMailUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DA5BF492556602100B6D148 /* Debug */,
+				3DA5BF4A2556602100B6D148 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3DA5BF4B2556602100B6D148 /* Build configuration list for PBXNativeTarget "AardvarkMailUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3DA5BF4C2556602100B6D148 /* Debug */,
+				3DA5BF4D2556602100B6D148 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

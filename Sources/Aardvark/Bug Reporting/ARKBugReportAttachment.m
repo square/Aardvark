@@ -1,5 +1,5 @@
 //
-//  ARKEmailAttachment.m
+//  ARKBugReportAttachment.m
 //  Aardvark
 //
 //  Created by Nick Entin on 1/10/18.
@@ -18,10 +18,10 @@
 //  limitations under the License.
 //
 
-#import "ARKEmailAttachment.h"
+#import "ARKBugReportAttachment.h"
 
 
-@implementation ARKEmailAttachment
+@implementation ARKBugReportAttachment
 
 - (instancetype)initWithFileName:(NSString *)fileName data:(NSData *)data dataMIMEType:(NSString *)dataMIMEType;
 {

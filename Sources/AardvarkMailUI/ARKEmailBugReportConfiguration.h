@@ -21,7 +21,7 @@
 #import <Foundation/Foundation.h>
 
 @class ARKLogStore;
-@class ARKEmailAttachment;
+@class ARKBugReportAttachment;
 
 
 /// Configuration object describing the contents of an email bug report.
@@ -43,7 +43,7 @@
 @property (nonatomic, readonly) BOOL includesViewHierarchyDescription;
 
 /// Additional attachments to include on the email. Defaults to an empty array.
-@property (nonnull, nonatomic, copy) NSArray<ARKEmailAttachment *> *additionalAttachments;
+@property (nonnull, nonatomic, copy) NSArray<ARKBugReportAttachment *> *additionalAttachments;
 
 /// Excludes the screenshot from the bug report, if one is included.
 - (void)excludeScreenshot;
