@@ -13,5 +13,5 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/AardvarkMailUI/**/*.{h,m,swift}'
   s.private_header_files = 'Sources/AardvarkMailUI/**/*_Testing.h', 'Sources/AardvarkMailUI/Private Categories/*.h'
 
-  s.dependency 'Aardvark', '~> 3.4'
+  s.dependency 'Aardvark', '~> 4.0'
 end
