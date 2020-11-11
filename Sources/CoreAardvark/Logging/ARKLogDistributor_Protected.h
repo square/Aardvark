@@ -1,8 +1,4 @@
 //
-//  ARKLogDistributor_Protected.h
-//  CoreAardvark
-//
-//  Created by Dan Federman on 3/30/15.
 //  Copyright 2015 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

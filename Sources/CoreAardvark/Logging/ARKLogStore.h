@@ -1,8 +1,4 @@
 //
-//  ARKLogStore.h
-//  CoreAardvark
-//
-//  Created by Dan Federman on 11/13/14.
 //  Copyright 2014 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

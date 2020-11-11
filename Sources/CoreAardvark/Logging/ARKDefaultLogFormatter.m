@@ -1,8 +1,4 @@
 //
-//  ARKLogFormatter.m
-//  Aardvark
-//
-//  Created by Dan Federman on 10/6/14.
 //  Copyright 2014 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

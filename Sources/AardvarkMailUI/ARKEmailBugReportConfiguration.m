@@ -1,8 +1,4 @@
 //
-//  ARKEmailBugReportConfiguration.m
-//  Aardvark
-//
-//  Created by Nick Entin on 4/14/18.
 //  Copyright 2018 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

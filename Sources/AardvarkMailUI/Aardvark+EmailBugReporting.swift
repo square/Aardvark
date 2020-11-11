@@ -1,8 +1,4 @@
 //
-//  Aardvark+EmailBugReporting.swift
-//  AardvarkMailUI
-//
-//  Created by Nick Entin on 11/6/20.
 //  Copyright © 2020 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

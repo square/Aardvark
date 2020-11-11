@@ -1,8 +1,4 @@
 //
-//  AardvarkLoggingUI.h
-//  AardvarkLoggingUI
-//
-//  Created by Nick Entin on 10/31/20.
 //  Copyright 2020 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
