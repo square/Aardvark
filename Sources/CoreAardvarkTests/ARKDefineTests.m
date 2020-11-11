@@ -1,8 +1,4 @@
 //
-//  ARKDefineTests.m
-//  Aardvark
-//
-//  Created by Dan Federman on 12/2/14.
 //  Copyright 2014 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

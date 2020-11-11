@@ -1,8 +1,4 @@
 //
-//  AardvarkMailUI.h
-//  AardvarkMailUI
-//
-//  Created by Nicholas Entin on 11/6/20.
 //  Copyright © 2020 Square, Inc. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

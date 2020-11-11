@@ -1,8 +1,4 @@
 //
-//  Logging.swift
-//  Aardvark
-//
-//  Created by Dan Federman on 3/22/16.
 //  Copyright © 2016 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

@@ -1,8 +1,4 @@
 //
-//  NSFileHandle+ARKAdditions.m
-//  CoreAardvark
-//
-//  Created by Peter Westen on 3/17/15.
 //  Copyright 2015 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
