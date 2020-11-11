@@ -19,6 +19,7 @@
 //
 
 import Aardvark
+import AardvarkMailUI
 import CoreAardvark
 import UIKit
 

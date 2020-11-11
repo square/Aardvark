@@ -1,9 +1,5 @@
 //
-//  Aardvark.h
-//  Aardvark
-//
-//  Created by Dan Federman on 10/4/14.
-//  Copyright 2014 Square, Inc.
+//  Copyright 2020 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -18,17 +14,7 @@
 //  limitations under the License.
 //
 
-@import UIKit;
+import Foundation
 
-
-//! Project version number for Aardvark-iOS.
-FOUNDATION_EXPORT double Aardvark_iOSVersionNumber;
-
-//! Project version string for Aardvark-iOS.
-FOUNDATION_EXPORT const unsigned char Aardvark_iOSVersionString[];
-
-
-#import <Aardvark/ARKBugReporter.h>
-#import <Aardvark/ARKBugReportAttachment.h>
-#import <Aardvark/ARKLogDistributor+UIAdditions.h>
-#import <Aardvark/ARKScreenshotLogging.h>
+@available(*, unavailable, renamed: "ARKBugReportAttachment")
+public typealias ARKEmailAttachment = ARKBugReportAttachment

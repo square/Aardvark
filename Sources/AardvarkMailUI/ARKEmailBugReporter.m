@@ -28,7 +28,7 @@
 #import "ARKEmailBugReporter.h"
 #import "ARKEmailBugReporter_Testing.h"
 
-#import "ARKEmailAttachment.h"
+#import "ARKBugReportAttachment.h"
 #import "ARKEmailBugReportConfiguration.h"
 #import "ARKEmailBugReportConfiguration_Protected.h"
 #import "ARKScreenshotLogging.h"
@@ -441,7 +441,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             }
             self.viewHierarchyDescription = nil;
             
-            for (ARKEmailAttachment *attachment in configuration.additionalAttachments) {
+            for (ARKBugReportAttachment *attachment in configuration.additionalAttachments) {
                 [self.mailComposeViewController addAttachmentData:attachment.data mimeType:attachment.dataMIMEType fileName:attachment.fileName];
             }
             

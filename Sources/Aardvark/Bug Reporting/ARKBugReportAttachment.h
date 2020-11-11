@@ -1,5 +1,5 @@
 //
-//  ARKEmailAttachment.h
+//  ARKBugReportAttachment.h
 //  Aardvark
 //
 //  Created by Nick Entin on 1/10/18.
@@ -21,7 +21,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface ARKEmailAttachment : NSObject
+@interface ARKBugReportAttachment : NSObject
 
 - (nonnull instancetype)initWithFileName:(nonnull NSString *)fileName data:(nonnull NSData *)data dataMIMEType:(nonnull NSString *)dataMIMEType;
 

@@ -264,7 +264,7 @@
     }];
     
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)test_initWithURL_detectsCorruptedArchive;
