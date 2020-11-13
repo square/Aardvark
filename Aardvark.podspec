@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'Aardvark'
-  s.version  = '3.4.4'
+  s.version  = '4.0.0'
   s.license  = 'Apache License, Version 2.0'
   s.summary  = 'Aardvark is a library that makes it dead simple to create actionable bug reports.'
   s.homepage = 'https://github.com/square/Aardvark'
@@ -12,5 +12,5 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Sources/Aardvark/**/*.{h,m,swift}'
 
-  s.dependency 'CoreAardvark', '~> 2.0'
+  s.dependency 'CoreAardvark', '~> 3.0'
 end
