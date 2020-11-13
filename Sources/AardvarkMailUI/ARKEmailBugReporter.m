@@ -177,7 +177,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable = 3;
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable = 15;
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
-    _attachesViewHierarchyDescriptionWithScreenshot = YES;
+    _attachesViewHierarchyDescription = YES;
     
     _mutableLogStores = [NSMutableArray new];
     
@@ -205,21 +205,21 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     ARKCheckCondition(self.mutableLogStores.count > 0, , @"Attempting to compose a bug report without logs.");
     
     self.attachScreenshotToNextBugReport = attachScreenshot;
-    
+
+    if (self.attachesViewHierarchyDescription) {
+        NSMutableString *mutableViewHierarchyDescription = [NSMutableString new];
+        for (UIWindow *window in [UIApplication sharedApplication].windows) {
+            NSMapTable<UIView *, UIViewController *> *const viewControllerMap = [NSMapTable<UIView *, UIViewController *> strongToStrongObjectsMapTable];
+            [window.rootViewController _ARK_appendRecursiveViewControllerMappingToMapTable:viewControllerMap];
+
+            [window _ARK_appendRecursiveViewHierarchyDescriptionToString:mutableViewHierarchyDescription withIndentationLevel:0 usingViewControllerMap:viewControllerMap];
+        }
+        self.viewHierarchyDescription = mutableViewHierarchyDescription;
+    }
+
     if (attachScreenshot && !self.screenFlashView) {
         // Take a screenshot.
         ARKLogScreenshot();
-        
-        if (self.attachesViewHierarchyDescriptionWithScreenshot) {
-            NSMutableString *mutableViewHierarchyDescription = [NSMutableString new];
-            for (UIWindow *window in [UIApplication sharedApplication].windows) {
-                NSMapTable<UIView *, UIViewController *> *const viewControllerMap = [NSMapTable<UIView *, UIViewController *> strongToStrongObjectsMapTable];
-                [window.rootViewController _ARK_appendRecursiveViewControllerMappingToMapTable:viewControllerMap];
-                
-                [window _ARK_appendRecursiveViewHierarchyDescriptionToString:mutableViewHierarchyDescription withIndentationLevel:0 usingViewControllerMap:viewControllerMap];
-            }
-            self.viewHierarchyDescription = mutableViewHierarchyDescription;
-        }
         
         // Flash the screen to simulate a screenshot being taken.
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
@@ -348,7 +348,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (ARKEmailBugReportConfiguration *)_configurationWithCurrentSettings;
 {
     ARKEmailBugReportConfiguration *const configuration = [[ARKEmailBugReportConfiguration alloc] initWithScreenshot:self.attachScreenshotToNextBugReport
-                                                                                            viewHierarchyDescription:(self.attachScreenshotToNextBugReport && self.attachesViewHierarchyDescriptionWithScreenshot)];
+                                                                                            viewHierarchyDescription:self.attachesViewHierarchyDescription];
     
     if (self.emailAttachmentAdditionsDelegate != nil) {
         NSMutableArray *const filteredLogStores = [NSMutableArray arrayWithCapacity:self.logStores.count];
