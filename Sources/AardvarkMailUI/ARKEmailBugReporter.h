@@ -100,7 +100,7 @@ typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReport
 /// Controls the number of recent error logs per log distributor to include in the email body of a bug report composed in a mail client that does not allow attachments. Defaults to 15.
 @property (nonatomic) NSUInteger numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable;
 
-/// The window level for the email composer on iOS 7 or later. Defaults to UIWindowLevelStatusBar + 3.0.
+/// The window level for the email composer. Defaults to UIWindowLevelStatusBar + 3.0.
 @property (nonatomic) UIWindowLevel emailComposeWindowLevel;
 
 /// If this bug report includes a screenshot, also attach a description of the view hierarchy. Defaults to YES.

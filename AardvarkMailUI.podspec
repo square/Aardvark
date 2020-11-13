@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source   = { :git => 'https://github.com/square/Aardvark.git', :tag => "AardvarkMailUI/#{ s.version.to_s }" }
 
   s.swift_version = '4.0'
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '12.0'
 
   s.source_files = 'Sources/AardvarkMailUI/**/*.{h,m,swift}'
   s.private_header_files = 'Sources/AardvarkMailUI/**/*_Testing.h', 'Sources/AardvarkMailUI/Private Categories/*.h'

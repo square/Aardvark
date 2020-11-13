@@ -102,8 +102,8 @@ Want to log with Aardvark but don’t want to use Aardvark’s bug reporting too
 
 ## Requirements
 
-* Xcode 8.0 or later
-* iOS 8 or later
+* Xcode 11.0 or later
+* iOS 12.0 or later
 
 ## Contributing
 

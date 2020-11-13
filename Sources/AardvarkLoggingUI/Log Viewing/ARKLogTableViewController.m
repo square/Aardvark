@@ -36,15 +36,24 @@
 @property (nonatomic) BOOL viewWillAppearForFirstTimeCalled;
 @property (nonatomic) BOOL hasScrolledToBottom;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 @property (nonatomic) UIActionSheet *clearLogsConfirmationActionSheet;
+#pragma clang diagnostic pop
 @property (nonatomic, weak) UIBarButtonItem *shareBarButtonItem;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 @property (nonatomic, strong) UIPopoverController *activitySheetPopoverController;
+#pragma clang diagnostic pop
 @property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic, strong) NSString *searchString;
 
 #if TARGET_IPHONE_SIMULATOR
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 @property (nonatomic) UIActionSheet *printLogsActionSheet;
+#pragma clang diagnostic pop
 @property (nonatomic) NSInteger printLogsToConsoleButtonIndex;
 @property (nonatomic) NSInteger saveLogsToFileButtonIndex;
 #endif
@@ -131,7 +140,10 @@
         self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
         self.searchController.searchResultsUpdater = self;
         self.searchController.delegate = self;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
         self.searchController.dimsBackgroundDuringPresentation = NO;
+#pragma clang diagnostic pop
         self.tableView.tableHeaderView = self.searchController.searchBar;
     }
 
@@ -142,7 +154,11 @@
 
 #pragma mark - UIActionSheetDelegate
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
+#pragma clang diagnostic pop
 {
 #if TARGET_IPHONE_SIMULATOR
     if (actionSheet == self.printLogsActionSheet) {
@@ -176,7 +192,11 @@
 
 #pragma mark - UIPopoverControllerDelegate
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController;
+#pragma clang diagnostic pop
 {
     self.activitySheetPopoverController = nil;
 }
@@ -353,11 +373,14 @@
 {
 #if TARGET_IPHONE_SIMULATOR
     // On the simulator, show an action sheet letting the developer write all logs to the console, or to a file on the desktop.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
     self.printLogsActionSheet = [[UIActionSheet alloc] initWithTitle:nil
                                                             delegate:self
                                                    cancelButtonTitle:NSLocalizedString(@"Cancel", @"Action sheet button title to cancel Print/Save Logs action sheet.")
                                               destructiveButtonTitle:nil
                                                    otherButtonTitles:nil];
+#pragma clang diagnostic pop
     
     self.printLogsToConsoleButtonIndex = [self.printLogsActionSheet addButtonWithTitle:NSLocalizedString(@"Print Logs to Console", @"Action sheet button to write logs to the console.")];
     self.saveLogsToFileButtonIndex = [self.printLogsActionSheet addButtonWithTitle:NSLocalizedString(@"Save Logs to File", @"Action sheet button to save logs to a file (and NSLog the path to that file).")];
@@ -377,7 +400,10 @@
         // isPad
         ARKCheckCondition(self.shareBarButtonItem, , @"Missing a share bar button item when that bar button item was clicked.");
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
         self.activitySheetPopoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
+#pragma clang diagnostic pop
         self.activitySheetPopoverController.delegate = self;
         [self.activitySheetPopoverController presentPopoverFromBarButtonItem:self.shareBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     }
@@ -386,7 +412,10 @@
 
 - (IBAction)_clearLogs:(id)sender;
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
     self.clearLogsConfirmationActionSheet = [UIActionSheet new];
+#pragma clang diagnostic pop
     self.clearLogsConfirmationActionSheet.destructiveButtonIndex = [self.clearLogsConfirmationActionSheet addButtonWithTitle:NSLocalizedString(@"Delete All Logs", @"Action sheet button to clear all logs.")];
     self.clearLogsConfirmationActionSheet.cancelButtonIndex = [self.clearLogsConfirmationActionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", @"Action sheet button title to cancel clearing logs.")];
     
