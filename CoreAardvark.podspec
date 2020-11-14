@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
 
   s.swift_version = '5.0'
   s.ios.deployment_target = '12.0'
-  s.watchos.deployment_target = '3.0'
+  s.watchos.deployment_target = '4.0'
 
   s.source_files = 'Sources/CoreAardvark/**/*.{h,m,swift}'
   s.private_header_files = 'Sources/CoreAardvark/**/*_Testing.h', 'Sources/CoreAardvark/Private Categories/*.h'
