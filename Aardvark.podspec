@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.authors  = 'Square'
   s.source   = { :git => 'https://github.com/square/Aardvark.git', :tag => "Aardvark/#{ s.version.to_s }" }
 
-  s.swift_version = '4.0'
+  s.swift_version = '5.0'
   s.ios.deployment_target = '12.0'
 
   s.source_files = 'Sources/Aardvark/**/*.{h,m,swift}'
