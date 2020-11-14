@@ -11,6 +11,8 @@
 		3D046DD9254D5ACB0045A06C /* AardvarkLoggingUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D046DD5254D5ACB0045A06C /* AardvarkLoggingUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3DA5BF6C2559D38F00B6D148 /* AardvarkMailUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA5BF692559D38F00B6D148 /* AardvarkMailUI.framework */; };
 		3DA5BF6D2559D38F00B6D148 /* AardvarkMailUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA5BF692559D38F00B6D148 /* AardvarkMailUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3DA8B6C4255F964D00018D29 /* AardvarkReveal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA8B6C1255F963800018D29 /* AardvarkReveal.framework */; };
+		3DA8B6C5255F964D00018D29 /* AardvarkReveal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA8B6C1255F963800018D29 /* AardvarkReveal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EA3C1DDD1D93696D0048C4CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3C1DDC1D93696D0048C4CD /* AppDelegate.swift */; };
 		EA3C1DE21D93696D0048C4CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1DE01D93696D0048C4CD /* Main.storyboard */; };
 		EA3C1DE41D93696D0048C4CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1DE31D93696D0048C4CD /* Assets.xcassets */; };
@@ -66,6 +68,20 @@
 			remoteGlobalIDString = 3DA5BF362556602000B6D148;
 			remoteInfo = AardvarkMailUI;
 		};
+		3DA8B6C0255F963800018D29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D083F7F2559D7C000F1A408;
+			remoteInfo = AardvarkReveal;
+		};
+		3DA8B6C2255F963800018D29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D083F872559D7C000F1A408;
+			remoteInfo = AardvarkRevealTests;
+		};
 		EA3C1E201D9375060048C4CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
@@ -117,6 +133,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				3DA8B6C5255F964D00018D29 /* AardvarkReveal.framework in Embed Frameworks */,
 				EA3C1E291D93750D0048C4CD /* Aardvark.framework in Embed Frameworks */,
 				3DA5BF6D2559D38F00B6D148 /* AardvarkMailUI.framework in Embed Frameworks */,
 				EA3C1E2D1D93750D0048C4CD /* CoreAardvark.framework in Embed Frameworks */,
@@ -146,6 +163,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DA8B6C4255F964D00018D29 /* AardvarkReveal.framework in Frameworks */,
 				EA3C1E281D93750D0048C4CD /* Aardvark.framework in Frameworks */,
 				3DA5BF6C2559D38F00B6D148 /* AardvarkMailUI.framework in Frameworks */,
 				EA3C1E2C1D93750D0048C4CD /* CoreAardvark.framework in Frameworks */,
@@ -208,6 +226,8 @@
 				3D046DD7254D5ACB0045A06C /* AardvarkLoggingUITests.xctest */,
 				3DA5BF692559D38F00B6D148 /* AardvarkMailUI.framework */,
 				3DA5BF6B2559D38F00B6D148 /* AardvarkMailUITests.xctest */,
+				3DA8B6C1255F963800018D29 /* AardvarkReveal.framework */,
+				3DA8B6C3255F963800018D29 /* AardvarkRevealTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -223,6 +243,7 @@
 				EA3C1DD61D93696D0048C4CD /* Frameworks */,
 				EA3C1DD71D93696D0048C4CD /* Resources */,
 				EA3C1E061D9369C80048C4CD /* Embed Frameworks */,
+				3DA8B6C6255F970800018D29 /* Integrate Reveal */,
 			);
 			buildRules = (
 			);
@@ -309,6 +330,20 @@
 			remoteRef = 3DA5BF6A2559D38F00B6D148 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		3DA8B6C1255F963800018D29 /* AardvarkReveal.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AardvarkReveal.framework;
+			remoteRef = 3DA8B6C0255F963800018D29 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3DA8B6C3255F963800018D29 /* AardvarkRevealTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AardvarkRevealTests.xctest;
+			remoteRef = 3DA8B6C2255F963800018D29 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		EA3C1E211D9375060048C4CD /* Aardvark.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -351,6 +386,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3DA8B6C6255F970800018D29 /* Integrate Reveal */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Integrate Reveal";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "REVEAL_APP_PATH=$(mdfind kMDItemCFBundleIdentifier=\"com.ittybittyapps.Reveal2\" | head -n 1)\nBUILD_SCRIPT_PATH=\"${REVEAL_APP_PATH}/Contents/SharedSupport/Scripts/reveal_server_build_phase.sh\"\nif [ \"${REVEAL_APP_PATH}\" -a -e \"${BUILD_SCRIPT_PATH}\" ]; then\n    \"${BUILD_SCRIPT_PATH}\"\nelse\n    echo \"Reveal Server not loaded: Cannot find a compatible Reveal app.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EA3C1DD51D93696D0048C4CD /* Sources */ = {

@@ -128,6 +128,28 @@ public protocol RevealAttachmentGeneratorDelegate: AnyObject {
 /// indicator **as long as all of the existing views/layers remain in the hierarchy** (for example, you can display a
 /// new window on top of the main window or present a modal view controller, depending on the use case). Once the
 /// generator has completed bundling the Reveal file, user interaction can be restored.
+///
+/// # Security Settings
+///
+/// The generator communicates with the Reveal server over HTTP. By default, the App Transport Security policy requires
+/// the use of a secure connection, which is not available. To enable the generator to connect to the server, add the
+/// following to your app's `Info.plist`:
+///
+/// ```xml
+/// <key>NSAppTransportSecurity</key>
+/// <dict>
+///     <key>NSExceptionDomains</key>
+///     <dict>
+///         <key>localhost</key>
+///         <dict>
+///             <key>NSExceptionAllowsInsecureHTTPLoads</key>
+///             <true/>
+///             <key>NSIncludesSubdomains</key>
+///             <true/>
+///         </dict>
+///     </dict>
+/// </dict>
+/// ```
 @objc(ARKRevealAttachmentGenerator)
 public final class RevealAttachmentGenerator: NSObject {
 
