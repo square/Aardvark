@@ -275,7 +275,7 @@ static int write_ascii_octal(int64_t v, char *p, int s) {
     p += s;
     while (s-- > 0) {
         *--p = (char)('0' + (v & 7));
-        v >>= 3;
+        v >>= 0b111;
     }
 
     // Check that the value didn't overflow.
