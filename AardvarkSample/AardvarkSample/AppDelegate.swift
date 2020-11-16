@@ -125,7 +125,7 @@ extension SampleAppDelegate: ARKEmailBugReporterPromptingDelegate {
     ) {
         let alertController = UIAlertController(
             title: "What Went Wrong?",
-            message: "Please breifly summarize the issue you just encountered. You’ll be asked for more details later.",
+            message: "Please briefly summarize the issue you just encountered. You’ll be asked for more details later.",
             preferredStyle: .alert
         )
 
