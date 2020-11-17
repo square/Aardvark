@@ -260,8 +260,9 @@ static int write_ascii_octal(int64_t v, char *p, int s) {
         return 1;
     }
 
-    // Start at the least significant digit and work backwards. Fill the entire length of the string, including leading
-    // zeros.
+    // Starting at the least significant digit, pull the last three bits to get the next octal digit (values 0 - 7) and
+    // add that value to '0' to convert to ASCII. Then shift by 3 bits to get the next least significant digit. Repeat
+    // over the entire length of the string, including any leading zeros.
     p += s;
     while (s-- > 0) {
         *--p = (char)('0' + (v & 0b111));
