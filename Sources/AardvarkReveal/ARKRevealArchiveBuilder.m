@@ -251,26 +251,26 @@ NSInteger const ARKRevealArchiveBuilderErrorCodeHeaderWriteFailure = 3;
     return header;
 }
 
-/// Writes the value `v` as an ASCII representation of an octal number of length `s` to `p`.
+/// Writes the value `value` as an ASCII representation of an octal number of length `length` to `string`.
 ///
 /// Returns `0` if successful, otherwise `1`.
-static int write_ascii_octal(int64_t v, char *p, int s) {
+static int write_ascii_octal(int64_t value, char *string, int length) {
     // Octal values can't be negative.
-    if (v < 0) {
+    if (value < 0) {
         return 1;
     }
 
     // Starting at the least significant digit, pull the last three bits to get the next octal digit (values 0 - 7) and
     // add that value to '0' to convert to ASCII. Then shift by 3 bits to get the next least significant digit. Repeat
     // over the entire length of the string, including any leading zeros.
-    p += s;
-    while (s-- > 0) {
-        *--p = (char)('0' + (v & 0b111));
-        v >>= 3;
+    string += length;
+    while (length-- > 0) {
+        *--string = (char)('0' + (value & 0b111));
+        value >>= 3;
     }
 
     // Check that the value didn't overflow.
-    return (v == 0) ? 0 : 1;
+    return (value == 0) ? 0 : 1;
 }
 
 @end
