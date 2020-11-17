@@ -15,31 +15,12 @@
 //
 
 #import "ARKRevealArchiveBuilder.h"
+#import "ARKRevealArchiveBuilder_Testing.h"
 
 #import <tar.h>
 
 
-struct header_posix_ustar {
-    char name[100];
-    char mode[8];
-    char uid[8];
-    char gid[8];
-    char size[12];
-    char mtime[12];
-    char checksum[8];
-    char typeflag[1];
-    char linkname[100];
-    char magic[6];
-    char version[2];
-    char uname[32];
-    char gname[32];
-    char devmajor[8];
-    char devminor[8];
-    char prefix[155];
-    char pad[12];
-};
 
-#define TAR_BLOCK_LENGTH 512
 
 
 NSString *const ARKRevealArchiveBuilderErrorDomain = @"ARKRevealArchiveBuilderErrorDomain";
@@ -50,7 +31,7 @@ NSInteger const ARKRevealArchiveBuilderErrorCodeHeaderWriteFailure = 3;
 
 @interface ARKRevealArchiveBuilder ()
 
-@property (nonatomic) NSMutableData *archiveData;
+@property (nonatomic, readwrite) NSMutableData *archiveData;
 @property (nonatomic) NSTimeInterval modificationDate;
 @property (nonatomic) BOOL isComplete;
 
@@ -66,9 +47,14 @@ NSInteger const ARKRevealArchiveBuilderErrorCodeHeaderWriteFailure = 3;
 
 - (instancetype)init;
 {
+    return [self initWithModificationDate:[[NSDate date] timeIntervalSince1970]];
+}
+
+- (instancetype)initWithModificationDate:(NSTimeInterval)modificationDate;
+{
     if (self = [super init]) {
         _archiveData = [NSMutableData data];
-        _modificationDate = [[NSDate date] timeIntervalSince1970];
+        _modificationDate = modificationDate;
         _isComplete = NO;
     }
 
@@ -88,11 +74,12 @@ NSInteger const ARKRevealArchiveBuilderErrorCodeHeaderWriteFailure = 3;
         }
 
         NSError *headerError;
-        struct header_posix_ustar header = [self _headerForPath:path
-                                                           type:DIRTYPE
-                                                       fileSize:0
-                                                       linkName:nil
-                                                          error:&headerError];
+        struct header_posix_ustar header = [[self class] _headerForPath:path
+                                                                   type:DIRTYPE
+                                                               fileSize:0
+                                                               linkName:nil
+                                                       modificationDate:_modificationDate
+                                                                  error:&headerError];
 
         if (headerError != nil) {
             *error = headerError;
@@ -130,11 +117,12 @@ NSInteger const ARKRevealArchiveBuilderErrorCodeHeaderWriteFailure = 3;
         }
 
         NSError *headerError;
-        struct header_posix_ustar header = [self _headerForPath:path
-                                                           type:REGTYPE
-                                                       fileSize:data.length
-                                                       linkName:nil
-                                                          error:&headerError];
+        struct header_posix_ustar header = [[self class] _headerForPath:path
+                                                                   type:REGTYPE
+                                                               fileSize:data.length
+                                                               linkName:nil
+                                                       modificationDate:_modificationDate
+                                                                  error:&headerError];
 
         if (headerError != nil) {
             *error = headerError;
@@ -160,11 +148,12 @@ NSInteger const ARKRevealArchiveBuilderErrorCodeHeaderWriteFailure = 3;
         }
 
         NSError *headerError;
-        struct header_posix_ustar header = [self _headerForPath:path
-                                                           type:SYMTYPE
-                                                       fileSize:0
-                                                       linkName:linkPath
-                                                          error:&headerError];
+        struct header_posix_ustar header = [[self class] _headerForPath:path
+                                                                   type:SYMTYPE
+                                                               fileSize:0
+                                                               linkName:linkPath
+                                                       modificationDate:_modificationDate
+                                                                  error:&headerError];
 
         if (headerError != nil) {
             *error = headerError;
@@ -200,16 +189,17 @@ NSInteger const ARKRevealArchiveBuilderErrorCodeHeaderWriteFailure = 3;
 
 #pragma mark - Private Methods
 
-- (struct header_posix_ustar)_headerForPath:(NSString *)path
++ (struct header_posix_ustar)_headerForPath:(NSString *)path
                                        type:(char)type
                                    fileSize:(int64_t)fileSize
                                    linkName:(NSString *)linkName
+                           modificationDate:(NSTimeInterval)modificationDate
                                       error:(NSError **)error;
 {
     // Create the header based on the Unix Standard TAR format.
     // See <https://www.freebsd.org/cgi/man.cgi?query=tar&apropos=0&sektion=5&manpath=FreeBSD+7.0-RELEASE&arch=default&format=html>.
     struct header_posix_ustar header = {
-        /* name */      "",
+        /* name */      {},
         /* mode */      {'0', '0', '0', '7', '7', '7', ' ', '\0'},
         /* uid */       {'0', '0', '0', '0', '0', '0', ' ', '\0'},
         /* gid */       {'0', '0', '0', '0', '0', '0', ' ', '\0'},
@@ -217,15 +207,15 @@ NSInteger const ARKRevealArchiveBuilderErrorCodeHeaderWriteFailure = 3;
         /* mtime */     {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', ' '},
         /* checksum */  {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         /* typeflag */  type,
-        /* linkname */  "",
+        /* linkname */  {},
         /* magic */     TMAGIC,
         /* version */   TVERSION,
-        /* uname */     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        /* gname */     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        /* uname */     {},
+        /* gname */     {},
         /* devmajor */  {'0', '0', '0', '0', '0', '0', ' ', '\0'},
         /* devminor */  {'0', '0', '0', '0', '0', '0', ' ', '\0'},
-        /* prefix */    "",
-        /* pad */       ""
+        /* prefix */    {},
+        /* pad */       {}
     };
 
     // Per the ustar spec, we should check the length of the file name and split it across the `name` and `prefix`
@@ -244,7 +234,7 @@ NSInteger const ARKRevealArchiveBuilderErrorCodeHeaderWriteFailure = 3;
 
     failed |= write_ascii_octal(fileSize, (char *)(&header.size), sizeof(header.size) - 1);
 
-    failed |= write_ascii_octal(_modificationDate, (char *)(&header.mtime), sizeof(header.mtime) - 1);
+    failed |= write_ascii_octal(modificationDate, (char *)(&header.mtime), sizeof(header.mtime) - 1);
 
     int64_t checksum = 0;
     for (int i = 0 ; i < TAR_BLOCK_LENGTH ; i++) {
@@ -274,8 +264,8 @@ static int write_ascii_octal(int64_t v, char *p, int s) {
     // zeros.
     p += s;
     while (s-- > 0) {
-        *--p = (char)('0' + (v & 7));
-        v >>= 0b111;
+        *--p = (char)('0' + (v & 0b111));
+        v >>= 3;
     }
 
     // Check that the value didn't overflow.

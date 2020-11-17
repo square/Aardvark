@@ -11,6 +11,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '12.0'
 
   s.source_files = 'Sources/AardvarkReveal/**/*.{h,m,swift}'
+  s.private_header_files = 'Sources/AardvarkReveal/**/*_Testing.h'
 
   s.dependency 'Aardvark', '~> 4.0'
 end
