@@ -277,7 +277,7 @@ public final class RevealAttachmentGenerator: NSObject {
 
                     completion(
                         ARKBugReportAttachment(
-                            fileName: "\(self.applicationName()).reveal.tar.gz",
+                            fileName: "\(Self.applicationName()).reveal.tar.gz",
                             data: compressedArchive,
                             dataMIMEType: "application/gzip"
                         )
@@ -311,7 +311,7 @@ public final class RevealAttachmentGenerator: NSObject {
     ) throws {
         // Create the bundle based on the application name, clamped to a reasonable length so that the file paths don't
         // go over 100 characters (a limitation of the archive builder).
-        let appName = applicationName()
+        let appName = Self.applicationName()
         let bundleName = "\(appName.prefix(50)).reveal"
         try archiveBuilder.addDirectory(atPath: "\(bundleName)/")
 
@@ -454,14 +454,6 @@ public final class RevealAttachmentGenerator: NSObject {
         }
     }
 
-    private func applicationName() -> String {
-        return Bundle.main.localizedInfoDictionary?["CFBundleDisplayName"] as? String
-            ?? Bundle.main.localizedInfoDictionary?["CFBundleName"] as? String
-            ?? Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String
-            ?? Bundle.main.infoDictionary?["CFBundleName"] as? String
-            ?? "Unknown App"
-    }
-
     private func addPropertiesPlist(appName: String, bundleName: String, archiveBuilder: ARKRevealArchiveBuilder) throws {
         let propertiesPlist: [String: Any] = [
             "application-name": appName,
@@ -476,6 +468,16 @@ public final class RevealAttachmentGenerator: NSObject {
             with: try Data(contentsOf: propertiesFileURL)
         )
         try? FileManager.default.removeItem(at: propertiesFileURL)
+    }
+
+    // MARK: - Private Static Methods
+
+    private static func applicationName() -> String {
+        return Bundle.main.localizedInfoDictionary?["CFBundleDisplayName"] as? String
+            ?? Bundle.main.localizedInfoDictionary?["CFBundleName"] as? String
+            ?? Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String
+            ?? Bundle.main.infoDictionary?["CFBundleName"] as? String
+            ?? "Unknown App"
     }
 
 }
