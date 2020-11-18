@@ -493,7 +493,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     
     [self.mailComposeViewController endAppearanceTransition];
     
-    // Work around an iOS 9 bug where we don't get UIWindowDidBecomeKeyNotification when the mail compose view controller dismisses.
+    // Work around a bug introduced in iOS 9 where we don't get UIWindowDidBecomeKeyNotification when the mail compose view controller dismisses.
     [self.previousKeyWindow makeKeyAndVisible];
     self.previousKeyWindow = nil;
 }
