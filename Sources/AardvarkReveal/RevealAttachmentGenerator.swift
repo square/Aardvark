@@ -249,7 +249,7 @@ public final class RevealAttachmentGenerator: NSObject {
             }
 
             do {
-                let archiveBuilder = ARKRevealArchiveBuilder()
+                let archiveBuilder = try RevealArchiveBuilder(bundleName: "\(Self.applicationName()).reveal")
 
                 try self.buildRevealPackage(
                     from: applicationStateData,
@@ -258,11 +258,7 @@ public final class RevealAttachmentGenerator: NSObject {
                     archiveBuilder: archiveBuilder,
                     completionQueue: completionQueue
                 ) { success in
-                    guard
-                        success,
-                        let archive = archiveBuilder.completeArchive(),
-                        let compressedArchive = ARKCompressionUtility.gzippedData(for: archive)
-                    else {
+                    guard success, let archive = archiveBuilder.completeArchive() else {
                         DispatchQueue.main.async {
                             delegate?.revealAttachmentGeneratorDidFinishBundlingRevealFile(success:false)
                         }
@@ -277,9 +273,9 @@ public final class RevealAttachmentGenerator: NSObject {
 
                     completion(
                         ARKBugReportAttachment(
-                            fileName: "\(Self.applicationName()).reveal.tar.gz",
-                            data: compressedArchive,
-                            dataMIMEType: "application/gzip"
+                            fileName: "\(Self.applicationName()).reveal.zip",
+                            data: archive,
+                            dataMIMEType: "application/zip"
                         )
                     )
                 }
@@ -305,18 +301,14 @@ public final class RevealAttachmentGenerator: NSObject {
         from applicationStateData: Data,
         baseRevealURL: URL,
         urlSession: URLSession,
-        archiveBuilder: ARKRevealArchiveBuilder,
+        archiveBuilder: RevealArchiveBuilder,
         completionQueue: DispatchQueue,
         completion: @escaping (_ success: Bool) -> Void
     ) throws {
-        // Create the bundle based on the application name, clamped to a reasonable length so that the file paths don't
-        // go over 100 characters (a limitation of the archive builder).
         let appName = Self.applicationName()
-        let bundleName = "\(appName.prefix(50)).reveal"
-        try archiveBuilder.addDirectory(atPath: "\(bundleName)/")
 
         if let compressedStateData = ARKCompressionUtility.gzippedData(for: applicationStateData) {
-            try archiveBuilder.addFile(atPath: "\(bundleName)/ApplicationState.json.gz", with: compressedStateData)
+            try archiveBuilder.addFile(at: "ApplicationState.json.gz", with: compressedStateData)
 
         } else {
             completionQueue.async {
@@ -325,22 +317,22 @@ public final class RevealAttachmentGenerator: NSObject {
             return
         }
 
-        try addPropertiesPlist(appName: appName, bundleName: bundleName, archiveBuilder: archiveBuilder)
+        try addPropertiesPlist(appName: appName, archiveBuilder: archiveBuilder)
 
         let resourceDirectoryName = "Resources"
-        try archiveBuilder.addDirectory(atPath: "\(bundleName)/\(resourceDirectoryName)/")
+        try archiveBuilder.addDirectory(at: resourceDirectoryName)
 
         let applicationState = try JSONDecoder().decode(ApplicationState.self, from: applicationStateData)
 
         try archiveBuilder.addSymbolicLink(
-            atPath: "\(bundleName)/Preview.png",
-            toPath: "\(resourceDirectoryName)/\(applicationState.screens.mainScreen.identifier)#1.png"
+            at: "Preview.png",
+            to: "\(resourceDirectoryName)/\(applicationState.screens.mainScreen.identifier)#1.png"
         )
 
         var parametersForImageDownloads = try downloadTaskParametersForImages(
             in: applicationState,
             baseRevealURL: baseRevealURL,
-            resourcesPathInArchive: "\(bundleName)/\(resourceDirectoryName)/"
+            resourcesPathInArchive: "\(resourceDirectoryName)/"
         )
 
         var appIconURLRequest = URLRequest(url: baseRevealURL.appendingPathComponent("icon", isDirectory: false))
@@ -348,7 +340,7 @@ public final class RevealAttachmentGenerator: NSObject {
         parametersForImageDownloads.append(
             DownloadTaskParameters(
                 urlRequest: appIconURLRequest,
-                pathInArchive: "\(bundleName)/Icon.tiff",
+                pathInArchive: "Icon.tiff",
                 completion: nil
             )
         )
@@ -427,7 +419,7 @@ public final class RevealAttachmentGenerator: NSObject {
     private func fetchImages(
         using taskParameters: [DownloadTaskParameters],
         urlSession: URLSession,
-        archiveBuilder: ARKRevealArchiveBuilder,
+        archiveBuilder: RevealArchiveBuilder,
         completionQueue: DispatchQueue,
         completion: @escaping () -> Void
     ) {
@@ -439,7 +431,7 @@ public final class RevealAttachmentGenerator: NSObject {
                 // Try to add the data to the archive if we got valid data back. The Reveal file is still valid even if
                 // it's missing some images, so don't throw any errors if this fails.
                 if let data = data {
-                    try? archiveBuilder.addFile(atPath: parameters.pathInArchive, with: data)
+                    try? archiveBuilder.addFile(at: parameters.pathInArchive, with: data)
                 }
 
                 parameters.completion?()
@@ -454,7 +446,7 @@ public final class RevealAttachmentGenerator: NSObject {
         }
     }
 
-    private func addPropertiesPlist(appName: String, bundleName: String, archiveBuilder: ARKRevealArchiveBuilder) throws {
+    private func addPropertiesPlist(appName: String, archiveBuilder: RevealArchiveBuilder) throws {
         let propertiesPlist: [String: Any] = [
             "application-name": appName,
             "version": 2,
@@ -464,7 +456,7 @@ public final class RevealAttachmentGenerator: NSObject {
         )
         try (propertiesPlist as NSDictionary).write(to: propertiesFileURL)
         try archiveBuilder.addFile(
-            atPath: "\(bundleName)/Properties.plist",
+            at: "Properties.plist",
             with: try Data(contentsOf: propertiesFileURL)
         )
         try? FileManager.default.removeItem(at: propertiesFileURL)

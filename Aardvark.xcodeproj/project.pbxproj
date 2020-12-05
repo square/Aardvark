@@ -27,9 +27,8 @@
 		3D083F992559D97100F1A408 /* ApplicationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D083F982559D97100F1A408 /* ApplicationState.swift */; };
 		3D083F9B2559DA8E00F1A408 /* ApplicationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D083F9A2559DA8E00F1A408 /* ApplicationStateTests.swift */; };
 		3D15E0311F9D4E13001DE13A /* ARKExceptionLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D15E02C1F9D38B1001DE13A /* ARKExceptionLogging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D2E13412571D5610045A897 /* RevealArchiveBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2E13402571D5610045A897 /* RevealArchiveBuilder.swift */; };
 		3D30DB51255B75B000807184 /* RevealServiceBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D30DB50255B75B000807184 /* RevealServiceBrowser.swift */; };
-		3D30DDCC255BA67400807184 /* ARKRevealArchiveBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D30DDCA255BA67400807184 /* ARKRevealArchiveBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3D30DDCD255BA67400807184 /* ARKRevealArchiveBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D30DDCB255BA67400807184 /* ARKRevealArchiveBuilder.m */; };
 		3D404FA92556410500CE4B83 /* UIActivityViewController+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D404FA72556410500CE4B83 /* UIActivityViewController+ARKAdditions.h */; };
 		3D404FAA2556410500CE4B83 /* UIActivityViewController+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D404FA82556410500CE4B83 /* UIActivityViewController+ARKAdditions.m */; };
 		3D404FAD25564CE700CE4B83 /* ARKFileHandleAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D48041AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m */; };
@@ -54,8 +53,6 @@
 		3DA5BF5D2556626800B6D148 /* UIApplication+ARKAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA98B94B1D4BF00600B3A390 /* UIApplication+ARKAdditions.swift */; };
 		3DA5BF602556640100B6D148 /* ARKBugReportAttachmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA5BF5F2556640100B6D148 /* ARKBugReportAttachmentTests.swift */; };
 		3DA743201F9D4EE500ADB183 /* ARKExceptionLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D15E02D1F9D38B1001DE13A /* ARKExceptionLogging.m */; };
-		3DA8B70B2562340100018D29 /* ARKRevealArchiveBuilder_Testing.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DA8B70A2562340100018D29 /* ARKRevealArchiveBuilder_Testing.h */; };
-		3DA8B71F2562350800018D29 /* ARKRevealArchiveBuilderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DA8B71E2562350800018D29 /* ARKRevealArchiveBuilderTests.m */; };
 		3DB4C506255E09CE002B6B1D /* Aardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4551A2C21BDACF9000F216D0 /* Aardvark.framework */; };
 		3DB4C507255E09CE002B6B1D /* Aardvark.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4551A2C21BDACF9000F216D0 /* Aardvark.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3DD020DF2556502E00E6400A /* ARKDefaultLogFormatterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAB38A319E2929C00161A54 /* ARKDefaultLogFormatterTests.m */; };
@@ -196,9 +193,8 @@
 		3D083F9A2559DA8E00F1A408 /* ApplicationStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationStateTests.swift; sourceTree = "<group>"; };
 		3D15E02C1F9D38B1001DE13A /* ARKExceptionLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKExceptionLogging.h; sourceTree = "<group>"; };
 		3D15E02D1F9D38B1001DE13A /* ARKExceptionLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKExceptionLogging.m; sourceTree = "<group>"; };
+		3D2E13402571D5610045A897 /* RevealArchiveBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevealArchiveBuilder.swift; sourceTree = "<group>"; };
 		3D30DB50255B75B000807184 /* RevealServiceBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevealServiceBrowser.swift; sourceTree = "<group>"; };
-		3D30DDCA255BA67400807184 /* ARKRevealArchiveBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKRevealArchiveBuilder.h; sourceTree = "<group>"; };
-		3D30DDCB255BA67400807184 /* ARKRevealArchiveBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARKRevealArchiveBuilder.m; sourceTree = "<group>"; };
 		3D404FA72556410500CE4B83 /* UIActivityViewController+ARKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityViewController+ARKAdditions.h"; sourceTree = "<group>"; };
 		3D404FA82556410500CE4B83 /* UIActivityViewController+ARKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActivityViewController+ARKAdditions.m"; sourceTree = "<group>"; };
 		3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKEmailBugReportConfiguration.m; sourceTree = "<group>"; };
@@ -217,8 +213,6 @@
 		3DA5BF462556602100B6D148 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DA5BF572556617000B6D148 /* Aardvark+EmailBugReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Aardvark+EmailBugReporting.swift"; sourceTree = "<group>"; };
 		3DA5BF5F2556640100B6D148 /* ARKBugReportAttachmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKBugReportAttachmentTests.swift; sourceTree = "<group>"; };
-		3DA8B70A2562340100018D29 /* ARKRevealArchiveBuilder_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKRevealArchiveBuilder_Testing.h; sourceTree = "<group>"; };
-		3DA8B71E2562350800018D29 /* ARKRevealArchiveBuilderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARKRevealArchiveBuilderTests.m; sourceTree = "<group>"; };
 		3DED97122006D35B007FC95C /* ARKBugReportAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKBugReportAttachment.h; sourceTree = "<group>"; };
 		3DED97132006D35B007FC95C /* ARKBugReportAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARKBugReportAttachment.m; sourceTree = "<group>"; };
 		4551A2C21BDACF9000F216D0 /* Aardvark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Aardvark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -407,9 +401,7 @@
 				3D083F982559D97100F1A408 /* ApplicationState.swift */,
 				3D876E68255A1BBD000335B9 /* ARKCompressionUtility.h */,
 				3D876E69255A1BBD000335B9 /* ARKCompressionUtility.m */,
-				3D30DDCA255BA67400807184 /* ARKRevealArchiveBuilder.h */,
-				3DA8B70A2562340100018D29 /* ARKRevealArchiveBuilder_Testing.h */,
-				3D30DDCB255BA67400807184 /* ARKRevealArchiveBuilder.m */,
+				3D2E13402571D5610045A897 /* RevealArchiveBuilder.swift */,
 				3D083F812559D7C000F1A408 /* AardvarkReveal.h */,
 				3D083F822559D7C000F1A408 /* Info.plist */,
 			);
@@ -421,7 +413,6 @@
 			isa = PBXGroup;
 			children = (
 				3D083F9A2559DA8E00F1A408 /* ApplicationStateTests.swift */,
-				3DA8B71E2562350800018D29 /* ARKRevealArchiveBuilderTests.m */,
 				3D083F8E2559D7C000F1A408 /* Info.plist */,
 			);
 			name = AardvarkRevealTests;
@@ -667,8 +658,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D083F8F2559D7C000F1A408 /* AardvarkReveal.h in Headers */,
-				3DA8B70B2562340100018D29 /* ARKRevealArchiveBuilder_Testing.h in Headers */,
-				3D30DDCC255BA67400807184 /* ARKRevealArchiveBuilder.h in Headers */,
 				3D876E6A255A1BBD000335B9 /* ARKCompressionUtility.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1091,9 +1080,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D083F992559D97100F1A408 /* ApplicationState.swift in Sources */,
-				3D30DDCD255BA67400807184 /* ARKRevealArchiveBuilder.m in Sources */,
 				3D30DB51255B75B000807184 /* RevealServiceBrowser.swift in Sources */,
 				3D083F972559D89700F1A408 /* RevealAttachmentGenerator.swift in Sources */,
+				3D2E13412571D5610045A897 /* RevealArchiveBuilder.swift in Sources */,
 				3D876E6B255A1BBD000335B9 /* ARKCompressionUtility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1103,7 +1092,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D083F9B2559DA8E00F1A408 /* ApplicationStateTests.swift in Sources */,
-				3DA8B71F2562350800018D29 /* ARKRevealArchiveBuilderTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
