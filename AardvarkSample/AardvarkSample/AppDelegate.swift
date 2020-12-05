@@ -106,6 +106,8 @@ extension SampleAppDelegate: ARKEmailBugReporterPromptingDelegate {
         for configuration: ARKEmailBugReportConfiguration,
         completion: @escaping ARKEmailBugReporterCustomPromptCompletionBlock
     ) {
+        // To help avoid getting the Reveal bundle in an inconsistent state, we'll disable user interaction while the
+        // bundle is being generated.
         UIApplication.shared.beginIgnoringInteractionEvents()
 
         revealAttachmentGenerator?.captureCurrentAppState(completionQueue: .main) { attachment in
