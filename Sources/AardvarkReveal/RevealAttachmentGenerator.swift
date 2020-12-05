@@ -217,7 +217,7 @@ public final class RevealAttachmentGenerator: NSObject {
         }
 
         let port = service.port
-        guard port != -1 else {
+        guard port != Constants.unresolvedServicePort else {
             completionQueue.async {
                 completion(nil)
             }
@@ -470,6 +470,15 @@ public final class RevealAttachmentGenerator: NSObject {
             ?? Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String
             ?? Bundle.main.infoDictionary?["CFBundleName"] as? String
             ?? "Unknown App"
+    }
+
+    // MARK: - Private Types
+
+    private enum Constants {
+
+        /// The port returned by a NetService when the service could not be resolved.
+        static let unresolvedServicePort: NSInteger = -1
+
     }
 
 }
