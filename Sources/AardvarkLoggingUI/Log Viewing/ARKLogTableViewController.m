@@ -360,12 +360,18 @@ typedef NS_ENUM(NSUInteger, ARKLogExportOption) {
     }
     
     if (logsText.length > 0) {
-        if (option == ARKLogExportOptionConsole) {
-            NSLog(@"Logs:\n%@", logsText);
-        } else if (option == ARKLogExportOptionFile) {
-            NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"Logs.txt"];
-            [logsText writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
-            NSLog(@"Logs saved to %@", filePath);
+        switch (option) {
+            case ARKLogExportOptionConsole:
+                NSLog(@"Logs:\n%@", logsText);
+                break;
+
+            case ARKLogExportOptionFile:
+            {
+                NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"Logs.txt"];
+                [logsText writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+                NSLog(@"Logs saved to %@", filePath);
+                break;
+            }
         }
     }
     #endif
