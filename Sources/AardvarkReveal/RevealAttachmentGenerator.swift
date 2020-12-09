@@ -203,7 +203,6 @@ public final class RevealAttachmentGenerator: NSObject {
     /// - parameter completionQueue: The queue on which to call the `completion`.
     /// - parameter completion: The completion handler to call when the capture is complete. Called with `nil` when the
     /// capture could not successfully be completed.
-    @available(iOS 11, *)
     @objc
     public func captureCurrentAppState(
         completionQueue: DispatchQueue,
@@ -296,7 +295,6 @@ public final class RevealAttachmentGenerator: NSObject {
 
     // MARK: - Private Methods
 
-    @available(iOS 11, *)
     private func buildRevealPackage(
         from applicationStateData: Data,
         baseRevealURL: URL,
