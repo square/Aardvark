@@ -27,6 +27,12 @@
 #import "ARKScreenshotViewController.h"
 #import "UIActivityViewController+ARKAdditions.h"
 
+typedef NS_ENUM(NSUInteger, ARKLogExportOption) {
+    /// Console Export Option
+    ARKLogExportOptionConsole,
+    /// File Export Option
+    ARKLogExportOptionFile,
+};
 
 @interface ARKLogTableViewController () <UIActionSheetDelegate, UIPopoverControllerDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 
@@ -36,18 +42,11 @@
 @property (nonatomic) BOOL viewWillAppearForFirstTimeCalled;
 @property (nonatomic) BOOL hasScrolledToBottom;
 
-@property (nonatomic) UIActionSheet *clearLogsConfirmationActionSheet;
+@property (nonatomic, weak) UIBarButtonItem *deleteBarButtonItem;
 @property (nonatomic, weak) UIBarButtonItem *shareBarButtonItem;
 
-@property (nonatomic, strong) UIPopoverController *activitySheetPopoverController;
 @property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic, strong) NSString *searchString;
-
-#if TARGET_IPHONE_SIMULATOR
-@property (nonatomic) UIActionSheet *printLogsActionSheet;
-@property (nonatomic) NSInteger printLogsToConsoleButtonIndex;
-@property (nonatomic) NSInteger saveLogsToFileButtonIndex;
-#endif
 
 @end
 
@@ -126,59 +125,16 @@
     self.tableView.rowHeight = 34.0;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
-        self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-        self.searchController.searchResultsUpdater = self;
-        self.searchController.delegate = self;
-        self.searchController.dimsBackgroundDuringPresentation = NO;
-        self.tableView.tableHeaderView = self.searchController.searchBar;
-    }
+
+    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    self.searchController.searchResultsUpdater = self;
+    self.searchController.delegate = self;
+    self.searchController.obscuresBackgroundDuringPresentation = NO;
+    self.tableView.tableHeaderView = self.searchController.searchBar;
 
     if (self.title.length == 0) {
         self.title = NSLocalizedString(@"Logs", @"Title of log viewing screen.");
     }
-}
-
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex;
-{
-#if TARGET_IPHONE_SIMULATOR
-    if (actionSheet == self.printLogsActionSheet) {
-        NSMutableString *logsText = [NSMutableString string];
-        for (ARKLogMessage *logMessage in self.filteredLogs) {
-            [logsText appendFormat:@"%@\n", [self.logFormatter formattedLogMessage:logMessage]];
-        }
-        
-        if (logsText.length > 0) {
-            if (buttonIndex == self.printLogsToConsoleButtonIndex) {
-                NSLog(@"Logs:\n%@", logsText);
-                
-            } else if (buttonIndex == self.saveLogsToFileButtonIndex) {
-                NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"Logs.txt"];
-                [logsText writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
-                NSLog(@"Logs saved to %@", filePath);
-            }
-        }
-        
-        return;
-    }
-#endif
-    
-    if (actionSheet == self.clearLogsConfirmationActionSheet) {
-        if (buttonIndex == actionSheet.destructiveButtonIndex) {
-            [self.logStore clearLogsWithCompletionHandler:NULL];
-            [self _reloadLogs];
-        }
-    }
-}
-
-#pragma mark - UIPopoverControllerDelegate
-
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController;
-{
-    self.activitySheetPopoverController = nil;
 }
 
 #pragma mark - UISearchResultsUpdating
@@ -353,17 +309,28 @@
 {
 #if TARGET_IPHONE_SIMULATOR
     // On the simulator, show an action sheet letting the developer write all logs to the console, or to a file on the desktop.
-    self.printLogsActionSheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                            delegate:self
-                                                   cancelButtonTitle:NSLocalizedString(@"Cancel", @"Action sheet button title to cancel Print/Save Logs action sheet.")
-                                              destructiveButtonTitle:nil
-                                                   otherButtonTitles:nil];
-    
-    self.printLogsToConsoleButtonIndex = [self.printLogsActionSheet addButtonWithTitle:NSLocalizedString(@"Print Logs to Console", @"Action sheet button to write logs to the console.")];
-    self.saveLogsToFileButtonIndex = [self.printLogsActionSheet addButtonWithTitle:NSLocalizedString(@"Save Logs to File", @"Action sheet button to save logs to a file (and NSLog the path to that file).")];
-    
-    [self.printLogsActionSheet showInView:self.view];
-    
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+    UIAlertAction *printLogsToConsoleAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Print Logs to Console", @"Action sheet button to write logs to the console.")
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction * _Nonnull action) {
+        [self _exportLogsWithOption:ARKLogExportOptionConsole];
+    }];
+    [actionSheet addAction:printLogsToConsoleAction];
+
+    UIAlertAction *saveLogsToFileAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Save Logs to File", @"Action sheet button to save logs to a file (and NSLog the path to that file).")
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction * _Nonnull action) {
+        [self _exportLogsWithOption:ARKLogExportOptionFile];
+    }];
+    [actionSheet addAction:saveLogsToFileAction];
+
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Action sheet button title to cancel Print/Save Logs action sheet.")
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
+    [actionSheet addAction:cancelAction];
+
+    [self presentViewController:actionSheet animated:YES completion:nil];
 #else
     // Show a share sheet so the user can email logs.
     NSArray *formattedLogMessages = [self contentForActivitySheet];
@@ -376,22 +343,59 @@
     } else {
         // isPad
         ARKCheckCondition(self.shareBarButtonItem, , @"Missing a share bar button item when that bar button item was clicked.");
-
-        self.activitySheetPopoverController = [[UIPopoverController alloc] initWithContentViewController:activityViewController];
-        self.activitySheetPopoverController.delegate = self;
-        [self.activitySheetPopoverController presentPopoverFromBarButtonItem:self.shareBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        
+        activityViewController.modalPresentationStyle = UIModalPresentationPopover;
+        activityViewController.popoverPresentationController.barButtonItem = self.shareBarButtonItem;
+        [self presentViewController:activityViewController animated:YES completion:nil];
     }
 #endif
 }
 
+- (void)_exportLogsWithOption:(ARKLogExportOption)option;
+{
+    #if TARGET_IPHONE_SIMULATOR
+    NSMutableString *logsText = [NSMutableString string];
+    for (ARKLogMessage *logMessage in self.filteredLogs) {
+        [logsText appendFormat:@"%@\n", [self.logFormatter formattedLogMessage:logMessage]];
+    }
+    
+    if (logsText.length > 0) {
+        switch (option) {
+            case ARKLogExportOptionConsole:
+                NSLog(@"Logs:\n%@", logsText);
+                break;
+
+            case ARKLogExportOptionFile:
+            {
+                NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"Logs.txt"];
+                [logsText writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+                NSLog(@"Logs saved to %@", filePath);
+                break;
+            }
+        }
+    }
+    #endif
+}
+
 - (IBAction)_clearLogs:(id)sender;
 {
-    self.clearLogsConfirmationActionSheet = [UIActionSheet new];
-    self.clearLogsConfirmationActionSheet.destructiveButtonIndex = [self.clearLogsConfirmationActionSheet addButtonWithTitle:NSLocalizedString(@"Delete All Logs", @"Action sheet button to clear all logs.")];
-    self.clearLogsConfirmationActionSheet.cancelButtonIndex = [self.clearLogsConfirmationActionSheet addButtonWithTitle:NSLocalizedString(@"Cancel", @"Action sheet button title to cancel clearing logs.")];
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle: UIAlertControllerStyleActionSheet];
+    actionSheet.popoverPresentationController.barButtonItem = self.deleteBarButtonItem;
     
-    self.clearLogsConfirmationActionSheet.delegate = self;
-    [self.clearLogsConfirmationActionSheet showInView:self.view];
+    UIAlertAction *deleteLogsAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete All Logs", @"Action sheet button to clear all logs.")
+                                                               style:UIAlertActionStyleDestructive
+                                                             handler:^(UIAlertAction * _Nonnull action) {
+        [self.logStore clearLogsWithCompletionHandler:NULL];
+        [self _reloadLogs];
+    }];
+    [actionSheet addAction:deleteLogsAction];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Action sheet button title to cancel clearing logs.")
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:nil];
+    [actionSheet addAction:cancelAction];
+    
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 - (void)_applicationDidBecomeActive:(NSNotification *)notification;
@@ -453,6 +457,7 @@
     self.shareBarButtonItem = shareButton;
 
     UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(_clearLogs:)];
+    self.deleteBarButtonItem = deleteButton;
     
     self.navigationItem.rightBarButtonItems = @[shareButton, deleteButton];
 }
