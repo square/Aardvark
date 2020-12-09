@@ -387,51 +387,51 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     
     if ([MFMailComposeViewController canSendMail]) {
         self.mailComposeViewController = [MFMailComposeViewController new];
-        
+
         [self.mailComposeViewController setToRecipients:@[self.bugReportRecipientEmailAddress]];
         [self.mailComposeViewController setSubject:configuration.prefilledEmailSubject];
-        
+
         // Once all log messages have been retrieved, attach the data and show the compose window.
         dispatch_group_notify(logStoreRetrievalDispatchGroup, dispatch_get_main_queue(), ^{
             NSMutableString *const emailBody = [self _prefilledEmailBodyWithEmailBodyAdditions:emailBodyAdditions];
-            
+
             for (ARKLogStore *logStore in logStores) {
                 NSArray *const logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
-                
+
                 NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
                 NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for logs attachments") stringByAppendingPathExtension:[self formattedLogMessagesAttachmentExtension]];
                 NSMutableString *const emailBodyForLogStore = [NSMutableString new];
                 BOOL appendToEmailBody = NO;
-                
+
                 if (logStore.name.length) {
                     [emailBodyForLogStore appendFormat:@"%@:\n", logStore.name];
                     screenshotFileName = [logStore.name stringByAppendingFormat:@"_%@", screenshotFileName];
                     logsFileName = [logStore.name stringByAppendingFormat:@"_%@", logsFileName];
                 }
-                
+
                 NSString *const recentErrorLogs = [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable];
                 if (recentErrorLogs.length) {
                     [emailBodyForLogStore appendFormat:@"%@\n", recentErrorLogs];
                     appendToEmailBody = YES;
                 }
-                
+
                 if (appendToEmailBody) {
                     [emailBody appendString:emailBodyForLogStore];
                 }
-                
+
                 if (configuration.includesScreenshot && self.attachScreenshotToNextBugReport) {
                     NSData *const mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
                     if (mostRecentImage.length > 0) {
                         [self.mailComposeViewController addAttachmentData:mostRecentImage mimeType:@"image/png" fileName:screenshotFileName];
                     }
                 }
-                
+
                 NSData *const formattedLogs = [self formattedLogMessagesAsData:logMessages];
                 if (formattedLogs.length) {
                     [self.mailComposeViewController addAttachmentData:formattedLogs mimeType:[self formattedLogMessagesDataMIMEType] fileName:logsFileName];
                 }
             }
-            
+
             if (configuration.includesViewHierarchyDescription && self.viewHierarchyDescription != nil) {
                 NSString *const viewHierarchyFileName = [NSLocalizedString(@"view_hierarchy", @"File name for view hierarchy attachment") stringByAppendingPathExtension:@"txt"];
                 NSData *const viewHierarchyData = [self.viewHierarchyDescription dataUsingEncoding:NSUTF8StringEncoding];
@@ -440,16 +440,16 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                 }
             }
             self.viewHierarchyDescription = nil;
-            
+
             for (ARKBugReportAttachment *attachment in configuration.additionalAttachments) {
                 [self.mailComposeViewController addAttachmentData:attachment.data mimeType:attachment.dataMIMEType fileName:attachment.fileName];
             }
-            
+
             [self.mailComposeViewController setMessageBody:emailBody isHTML:NO];
             self.mailComposeViewController.mailComposeDelegate = self;
             [self _showEmailComposeWindow];
         });
-        
+
     } else {
         dispatch_group_notify(logStoreRetrievalDispatchGroup, dispatch_get_main_queue(), ^{
             NSMutableString *const emailBody = [self _prefilledEmailBodyWithEmailBodyAdditions:emailBodyAdditions];
@@ -461,7 +461,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             
             NSURL *const composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:configuration.prefilledEmailSubject body:emailBody];
             if (composeEmailURL != nil) {
-                [[UIApplication sharedApplication] openURL:composeEmailURL];
+                [[UIApplication sharedApplication] openURL:composeEmailURL options:@{} completionHandler:NULL];
             }
         });
     }
@@ -493,17 +493,9 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     
     [self.mailComposeViewController endAppearanceTransition];
     
-    static BOOL iOS9OrLater;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        iOS9OrLater = [[UIDevice currentDevice].systemVersion compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending;
-    });
-    
-    // Work around an iOS 9 bug where we don't get UIWindowDidBecomeKeyNotification when the mail compose view controller dismisses.
-    if (iOS9OrLater) {
-        [self.previousKeyWindow makeKeyAndVisible];
-        self.previousKeyWindow = nil;
-    }
+    // Work around a bug introduced in iOS 9 where we don't get UIWindowDidBecomeKeyNotification when the mail compose view controller dismisses.
+    [self.previousKeyWindow makeKeyAndVisible];
+    self.previousKeyWindow = nil;
 }
 
 - (NSMutableString *)_prefilledEmailBodyWithEmailBodyAdditions:(nullable NSDictionary *)emailBodyAdditions;
@@ -577,15 +569,15 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (NSURL *)_emailURLWithPrefix:(NSString *)prefix recipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText shouldCheckCanOpenURL:(BOOL)shouldCheckCanOpenURL;
 {
-    NSString *const recipientsEscapedString = [[recipients componentsJoinedByString:@","] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *const recipientsEscapedString = [[recipients componentsJoinedByString:@","] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
     
     NSString *const toArgument = (recipients.count > 0) ? [NSString stringWithFormat:@"to=%@&", recipientsEscapedString] : @"";
     NSString *const URLString = [NSString stringWithFormat:@"%@?%@cc=%@&subject=%@&body=%@",
                                  prefix,
                                  toArgument,
-                                 [CCLine stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                                 [subjectLine stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                                 [bodyText stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+                                 [CCLine stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet],
+                                 [subjectLine stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet],
+                                 [bodyText stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
     
     NSURL *const URL = [NSURL URLWithString:URLString];
     if (shouldCheckCanOpenURL) {

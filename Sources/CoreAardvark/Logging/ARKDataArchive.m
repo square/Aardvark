@@ -92,14 +92,10 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 
 - (void)appendArchiveOfObject:(nonnull id <NSSecureCoding>)object;
 {
-    NSData *data = nil;
-    
-    @try {
-        data = [NSKeyedArchiver archivedDataWithRootObject:object];
-    }
-    @catch (NSException *exception) {
-        ARKCheckCondition(NO, , @"Couldn't archive object %@", object);
-    }
+    NSError *error = nil;
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:NO error:&error];
+
+    ARKCheckCondition(error == nil, , @"Couldn't archive object %@", object);
     
     if (data.length > 0) {
         [self.fileOperationQueue addOperationWithBlock:^{
@@ -143,7 +139,10 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
                 
                 id object = nil;
                 @try {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
                     object = [NSKeyedUnarchiver unarchiveObjectWithData:objectData];
+#pragma clang diagnostic pop
                 }
                 @catch (NSException *exception) {
                     // The structure of the archive itself isn't corrupted, just the data itself, so ignore and continue.
