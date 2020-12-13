@@ -155,7 +155,20 @@ public final class RevealAttachmentGenerator: NSObject {
 
     // MARK: - Life Cycle
 
-    public override init() {
+    public override convenience init() {
+        self.init(
+            serviceBrowser: RevealServiceBrowser(),
+            urlSession: URLSession(configuration: .default)
+        )
+    }
+
+    internal init(
+        serviceBrowser: RevealServiceBrowsing,
+        urlSession: URLSession
+    ) {
+        self.serviceBrowser = serviceBrowser
+        self.urlSession = urlSession
+
         super.init()
 
         serviceBrowser.startSearching()
@@ -191,7 +204,9 @@ public final class RevealAttachmentGenerator: NSObject {
 
     // MARK: - Private Properties
 
-    private let serviceBrowser: RevealServiceBrowser = .init()
+    private let serviceBrowser: RevealServiceBrowsing
+
+    private let urlSession: URLSession
 
     private var notificationObservers: [NSObjectProtocol] = []
 
@@ -223,15 +238,13 @@ public final class RevealAttachmentGenerator: NSObject {
             return
         }
 
-        let session = URLSession(configuration: .default)
-
         // We can always connect to Reveal on localhost, even if the service we discovered was using our host name.
         let baseRevealURL = URL(string: "http://localhost:\(port)")!
 
         delegate?.revealAttachmentGeneratorWillBeginCapturingAppState()
 
         let applicationURL = baseRevealURL.appendingPathComponent("application")
-        let dataTask = session.dataTask(with: applicationURL) { [delegate] data, _, _ in
+        let dataTask = urlSession.dataTask(with: applicationURL) { [delegate] data, _, _ in
             guard let applicationStateData = data else {
                 DispatchQueue.main.async {
                     delegate?.revealAttachmentGeneratorDidFinishCapturingAppState(success: false)
@@ -253,7 +266,6 @@ public final class RevealAttachmentGenerator: NSObject {
                 try self.buildRevealPackage(
                     from: applicationStateData,
                     baseRevealURL: baseRevealURL,
-                    urlSession: session,
                     archiveBuilder: archiveBuilder,
                     completionQueue: completionQueue
                 ) { success in
@@ -298,7 +310,6 @@ public final class RevealAttachmentGenerator: NSObject {
     private func buildRevealPackage(
         from applicationStateData: Data,
         baseRevealURL: URL,
-        urlSession: URLSession,
         archiveBuilder: RevealArchiveBuilder,
         completionQueue: DispatchQueue,
         completion: @escaping (_ success: Bool) -> Void

@@ -16,7 +16,29 @@
 
 import Foundation
 
-final class RevealServiceBrowser: NSObject, NetServiceBrowserDelegate {
+protocol RevealService: AnyObject {
+
+    var port: Int { get }
+
+}
+
+extension NetService: RevealService {}
+
+// MARK: -
+
+protocol RevealServiceBrowsing: AnyObject {
+
+    var localService: RevealService? { get }
+
+    func startSearching()
+
+    func stopSearching()
+
+}
+
+// MARK: -
+
+final class RevealServiceBrowser: NSObject, NetServiceBrowserDelegate, RevealServiceBrowsing {
 
     // MARK: - Life Cycle
 
@@ -28,7 +50,7 @@ final class RevealServiceBrowser: NSObject, NetServiceBrowserDelegate {
 
     // MARK: - Internal Properties
 
-    var localService: NetService? {
+    var localService: RevealService? {
         // When running on device, the host name will match the device's host name. When running in a simulator, the
         // host name will be "localhost.".
         let deviceHostName = ProcessInfo.processInfo.hostName.lowercased() + "."
