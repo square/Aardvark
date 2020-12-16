@@ -27,6 +27,7 @@
 #import "ARKScreenshotViewController.h"
 #import "UIActivityViewController+ARKAdditions.h"
 
+/// Private enum to specify destination of log export (Console or File).
 typedef NS_ENUM(NSUInteger, ARKLogExportOption) {
     /// Console Export Option
     ARKLogExportOptionConsole,
@@ -351,6 +352,7 @@ typedef NS_ENUM(NSUInteger, ARKLogExportOption) {
 #endif
 }
 
+///Exports logs to specified destination. Using enum allows for a single method for exporting and avoided duplication of code.
 - (void)_exportLogsWithOption:(ARKLogExportOption)option;
 {
     #if TARGET_IPHONE_SIMULATOR
