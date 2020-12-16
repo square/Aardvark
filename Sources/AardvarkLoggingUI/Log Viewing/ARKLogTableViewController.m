@@ -352,7 +352,7 @@ typedef NS_ENUM(NSUInteger, ARKLogExportOption) {
 #endif
 }
 
-///Exports logs to specified destination. Using enum allows for a single method for exporting and avoided duplication of code.
+/// Exports logs to specified destination. Using enum allows for a single method for exporting and avoided duplication of code.
 - (void)_exportLogsWithOption:(ARKLogExportOption)option;
 {
     #if TARGET_IPHONE_SIMULATOR
