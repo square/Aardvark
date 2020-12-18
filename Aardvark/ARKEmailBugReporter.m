@@ -476,7 +476,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     [self.mailComposeViewController beginAppearanceTransition:YES animated:YES];
     
     self.emailComposeWindow.rootViewController = self.mailComposeViewController;
-    [self.emailComposeWindow addSubview:self.mailComposeViewController.view];
     [self.emailComposeWindow makeKeyAndVisible];
     
     [self.mailComposeViewController endAppearanceTransition];
@@ -489,6 +488,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     
     [self.mailComposeViewController.view removeFromSuperview];
     self.emailComposeWindow.rootViewController = nil;
+    // Manually hide the window so that UIKit stops retaining it
+    self.emailComposeWindow.hidden = YES;
     self.emailComposeWindow = nil;
     
     [self.mailComposeViewController endAppearanceTransition];
