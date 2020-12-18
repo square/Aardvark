@@ -476,7 +476,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     [self.mailComposeViewController beginAppearanceTransition:YES animated:YES];
     
     self.emailComposeWindow.rootViewController = self.mailComposeViewController;
-    [self.emailComposeWindow addSubview:self.mailComposeViewController.view];
     [self.emailComposeWindow makeKeyAndVisible];
     
     [self.mailComposeViewController endAppearanceTransition];
