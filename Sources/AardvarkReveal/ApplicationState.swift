@@ -36,7 +36,7 @@ enum Class: Equatable {
 
 }
 
-extension Class: Decodable {
+extension Class: Codable {
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -45,6 +45,17 @@ extension Class: Decodable {
             self = .subclass(name: name, superclass: superclass)
         } else {
             self = .baseClass(name: name)
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var values = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case let .baseClass(name: name):
+            try values.encode(name, forKey: .name)
+        case let .subclass(name: name, superclass: superclass):
+            try values.encode(name, forKey: .name)
+            try values.encode(superclass, forKey: .superclass)
         }
     }
 
@@ -65,7 +76,7 @@ struct ApplicationState {
 
 }
 
-extension ApplicationState: Decodable {}
+extension ApplicationState: Codable {}
 
 // MARK: -
 
@@ -75,7 +86,7 @@ struct Screens {
 
 }
 
-extension Screens: Decodable {}
+extension Screens: Codable {}
 
 // MARK: -
 
@@ -89,13 +100,20 @@ struct Object: Equatable {
 
 }
 
-extension Object: Decodable {
+extension Object: Codable {
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         self.identifier = try values.decode(Int.self, forKey: .identifier)
         self.class = try values.decode(Class.self, forKey: .class)
         self.attributes = try values.decode(Dictionary<String, Attribute>.self, forKey: .attributes)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var values = encoder.container(keyedBy: CodingKeys.self)
+        try values.encode(identifier, forKey: .identifier)
+        try values.encode(`class`, forKey: .class)
+        try values.encode(attributes, forKey: .attributes)
     }
 
     enum CodingKeys: String, CodingKey {
@@ -114,7 +132,7 @@ enum Attribute: Equatable {
     case unknown
 }
 
-extension Attribute: Decodable {
+extension Attribute: Codable {
 
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
@@ -138,6 +156,22 @@ extension Attribute: Decodable {
 
         default:
             self = .unknown
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var values = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .unknown:
+            try values.encode("NSObject", forKey: .type)
+
+        case let .array(contents):
+            try values.encode("NSArray", forKey: .type)
+            try values.encode(contents, forKey: .value)
+
+        case let .object(object):
+            try values.encode("NSObject", forKey: .type)
+            try values.encode(object, forKey: .value)
         }
     }
 

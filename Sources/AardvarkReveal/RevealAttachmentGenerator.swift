@@ -164,7 +164,7 @@ public final class RevealAttachmentGenerator: NSObject {
 
     internal init(
         serviceBrowser: RevealServiceBrowsing,
-        urlSession: URLSession
+        urlSession: NetworkSession
     ) {
         self.serviceBrowser = serviceBrowser
         self.urlSession = urlSession
@@ -206,7 +206,7 @@ public final class RevealAttachmentGenerator: NSObject {
 
     private let serviceBrowser: RevealServiceBrowsing
 
-    private let urlSession: URLSession
+    private let urlSession: NetworkSession
 
     private var notificationObservers: [NSObjectProtocol] = []
 
@@ -244,7 +244,7 @@ public final class RevealAttachmentGenerator: NSObject {
         delegate?.revealAttachmentGeneratorWillBeginCapturingAppState()
 
         let applicationURL = baseRevealURL.appendingPathComponent("application")
-        let dataTask = urlSession.dataTask(with: applicationURL) { [delegate] data, _, _ in
+        urlSession.performDataTask(with: applicationURL) { [delegate] data in
             guard let applicationStateData = data else {
                 DispatchQueue.main.async {
                     delegate?.revealAttachmentGeneratorDidFinishCapturingAppState(success: false)
@@ -301,8 +301,6 @@ public final class RevealAttachmentGenerator: NSObject {
                 }
             }
         }
-
-        dataTask.resume()
     }
 
     // MARK: - Private Methods
@@ -427,7 +425,7 @@ public final class RevealAttachmentGenerator: NSObject {
 
     private func fetchImages(
         using taskParameters: [DownloadTaskParameters],
-        urlSession: URLSession,
+        urlSession: NetworkSession,
         archiveBuilder: RevealArchiveBuilder,
         completionQueue: DispatchQueue,
         completion: @escaping () -> Void
@@ -436,7 +434,7 @@ public final class RevealAttachmentGenerator: NSObject {
 
         for parameters in taskParameters {
             dispatchGroup.enter()
-            let task = urlSession.dataTask(with: parameters.urlRequest) { data, _, _ in
+            urlSession.performDataTask(with: parameters.urlRequest) { data in
                 // Try to add the data to the archive if we got valid data back. The Reveal file is still valid even if
                 // it's missing some images, so don't throw any errors if this fails.
                 if let data = data {
@@ -447,7 +445,6 @@ public final class RevealAttachmentGenerator: NSObject {
 
                 dispatchGroup.leave()
             }
-            task.resume()
         }
 
         dispatchGroup.notify(queue: completionQueue) {
