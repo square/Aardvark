@@ -158,16 +158,19 @@ public final class RevealAttachmentGenerator: NSObject {
     public override convenience init() {
         self.init(
             serviceBrowser: RevealServiceBrowser(),
-            urlSession: URLSession(configuration: .default)
+            urlSession: URLSession(configuration: .default),
+            archiveBuilderFactory: { try ZIPArchiveBuilder(bundleName: $0) }
         )
     }
 
     internal init(
         serviceBrowser: RevealServiceBrowsing,
-        urlSession: NetworkSession
+        urlSession: NetworkSession,
+        archiveBuilderFactory: @escaping (_ bundleName: String) throws -> ArchiveBuilder
     ) {
         self.serviceBrowser = serviceBrowser
         self.urlSession = urlSession
+        self.archiveBuilderFactory = archiveBuilderFactory
 
         super.init()
 
@@ -207,6 +210,8 @@ public final class RevealAttachmentGenerator: NSObject {
     private let serviceBrowser: RevealServiceBrowsing
 
     private let urlSession: NetworkSession
+
+    private let archiveBuilderFactory: (_ bundleName: String) throws -> ArchiveBuilder
 
     private var notificationObservers: [NSObjectProtocol] = []
 
@@ -261,7 +266,7 @@ public final class RevealAttachmentGenerator: NSObject {
             }
 
             do {
-                let archiveBuilder = try RevealArchiveBuilder(bundleName: "\(Self.applicationName()).reveal")
+                let archiveBuilder = try self.archiveBuilderFactory("\(Self.applicationName()).reveal")
 
                 try self.buildRevealPackage(
                     from: applicationStateData,
@@ -308,7 +313,7 @@ public final class RevealAttachmentGenerator: NSObject {
     private func buildRevealPackage(
         from applicationStateData: Data,
         baseRevealURL: URL,
-        archiveBuilder: RevealArchiveBuilder,
+        archiveBuilder: ArchiveBuilder,
         completionQueue: DispatchQueue,
         completion: @escaping (_ success: Bool) -> Void
     ) throws {
@@ -426,7 +431,7 @@ public final class RevealAttachmentGenerator: NSObject {
     private func fetchImages(
         using taskParameters: [DownloadTaskParameters],
         urlSession: NetworkSession,
-        archiveBuilder: RevealArchiveBuilder,
+        archiveBuilder: ArchiveBuilder,
         completionQueue: DispatchQueue,
         completion: @escaping () -> Void
     ) {
@@ -452,7 +457,7 @@ public final class RevealAttachmentGenerator: NSObject {
         }
     }
 
-    private func addPropertiesPlist(appName: String, archiveBuilder: RevealArchiveBuilder) throws {
+    private func addPropertiesPlist(appName: String, archiveBuilder: ArchiveBuilder) throws {
         let propertiesPlist: [String: Any] = [
             "application-name": appName,
             "version": 2,

@@ -23,7 +23,8 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
     func testRevealServiceNotFound() {
         let generator = RevealAttachmentGenerator(
             serviceBrowser: TestServiceBrowser(),
-            urlSession: TestNetworkSession()
+            urlSession: TestNetworkSession(),
+            archiveBuilderFactory: { _ in TestArchiveBuilder() }
         )
 
         let delegate = TestDelegate()
@@ -55,7 +56,8 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
 
         let generator = RevealAttachmentGenerator(
             serviceBrowser: browser,
-            urlSession: session
+            urlSession: session,
+            archiveBuilderFactory: { _ in TestArchiveBuilder() }
         )
 
         let delegate = TestDelegate()
@@ -105,21 +107,28 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
         let browser = TestServiceBrowser()
         browser.localService = TestService(port: 1234)
 
+        let archiveBuilder = TestArchiveBuilder()
+        let callsArchiveBuilderFactoryExpectation = self.expectation(description: "calls archive builder factory")
+
         let generator = RevealAttachmentGenerator(
             serviceBrowser: browser,
-            urlSession: session
+            urlSession: session,
+            archiveBuilderFactory: { _ in
+                callsArchiveBuilderFactoryExpectation.fulfill()
+                return archiveBuilder
+            }
         )
 
         let delegate = TestDelegate()
         generator.delegate = delegate
 
         let dispatchQueue = DispatchQueue(label: "test")
-        let expectation = self.expectation(description: "calls completion")
+        let completionExpectation = self.expectation(description: "calls completion")
 
         generator.captureCurrentAppState(completionQueue: dispatchQueue) { attachment in
             dispatchPrecondition(condition: .onQueue(dispatchQueue))
             XCTAssertNotNil(attachment)
-            expectation.fulfill()
+            completionExpectation.fulfill()
         }
 
         // Since the Reveal service already exists, the generator should call the delegate immediately.
@@ -199,6 +208,22 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishCapturingAppStateCount, 1)
         XCTAssertEqual(delegate.didCaptureMainScreenSnapshotCount, 1)
         XCTAssertEqual(delegate.didFinishBundlingRevealFileCount, 1)
+
+        XCTAssertEqual(archiveBuilder.completeCount, 1)
+        XCTAssertEqual(archiveBuilder.directoryPaths, ["Resources"])
+        XCTAssertEqual(
+            archiveBuilder.filePaths.sorted(),
+            [
+                "ApplicationState.json.gz",
+                "Icon.tiff",
+                "Properties.plist",
+                "Resources/5678#1.png",
+            ]
+        )
+
+        // There should be a single symbolic link called "Preview.png" that points at the main screen snapshot.
+        XCTAssertEqual(archiveBuilder.symbolicLinks.count, 1)
+        XCTAssertEqual(archiveBuilder.symbolicLinks["Preview.png"], "Resources/5678#1.png")
 
         waitForExpectations(timeout: 10)
     }
@@ -287,6 +312,38 @@ private final class TestNetworkSession: NetworkSession {
 
     func performDataTask(with request: URLRequest, completionHandler: @escaping (Data?) -> Void) {
         tasksByRequest.append((request, completionHandler))
+    }
+
+}
+
+private final class TestArchiveBuilder: ArchiveBuilder {
+
+    private(set) var directoryPaths: [String] = []
+
+    func addDirectory(at path: String) throws {
+        guard completeCount == 0 else { return }
+        directoryPaths.append(path)
+    }
+
+    private(set) var filePaths: [String] = []
+
+    func addFile(at path: String, with data: Data) throws {
+        guard completeCount == 0 else { return }
+        filePaths.append(path)
+    }
+
+    private(set) var symbolicLinks: [String: String] = [:]
+
+    func addSymbolicLink(at path: String, to linkPath: String) throws {
+        guard completeCount == 0 else { return }
+        symbolicLinks[path] = linkPath
+    }
+
+    private(set) var completeCount = 0
+
+    func completeArchive() -> Data? {
+        completeCount += 1
+        return Data()
     }
 
 }

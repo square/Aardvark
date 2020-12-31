@@ -16,7 +16,19 @@
 
 import Foundation
 
-final class RevealArchiveBuilder {
+protocol ArchiveBuilder {
+
+    func addDirectory(at path: String) throws
+
+    func addFile(at path: String, with data: Data) throws
+
+    func addSymbolicLink(at path: String, to linkPath: String) throws
+
+    func completeArchive() -> Data?
+
+}
+
+final class ZIPArchiveBuilder: ArchiveBuilder {
 
     // MARK: - Life Cycle
 
