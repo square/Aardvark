@@ -57,6 +57,7 @@
 		3DB4C506255E09CE002B6B1D /* Aardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4551A2C21BDACF9000F216D0 /* Aardvark.framework */; };
 		3DB4C507255E09CE002B6B1D /* Aardvark.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4551A2C21BDACF9000F216D0 /* Aardvark.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3DCE4DA1259B344800E562B7 /* NetworkSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCE4DA0259B344800E562B7 /* NetworkSession.swift */; };
+		3DCE4DC725A0103D00E562B7 /* RevealAttachmentGeneratorTestFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCE4DC625A0103D00E562B7 /* RevealAttachmentGeneratorTestFixture.swift */; };
 		3DD020DF2556502E00E6400A /* ARKDefaultLogFormatterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EAAB38A319E2929C00161A54 /* ARKDefaultLogFormatterTests.m */; };
 		3DED97142006D35B007FC95C /* ARKBugReportAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 3DED97122006D35B007FC95C /* ARKBugReportAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3DED97152006D35B007FC95C /* ARKBugReportAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DED97132006D35B007FC95C /* ARKBugReportAttachment.m */; };
@@ -217,6 +218,7 @@
 		3DA5BF572556617000B6D148 /* Aardvark+EmailBugReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Aardvark+EmailBugReporting.swift"; sourceTree = "<group>"; };
 		3DA5BF5F2556640100B6D148 /* ARKBugReportAttachmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKBugReportAttachmentTests.swift; sourceTree = "<group>"; };
 		3DCE4DA0259B344800E562B7 /* NetworkSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSession.swift; sourceTree = "<group>"; };
+		3DCE4DC625A0103D00E562B7 /* RevealAttachmentGeneratorTestFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevealAttachmentGeneratorTestFixture.swift; sourceTree = "<group>"; };
 		3DED97122006D35B007FC95C /* ARKBugReportAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKBugReportAttachment.h; sourceTree = "<group>"; };
 		3DED97132006D35B007FC95C /* ARKBugReportAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARKBugReportAttachment.m; sourceTree = "<group>"; };
 		4551A2C21BDACF9000F216D0 /* Aardvark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Aardvark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -419,6 +421,7 @@
 			children = (
 				3D083F9A2559DA8E00F1A408 /* ApplicationStateTests.swift */,
 				3D43CD9F2585949F00FE50A0 /* RevealAttachmentGeneratorTests.swift */,
+				3DCE4DC625A0103D00E562B7 /* RevealAttachmentGeneratorTestFixture.swift */,
 				3D083F8E2559D7C000F1A408 /* Info.plist */,
 			);
 			name = AardvarkRevealTests;
@@ -1099,6 +1102,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D083F9B2559DA8E00F1A408 /* ApplicationStateTests.swift in Sources */,
+				3DCE4DC725A0103D00E562B7 /* RevealAttachmentGeneratorTestFixture.swift in Sources */,
 				3D43CDA02585949F00FE50A0 /* RevealAttachmentGeneratorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

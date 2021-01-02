@@ -21,23 +21,16 @@ import XCTest
 final class RevealAttachmentGeneratorTests: XCTestCase {
 
     func testRevealServiceNotFound() {
-        let generator = RevealAttachmentGenerator(
-            serviceBrowser: TestServiceBrowser(),
-            urlSession: TestNetworkSession(),
-            archiveBuilderFactory: { _ in TestArchiveBuilder() }
+        let fixture = RevealAttachmentGeneratorTestFixture(
+            revealServicePort: nil
         )
 
-        let delegate = TestDelegate()
-        generator.delegate = delegate
+        let delegate = fixture.delegate
 
-        let dispatchQueue = DispatchQueue(label: "test")
-        let expectation = self.expectation(description: "calls completion")
-
-        generator.captureCurrentAppState(completionQueue: dispatchQueue) { attachment in
-            dispatchPrecondition(condition: .onQueue(dispatchQueue))
-            XCTAssertNil(attachment)
-            expectation.fulfill()
-        }
+        fixture.triggerCapture(
+            expectAttachment: false,
+            completionExpectation: expectation(description: "calls completion")
+        )
 
         // The generator should never call the delegate if it couldn't find the Reveal service.
         XCTAssertEqual(delegate.willBeginCapturingAppStateCount, 0)
@@ -48,29 +41,17 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
         waitForExpectations(timeout: 10)
     }
 
-    func testFailsToCaptureAppState() {
-        let session = TestNetworkSession()
-
-        let browser = TestServiceBrowser()
-        browser.localService = TestService(port: 1234)
-
-        let generator = RevealAttachmentGenerator(
-            serviceBrowser: browser,
-            urlSession: session,
-            archiveBuilderFactory: { _ in TestArchiveBuilder() }
+    func testFailsToCaptureAppState() throws {
+        let fixture = RevealAttachmentGeneratorTestFixture(
+            revealServicePort: 1234
         )
 
-        let delegate = TestDelegate()
-        generator.delegate = delegate
+        let delegate = fixture.delegate
 
-        let dispatchQueue = DispatchQueue(label: "test")
-        let expectation = self.expectation(description: "calls completion")
-
-        generator.captureCurrentAppState(completionQueue: dispatchQueue) { attachment in
-            dispatchPrecondition(condition: .onQueue(dispatchQueue))
-            XCTAssertNil(attachment)
-            expectation.fulfill()
-        }
+        fixture.triggerCapture(
+            expectAttachment: false,
+            completionExpectation: expectation(description: "calls completion")
+        )
 
         // Since the Reveal service already exists, the generator should call the delegate immediately.
         XCTAssertEqual(delegate.willBeginCapturingAppStateCount, 1)
@@ -79,18 +60,10 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishBundlingRevealFileCount, 0)
 
         // The generator should immediately call the Reveal service to capture the app state.
-        XCTAssertEqual(session.tasksByRequest.count, 1)
-        guard let appStateTask = session.tasksByRequest.first else {
-            XCTFail("Generator should have called Reveal server to capture app state")
-            return
-        }
-        XCTAssertEqual(appStateTask.0.url?.absoluteString, "http://localhost:1234/application")
-
-        // Simulate the task failing by calling the completion with `nil`.
-        appStateTask.1(nil)
-
-        // Run the run loop once to allow the async dispatch to the main queue to complete.
-        RunLoop.current.run(until: Date())
+        try fixture.assertCallsServiceToCaptureAppState(
+            at: "http://localhost:1234/application",
+            responseConfig: nil
+        )
 
         // The generator should still tell the delegate it has completed capturing the app state even if it fails.
         XCTAssertEqual(delegate.willBeginCapturingAppStateCount, 1)
@@ -102,34 +75,17 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
     }
 
     func testBuildsRevealFile() throws {
-        let session = TestNetworkSession()
-
-        let browser = TestServiceBrowser()
-        browser.localService = TestService(port: 1234)
-
-        let archiveBuilder = TestArchiveBuilder()
-        let callsArchiveBuilderFactoryExpectation = self.expectation(description: "calls archive builder factory")
-
-        let generator = RevealAttachmentGenerator(
-            serviceBrowser: browser,
-            urlSession: session,
-            archiveBuilderFactory: { _ in
-                callsArchiveBuilderFactoryExpectation.fulfill()
-                return archiveBuilder
-            }
+        let fixture = RevealAttachmentGeneratorTestFixture(
+            revealServicePort: 1234,
+            callsArchiveBuilderExpectation: expectation(description: "calls archive builder factory")
         )
 
-        let delegate = TestDelegate()
-        generator.delegate = delegate
+        let delegate = fixture.delegate
 
-        let dispatchQueue = DispatchQueue(label: "test")
-        let completionExpectation = self.expectation(description: "calls completion")
-
-        generator.captureCurrentAppState(completionQueue: dispatchQueue) { attachment in
-            dispatchPrecondition(condition: .onQueue(dispatchQueue))
-            XCTAssertNotNil(attachment)
-            completionExpectation.fulfill()
-        }
+        fixture.triggerCapture(
+            expectAttachment: true,
+            completionExpectation: expectation(description: "calls completion")
+        )
 
         // Since the Reveal service already exists, the generator should call the delegate immediately.
         XCTAssertEqual(delegate.willBeginCapturingAppStateCount, 1)
@@ -138,52 +94,23 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishBundlingRevealFileCount, 0)
 
         // The generator should immediately call the Reveal service to capture the app state.
-        XCTAssertEqual(session.tasksByRequest.count, 1)
-        guard let appStateTask = session.tasksByRequest.first else {
-            XCTFail("Generator should have called Reveal server to capture app state")
-            return
-        }
-        XCTAssertEqual(appStateTask.0.url?.absoluteString, "http://localhost:1234/application")
-
-        let applicationState = ApplicationState(
-            screens: Screens(
-                mainScreen: Object(
-                    identifier: 5678,
-                    class: .baseClass(name: "UIScreen"),
-                    attributes: [:]
-                )
-            ),
-            application: Object(
-                identifier: -1,
-                class: .baseClass(name: "UIApplication"),
-                attributes: [:]
+        try fixture.assertCallsServiceToCaptureAppState(
+            at: "http://localhost:1234/application",
+            responseConfig: .init(
+                mainScreenIdenitifier: 5678
             )
         )
 
-        // Simulate the task failing by calling the completion with `nil`.
-        appStateTask.1(try JSONEncoder().encode(applicationState))
-
-        // Run the run loop once to allow the async dispatch to the main queue to complete.
-        RunLoop.current.run(until: Date())
-
-        // The generator should still tell the delegate it has completed capturing the app state even if it fails.
         XCTAssertEqual(delegate.willBeginCapturingAppStateCount, 1)
         XCTAssertEqual(delegate.didFinishCapturingAppStateCount, 1)
         XCTAssertEqual(delegate.didCaptureMainScreenSnapshotCount, 0)
         XCTAssertEqual(delegate.didFinishBundlingRevealFileCount, 0)
 
-        // At this point the generator should send a request for each view, including the main screen.
-        guard let mainScreenTask = session.tasksByRequest.first(where: { $0.0.url?.absoluteString.contains("5678") ?? false }) else {
-            XCTFail("Generator should have sent request to capture the main screen")
-            return
-        }
-        XCTAssertEqual(mainScreenTask.0.url?.absoluteString, "http://localhost:1234/objects/5678?subviews=1")
-        XCTAssertEqual(mainScreenTask.0.value(forHTTPHeaderField: "Accept"), "image/png")
-
-        mainScreenTask.1(Data())
-
-        // Run the run loop once to allow the async dispatch to the main queue to complete.
-        RunLoop.current.run(until: Date())
+        try fixture.assertCallsToCaptureImage(
+            at: "http://localhost:1234/objects/5678?subviews=1",
+            type: "image/png",
+            responseData: Data()
+        )
 
         XCTAssertEqual(delegate.willBeginCapturingAppStateCount, 1)
         XCTAssertEqual(delegate.didFinishCapturingAppStateCount, 1)
@@ -191,15 +118,11 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishBundlingRevealFileCount, 0)
 
         // The last remaining task should be to fetch the app icon.
-        XCTAssertEqual(session.tasksByRequest.count, 3)
-        guard let iconTask = session.tasksByRequest.first(where: { $0.0.url?.absoluteString.contains("icon") ?? false }) else {
-            XCTFail("Generator should have sent request to capture the app icon")
-            return
-        }
-        XCTAssertEqual(iconTask.0.url?.absoluteString, "http://localhost:1234/icon")
-        XCTAssertEqual(iconTask.0.value(forHTTPHeaderField: "Accept"), "image/tiff")
-
-        iconTask.1(Data())
+        try fixture.assertCallsToCaptureImage(
+            at: "http://localhost:1234/icon",
+            type: "image/tiff",
+            responseData: Data()
+        )
 
         // Run the run loop for a couple sections to allow the archive to finish building.
         RunLoop.current.run(until: Date(timeIntervalSinceNow: 2))
@@ -208,6 +131,8 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishCapturingAppStateCount, 1)
         XCTAssertEqual(delegate.didCaptureMainScreenSnapshotCount, 1)
         XCTAssertEqual(delegate.didFinishBundlingRevealFileCount, 1)
+
+        let archiveBuilder = fixture.archiveBuilder
 
         XCTAssertEqual(archiveBuilder.completeCount, 1)
         XCTAssertEqual(archiveBuilder.directoryPaths, ["Resources"])
@@ -226,124 +151,6 @@ final class RevealAttachmentGeneratorTests: XCTestCase {
         XCTAssertEqual(archiveBuilder.symbolicLinks["Preview.png"], "Resources/5678#1.png")
 
         waitForExpectations(timeout: 10)
-    }
-
-}
-
-// MARK: -
-
-private final class TestServiceBrowser: RevealServiceBrowsing {
-
-    // MARK: - Public Properties
-
-    var isSearching = false
-
-    // MARK: - RevealServiceBrowsing
-
-    var localService: RevealService?
-
-    func startSearching() {
-        isSearching = true
-    }
-
-    func stopSearching() {
-        isSearching = false
-    }
-
-}
-
-private final class TestService: RevealService {
-
-    // MARK: - Life Cycle
-
-    init(port: Int = -1) {
-        self.port = port
-    }
-
-    // MARK: - RevealService
-
-    let port: Int
-
-}
-
-private final class TestDelegate: RevealAttachmentGeneratorDelegate {
-
-    // MARK: - RevealAttachmentGeneratorDelegate
-
-    private(set) var willBeginCapturingAppStateCount = 0
-
-    func revealAttachmentGeneratorWillBeginCapturingAppState() {
-        willBeginCapturingAppStateCount += 1
-    }
-
-    private(set) var didFinishCapturingAppStateCount = 0
-    private(set) var didFinishCapturingAppStateLastSuccess = false
-
-    func revealAttachmentGeneratorDidFinishCapturingAppState(success: Bool) {
-        didFinishCapturingAppStateCount += 1
-        didFinishCapturingAppStateLastSuccess = success
-    }
-
-    private(set) var didCaptureMainScreenSnapshotCount = 0
-
-    func revealAttachmentGeneratorDidCaptureMainScreenSnapshot() {
-        didCaptureMainScreenSnapshotCount += 1
-    }
-
-    private(set) var didFinishBundlingRevealFileCount = 0
-
-    func revealAttachmentGeneratorDidFinishBundlingRevealFile(success: Bool) {
-        didFinishBundlingRevealFileCount += 1
-    }
-
-}
-
-private final class TestNetworkSession: NetworkSession {
-
-    // MARK: - Public Properties
-
-    private(set) var tasksByRequest: [(URLRequest, (Data?) -> Void)] = []
-
-    // MARK: - NetworkSession
-
-    func performDataTask(with url: URL, completionHandler: @escaping (Data?) -> Void) {
-        tasksByRequest.append((URLRequest(url: url), completionHandler))
-    }
-
-    func performDataTask(with request: URLRequest, completionHandler: @escaping (Data?) -> Void) {
-        tasksByRequest.append((request, completionHandler))
-    }
-
-}
-
-private final class TestArchiveBuilder: ArchiveBuilder {
-
-    private(set) var directoryPaths: [String] = []
-
-    func addDirectory(at path: String) throws {
-        guard completeCount == 0 else { return }
-        directoryPaths.append(path)
-    }
-
-    private(set) var filePaths: [String] = []
-
-    func addFile(at path: String, with data: Data) throws {
-        guard completeCount == 0 else { return }
-        filePaths.append(path)
-    }
-
-    private(set) var symbolicLinks: [String: String] = [:]
-
-    func addSymbolicLink(at path: String, to linkPath: String) throws {
-        guard completeCount == 0 else { return }
-        symbolicLinks[path] = linkPath
-    }
-
-    private(set) var completeCount = 0
-
-    func completeArchive() -> Data? {
-        completeCount += 1
-        return Data()
     }
 
 }
