@@ -20,7 +20,7 @@ import XCTest
 
 final class ApplicationStateTests: XCTestCase {
 
-    func testClass() throws {
+    func testDecodesClassFromJSON() throws {
         let json = """
             {
               "n": "UIWindowLayer",
@@ -47,7 +47,7 @@ final class ApplicationStateTests: XCTestCase {
         )
     }
 
-    func testSimpleObject() throws {
+    func testDecodesSimpleObjectFromJSON() throws {
         let json = """
             {
               "at": {},
@@ -74,7 +74,7 @@ final class ApplicationStateTests: XCTestCase {
         )
     }
 
-    func testObjectAttribute() throws {
+    func testDecodesObjectAttributeFromJSON() throws {
         let json = """
             {
               "c": "UIWindow",
@@ -104,7 +104,7 @@ final class ApplicationStateTests: XCTestCase {
         )
     }
 
-    func testNullObjectAttribute() throws {
+    func testDecodesNullObjectAttributeFromJSON() throws {
         let json = """
             {
               "c": "UIWindow",
@@ -121,7 +121,7 @@ final class ApplicationStateTests: XCTestCase {
         )
     }
 
-    func testArrayAttribute() throws {
+    func testDecodesArrayAttributeFromJSON() throws {
         let json = """
             {
                 "c": "UIWindow",
