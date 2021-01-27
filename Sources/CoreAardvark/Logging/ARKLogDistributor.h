@@ -56,7 +56,7 @@
 - (void)logMessage:(nonnull ARKLogMessage *)logMessage;
 
 /// Creates a log message and distributes the log to the log observers.
-- (void)logWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
+- (void)logWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type parameters:(nonnull NSDictionary<NSString *, NSString *> *)parameters userInfo:(nullable NSDictionary *)userInfo;
 
 NS_ASSUME_NONNULL_BEGIN
 /// Creates a log message and distributes the log to the log observers.

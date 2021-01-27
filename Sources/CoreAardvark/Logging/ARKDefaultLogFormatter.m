@@ -63,11 +63,16 @@
             break;
     }
     
-    if (prefixPrepended && logMessage.text.length) {
+    if (prefixPrepended && (logMessage.text.length > 0 || [logMessage.parameters count] > 0)) {
         [formattedLogMessage appendString:@"\n"];
     }
     
     [formattedLogMessage appendFormat:@"%@", logMessage];
+
+    for (NSString *key in logMessage.parameters) {
+        NSString *value = logMessage.parameters[key];
+        [formattedLogMessage appendFormat:@"\n  - %@: %@", key, value];
+    }
     
     return [formattedLogMessage copy];
 }

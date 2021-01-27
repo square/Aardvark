@@ -40,7 +40,13 @@
     self = [super init];
     
     _textView = [[UITextView alloc] initWithFrame:CGRectZero];
-    _text = [NSString stringWithFormat:@"%@\n%@", logMessage.date, logMessage.text];
+
+    NSMutableString *parametersString = [NSMutableString new];
+    for (NSString *key in logMessage.parameters) {
+        [parametersString appendFormat:@"\n - %@: %@", key, logMessage.parameters[key]];
+    }
+
+    _text = [NSString stringWithFormat:@"%@\n%@%@", logMessage.date, logMessage.text, parametersString];
     
     return self;
 }

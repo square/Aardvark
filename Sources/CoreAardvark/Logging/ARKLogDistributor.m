@@ -198,12 +198,12 @@
     }];
 }
 
-- (void)logWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
+- (void)logWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type parameters:(NSDictionary<NSString *, NSString *> *)parameters userInfo:(NSDictionary *)userInfo;
 {
     Class logMessageClass = self.logMessageClass;
     
     [self.logDistributingQueue addOperationWithBlock:^{
-        ARKLogMessage *logMessage = [[logMessageClass alloc] initWithText:text image:image type:type userInfo:userInfo];
+        ARKLogMessage *logMessage = [[logMessageClass alloc] initWithText:text image:image type:type parameters:parameters userInfo:userInfo];
         
         [self _logMessage_inLogDistributingQueue:logMessage];
     }];
@@ -212,7 +212,7 @@
 - (void)logWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 {
     NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-    [self logWithText:logText image:nil type:type userInfo:userInfo];
+    [self logWithText:logText image:nil type:type parameters:@{} userInfo:userInfo];
 }
 
 - (void)logWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format, ...;
@@ -226,7 +226,7 @@
 - (void)logWithFormat:(NSString *)format arguments:(va_list)argList;
 {
     NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
-    [self logWithText:logText image:nil type:ARKLogTypeDefault userInfo:nil];
+    [self logWithText:logText image:nil type:ARKLogTypeDefault parameters:@{} userInfo:nil];
 }
 
 - (void)logWithFormat:(NSString *)format, ...;

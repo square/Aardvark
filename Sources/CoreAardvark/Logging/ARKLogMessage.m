@@ -42,18 +42,19 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo;
+- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type parameters:(NSDictionary *)parameters userInfo:(NSDictionary *)userInfo;
 {
-    return [self initWithText:text image:image type:type userInfo:userInfo date:[NSDate date]];
+    return [self initWithText:text image:image type:type parameters:parameters userInfo:userInfo date:[NSDate date]];
 }
 
-- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type userInfo:(NSDictionary *)userInfo date:(nonnull NSDate *)date;
+- (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type parameters:(NSDictionary *)parameters userInfo:(NSDictionary *)userInfo date:(nonnull NSDate *)date;
 {
     self = [super init];
     
     _text = [text copy];
     _image = image;
     _type = type;
+    _parameters = [parameters copy] ?: @{};
     _userInfo = [userInfo copy] ?: @{};
     _date = date;
 	
@@ -71,8 +72,9 @@
 #pragma clang diagnostic ignored "-Wdeprecated"
     NSDate *const date = [([aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(date)] ?: [aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(creationDate)]) copy];
 #pragma clang diagnostic pop
+    NSDictionary<NSString *, NSString*> *const parameters = [aDecoder decodeObjectOfClass:[NSDictionary class] forKey:ARKSelfKeyPath(parameters)];
     
-    return [self initWithText:text image:image type:type userInfo:nil date:date];
+    return [self initWithText:text image:image type:type parameters:parameters userInfo:nil date:date];
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder;
@@ -81,6 +83,7 @@
     [aCoder encodeObject:self.image forKey:ARKSelfKeyPath(image)];
     [aCoder encodeObject:@(self.type) forKey:ARKSelfKeyPath(type)];
     [aCoder encodeObject:self.date forKey:ARKSelfKeyPath(date)];
+    [aCoder encodeObject:self.parameters forKey:ARKSelfKeyPath(parameters)];
 }
 
 #pragma mark - NSCopying
@@ -115,6 +118,10 @@
     if (![self.date isEqualToDate:otherMessage.date]) {
         return NO;
     }
+
+    if (![self.parameters isEqualToDictionary:otherMessage.parameters]) {
+        return NO;
+    }
     
     return YES;
 }
@@ -127,7 +134,13 @@
 - (NSString *)description;
 {
     NSString *dateString = [NSDateFormatter localizedStringFromDate:self.date dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterMediumStyle];
-    return [NSString stringWithFormat:@"[%@] %@", dateString, self.text];
+
+    NSMutableString *parametersString = [NSMutableString new];
+    for (NSString *key in self.parameters) {
+        [parametersString appendFormat:@"\n - %@: %@", key, self.parameters[key]];
+    }
+
+    return [NSString stringWithFormat:@"[%@] %@%@", dateString, self.text, parametersString];
 }
 
 @end

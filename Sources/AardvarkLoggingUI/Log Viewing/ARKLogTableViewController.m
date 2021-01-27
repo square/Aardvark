@@ -498,7 +498,7 @@ typedef NS_ENUM(NSUInteger, ARKLogExportOption) {
 - (instancetype)initWithDate:(NSDate *)date;
 {
     NSString *text = [[[self class] sharedDateFormatter] stringFromDate:date];
-    return [super initWithText:text image:nil type:ARKLogTypeSeparator userInfo:nil date:date];
+    return [super initWithText:text image:nil type:ARKLogTypeSeparator parameters:@{} userInfo:nil date:date];
 }
 
 @end
