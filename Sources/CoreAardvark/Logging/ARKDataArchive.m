@@ -199,6 +199,20 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     }
 }
 
+- (void)saveArchiveWithCompletionHandler:(nullable dispatch_block_t)completionHandler;
+{
+    NSBlockOperation *completionOperation = [NSBlockOperation blockOperationWithBlock:^{
+        [self.fileHandle synchronizeFile];
+
+        if (completionHandler != NULL) {
+            dispatch_block_t const operationBlock = completionHandler;
+            [[NSOperationQueue mainQueue] addOperationWithBlock:operationBlock];
+        }
+    }];
+    completionOperation.qualityOfService = NSQualityOfServiceUserInitiated;
+    [self.fileOperationQueue addOperation:completionOperation];
+}
+
 #pragma mark - Testing Methods
 
 - (void)waitUntilAllOperationsAreFinished;

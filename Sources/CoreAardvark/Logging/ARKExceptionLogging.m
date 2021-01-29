@@ -24,6 +24,7 @@
 #import "ARKLogDistributor.h"
 #import "ARKLogDistributor_Protected.h"
 #import "ARKLogging.h"
+#import "ARKLogObserver.h"
 
 
 NSUncaughtExceptionHandler *_Nullable ARKPreviousUncaughtExceptionHandler = nil;
@@ -50,11 +51,24 @@ void ARKHandleUncaughtException(NSException *_Nonnull exception)
     NSLock *const logDistributorsLock = ARKGetUncaughtExceptionLogDistributorsLock();
     [logDistributorsLock lock];
 
+    dispatch_group_t observerGroup = dispatch_group_create();
+
     for (ARKLogDistributor *const logDistributor in ARKUncaughtExceptionLogDistributors) {
         [logDistributor logWithType:ARKLogTypeError userInfo:nil format:@"Uncaught exception '%@':\n%@", exception.name, exception.debugDescription];
         [logDistributor distributeAllPendingLogsWithCompletionHandler:^{}];
         [logDistributor waitUntilAllPendingLogsHaveBeenDistributed];
+
+        for (id<ARKLogObserver> observer in logDistributor.logObservers) {
+            if ([observer respondsToSelector:@selector(processAllPendingLogsWithCompletionHandler:)]) {
+                dispatch_group_enter(observerGroup);
+                [observer processAllPendingLogsWithCompletionHandler:^{
+                    dispatch_group_leave(observerGroup);
+                }];
+            }
+        }
     }
+
+    dispatch_group_wait(observerGroup, DISPATCH_TIME_FOREVER);
 
     NSUncaughtExceptionHandler *const previousHandler = ARKPreviousUncaughtExceptionHandler;
 

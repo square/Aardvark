@@ -33,4 +33,9 @@
 /// Called on a background operation queue when logs are appended to the log distributor.
 - (void)observeLogMessage:(nonnull ARKLogMessage *)logMessage;
 
+@optional
+/// Called to indicate that the observer should finish processing any pending logs in preparation for the app execution
+/// terminating. Any asynchronous tasks should be prioritized and completed before calling the completion handler.
+- (void)processAllPendingLogsWithCompletionHandler:(nonnull dispatch_block_t)completionHandler;
+
 @end

@@ -81,7 +81,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - ARKLogDistributor
+#pragma mark - ARKLogObserver
 
 - (void)observeLogMessage:(nonnull ARKLogMessage *)logMessage;
 {
@@ -99,6 +99,11 @@
     }
     
     [self.dataArchive appendArchiveOfObject:logMessage];
+}
+
+- (void)processAllPendingLogsWithCompletionHandler:(nonnull dispatch_block_t)completionHandler;
+{
+    [self.dataArchive saveArchiveWithCompletionHandler:completionHandler];
 }
 
 #pragma mark - Public Methods
