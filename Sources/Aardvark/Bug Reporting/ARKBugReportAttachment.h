@@ -1,8 +1,4 @@
 //
-//  ARKBugReportAttachment.h
-//  Aardvark
-//
-//  Created by Nick Entin on 1/10/18.
 //  Copyright 2018 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
