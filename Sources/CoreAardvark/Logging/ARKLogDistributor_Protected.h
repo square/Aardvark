@@ -27,6 +27,6 @@
 
 - (void)waitUntilAllPendingLogsHaveBeenDistributed;
 
-@property (copy, readonly) NSArray *logObservers;
+@property (copy, readonly) NSMutableArray *logObservers;
 
 @end
