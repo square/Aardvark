@@ -38,3 +38,17 @@ void ARKLogWithType(ARKLogType type, NSDictionary *userInfo, NSString *format, .
     [[ARKLogDistributor defaultDistributor] logWithType:type userInfo:userInfo format:format arguments:argList];
     va_end(argList);
 }
+
+void ARKLogWithParameters(NSDictionary<NSString *, NSString *> *parameters, NSString *format, ...) {
+    va_list argList;
+    va_start(argList, format);
+    [[ARKLogDistributor defaultDistributor] logWithParameters:parameters format:format arguments:argList];
+    va_end(argList);
+}
+
+void ARKLogWithTypeAndParameters(ARKLogType type, NSDictionary<NSString *, NSString *> *parameters, NSString *format, ...) {
+    va_list argList;
+    va_start(argList, format);
+    [[ARKLogDistributor defaultDistributor] logWithType:type parameters:parameters format:format arguments:argList];
+    va_end(argList);
+}

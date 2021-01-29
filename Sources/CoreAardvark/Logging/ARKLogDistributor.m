@@ -209,6 +209,12 @@
     }];
 }
 
+/// Creates a log message and distributes the log to the log observers.
+- (void)logWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
+{
+    [self logWithText:text image:image type:type parameters:@{} userInfo:nil];
+}
+
 - (void)logWithType:(ARKLogType)type userInfo:(NSDictionary *)userInfo format:(NSString *)format arguments:(va_list)argList;
 {
     NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
@@ -234,6 +240,34 @@
     va_list argList;
     va_start(argList, format);
     [self logWithFormat:format arguments:argList];
+    va_end(argList);
+}
+
+- (void)logWithParameters:(nonnull NSDictionary<NSString *, NSString *> *)parameters format:(nonnull NSString *)format arguments:(va_list)argList;
+{
+    NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+    [self logWithText:logText image:nil type:ARKLogTypeDefault parameters:parameters userInfo:nil];
+}
+
+- (void)logWithParameters:(nonnull NSDictionary<NSString *, NSString *> *)parameters format:(nonnull NSString *)format, ... NS_FORMAT_FUNCTION(2,3);
+{
+    va_list argList;
+    va_start(argList, format);
+    [self logWithParameters:parameters format:format arguments:argList];
+    va_end(argList);
+}
+
+- (void)logWithType:(ARKLogType)type parameters:(nonnull NSDictionary<NSString *, NSString*> *)parameters format:(nonnull NSString *)format arguments:(va_list)argList;
+{
+    NSString *logText = [[NSString alloc] initWithFormat:format arguments:argList];
+    [self logWithText:logText image:nil type:type parameters:parameters userInfo:nil];
+}
+
+- (void)logWithType:(ARKLogType)type parameters:(nonnull NSDictionary<NSString *, NSString*> *)parameters format:(nonnull NSString *)format, ... NS_FORMAT_FUNCTION(3,4);
+{
+    va_list argList;
+    va_start(argList, format);
+    [self logWithType:type parameters:parameters format:format arguments:argList];
     va_end(argList);
 }
 
