@@ -270,6 +270,30 @@
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
+- (void)test_formattedLogMessage_parameters;
+{
+    ARKLogWithParameters(@{@"Hello": @"World", @"Foo": @"Bar"}, @"Test message");
+
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        XCTAssertEqual(logMessages.count, 1);
+
+        ARKLogMessage *const firstLogMessage = logMessages.firstObject;
+        NSString *const formattedSingleLog = [self.logFormatter formattedLogMessage:firstLogMessage];
+        NSArray *const splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
+        XCTAssertEqual(splitLog.count, 3);
+
+        if (splitLog.count == 3) {
+            XCTAssertEqualObjects([splitLog objectAtIndex:1], @" - Foo: Bar");
+            XCTAssertEqualObjects([splitLog objectAtIndex:2], @" - Hello: World");
+        }
+
+        [expectation fulfill];
+    }];
+
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+}
+
 #pragma mark - Performance Tests
 
 - (void)test_formattedLogMessage_performance;

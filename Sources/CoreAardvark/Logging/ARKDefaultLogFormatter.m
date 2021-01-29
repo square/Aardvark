@@ -68,11 +68,6 @@
     }
     
     [formattedLogMessage appendFormat:@"%@", logMessage];
-
-    for (NSString *key in logMessage.parameters) {
-        NSString *value = logMessage.parameters[key];
-        [formattedLogMessage appendFormat:@"\n  - %@: %@", key, value];
-    }
     
     return [formattedLogMessage copy];
 }

@@ -136,7 +136,7 @@
     NSString *dateString = [NSDateFormatter localizedStringFromDate:self.date dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterMediumStyle];
 
     NSMutableString *parametersString = [NSMutableString new];
-    for (NSString *key in self.parameters) {
+    for (NSString *key in [[self.parameters allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
         [parametersString appendFormat:@"\n - %@: %@", key, self.parameters[key]];
     }
 
