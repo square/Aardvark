@@ -50,7 +50,7 @@
 
 - (instancetype)initWithDate:(NSDate *)date;
 {
-    self = [super initWithText:@"Fake Log" image:nil type:ARKLogTypeDefault userInfo:nil date:date];
+    self = [super initWithText:@"Fake Log" image:nil type:ARKLogTypeDefault parameters:@{} userInfo:nil date:date];
     if (!self) {
         return nil;
     }

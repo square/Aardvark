@@ -458,7 +458,7 @@
     
     NSMutableArray *logMessages = [NSMutableArray new];
     for (NSUInteger i  = 0; i < dataArchive.maximumObjectCount; i++) {
-        [logMessages addObject:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault userInfo:nil]];
+        [logMessages addObject:[[ARKLogMessage alloc] initWithText:[NSString stringWithFormat:@"%@", @(i)] image:nil type:ARKLogTypeDefault parameters:@{} userInfo:nil]];
     }
     
     [self measureBlock:^{
