@@ -209,7 +209,6 @@
     }];
 }
 
-/// Creates a log message and distributes the log to the log observers.
 - (void)logWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
 {
     [self logWithText:text image:image type:type parameters:@{} userInfo:nil];
