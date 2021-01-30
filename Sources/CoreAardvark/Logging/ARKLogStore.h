@@ -48,7 +48,7 @@
 @property (nullable, atomic, copy) BOOL (^logFilterBlock)(ARKLogMessage * _Nonnull logMessage);
 
 /// Retrieves an array of ARKLogMessage objects. Completion handler is called on the main queue.
-- (void)retrieveAllLogMessagesWithCompletionHandler:(nonnull void (^)(NSArray * _Nonnull logMessages))completionHandler;
+- (void)retrieveAllLogMessagesWithCompletionHandler:(nonnull void (^)(NSArray<ARKLogMessage *> * _Nonnull logMessages))completionHandler;
 
 /// Removes all logs. Completion handler is called on the main queue.
 - (void)clearLogsWithCompletionHandler:(nullable dispatch_block_t)completionHandler;
