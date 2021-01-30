@@ -30,8 +30,8 @@
 
 - (nonnull instancetype)initWithDate:(nonnull NSDate *)date NS_DESIGNATED_INITIALIZER;
 
-- (nonnull instancetype)initWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo NS_UNAVAILABLE;
-- (nonnull instancetype)initWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo date:(nonnull NSDate *)date NS_UNAVAILABLE;
+- (nonnull instancetype)initWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type parameters:(nonnull NSDictionary<NSString *, NSString*> *)parameters userInfo:(nullable NSDictionary *)userInfo NS_UNAVAILABLE;
+- (nonnull instancetype)initWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type parameters:(nonnull NSDictionary<NSString *, NSString*> *)parameters userInfo:(nullable NSDictionary *)userInfo date:(nonnull NSDate *)date NS_UNAVAILABLE;
 - (nonnull instancetype)init NS_UNAVAILABLE;
 + (nonnull instancetype)new NS_UNAVAILABLE;
 

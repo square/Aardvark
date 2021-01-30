@@ -41,7 +41,7 @@
     
     if (screenshot != nil) {
         NSString *logText = @"Screenshot Logged";
-        [self logWithText:logText image:screenshot type:ARKLogTypeScreenshot userInfo:nil];
+        [self logWithText:logText image:screenshot type:ARKLogTypeScreenshot parameters:@{} userInfo:nil];
     }
 }
 @end

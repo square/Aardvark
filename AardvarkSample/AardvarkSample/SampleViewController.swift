@@ -141,19 +141,19 @@ class SampleViewController : UIViewController {
     }
     
     @IBAction func blueButtonPressed(_ sender: AnyObject) {
-        log("Blue")
+        log("Tapped button", parameters: ["color": "blue"])
     }
     
     @IBAction func redButtonPressed(_ sender: AnyObject) {
-        log("Red")
+        log("Tapped button", parameters: ["color": "red"])
     }
     
     @IBAction func greenButtonPressed(_ sender: AnyObject) {
-        log("Green")
+        log("Tapped button", parameters: ["color": "green"])
     }
     
     @IBAction func yellowButtonPressed(_ sender: AnyObject) {
-        log("Yellow")
+        log("Tapped button", parameters: ["color": "yellow"])
     }
     
     // MARK: – Private Methods

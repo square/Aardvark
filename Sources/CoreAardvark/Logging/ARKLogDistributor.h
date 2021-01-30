@@ -52,6 +52,9 @@
 - (void)logMessage:(nonnull ARKLogMessage *)logMessage;
 
 /// Creates a log message and distributes the log to the log observers.
+- (void)logWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type parameters:(nonnull NSDictionary<NSString *, NSString *> *)parameters userInfo:(nullable NSDictionary *)userInfo;
+
+/// Creates a log message and distributes the log to the log observers.
 - (void)logWithText:(nonnull NSString *)text image:(nullable UIImage *)image type:(ARKLogType)type userInfo:(nullable NSDictionary *)userInfo;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -69,5 +72,21 @@ NS_ASSUME_NONNULL_END
 
 /// Creates a log message with ARKLogTypeDefault and distributes the log to the log observers.
 - (void)logWithFormat:(nonnull NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
+
+NS_ASSUME_NONNULL_BEGIN
+/// Creates a log message with ARKLogTypeDefault and distributes the log to the log observers.
+- (void)logWithParameters:(nonnull NSDictionary<NSString *, NSString *> *)parameters format:(nonnull NSString *)format arguments:(va_list)argList;
+NS_ASSUME_NONNULL_END
+
+/// Creates a log message with ARKLogTypeDefault and distributes the log to the log observers.
+- (void)logWithParameters:(nonnull NSDictionary<NSString *, NSString *> *)parameters format:(nonnull NSString *)format, ... NS_FORMAT_FUNCTION(2,3);
+
+NS_ASSUME_NONNULL_BEGIN
+/// Creates a log message and distributes the log to the log observers.
+- (void)logWithType:(ARKLogType)type parameters:(nonnull NSDictionary<NSString *, NSString*> *)parameters format:(nonnull NSString *)format arguments:(va_list)argList;
+NS_ASSUME_NONNULL_END
+
+/// Creates a log message and distributes the log to the log observers.
+- (void)logWithType:(ARKLogType)type parameters:(nonnull NSDictionary<NSString *, NSString*> *)parameters format:(nonnull NSString *)format, ... NS_FORMAT_FUNCTION(3,4);
 
 @end
