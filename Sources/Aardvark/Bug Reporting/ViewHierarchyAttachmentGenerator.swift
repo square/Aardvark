@@ -19,12 +19,20 @@ import Foundation
 @objc(ARKViewHierarchyAttachmentGenerator)
 public final class ViewHierarchyAttachmentGenerator: NSObject {
 
+    // MARK: - Public Static Methods
+
     /// Captures a textual representation of the current view hierarchy and returns a bug report attachment containing
     /// plain text data for that representation.
     @objc
     public static func captureCurrentHierarchy() -> ARKBugReportAttachment {
+        return generateAttachment(for: UIApplication.shared.windows)
+    }
+
+    // MARK: - Internal Static Methods
+
+    internal static func generateAttachment(for windows: [UIWindow]) -> ARKBugReportAttachment {
         var hierarchyDescription = ""
-        for window in UIApplication.shared.windows {
+        for window in windows {
             var viewControllerMap: [UIView: UIViewController] = [:]
             window.rootViewController?.appendRecursiveViewControllerMapping(to: &viewControllerMap)
 
