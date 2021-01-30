@@ -210,33 +210,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     return _emailComposeWindow;
 }
 
-#pragma mark - Public Methods
-
-- (NSData *)formattedLogMessagesAsData:(NSArray *)logMessages;
-{
-    NSMutableArray *const formattedLogMessages = [NSMutableArray new];
-    for (ARKLogMessage *const logMessage in logMessages) {
-        [formattedLogMessages addObject:[self.logFormatter formattedLogMessage:logMessage]];
-    }
-    
-    NSData *const formattedLogMessagesAsData = [[formattedLogMessages componentsJoinedByString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding];
-    if (formattedLogMessagesAsData != nil) {
-        return formattedLogMessagesAsData;
-    } else {
-        return [NSData new];
-    }
-}
-
-- (NSString *)formattedLogMessagesDataMIMEType;
-{
-    return @"text/plain";
-}
-
-- (NSString *)formattedLogMessagesAttachmentExtension;
-{
-    return @"txt";
-}
-
 #pragma mark - Private Methods
 
 - (void)_showBugReportPrompt;
@@ -303,15 +276,22 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             for (ARKLogStore *logStore in logStores) {
                 NSArray *const logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
 
-                NSString *screenshotFileName = [NSLocalizedString(@"screenshot", @"File name of a screenshot") stringByAppendingPathExtension:@"png"];
-                NSString *logsFileName = [NSLocalizedString(@"logs", @"File name for logs attachments") stringByAppendingPathExtension:[self formattedLogMessagesAttachmentExtension]];
+                NSArray<ARKBugReportAttachment *> *attachments = [ARKLogStoreAttachmentGenerator attachmentsFor:logMessages
+                                                                                                   logStoreName:logStore.name
+                                                                                               messageFormatter:self.logFormatter
+                                                                                        includeLatestScreenshot:(configuration.includesScreenshot && self.attachScreenshotToNextBugReport)];
+
+                for (ARKBugReportAttachment *attachment in attachments) {
+                    [self.mailComposeViewController addAttachmentData:attachment.data
+                                                             mimeType:attachment.dataMIMEType
+                                                             fileName:attachment.fileName];
+                }
+
                 NSMutableString *const emailBodyForLogStore = [NSMutableString new];
                 BOOL appendToEmailBody = NO;
 
                 if (logStore.name.length) {
                     [emailBodyForLogStore appendFormat:@"%@:\n", logStore.name];
-                    screenshotFileName = [logStore.name stringByAppendingFormat:@"_%@", screenshotFileName];
-                    logsFileName = [logStore.name stringByAppendingFormat:@"_%@", logsFileName];
                 }
 
                 NSString *const recentErrorLogs = [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable];
@@ -322,18 +302,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
                 if (appendToEmailBody) {
                     [emailBody appendString:emailBodyForLogStore];
-                }
-
-                if (configuration.includesScreenshot && self.attachScreenshotToNextBugReport) {
-                    NSData *const mostRecentImage = [self _mostRecentImageAsPNG:logMessages];
-                    if (mostRecentImage.length > 0) {
-                        [self.mailComposeViewController addAttachmentData:mostRecentImage mimeType:@"image/png" fileName:screenshotFileName];
-                    }
-                }
-
-                NSData *const formattedLogs = [self formattedLogMessagesAsData:logMessages];
-                if (formattedLogs.length) {
-                    [self.mailComposeViewController addAttachmentData:formattedLogs mimeType:[self formattedLogMessagesDataMIMEType] fileName:logsFileName];
                 }
             }
 
@@ -436,18 +404,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     } else {
         return @"";
     }
-}
-
-- (NSData *)_mostRecentImageAsPNG:(NSArray *)logMessages;
-{
-    for (ARKLogMessage *logMessage in [logMessages reverseObjectEnumerator]) {
-        UIImage *const logImage = logMessage.image;
-        if (logImage != nil) {
-            return UIImagePNGRepresentation(logImage);
-        }
-    }
-    
-    return nil;
 }
 
 - (NSURL *)_emailURLWithRecipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText;
