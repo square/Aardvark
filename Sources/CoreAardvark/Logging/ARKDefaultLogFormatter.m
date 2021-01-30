@@ -59,7 +59,7 @@
             break;
     }
     
-    if (prefixPrepended && logMessage.text.length) {
+    if (prefixPrepended && (logMessage.text.length > 0 || [logMessage.parameters count] > 0)) {
         [formattedLogMessage appendString:@"\n"];
     }
     

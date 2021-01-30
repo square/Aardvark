@@ -17,6 +17,12 @@
 import Foundation
 
 
-public func log(_ text: String, type: ARKLogType = .`default`, image: UIImage? = nil, userInfo: [NSObject : AnyObject]? = nil) {
-    ARKLogDistributor.default().log(withText: text, image: image, type: type, userInfo: userInfo);
+public func log(
+    _ text: String,
+    type: ARKLogType = .`default`,
+    image: UIImage? = nil,
+    parameters: [String : String] = [:],
+    userInfo: [NSObject : AnyObject]? = nil
+) {
+    ARKLogDistributor.default().log(withText: text, image: image, type: type, parameters: parameters, userInfo: userInfo);
 }

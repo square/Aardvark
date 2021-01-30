@@ -22,3 +22,9 @@ OBJC_EXTERN void ARKLog(NSString * _Nonnull format, ...) NS_FORMAT_FUNCTION(1,2)
 
 /// Logs a log with customized type and userInfo to the default log distributor.
 OBJC_EXTERN void ARKLogWithType(ARKLogType type, NSDictionary * _Nullable userInfo, NSString * _Nonnull format, ...) NS_FORMAT_FUNCTION(3,4);
+
+/// Logs a log with parameters to the default log distributor.
+OBJC_EXTERN void ARKLogWithParameters(NSDictionary<NSString *, NSString *> * _Nonnull parameters, NSString * _Nonnull format, ...) NS_FORMAT_FUNCTION(2, 3);
+
+/// Logs a log with customized type and parameters to the default log distributor.
+OBJC_EXTERN void ARKLogWithTypeAndParameters(ARKLogType type, NSDictionary<NSString *, NSString *> * _Nonnull parameters, NSString * _Nonnull format, ...) NS_FORMAT_FUNCTION(3, 4);
