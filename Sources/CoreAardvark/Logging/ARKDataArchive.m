@@ -103,7 +103,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     }
 }
 
-- (void)readObjectsFromArchiveWithCompletionHandler:(nonnull void (^)(NSArray * _Nonnull unarchivedObjects))completionHandler;
+- (void)readObjectsFromArchiveOfType:(nonnull Class)objectType completionHandler:(nonnull void (^)(NSArray * _Nonnull unarchivedObjects))completionHandler;
 {
     ARKCheckCondition(completionHandler != NULL, , @"Must provide a completionHandler!");
     
@@ -132,18 +132,8 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
                     // We're done.
                     break;
                 }
-                
-                id object = nil;
-                @try {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
-                    object = [NSKeyedUnarchiver unarchiveObjectWithData:objectData];
-#pragma clang diagnostic pop
-                }
-                @catch (NSException *exception) {
-                    // The structure of the archive itself isn't corrupted, just the data itself, so ignore and continue.
-                    continue;
-                }
+
+                id object = [NSKeyedUnarchiver unarchivedObjectOfClass:objectType fromData:objectData error:NULL];
                 
                 if (object != nil) {
                     [unarchivedObjects addObject:object];
