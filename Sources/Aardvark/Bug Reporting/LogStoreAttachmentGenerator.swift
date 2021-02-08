@@ -11,58 +11,64 @@ import Foundation
 @objc(ARKLogStoreAttachmentGenerator)
 public final class LogStoreAttachmentGenerator: NSObject {
 
+    // MARK: - Public Types
+
+    public struct Attachments {
+
+        public var logMessagesAttachment: ARKBugReportAttachment
+
+        public var latestScreenshotAttachment: ARKBugReportAttachment?
+
+    }
+
+    // MARK: - Public Static Methods
+
     /// Generates bug report attachments representing the data in the log store.
     ///
-    /// - parameter includeLatestScreenshot: Whether an attachment should be generated for the last screenshot
-    /// in the log store, if one exists.
-    @objc
+    /// - parameter logStore: The log store from which to read the messages.
+    /// - parameter messageFormatter: The formatter used to format messages in the logs attachment.
+    /// - parameter includeLatestScreenshot: Whether an attachment should be generated for the last screenshot in the
+    /// log store, if one exists.
+    /// - parameter completionQueue: The queue on which the completion should be called.
+    /// - parameter completion: The completion to be called once the attachments have been generated.
     public static func attachments(
         for logStore: ARKLogStore,
         messageFormatter: ARKLogFormatter = ARKDefaultLogFormatter(),
         includeLatestScreenshot: Bool,
         completionQueue: DispatchQueue,
-        completion: @escaping ([ARKBugReportAttachment]) -> Void
+        completion: @escaping (Attachments) -> Void
     ) {
         logStore.retrieveAllLogMessages { logMessages in
-            let attachments = Self.attachments(
+            let screenshotAttachment: ARKBugReportAttachment?
+            if includeLatestScreenshot {
+                screenshotAttachment = attachmentForLatestScreenshot(in: logMessages, logStoreName: logStore.name)
+            } else {
+                screenshotAttachment = nil
+            }
+
+            let logsAttachment = attachment(
                 for: logMessages,
-                logStoreName: logStore.name,
-                messageFormatter: messageFormatter,
-                includeLatestScreenshot: includeLatestScreenshot
+                using: messageFormatter,
+                logStoreName: logStore.name
             )
 
             completionQueue.async {
-                completion(attachments)
+                completion(
+                    .init(
+                        logMessagesAttachment: logsAttachment,
+                        latestScreenshotAttachment: screenshotAttachment
+                    )
+                )
             }
         }
     }
 
-    /// Generates bug report attachments representing the log messages.
+    /// Generates an attachment containing the latest screenshot in the provided log messages.
     ///
-    /// - parameter includeLatestScreenshot: Whether an attachment should be generated for the last screenshot
-    /// in the log messages, if one exists.
-    @objc
-    public static func attachments(
-        for logMessages: [ARKLogMessage],
-        logStoreName: String?,
-        messageFormatter: ARKLogFormatter = ARKDefaultLogFormatter(),
-        includeLatestScreenshot: Bool
-    ) -> [ARKBugReportAttachment] {
-        var attachments: [ARKBugReportAttachment] = []
-
-        if includeLatestScreenshot, let attachment = attachmentForLatestScreenshot(in: logMessages, logStoreName: logStoreName) {
-            attachments.append(attachment)
-        }
-
-        let logsAttachment = attachmentForLogs(for: logMessages, using: messageFormatter, logStoreName: logStoreName)
-        attachments.append(logsAttachment)
-
-        return attachments
-    }
-
-    // MARK: - Private Methods
-
-    private static func attachmentForLatestScreenshot(
+    /// - parameter logMessages: The log messages through which to search for the screenshot.
+    /// - parameter logStoreName: The name of the log store from which the logs were collected.
+    @objc(attachmentForLatestScreenshotInLogMessages:logStoreName:)
+    public static func attachmentForLatestScreenshot(
         in logMessages: [ARKLogMessage],
         logStoreName: String?
     ) -> ARKBugReportAttachment? {
@@ -80,16 +86,13 @@ public final class LogStoreAttachmentGenerator: NSObject {
         )
     }
 
-    private static func screenshotFileName(for logStoreName: String?) -> String {
-        var fileName = NSLocalizedString("screenshot", comment: "File name of a screenshot")
-        fileName = (fileName as NSString).appendingPathExtension("png") ?? fileName
-        if let logStoreName = logStoreName, !logStoreName.isEmpty {
-            fileName = "\(logStoreName)_\(fileName)"
-        }
-        return fileName
-    }
-
-    private static func attachmentForLogs(
+    /// Generates an attachment containing the log messages formatted using the specified formatter.
+    ///
+    /// - parameter logMessages: The log messages to be included in the attachment.
+    /// - parameter logFormatter: The formatter with which to format the log messages.
+    /// - parameter logStoreName: The name of the log store from which the logs were collected.
+    @objc(attachmentForLogMessages:usingLogFormatter:logStoreName:)
+    public static func attachment(
         for logMessages: [ARKLogMessage],
         using logFormatter: ARKLogFormatter,
         logStoreName: String?
@@ -99,11 +102,24 @@ public final class LogStoreAttachmentGenerator: NSObject {
             .joined(separator: "\n")
             .data(using: .utf8)!
 
+        let fileName = logsFileName(for: logStoreName, fileType: "txt")
+
         return ARKBugReportAttachment(
-            fileName: logsFileName(for: logStoreName, fileType: "txt"),
+            fileName: fileName,
             data: formattedLogData,
             dataMIMEType: "text/plain"
         )
+    }
+
+    // MARK: - Private Static Methods
+
+    private static func screenshotFileName(for logStoreName: String?) -> String {
+        var fileName = NSLocalizedString("screenshot", comment: "File name of a screenshot")
+        fileName = (fileName as NSString).appendingPathExtension("png") ?? fileName
+        if let logStoreName = logStoreName, !logStoreName.isEmpty {
+            fileName = "\(logStoreName)_\(fileName)"
+        }
+        return fileName
     }
 
     private static func logsFileName(for logStoreName: String?, fileType: String) -> String {
