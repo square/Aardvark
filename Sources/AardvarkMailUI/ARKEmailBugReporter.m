@@ -171,6 +171,15 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     return [self.mutableLogStores copy];
 }
 
+#pragma mark - Public Methods
+
+- (ARKBugReportAttachment *)logsAttachmentForLogMessages:(NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(NSString *)logStoreName;
+{
+    return [ARKLogStoreAttachmentGenerator attachmentForLogMessages:logMessages
+                                                  usingLogFormatter:self.logFormatter
+                                                       logStoreName:logStoreName];
+}
+
 #pragma mark - CAAnimationDelegate
 
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished;
@@ -268,16 +277,20 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             for (ARKLogStore *logStore in logStores) {
                 NSArray *const logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
 
-                NSArray<ARKBugReportAttachment *> *attachments = [ARKLogStoreAttachmentGenerator attachmentsFor:logMessages
-                                                                                                   logStoreName:logStore.name
-                                                                                               messageFormatter:self.logFormatter
-                                                                                        includeLatestScreenshot:(configuration.includesScreenshot && self.attachScreenshotToNextBugReport)];
+                if (configuration.includesScreenshot && self.attachScreenshotToNextBugReport) {
+                    ARKBugReportAttachment *const screenshotAttachment = [ARKLogStoreAttachmentGenerator attachmentForLatestScreenshotInLogMessages:logMessages
+                                                                                                                                       logStoreName:[logStore name]];
 
-                for (ARKBugReportAttachment *attachment in attachments) {
-                    [self.mailComposeViewController addAttachmentData:attachment.data
-                                                             mimeType:attachment.dataMIMEType
-                                                             fileName:attachment.fileName];
+                    [self.mailComposeViewController addAttachmentData:screenshotAttachment.data
+                                                             mimeType:screenshotAttachment.dataMIMEType
+                                                             fileName:screenshotAttachment.fileName];
                 }
+
+                ARKBugReportAttachment *const logsAttachment = [self logsAttachmentForLogMessages:logMessages inLogStoreNamed:[logStore name]];
+
+                [self.mailComposeViewController addAttachmentData:logsAttachment.data
+                                                         mimeType:logsAttachment.dataMIMEType
+                                                         fileName:logsAttachment.fileName];
 
                 NSMutableString *const emailBodyForLogStore = [NSMutableString new];
                 BOOL appendToEmailBody = NO;
