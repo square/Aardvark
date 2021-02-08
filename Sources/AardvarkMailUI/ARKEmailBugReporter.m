@@ -295,7 +295,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     if (!_emailComposeWindow) {
         if (@available(iOS 13.0, *)) {
-            UIWindowScene *activeWindowScene = [self _activeWindowScene];
+            UIWindowScene *activeWindowScene = [[self class] _activeWindowScene];
             if (activeWindowScene != nil) {
                 _emailComposeWindow = [[UIWindow alloc] initWithWindowScene:activeWindowScene];
                 return _emailComposeWindow;
@@ -337,17 +337,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 }
 
 #pragma mark - Private Methods
-
-- (UIWindowScene *)_activeWindowScene API_AVAILABLE(ios(13.0));
-{
-    NSSet<UIScene *> *scenes = [[UIApplication sharedApplication] connectedScenes];
-    for (UIScene *scene in scenes) {
-        if ([scene isKindOfClass:[UIWindowScene class]] && scene.activationState == UISceneActivationStateForegroundActive) {
-            return (UIWindowScene *)scene;
-        }
-    }
-    return nil;
-}
 
 - (void)_showBugReportPrompt;
 {
@@ -601,6 +590,18 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     }
 }
 
+#pragma mark - Private Static Methods
+
++ (UIWindowScene *)_activeWindowScene API_AVAILABLE(ios(13.0));
+{
+    NSSet<UIScene *> *scenes = [[UIApplication sharedApplication] connectedScenes];
+    for (UIScene *scene in scenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]] && scene.activationState == UISceneActivationStateForegroundActive) {
+            return (UIWindowScene *)scene;
+        }
+    }
+    return nil;
+}
 
 @end
 
