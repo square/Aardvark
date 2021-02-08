@@ -173,7 +173,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 #pragma mark - Public Methods
 
-- (ARKBugReportAttachment *)logsAttachmentForLogMessages:(NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(NSString *)logStoreName;
+- (ARKBugReportAttachment *)attachmentForLogMessages:(NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(NSString *)logStoreName;
 {
     return [ARKLogStoreAttachmentGenerator attachmentForLogMessages:logMessages
                                                   usingLogFormatter:self.logFormatter
@@ -286,7 +286,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                                                              fileName:screenshotAttachment.fileName];
                 }
 
-                ARKBugReportAttachment *const logsAttachment = [self logsAttachmentForLogMessages:logMessages inLogStoreNamed:[logStore name]];
+                ARKBugReportAttachment *const logsAttachment = [self attachmentForLogMessages:logMessages inLogStoreNamed:[logStore name]];
 
                 [self.mailComposeViewController addAttachmentData:logsAttachment.data
                                                          mimeType:logsAttachment.dataMIMEType
