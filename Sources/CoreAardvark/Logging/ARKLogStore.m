@@ -99,7 +99,7 @@
 
 #pragma mark - Public Methods
 
-- (void)retrieveAllLogMessagesWithCompletionHandler:(nonnull void (^)(NSArray *logMessages))completionHandler;
+- (void)retrieveAllLogMessagesWithCompletionHandler:(nonnull void (^)(NSArray<ARKLogMessage *> *logMessages))completionHandler;
 {
     ARKCheckCondition(completionHandler != NULL, , @"Can not retrieve log messages without a completion handler");
     if (self.logDistributor == nil) {
