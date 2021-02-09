@@ -41,7 +41,7 @@ final class ViewHierarchyAttachmentGeneratorTests: XCTestCase {
         )
     }
 
-    func testDescriptionForWindowWithSubviews() {
+    func test_generateAttachment_description_hasExpectedFormatForWindowWithSubviews() {
         let window = TestWindow()
 
         let firstSubview = TestView(identifier: "B")
