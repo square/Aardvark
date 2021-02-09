@@ -289,7 +289,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                     ARKBugReportAttachment *const screenshotAttachment = [ARKLogStoreAttachmentGenerator attachmentForLatestScreenshotInLogMessages:logMessages
                                                                                                                                        logStoreName:[logStore name]];
 
-                    if (screenshotAttachment.data != nil) {
+                    if (screenshotAttachment != nil) {
                         [self.mailComposeViewController addAttachmentData:screenshotAttachment.data
                                                                  mimeType:screenshotAttachment.dataMIMEType
                                                                  fileName:screenshotAttachment.fileName];
@@ -298,9 +298,11 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
                 ARKBugReportAttachment *const logsAttachment = [self attachmentForLogMessages:logMessages inLogStoreNamed:[logStore name]];
 
-                [self.mailComposeViewController addAttachmentData:logsAttachment.data
-                                                         mimeType:logsAttachment.dataMIMEType
-                                                         fileName:logsAttachment.fileName];
+                if (logsAttachment != nil) {
+                    [self.mailComposeViewController addAttachmentData:logsAttachment.data
+                                                             mimeType:logsAttachment.dataMIMEType
+                                                             fileName:logsAttachment.fileName];
+                }
 
                 NSMutableString *const emailBodyForLogStore = [NSMutableString new];
                 BOOL appendToEmailBody = NO;

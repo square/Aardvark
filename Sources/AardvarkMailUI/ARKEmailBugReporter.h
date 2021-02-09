@@ -103,6 +103,6 @@ typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReport
 @property (nonatomic) BOOL attachesViewHierarchyDescription;
 
 /// Returns an attachment containing the log messages. Defaults to a plain text attachment containing each log message formatted using the bug reporter's `logFormatter`.
-- (nonnull ARKBugReportAttachment *)attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName;
+- (nullable ARKBugReportAttachment *)attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName;
 
 @end
