@@ -164,7 +164,7 @@ private final class TestViewController: UIViewController {
     }
 
     override var description: String {
-        return "View Controller Description"
+        "View Controller Description"
     }
 
 }
