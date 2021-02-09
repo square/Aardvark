@@ -109,7 +109,7 @@
     
     // Ensure we observe all log messages that have been queued by the distributor before we retrieve the our logs.
     [self.logDistributor distributeAllPendingLogsWithCompletionHandler:^{
-        [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+        [self.dataArchive readObjectsFromArchiveOfType:[ARKLogMessage class] completionHandler:^(NSArray *unarchivedObjects) {
             completionHandler(unarchivedObjects);
         }];
     }];
