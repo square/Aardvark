@@ -26,6 +26,8 @@
 		3D404FAA2556410500CE4B83 /* UIActivityViewController+ARKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D404FA82556410500CE4B83 /* UIActivityViewController+ARKAdditions.m */; };
 		3D404FAD25564CE700CE4B83 /* ARKFileHandleAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D48041AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m */; };
 		3D404FAE25564CE700CE4B83 /* ARKURLAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA46F7F91ACB8448007FC415 /* ARKURLAdditionsTests.m */; };
+		3D81BC4425C50A9800E61A49 /* ViewHierarchyAttachmentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D81BC4325C50A9800E61A49 /* ViewHierarchyAttachmentGenerator.swift */; };
+		3D81BC4E25C5437E00E61A49 /* ViewHierarchyAttachmentGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D81BC4D25C5437E00E61A49 /* ViewHierarchyAttachmentGeneratorTests.swift */; };
 		3D850497215EF21100B3957C /* ARKExceptionLogging_Testing.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D850496215EF20800B3957C /* ARKExceptionLogging_Testing.h */; };
 		3D850499215EF6F500B3957C /* ARKExceptionLoggingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D850498215EF6F500B3957C /* ARKExceptionLoggingTests.m */; };
 		3D9F0A15255BC728000E63D7 /* ARKEmailAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F0A14255BC728000E63D7 /* ARKEmailAttachment.swift */; };
@@ -150,6 +152,8 @@
 		3D404FA82556410500CE4B83 /* UIActivityViewController+ARKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActivityViewController+ARKAdditions.m"; sourceTree = "<group>"; };
 		3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKEmailBugReportConfiguration.m; sourceTree = "<group>"; };
 		3D6E2D0D20868335007B8013 /* ARKEmailBugReportConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKEmailBugReportConfiguration.h; sourceTree = "<group>"; };
+		3D81BC4325C50A9800E61A49 /* ViewHierarchyAttachmentGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHierarchyAttachmentGenerator.swift; sourceTree = "<group>"; };
+		3D81BC4D25C5437E00E61A49 /* ViewHierarchyAttachmentGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHierarchyAttachmentGeneratorTests.swift; sourceTree = "<group>"; };
 		3D850496215EF20800B3957C /* ARKExceptionLogging_Testing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKExceptionLogging_Testing.h; sourceTree = "<group>"; };
 		3D850498215EF6F500B3957C /* ARKExceptionLoggingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARKExceptionLoggingTests.m; sourceTree = "<group>"; };
 		3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKEmailBugReportConfiguration_Protected.h; sourceTree = "<group>"; };
@@ -346,6 +350,7 @@
 			isa = PBXGroup;
 			children = (
 				3DA5BF5F2556640100B6D148 /* ARKBugReportAttachmentTests.swift */,
+				3D81BC4D25C5437E00E61A49 /* ViewHierarchyAttachmentGeneratorTests.swift */,
 				EAD1442F19E073FB0065A1FF /* Info.plist */,
 			);
 			name = AardvarkTests;
@@ -449,6 +454,7 @@
 				3DED97122006D35B007FC95C /* ARKBugReportAttachment.h */,
 				3DED97132006D35B007FC95C /* ARKBugReportAttachment.m */,
 				3D9F0A14255BC728000E63D7 /* ARKEmailAttachment.swift */,
+				3D81BC4325C50A9800E61A49 /* ViewHierarchyAttachmentGenerator.swift */,
 			);
 			path = "Bug Reporting";
 			sourceTree = "<group>";
@@ -932,6 +938,7 @@
 				EA98B9531D4BF43400B3A390 /* ARKScreenshotLogging.m in Sources */,
 				3DED97152006D35B007FC95C /* ARKBugReportAttachment.m in Sources */,
 				3D9F0A15255BC728000E63D7 /* ARKEmailAttachment.swift in Sources */,
+				3D81BC4425C50A9800E61A49 /* ViewHierarchyAttachmentGenerator.swift in Sources */,
 				EA98B9121D4BEB3D00B3A390 /* ARKLogDistributor+UIAdditions.m in Sources */,
 				3DA5BF5D2556626800B6D148 /* UIApplication+ARKAdditions.swift in Sources */,
 				EA98B9621D4BFA1700B3A390 /* Aardvark.swift in Sources */,
@@ -958,6 +965,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DA5BF602556640100B6D148 /* ARKBugReportAttachmentTests.swift in Sources */,
+				3D81BC4E25C5437E00E61A49 /* ViewHierarchyAttachmentGeneratorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

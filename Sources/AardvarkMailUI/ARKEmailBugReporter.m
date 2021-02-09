@@ -29,6 +29,8 @@
 #import "ARKEmailBugReportConfiguration_Protected.h"
 #import "ARKScreenshotLogging.h"
 
+#import <Aardvark/Aardvark-Swift.h>
+
 
 NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
@@ -36,100 +38,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 @interface ARKInvisibleView : UIView
 @end
 
-
-@interface CALayer (HierarchyDescription)
-
-- (void)_ARK_appendRecursiveLayerHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel;
-
-@end
-
-
-@implementation CALayer (HierarchyDescription)
-
-- (void)_ARK_appendRecursiveLayerHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel;
-{
-    for (int i = 0 ; i < indentationLevel ; i++) {
-        [mutableDescription appendString:@"   | "];
-    }
-    
-    [mutableDescription appendFormat:@"%@\n", self];
-    
-    for (CALayer *sublayer in self.sublayers) {
-        [sublayer _ARK_appendRecursiveLayerHierarchyDescriptionToString:mutableDescription withIndentationLevel:(indentationLevel + 1)];
-    }
-}
-
-@end
-
-
-@interface UIView (HierarchyDescription)
-
-/// Appends the recursive description of the view hierarchy starting with the current view to the provided mutable string. Description is similar to the private `-[UIView recursiveDescription]` method.
-- (void)_ARK_appendRecursiveViewHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap;
-
-@end
-
-
-@implementation UIView (HierarchyDescription)
-
-- (void)_ARK_appendRecursiveViewHierarchyDescriptionToString:(NSMutableString *)mutableDescription withIndentationLevel:(NSUInteger)indentationLevel usingViewControllerMap:(NSMapTable<UIView *, UIViewController *> *)viewControllerMap;
-{
-    UIViewController *const viewController = [viewControllerMap objectForKey:self];
-    if (viewController != nil) {
-        for (int i = 0 ; i < indentationLevel ; i++) {
-            [mutableDescription appendString:@"   | "];
-        }
-        
-        [mutableDescription appendFormat:@"VC: %@\n", viewController];
-    }
-    
-    for (int i = 0 ; i < indentationLevel ; i++) {
-        [mutableDescription appendString:@"   | "];
-    }
-    
-    [mutableDescription appendFormat:@"%@\n", self];
-    
-    // Each subview's layer is also a sublayer, but we should only include it in the hierarchy once (with the subview).
-    NSMutableSet<CALayer *> *const sublayersToSkip = [NSMutableSet<CALayer *> setWithCapacity:self.subviews.count];
-    
-    for (UIView *subview in self.subviews) {
-        [subview _ARK_appendRecursiveViewHierarchyDescriptionToString:mutableDescription withIndentationLevel:(indentationLevel + 1) usingViewControllerMap:viewControllerMap];
-        [sublayersToSkip addObject:subview.layer];
-    }
-    
-    for (CALayer *sublayer in self.layer.sublayers) {
-        if ([sublayersToSkip containsObject:sublayer]) {
-            continue;
-        }
-        
-        [sublayer _ARK_appendRecursiveLayerHierarchyDescriptionToString:mutableDescription withIndentationLevel:(indentationLevel + 1)];
-    }
-}
-
-@end
-
-
-@interface UIViewController (HierarchyDescription)
-
-- (void)_ARK_appendRecursiveViewControllerMappingToMapTable:(NSMapTable<UIView *, UIViewController *> *)mapTable;
-
-@end
-
-
-@implementation UIViewController (HierarchyDescription)
-
-- (void)_ARK_appendRecursiveViewControllerMappingToMapTable:(NSMapTable<UIView *, UIViewController *> *)mapTable;
-{
-    if (self.isViewLoaded) {
-        [mapTable setObject:self forKey:self.view];
-    }
-    
-    for (UIViewController *childViewController in self.childViewControllers) {
-        [childViewController _ARK_appendRecursiveViewControllerMappingToMapTable:mapTable];
-    }
-}
-
-@end
 
 
 @interface ARKDefaultPromptPresenter : NSObject <ARKEmailBugReporterPromptingDelegate>
@@ -149,7 +57,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 @property (nonatomic) BOOL attachScreenshotToNextBugReport;
 
-@property (nonatomic) NSString *viewHierarchyDescription;
+@property (nonatomic) ARKBugReportAttachment *viewHierarchyAttachment;
 
 @end
 
@@ -203,14 +111,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     self.attachScreenshotToNextBugReport = attachScreenshot;
 
     if (self.attachesViewHierarchyDescription) {
-        NSMutableString *mutableViewHierarchyDescription = [NSMutableString new];
-        for (UIWindow *window in [UIApplication sharedApplication].windows) {
-            NSMapTable<UIView *, UIViewController *> *const viewControllerMap = [NSMapTable<UIView *, UIViewController *> strongToStrongObjectsMapTable];
-            [window.rootViewController _ARK_appendRecursiveViewControllerMappingToMapTable:viewControllerMap];
-
-            [window _ARK_appendRecursiveViewHierarchyDescriptionToString:mutableViewHierarchyDescription withIndentationLevel:0 usingViewControllerMap:viewControllerMap];
-        }
-        self.viewHierarchyDescription = mutableViewHierarchyDescription;
+        self.viewHierarchyAttachment = [ARKViewHierarchyAttachmentGenerator captureCurrentHierarchy];
     }
 
     if (attachScreenshot && !self.screenFlashView) {
@@ -436,14 +337,12 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                 }
             }
 
-            if (configuration.includesViewHierarchyDescription && self.viewHierarchyDescription != nil) {
-                NSString *const viewHierarchyFileName = [NSLocalizedString(@"view_hierarchy", @"File name for view hierarchy attachment") stringByAppendingPathExtension:@"txt"];
-                NSData *const viewHierarchyData = [self.viewHierarchyDescription dataUsingEncoding:NSUTF8StringEncoding];
-                if (viewHierarchyData.length > 0) {
-                    [self.mailComposeViewController addAttachmentData:viewHierarchyData mimeType:@"text/plain" fileName:viewHierarchyFileName];
-                }
+            if (configuration.includesViewHierarchyDescription && self.viewHierarchyAttachment != nil) {
+                [self.mailComposeViewController addAttachmentData:self.viewHierarchyAttachment.data
+                                                         mimeType:self.viewHierarchyAttachment.dataMIMEType
+                                                         fileName:self.viewHierarchyAttachment.fileName];
             }
-            self.viewHierarchyDescription = nil;
+            self.viewHierarchyAttachment = nil;
 
             for (ARKBugReportAttachment *attachment in configuration.additionalAttachments) {
                 [self.mailComposeViewController addAttachmentData:attachment.data mimeType:attachment.dataMIMEType fileName:attachment.fileName];
