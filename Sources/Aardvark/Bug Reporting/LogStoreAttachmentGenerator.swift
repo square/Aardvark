@@ -25,7 +25,7 @@ public final class LogStoreAttachmentGenerator: NSObject {
     public struct Attachments {
 
         // An attachment representing the textual content of the log messages in the log store.
-        public var logMessagesAttachment: ARKBugReportAttachment
+        public var logMessagesAttachment: ARKBugReportAttachment?
 
         // An attachment containing the image from most recent screenshot log messages in the log store.
         public var latestScreenshotAttachment: ARKBugReportAttachment?
@@ -102,6 +102,8 @@ public final class LogStoreAttachmentGenerator: NSObject {
 
     /// Generates an attachment containing the log messages formatted using the specified formatter.
     ///
+    /// Returns `nil` if there are no log messages.
+    ///
     /// - parameter logMessages: The log messages to be included in the attachment.
     /// - parameter logFormatter: The formatter with which to format the log messages.
     /// - parameter logStoreName: The name of the log store from which the logs were collected.
@@ -110,7 +112,11 @@ public final class LogStoreAttachmentGenerator: NSObject {
         for logMessages: [ARKLogMessage],
         using logFormatter: ARKLogFormatter,
         logStoreName: String?
-    ) -> ARKBugReportAttachment {
+    ) -> ARKBugReportAttachment? {
+        guard !logMessages.isEmpty else {
+            return nil
+        }
+
         let formattedLogData = logMessages
             .map(logFormatter.formattedLogMessage(_:))
             .joined(separator: "\n")
