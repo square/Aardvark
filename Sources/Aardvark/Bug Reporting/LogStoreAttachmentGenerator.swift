@@ -110,7 +110,7 @@ public final class LogStoreAttachmentGenerator: NSObject {
     @objc(attachmentForLogMessages:usingLogFormatter:logStoreName:)
     public static func attachment(
         for logMessages: [ARKLogMessage],
-        using logFormatter: ARKLogFormatter,
+        using logFormatter: ARKLogFormatter = ARKDefaultLogFormatter(),
         logStoreName: String?
     ) -> ARKBugReportAttachment? {
         guard !logMessages.isEmpty else {
