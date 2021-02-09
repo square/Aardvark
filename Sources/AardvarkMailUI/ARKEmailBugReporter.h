@@ -102,13 +102,7 @@ typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReport
 /// Controls whether the bug reporter should generate and attach a description of the view hierarchy. Defaults to YES.
 @property (nonatomic) BOOL attachesViewHierarchyDescription;
 
-/// Returns formatted log messages as NSData.
-- (nonnull NSData *)formattedLogMessagesAsData:(nonnull NSArray *)logMessages;
-
-/// Returns the MIME type of the data returned by formattedLogMessagesAsData:. MIME types are as specified by the IANA: http://www.iana.org/assignments/media-types/
-- (nonnull NSString *)formattedLogMessagesDataMIMEType;
-
-/// Returns the extension for the log attachments.
-- (nonnull NSString *)formattedLogMessagesAttachmentExtension;
+/// Returns an attachment containing the log messages. Defaults to a plain text attachment containing each log message formatted using the bug reporter's `logFormatter`.
+- (nullable ARKBugReportAttachment *)attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName;
 
 @end
