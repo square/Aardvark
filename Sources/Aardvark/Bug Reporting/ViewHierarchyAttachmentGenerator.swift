@@ -44,7 +44,7 @@ public final class ViewHierarchyAttachmentGenerator: NSObject {
         }
 
         let fileBaseName = NSLocalizedString("view_hierarchy", comment: "File name for view hierarchy attachment")
-        let fileName = (fileBaseName as NSString).appendingPathExtension("txt") ?? fileBaseName
+        let fileName = URL(fileURLWithPath: fileBaseName).appendingPathExtension("txt").lastPathComponent
 
         return ARKBugReportAttachment(
             fileName: fileName,
