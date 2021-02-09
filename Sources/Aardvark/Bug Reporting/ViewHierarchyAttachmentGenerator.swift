@@ -25,7 +25,7 @@ public final class ViewHierarchyAttachmentGenerator: NSObject {
     /// plain text data for that representation.
     @objc
     public static func captureCurrentHierarchy() -> ARKBugReportAttachment {
-        return generateAttachment(for: UIApplication.shared.windows)
+        generateAttachment(for: UIApplication.shared.windows)
     }
 
     // MARK: - Internal Static Methods
