@@ -65,7 +65,7 @@ final class ViewHierarchyAttachmentGeneratorTests: XCTestCase {
         )
     }
 
-    func testDescriptionForWindowWithSublayers() {
+    func test_generateAttachment_description_hasExpectedFormatForWindowWithSublayers() {
         let window = TestWindow()
 
         let subview = TestView(identifier: "Subview")
