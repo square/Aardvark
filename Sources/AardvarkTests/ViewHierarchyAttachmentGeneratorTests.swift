@@ -152,7 +152,7 @@ private final class TestView: UIView {
 private final class TestLayer: CALayer {
 
     override var description: String {
-        return "Layer Description"
+        "Layer Description"
     }
 
 }
