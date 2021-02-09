@@ -144,7 +144,7 @@ private final class TestView: UIView {
     // MARK: - UIView
 
     override var description: String {
-        return "View Description for \(identifier)"
+        "View Description for \(identifier)"
     }
 
 }
