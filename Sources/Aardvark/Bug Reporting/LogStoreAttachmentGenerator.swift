@@ -21,10 +21,13 @@ public final class LogStoreAttachmentGenerator: NSObject {
 
     // MARK: - Public Types
 
+    /// Container around the attachments generated from a log store.
     public struct Attachments {
 
+        // An attachment representing the textual content of the log messages in the log store.
         public var logMessagesAttachment: ARKBugReportAttachment
 
+        // An attachment containing the image from most recent screenshot log messages in the log store.
         public var latestScreenshotAttachment: ARKBugReportAttachment?
 
     }
@@ -32,6 +35,9 @@ public final class LogStoreAttachmentGenerator: NSObject {
     // MARK: - Public Static Methods
 
     /// Generates bug report attachments representing the data in the log store.
+    ///
+    /// This is a convenience for asynchronously retrieving the messages from the log store and generating the
+    /// appropriate attachments from those messages.
     ///
     /// - parameter logStore: The log store from which to read the messages.
     /// - parameter messageFormatter: The formatter used to format messages in the logs attachment.
