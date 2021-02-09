@@ -294,6 +294,14 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (UIWindow *)emailComposeWindow;
 {
     if (!_emailComposeWindow) {
+        if (@available(iOS 13.0, *)) {
+            UIWindowScene *activeWindowScene = [[self class] _activeWindowScene];
+            if (activeWindowScene != nil) {
+                _emailComposeWindow = [[UIWindow alloc] initWithWindowScene:activeWindowScene];
+                return _emailComposeWindow;
+            }
+        }
+
         _emailComposeWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         _emailComposeWindow.windowLevel = self.emailComposeWindowLevel;
     }
@@ -472,7 +480,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     [self.mailComposeViewController beginAppearanceTransition:YES animated:YES];
     
     self.emailComposeWindow.rootViewController = self.mailComposeViewController;
-    [self.emailComposeWindow addSubview:self.mailComposeViewController.view];
     [self.emailComposeWindow makeKeyAndVisible];
     
     [self.mailComposeViewController endAppearanceTransition];
@@ -583,6 +590,18 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     }
 }
 
+#pragma mark - Private Static Methods
+
++ (UIWindowScene *)_activeWindowScene API_AVAILABLE(ios(13.0));
+{
+    NSSet<UIScene *> *scenes = [[UIApplication sharedApplication] connectedScenes];
+    for (UIScene *scene in scenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]] && scene.activationState == UISceneActivationStateForegroundActive) {
+            return (UIWindowScene *)scene;
+        }
+    }
+    return nil;
+}
 
 @end
 
