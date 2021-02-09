@@ -20,10 +20,15 @@ import XCTest
 
 final class ViewHierarchyAttachmentGeneratorTests: XCTestCase {
 
-    func testAttachmentMetadata() {
+    func test_generateAttachment_hasExpectedFileName() {
         let attachment = ViewHierarchyAttachmentGenerator.generateAttachment(for: [])
 
         XCTAssertEqual(attachment.fileName, "view_hierarchy.txt")
+    }
+
+    func test_generateAttachment_hasExpectedMIMEType() {
+        let attachment = ViewHierarchyAttachmentGenerator.generateAttachment(for: [])
+
         XCTAssertEqual(attachment.dataMIMEType, "text/plain")
     }
 
