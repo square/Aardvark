@@ -289,9 +289,11 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                     ARKBugReportAttachment *const screenshotAttachment = [ARKLogStoreAttachmentGenerator attachmentForLatestScreenshotInLogMessages:logMessages
                                                                                                                                        logStoreName:[logStore name]];
 
-                    [self.mailComposeViewController addAttachmentData:screenshotAttachment.data
-                                                             mimeType:screenshotAttachment.dataMIMEType
-                                                             fileName:screenshotAttachment.fileName];
+                    if (screenshotAttachment.data != nil) {
+                        [self.mailComposeViewController addAttachmentData:screenshotAttachment.data
+                                                                 mimeType:screenshotAttachment.dataMIMEType
+                                                                 fileName:screenshotAttachment.fileName];
+                    }
                 }
 
                 ARKBugReportAttachment *const logsAttachment = [self attachmentForLogMessages:logMessages inLogStoreNamed:[logStore name]];
