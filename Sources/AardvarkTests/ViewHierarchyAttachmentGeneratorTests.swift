@@ -89,7 +89,7 @@ final class ViewHierarchyAttachmentGeneratorTests: XCTestCase {
         )
     }
 
-    func testDescriptionForWindowWithViewController() {
+    func test_generateAttachment_description_hasExpectedFormatForWindowWithViewController() {
         let window = TestWindow()
 
         let viewController = TestViewController()
