@@ -84,7 +84,7 @@
 - (void)test_setUp_providesEmptyArchive;
 {
     XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSString class] completionHandler:^(NSArray *unarchivedObjects) {
         XCTAssertNotNil(unarchivedObjects, @"-[ARKDataArchive readObjectsFromArchiveWithCompletionHandler:] should never return nil!");
         XCTAssertEqual(unarchivedObjects.count, 0, @"Archive not initially empty!");
         
@@ -99,7 +99,7 @@
     NSURL *fileURL = self.dataArchive.archiveFileURL;
     
     XCTestExpectation *expectation0 = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSString class] completionHandler:^(NSArray *unarchivedObjects) {
         XCTAssertEqual(unarchivedObjects.count, 0, @"Archive not initially empty!");
         
         [expectation0 fulfill];
@@ -116,7 +116,7 @@
     self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:10 trimmedObjectCount:5];
     
     XCTestExpectation *expectation1 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSString class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @"One", @"Two", @"Three", @"Four" ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Re-opened archive didn't have expected objects!");
         
@@ -127,7 +127,7 @@
     [self.dataArchive appendArchiveOfObject:@"Six"];
     
     XCTestExpectation *expectation2 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSString class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @"One", @"Two", @"Three", @"Four", @"Five", @"Six" ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Re-appended archive didn't have expected objects!");
         
@@ -139,7 +139,7 @@
     
     self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:5 trimmedObjectCount:4];
     XCTestExpectation *expectation3 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-3", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSString class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @"Three", @"Four", @"Five", @"Six" ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Re-opened archive didn't trim to new values!");
         
@@ -152,7 +152,7 @@
 - (void)test_appendArchiveOfObject_trimsArchive;
 {
     XCTestExpectation *expectation0 = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSNumber class] completionHandler:^(NSArray *unarchivedObjects) {
         XCTAssertEqual(unarchivedObjects.count, 0, @"Archive not initially empty!");
         
         [expectation0 fulfill];
@@ -168,7 +168,7 @@
     [self.dataArchive appendArchiveOfObject:@8];
     
     XCTestExpectation *expectation1 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSNumber class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @1, @2, @3, @4, @5, @6, @7, @8 ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected initial maximum number of objects!");
         
@@ -178,7 +178,7 @@
     [self.dataArchive appendArchiveOfObject:@9];
     
     XCTestExpectation *expectation2 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSNumber class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @5, @6, @7, @8, @9 ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected initial trimmed objects!");
         
@@ -190,7 +190,7 @@
     [self.dataArchive appendArchiveOfObject:@12];
     
     XCTestExpectation *expectation3 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-3", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSNumber class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @5, @6, @7, @8, @9, @10, @11, @12 ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected second maximum number objects!");
         
@@ -200,7 +200,7 @@
     [self.dataArchive appendArchiveOfObject:@13];
     
     XCTestExpectation *expectation4 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-4", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSNumber class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @9, @10, @11, @12, @13 ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected second trimmed objects!");
         
@@ -215,7 +215,7 @@
     [self.dataArchive appendArchiveOfObject:@19];
     
     XCTestExpectation *expectation5 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-5", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSNumber class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @13, @14, @15, @16, @17, @18, @19 ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected final objects!");
         
@@ -237,7 +237,7 @@
     [self.dataArchive appendArchiveOfObject:@8];
     
     XCTestExpectation *expectation1 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSNumber class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @1, @2, @3, @4, @5, @6, @7, @8 ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected initial maximum number of objects!");
         
@@ -252,7 +252,7 @@
     [self.dataArchive appendArchiveOfObject:@9];
     
     XCTestExpectation *expectation2 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSNumber class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @1, @2, @3 ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected objects after trimming a corrupted archive!");
         
@@ -281,7 +281,7 @@
     self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:10 trimmedObjectCount:5];
     
     XCTestExpectation *expectation = [self expectationWithDescription:[NSString stringWithFormat:@"%@", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSArray class] completionHandler:^(NSArray *unarchivedObjects) {
         XCTAssertEqualObjects(unarchivedObjects, @[], @"Archive didn't trim invalid data after re-initialization.");
         
         [expectation fulfill];
@@ -309,7 +309,7 @@
     self.dataArchive = [[ARKDataArchive alloc] initWithURL:fileURL maximumObjectCount:10 trimmedObjectCount:5];
     
     XCTestExpectation *expectation = [self expectationWithDescription:[NSString stringWithFormat:@"%@", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSArray class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @[ @1, @2 ] ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't truncate invalid data after re-initialization.");
         
@@ -322,7 +322,7 @@
 - (void)test_readObjectsFromArchive_excludesFaultyUnarchives;
 {
     XCTestExpectation *expectation0 = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSString class] completionHandler:^(NSArray *unarchivedObjects) {
         XCTAssertEqual(unarchivedObjects.count, 0, @"Archive not initially empty!");
         
         [expectation0 fulfill];
@@ -338,7 +338,7 @@
     [self.dataArchive appendArchiveOfObject:@"Eighth"];
     
     XCTestExpectation *expectation1 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-1", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSString class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @"First", @"Second", @"Third", @"Fifth", @"Sixth", @"Seventh", @"Eighth" ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected objects omitted failed unarchiver!");
         
@@ -351,7 +351,7 @@
     [self.dataArchive appendArchiveOfObject:@"Twelfth"];
     
     XCTestExpectation *expectation2 = [self expectationWithDescription:[NSString stringWithFormat:@"%@-2", NSStringFromSelector(_cmd)]];
-    [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [self.dataArchive readObjectsFromArchiveOfType:[NSString class] completionHandler:^(NSArray *unarchivedObjects) {
         NSArray *expectedObjects = @[ @"Fifth", @"Sixth", @"Seventh", @"Eighth", @"Ninth", @"Tenth", @"Eleventh", @"Twelfth" ];
         XCTAssertEqualObjects(unarchivedObjects, expectedObjects, @"Archive didn't have expected objects after trimming out failed unarchiver!");
         
@@ -372,11 +372,11 @@
     ARKDataArchive *dataArchive = [[ARKDataArchive alloc] initWithURL:self.dataArchive.archiveFileURL maximumObjectCount:self.dataArchive.maximumObjectCount trimmedObjectCount:self.dataArchive.trimmedObjectCount];
     
     XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    [dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+    [dataArchive readObjectsFromArchiveOfType:[NSString class] completionHandler:^(NSArray *unarchivedObjects) {
         XCTAssertEqual(unarchivedObjects.count, self.dataArchive.maximumObjectCount);
         
         [dataArchive clearArchiveWithCompletionHandler:^{
-            [self.dataArchive readObjectsFromArchiveWithCompletionHandler:^(NSArray *unarchivedObjects) {
+            [self.dataArchive readObjectsFromArchiveOfType:[NSNumber class] completionHandler:^(NSArray *unarchivedObjects) {
                 XCTAssertEqual(unarchivedObjects.count, 0);
                 [expectation fulfill];
             }];
