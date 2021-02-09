@@ -129,7 +129,7 @@ public final class LogStoreAttachmentGenerator: NSObject {
 
     private static func screenshotFileName(for logStoreName: String?) -> String {
         var fileName = NSLocalizedString("screenshot", comment: "File name of a screenshot")
-        fileName = (fileName as NSString).appendingPathExtension("png") ?? fileName
+        fileName = URL(fileURLWithPath: fileName).appendingPathExtension("png").lastPathComponent
         if let logStoreName = logStoreName, !logStoreName.isEmpty {
             fileName = "\(logStoreName)_\(fileName)"
         }
@@ -138,7 +138,7 @@ public final class LogStoreAttachmentGenerator: NSObject {
 
     private static func logsFileName(for logStoreName: String?, fileType: String) -> String {
         var fileName = NSLocalizedString("logs", comment: "File name for logs attachments")
-        fileName = (fileName as NSString).appendingPathExtension(fileType) ?? fileName
+        fileName = URL(fileURLWithPath: fileName).appendingPathExtension(fileType).lastPathComponent
         if let logStoreName = logStoreName, !logStoreName.isEmpty {
             fileName = "\(logStoreName)_\(fileName)"
         }
