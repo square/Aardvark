@@ -27,7 +27,7 @@ final class ViewHierarchyAttachmentGeneratorTests: XCTestCase {
         XCTAssertEqual(attachment.dataMIMEType, "text/plain")
     }
 
-    func testDescriptionForSimpleWindow() {
+    func test_generateAttachment_description_hasExpectedFormatForSimpleWindow() {
         let window = TestWindow()
         let attachment = ViewHierarchyAttachmentGenerator.generateAttachment(for: [window])
         let description = String(data: attachment.data, encoding: .utf8)
