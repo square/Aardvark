@@ -117,7 +117,7 @@ final class ViewHierarchyAttachmentGeneratorTests: XCTestCase {
 private final class TestWindow: UIWindow {
 
     override var description: String {
-        return "Window Description"
+        "Window Description"
     }
 
 }
