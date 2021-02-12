@@ -257,10 +257,9 @@
 			};
 			buildConfigurationList = EA3C1DD41D93696D0048C4CD /* Build configuration list for PBXProject "AardvarkSample" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);

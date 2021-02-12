@@ -816,11 +816,11 @@
 			};
 			buildConfigurationList = EAD1441C19E073FB0065A1FF /* Build configuration list for PBXProject "Aardvark" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
+				Base,
 			);
 			mainGroup = EAD1441819E073FB0065A1FF;
 			productRefGroup = EAD1442219E073FB0065A1FF /* Products */;
