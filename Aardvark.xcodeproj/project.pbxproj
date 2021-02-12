@@ -21,6 +21,7 @@
 		3D046DE5254D5C700045A06C /* ARKLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = EA98B9361D4BEB6E00B3A390 /* ARKLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D046DE7254D5C790045A06C /* ARKDefaultLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = EA98B9321D4BEB6E00B3A390 /* ARKDefaultLogFormatter.m */; };
 		3D046DE8254D5C7E0045A06C /* ARKDefaultLogFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = EA98B9311D4BEB6E00B3A390 /* ARKDefaultLogFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3D0C342025D73E10009BBDE1 /* ARKLogDistributor+SwiftAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0C341F25D73E10009BBDE1 /* ARKLogDistributor+SwiftAdditions.swift */; };
 		3D15E0311F9D4E13001DE13A /* ARKExceptionLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D15E02C1F9D38B1001DE13A /* ARKExceptionLogging.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D1B288B25D23F4800DFBB4B /* LogStoreAttachmentGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1B288A25D23F4800DFBB4B /* LogStoreAttachmentGeneratorTests.swift */; };
 		3D404FA92556410500CE4B83 /* UIActivityViewController+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D404FA72556410500CE4B83 /* UIActivityViewController+ARKAdditions.h */; };
@@ -148,6 +149,7 @@
 		3D046DB7254D5A840045A06C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3D046DBC254D5A840045A06C /* AardvarkLoggingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AardvarkLoggingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D046DC3254D5A850045A06C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D0C341F25D73E10009BBDE1 /* ARKLogDistributor+SwiftAdditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARKLogDistributor+SwiftAdditions.swift"; sourceTree = "<group>"; };
 		3D15E02C1F9D38B1001DE13A /* ARKExceptionLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKExceptionLogging.h; sourceTree = "<group>"; };
 		3D15E02D1F9D38B1001DE13A /* ARKExceptionLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKExceptionLogging.m; sourceTree = "<group>"; };
 		3D1B288A25D23F4800DFBB4B /* LogStoreAttachmentGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogStoreAttachmentGeneratorTests.swift; sourceTree = "<group>"; };
@@ -536,6 +538,7 @@
 				EA98B8C91D4BE83300B3A390 /* ARKLogDistributor_Protected.h */,
 				EA98B8CA1D4BE83300B3A390 /* ARKLogDistributor_Testing.h */,
 				EA98B8CC1D4BE83300B3A390 /* ARKLogDistributor.m */,
+				3D0C341F25D73E10009BBDE1 /* ARKLogDistributor+SwiftAdditions.swift */,
 				EA98B8CD1D4BE83300B3A390 /* ARKLogMessage.h */,
 				EA98B8CE1D4BE83300B3A390 /* ARKLogMessage.m */,
 				EA98B8CF1D4BE83300B3A390 /* ARKLogObserver.h */,
@@ -984,6 +987,7 @@
 				EA98B8D81D4BE83300B3A390 /* ARKDataArchive.m in Sources */,
 				EA98B8C11D4BE82100B3A390 /* NSFileHandle+ARKAdditions.m in Sources */,
 				3D046DE7254D5C790045A06C /* ARKDefaultLogFormatter.m in Sources */,
+				3D0C342025D73E10009BBDE1 /* ARKLogDistributor+SwiftAdditions.swift in Sources */,
 				EA98B8E41D4BE83300B3A390 /* ARKLogMessage.m in Sources */,
 				EA98B8C51D4BE82100B3A390 /* NSURL+ARKAdditions.m in Sources */,
 				EA98B95A1D4BF88600B3A390 /* ARKLogging.m in Sources */,
