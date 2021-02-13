@@ -70,7 +70,7 @@ void ARKHandleUncaughtException(NSException *_Nonnull exception)
 
     // Wait for the logs to finish distributing before continuing, since otherwise the app will terminate and the
     // distribution (which normally happens in the background) won't complete.
-    dispatch_group_wait(observerGroup, DISPATCH_TIME_FOREVER);
+    dispatch_group_wait(observerGroup, dispatch_time(DISPATCH_TIME_NOW, 30 * NSEC_PER_SEC));
 
     NSUncaughtExceptionHandler *const previousHandler = ARKPreviousUncaughtExceptionHandler;
 
