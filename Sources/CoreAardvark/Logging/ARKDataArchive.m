@@ -202,7 +202,7 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
 - (void)saveArchiveWithCompletionHandler:(nullable dispatch_block_t)completionHandler;
 {
     NSBlockOperation *completionOperation = [NSBlockOperation blockOperationWithBlock:^{
-        [self.fileHandle synchronizeFile];
+        [self _saveArchive_inFileOperationQueue];
 
         if (completionHandler != NULL) {
             completionHandler();

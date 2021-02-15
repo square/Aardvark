@@ -53,6 +53,28 @@
 @end
 
 
+#pragma -
+
+
+@interface ARKTestDataArchive : ARKDataArchive
+
+@property (nonatomic, readonly) BOOL synchronizedFileHandle;
+
+@end
+
+@implementation ARKTestDataArchive
+
+- (void)_saveArchive_inFileOperationQueue;
+{
+    _synchronizedFileHandle = YES;
+}
+
+@end
+
+
+#pragma -
+
+
 @interface ARKDataArchiveTests : XCTestCase
 
 @property (nonatomic) ARKDataArchive *dataArchive;
@@ -399,6 +421,22 @@
     }];
     
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
+}
+
+- (void)test_saveArchiveWithCompletionHandler_synchronizesFileBeforeCallingCompletionHandler;
+{
+    NSURL *fileURL = [NSURL ARK_fileURLWithApplicationSupportFilename:@"archive-synchronizes-before-calling-completion.data"];
+    ARKTestDataArchive *dataArchive = [[ARKTestDataArchive alloc] initWithURL:fileURL maximumObjectCount:500 trimmedObjectCount:500];
+
+    XCTAssertFalse(dataArchive.synchronizedFileHandle);
+
+    XCTestExpectation *expectation = [self expectationWithDescription:@"call completion"];
+    [dataArchive saveArchiveWithCompletionHandler:^{
+        XCTAssertTrue(dataArchive.synchronizedFileHandle);
+        [expectation fulfill];
+    }];
+
+    [self waitForExpectations:@[expectation] timeout:5];
 }
 
 #pragma mark - Performance Tests
