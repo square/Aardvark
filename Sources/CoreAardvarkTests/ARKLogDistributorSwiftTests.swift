@@ -19,7 +19,7 @@ import XCTest
 
 final class ARKLogDistributorSwiftTests: XCTestCase {
 
-    func test_log_defaultValues() throws {
+    func test_log_propogatesExpectedDefaultValues() throws {
         let logDistributor = ARKLogDistributor()
         let observer = TestObserver()
         logDistributor.add(observer)
@@ -43,7 +43,7 @@ final class ARKLogDistributorSwiftTests: XCTestCase {
         XCTAssert(logMessage.userInfo.isEmpty)
     }
 
-    func test_log_explicitValues() throws {
+    func test_log_propogatesPassedInValues() throws {
         let logDistributor = ARKLogDistributor()
         let observer = TestObserver()
         logDistributor.add(observer)
