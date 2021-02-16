@@ -77,22 +77,18 @@ final class ARKLogDistributorSwiftTests: XCTestCase {
 
 // MARK: -
 
-extension ARKLogDistributorSwiftTests {
+private final class TestObserver: NSObject, ARKLogObserver {
 
-    fileprivate final class TestObserver: NSObject, ARKLogObserver {
+    // MARK: - Public Properties
 
-        // MARK: - Public Properties
+    private(set) var observedLogMessages: [ARKLogMessage] = []
 
-        private(set) var observedLogMessages: [ARKLogMessage] = []
+    // MARK: - ARKLogObserver
 
-        // MARK: - ARKLogObserver
+    var logDistributor: ARKLogDistributor?
 
-        var logDistributor: ARKLogDistributor?
-
-        func observe(_ logMessage: ARKLogMessage) {
-            observedLogMessages.append(logMessage)
-        }
-
+    func observe(_ logMessage: ARKLogMessage) {
+        observedLogMessages.append(logMessage)
     }
 
 }
