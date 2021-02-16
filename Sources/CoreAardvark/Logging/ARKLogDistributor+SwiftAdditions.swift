@@ -18,7 +18,8 @@ import Foundation
 
 extension ARKLogDistributor {
 
-    /// Creates a log message and distributes it to the log observers.
+    /// Creates a log message and distributes it to the log observers. This is a convenience wrapper for Swift usage
+    /// around the Objective-C API.
     ///
     /// - parameter text: The text of the log message.
     /// - parameter type: The type of log message.
