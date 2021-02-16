@@ -156,7 +156,6 @@
 		3D1B288A25D23F4800DFBB4B /* LogStoreAttachmentGeneratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogStoreAttachmentGeneratorTests.swift; sourceTree = "<group>"; };
 		3D404FA72556410500CE4B83 /* UIActivityViewController+ARKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActivityViewController+ARKAdditions.h"; sourceTree = "<group>"; };
 		3D404FA82556410500CE4B83 /* UIActivityViewController+ARKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActivityViewController+ARKAdditions.m"; sourceTree = "<group>"; };
-		3D5483FD25DA71D3008B3C49 /* CoreAardvarkTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CoreAardvarkTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		3D5483FE25DA71D3008B3C49 /* ARKLogDistributorSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKLogDistributorSwiftTests.swift; sourceTree = "<group>"; };
 		3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKEmailBugReportConfiguration.m; sourceTree = "<group>"; };
 		3D6E2D0D20868335007B8013 /* ARKEmailBugReportConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKEmailBugReportConfiguration.h; sourceTree = "<group>"; };
@@ -351,7 +350,6 @@
 				D04D48041AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m */,
 				EA46F7F91ACB8448007FC415 /* ARKURLAdditionsTests.m */,
 				EAAB38A319E2929C00161A54 /* ARKDefaultLogFormatterTests.m */,
-				3D5483FD25DA71D3008B3C49 /* CoreAardvarkTests-Bridging-Header.h */,
 			);
 			name = CoreAardvarkTests;
 			path = Sources/CoreAardvarkTests;
@@ -1399,7 +1397,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.CoreAardvarkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CoreAardvarkTests/CoreAardvarkTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -1427,7 +1425,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.CoreAardvarkTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
-				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CoreAardvarkTests/CoreAardvarkTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
