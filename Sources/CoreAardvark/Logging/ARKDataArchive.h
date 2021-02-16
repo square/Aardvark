@@ -47,4 +47,7 @@
 /// Ensures the archive is persisted on the file system, synchronously if requested.
 - (void)saveArchiveAndWait:(BOOL)wait;
 
+/// Ensures the archive is persisted on the file system. Completion handler is called on a background queue.
+- (void)saveArchiveWithCompletionHandler:(nullable dispatch_block_t)completionHandler;
+
 @end

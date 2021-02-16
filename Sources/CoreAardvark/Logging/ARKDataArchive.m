@@ -185,6 +185,23 @@ NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
     }
 }
 
+- (void)saveArchiveWithCompletionHandler:(nullable dispatch_block_t)completionHandler;
+{
+    NSBlockOperation *completionOperation = [NSBlockOperation blockOperationWithBlock:^{
+        [self _saveArchive_inFileOperationQueue];
+
+        if (completionHandler != NULL) {
+            completionHandler();
+        }
+    }];
+
+    // Set the QoS of this operation to be high, since the archive is typically saved when the app is about to be
+    // terminated, so we want to make sure this task gets prioritized.
+    completionOperation.qualityOfService = NSQualityOfServiceUserInitiated;
+
+    [self.fileOperationQueue addOperation:completionOperation];
+}
+
 #pragma mark - Testing Methods
 
 - (void)waitUntilAllOperationsAreFinished;

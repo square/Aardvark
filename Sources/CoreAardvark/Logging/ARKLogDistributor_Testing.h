@@ -21,7 +21,6 @@
 
 @interface ARKLogDistributor (Private)
 
-- (nonnull NSMutableSet *)logObservers;
 - (NSUInteger)internalQueueOperationCount;
 
 @end

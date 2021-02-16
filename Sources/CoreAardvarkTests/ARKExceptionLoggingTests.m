@@ -63,6 +63,54 @@ void ARKTestSetUncaughtExceptionHandler(NSUncaughtExceptionHandler *_Nullable un
 }
 
 
+#pragma mark -
+
+@interface ARKExceptionTestLogObserver : NSObject <ARKLogObserver>
+
+@property (nonatomic, readonly) BOOL hasProcessAllPendingLogsImplementation;
+
+@property (nonatomic, readonly) BOOL calledProcessAllPendingLogs;
+
+@end
+
+@implementation ARKExceptionTestLogObserver
+
+@synthesize logDistributor;
+
+- (instancetype)initWithProcessAllPendingLogImplementation:(BOOL)hasProcessAllPendingLogsImplementation;
+{
+    if (self = [super init]) {
+        _hasProcessAllPendingLogsImplementation = hasProcessAllPendingLogsImplementation;
+        _calledProcessAllPendingLogs = NO;
+    }
+    return self;
+}
+
+- (void)observeLogMessage:(ARKLogMessage *)logMessage;
+{
+    // No-op.
+}
+
+- (BOOL)respondsToSelector:(SEL)aSelector;
+{
+    if (aSelector == @selector(processAllPendingLogsWithCompletionHandler:)) {
+        return self.hasProcessAllPendingLogsImplementation;
+    } else {
+        return [super respondsToSelector:aSelector];
+    }
+}
+
+- (void)processAllPendingLogsWithCompletionHandler:(dispatch_block_t)completionHandler;
+{
+    _calledProcessAllPendingLogs = YES;
+    completionHandler();
+}
+
+@end
+
+#pragma mark -
+
+
 @implementation ARKExceptionLoggingTests
 
 - (void)setUp {
@@ -155,6 +203,30 @@ void ARKTestSetUncaughtExceptionHandler(NSUncaughtExceptionHandler *_Nullable un
     ARKTestSetPreviousUncaughtExceptionHandlerExpectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     ARKDisableLogOnUncaughtExceptionToLogDistributor(self.logDistributor);
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
+}
+
+- (void)test_handleUncaughtException_tellsAsyncLogObserverToProcessPendingLogs;
+{
+    ARKExceptionTestLogObserver *const asyncObserver = [[ARKExceptionTestLogObserver alloc] initWithProcessAllPendingLogImplementation:YES];
+    [self.logDistributor addLogObserver:asyncObserver];
+
+    ARKEnableLogOnUncaughtExceptionToLogDistributor(self.logDistributor);
+    NSException *const exception = [NSException exceptionWithName:NSGenericException reason:@"Test Exception" userInfo:nil];
+    ARKHandleUncaughtException(exception);
+
+    XCTAssertTrue(asyncObserver.calledProcessAllPendingLogs);
+}
+
+- (void)test_handleUncaughtException_doesNotTellSyncLogObserverToProcessPendingLogs;
+{
+    ARKExceptionTestLogObserver *const syncObserver = [[ARKExceptionTestLogObserver alloc] initWithProcessAllPendingLogImplementation:NO];
+    [self.logDistributor addLogObserver:syncObserver];
+
+    ARKEnableLogOnUncaughtExceptionToLogDistributor(self.logDistributor);
+    NSException *const exception = [NSException exceptionWithName:NSGenericException reason:@"Test Exception" userInfo:nil];
+    ARKHandleUncaughtException(exception);
+
+    XCTAssertFalse(syncObserver.calledProcessAllPendingLogs);
 }
 
 - (void)test_multipleLogDistributors_onlySetsOnce;
