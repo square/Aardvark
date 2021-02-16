@@ -23,4 +23,6 @@
 
 - (void)waitUntilAllPendingLogsHaveBeenDistributed;
 
+@property (copy, readonly) NSArray *logObservers;
+
 @end
