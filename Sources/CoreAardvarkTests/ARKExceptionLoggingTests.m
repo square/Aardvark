@@ -209,11 +209,8 @@ void ARKTestSetUncaughtExceptionHandler(NSUncaughtExceptionHandler *_Nullable un
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
-- (void)test_tellsLogObserversToProcessPendingLogs;
+- (void)test_handleUncaughtException_tellsAsyncLogObserverToProcessPendingLogs;
 {
-    ARKExceptionTestLogObserver *const syncObserver = [[ARKExceptionTestLogObserver alloc] initWithProcessAllPendingLogImplementation:NO];
-    [self.logDistributor addLogObserver:syncObserver];
-
     ARKExceptionTestLogObserver *const asyncObserver = [[ARKExceptionTestLogObserver alloc] initWithProcessAllPendingLogImplementation:YES];
     [self.logDistributor addLogObserver:asyncObserver];
 
@@ -222,6 +219,17 @@ void ARKTestSetUncaughtExceptionHandler(NSUncaughtExceptionHandler *_Nullable un
     ARKHandleUncaughtException(exception);
 
     XCTAssertTrue(asyncObserver.calledProcessAllPendingLogs);
+}
+
+- (void)test_handleUncaughtException_doesNotTellSyncLogObserverToProcessPendingLogs;
+{
+    ARKExceptionTestLogObserver *const syncObserver = [[ARKExceptionTestLogObserver alloc] initWithProcessAllPendingLogImplementation:NO];
+    [self.logDistributor addLogObserver:syncObserver];
+
+    ARKEnableLogOnUncaughtExceptionToLogDistributor(self.logDistributor);
+    NSException *const exception = [NSException exceptionWithName:NSGenericException reason:@"Test Exception" userInfo:nil];
+    ARKHandleUncaughtException(exception);
+
     XCTAssertFalse(syncObserver.calledProcessAllPendingLogs);
 }
 
