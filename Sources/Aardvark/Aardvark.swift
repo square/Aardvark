@@ -17,8 +17,6 @@
 import CoreAardvark
 import Foundation
 
-public typealias EmailAddress = String
-
 @objc
 public class Aardvark : NSObject {
 

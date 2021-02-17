@@ -22,7 +22,7 @@ extension Aardvark {
     /// `emailAddress`. Returns the created bug reporter for convenience.
     @objc
     public static func addDefaultBugReportingGestureWithEmailBugReporter(
-        withRecipient emailAddress: EmailAddress
+        withRecipient emailAddress: String
     ) -> ARKEmailBugReporter {
         let logStore = ARKLogDistributor.default().defaultLogStore
         let bugReporter = ARKEmailBugReporter(emailAddress: emailAddress, logStore: logStore)
