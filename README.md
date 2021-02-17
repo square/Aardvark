@@ -64,12 +64,6 @@ In Objective-C:
 
 In Swift, replace calls to `print` with `log`. In Objective-C, replace calls to `NSLog` with `ARKLog`.
 
-By default, this will log messages to the Aardvark log store _instead of_ the console. If you would like the messages to be logged to the console as well, toggle the default log store's `printsLogsToConsole` property:
-
-```swift
-ARKLogDistributor.default().defaultLogStore.printsLogsToConsole = true
-```
-
 ## Reporting Bugs
 
 After doing the above, your users can report a bug by making a two-finger long-press gesture. This gesture triggers a UIAlert asking the user what went wrong. When the user enters this information, an email bug report is generated complete with an attached app screenshot and a text file containing the last 2000 logs. Screenshots are created and stored within Aardvark and do not require camera roll access.
@@ -92,11 +86,7 @@ Once the exception is logged, it will be propogated to any existing uncaught exc
 
 Want to customize how bug reports are filed? Pass your own object conforming to the [ARKBugReporter](Sources/Aardvark/Bug%20Reporting/ARKBugReporter.h) protocol and the desired subclass of `UIGestureRecognizer` to `[Aardvark addBugReporter:triggeringGestureRecognizerClass:]`. You can further customize how bug reports will be triggered by modifying the returned gesture recognizer.
 
-Want to change how logs are formatted? Set your own `logFormatter` on the [ARKEmailBugReporter](Sources/AardvarkMailUI/ARKEmailBugReporter.h) returned from `[Aardvark addDefaultBugReportingGestureWithEmailBugReporterWithRecipient:]`.
-
-Want different log files for different features? Create an [ARKLogStore](Sources/CoreAardvark/Logging/ARKLogStore.h) for each feature you want to have its own log file and add them to the default log distributor with `[[ARKLogDistributor defaultDistributor] addLogObserver:featureLogStore]`. Set the `logFilterBlock` on your [ARKLogStore](Sources/CoreAardvark/Logging/ARKLogStore.h) to make sure only the logs you want are observed by the [ARKLogStore](Sources/CoreAardvark/Logging/ARKLogStore.h). Use `ARKLogWithType`’s `userInfo` dictionary to specify to which feature a log pertains. See [SampleViewController](AardvarkSample/AardvarkSample/SampleViewController.swift)’s `tapGestureLogStore` for an example.
-
-Want to send your logs to third party services? One log can be easily distributed to multiple services by adding objects conforming to [ARKLogObserver](Sources/CoreAardvark/Logging/ARKLogObserver.h) to the default [ARKLogDistributor](Sources/CoreAardvark/Logging/ARKLogDistributor.h) via `addLogObserver:`. [SampleCrashlyticsLogObserver](AardvarkSample/AardvarkSample/SampleCrashlyticsLogObserver.h) is an example of an [ARKLogObserver](Sources/CoreAardvark/Logging/ARKLogObserver.h) that sends event logs to Crashlytics.
+Want to change how logs are formatted? Or use different log files for different features? Or send your logs to third party services? Check out the [logging documentation](Documentation/Logging.md).
 
 Want to log with Aardvark but don’t want to use Aardvark’s bug reporting tool? Change the dependency to be on `Aardvark` and skip step #2 in the Getting Started guide.
 
