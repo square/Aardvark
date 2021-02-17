@@ -30,7 +30,6 @@ The easiest way to get Aardvark up and running is to add a dependency on the Aar
 #### Using [CocoaPods](https://cocoapods.org)
 
 ```
-platform :ios, '8.0'
 pod 'AardvarkMailUI'
 ```
 
