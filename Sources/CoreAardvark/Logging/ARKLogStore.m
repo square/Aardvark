@@ -169,7 +169,6 @@
 
 + (ARKDataArchive *)_dataArchiveWithPersistedLogFileURL:(nonnull NSURL *)persistedLogFileURL maximumLogMessageCount:(NSUInteger)maximumLogMessageCount;
 {
-    ARKCheckCondition(persistedLogFileURL.isFileURL, nil, @"persistedLogFileURL must be a file URL");
     ARKCheckCondition(maximumLogMessageCount > 0, nil, @"maximumLogMessageCount must be greater than zero");
 
     return [[ARKDataArchive alloc] initWithURL:persistedLogFileURL maximumObjectCount:maximumLogMessageCount trimmedObjectCount:0.5 * maximumLogMessageCount];
