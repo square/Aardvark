@@ -81,7 +81,7 @@
         return nil;
     }
 
-    _persistedLogFileURL = persistedLogFileURL;
+    _persistedLogFileURL = [persistedLogFileURL copy];
     _maximumLogMessageCount = maximumLogMessageCount;
     _dataArchive = dataArchive;
     _prefixNameWhenPrintingToConsole = YES;
