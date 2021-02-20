@@ -26,6 +26,9 @@
 /// Creates an ARKLogStore with persistedLogsFileURL set to the supplied fileName within the application support directory that keeps a maximum of 2000 logs persisted.
 - (nullable instancetype)initWithPersistedLogFileName:(nonnull NSString *)fileName;
 
+/// Creates an ARKLogStore with persistedLogsFileURL set to the supplied file URL.
+- (nullable instancetype)initWithPersistedLogFileURL:(nonnull NSURL *)fileURL maximumLogMessageCount:(NSUInteger)maximumLogMessageCount NS_DESIGNATED_INITIALIZER;
+
 - (nonnull instancetype)init NS_UNAVAILABLE;
 + (nonnull instancetype)new NS_UNAVAILABLE;
 

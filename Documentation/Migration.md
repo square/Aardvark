@@ -9,3 +9,4 @@ In addition, there are a handful of breaking changes in the API:
 * `ARKEmailAttachment` was renamed to `ARKBugReportAttachment`.
 * `ARKEmailBugReporter.attachesViewHierarchyDescriptionWithScreenshot` was renamed to `ARKEmailBugReporter.attachesViewHierarchyDescription`. This also represents a change in when the view hierarchy is attached (it no longer depends on the screenshot also being attached).
 * The initializer for `ARKLogMessage` now takes an additional `parameters` argument. This allows for attaching a persisted string dictionary to the log message.
+* `ARKLogStore` has a new designated initializer that takes a file URL for the persisted log file.

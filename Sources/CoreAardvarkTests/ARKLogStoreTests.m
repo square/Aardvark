@@ -68,6 +68,32 @@
 
 #pragma mark - Behavior Tests
 
+- (void)test_initWithPersistedLogFileName_createsLogFileInApplicationSupport;
+{
+    ARKLogStore *const logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:@"test_log_store" maximumLogMessageCount:100];
+
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = paths.firstObject;
+    NSString *archivePath = [applicationSupportDirectory stringByAppendingPathComponent:@"test_log_store"];
+    XCTAssertEqualObjects(logStore.persistedLogFileURL, [NSURL fileURLWithPath:archivePath]);
+}
+
+- (void)test_initWithPersistedLogFileURL_createsLogFileAtSpecifiedURL;
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
+    NSString *applicationSupportDirectory = paths.firstObject;
+    NSString *archiveDirectoryPath = [applicationSupportDirectory stringByAppendingPathComponent:@"archive_dir"];
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager createDirectoryAtPath:archiveDirectoryPath withIntermediateDirectories:YES attributes:nil error:nil];
+
+    NSString *archivePath = [archiveDirectoryPath stringByAppendingPathComponent:@"test_log_store"];
+    NSURL *archiveURL = [NSURL fileURLWithPath:archivePath];
+
+    ARKLogStore *const logStore = [[ARKLogStore alloc] initWithPersistedLogFileURL:archiveURL maximumLogMessageCount:100];
+    XCTAssertEqualObjects(logStore.persistedLogFileURL, archiveURL);
+}
+
 - (void)test_observeLogMessage_logsLogToLogStore;
 {
     [self.logStore observeLogMessage:[[ARKLogMessage alloc] initWithText:@"Logging Enabled" image:nil type:ARKLogTypeDefault parameters:@{} userInfo:nil]];
