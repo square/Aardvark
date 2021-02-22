@@ -37,7 +37,7 @@ ARKLogWithParameters(@{ @"user_name": [user name] }, @"Said hello to user");
 If your app is architected around dependency injection, you can inject an `ARKLogDistributor` instead of using the global logging functions.
 
 ```swift
-func sayHello(to name: String, on logDistributor: ARKLogDistributor) {
+func sayHelloToPerson(named name: String, on logDistributor: ARKLogDistributor) {
     logDistributor.log("Hello \(name)")
 }
 ```
