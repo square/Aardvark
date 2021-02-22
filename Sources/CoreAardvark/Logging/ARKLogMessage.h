@@ -39,11 +39,19 @@
 - (nonnull instancetype)init NS_UNAVAILABLE;
 + (nonnull instancetype)new NS_UNAVAILABLE;
 
+/// The date at which the message was logged.
 @property (nonnull, nonatomic, copy, readonly) NSDate *date;
+
+/// The text of the log message.
 @property (nonnull, nonatomic, copy, readonly) NSString *text;
+
+/// An optional image associated with the log message. Typically used for logs of type `ARKLogTypeScreenshot`.
 @property (nullable, nonatomic, readonly) UIImage *image;
+
+/// The type of the log message.
 @property (nonatomic, readonly) ARKLogType type;
 
+/// Details about the log message. This data is persisted.
 @property (nonnull, nonatomic, copy, readonly) NSDictionary<NSString *, NSString *> *parameters;
 
 /// Arbitrary information that can be used by ARKLogObserver objects. This data is not persisted.
