@@ -59,7 +59,7 @@ To facilitate filtering, log messages contain a `userInfo` dictionary. Unlike th
 log("Loaded data", userInfo: ["category": "Core Data"])
 ```
 
-For example, we can set up a second log store for all of the logs related to Core Data that is separate from the rest of the logs. This could be helpful if our Core Data implementation consistently runs tasks in the background and creates noise in the main log store.
+For example, we can set up a second log store for all of the logs related to Core Data and filter these logs out of the main log store. This could be helpful if our Core Data implementation consistently runs tasks in the background and creates noise in the main log store.
 
 ```swift
 // Create the new log store.
