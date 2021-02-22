@@ -34,7 +34,7 @@ ARKLogWithParameters(@{ @"user_name": [user name] }, @"Said hello to user");
 
 ## Using Dependency Injection
 
-If your app is architected around dependency injection, you can inject an `ARKLogDistributor` instead of using the global logging functions.
+If you prefer to use dependency injection rather than global functions, you can inject an `ARKLogDistributor` to your logging call sites.
 
 ```swift
 func sayHelloToPerson(named name: String, on logDistributor: ARKLogDistributor) {
