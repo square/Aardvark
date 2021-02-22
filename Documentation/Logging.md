@@ -22,7 +22,7 @@ ARKLogDistributor.default().defaultLogStore.printsLogsToConsole = true
 
 ## Adding Parameters
 
-A recommended pattern for logging is to keep your log messages simple and attach details of the log in parameters. You can attach key/value pairs of strings to your log messages to provide this extra detail, while keeping your logs easy to scan through in a list of messages.
+A recommended pattern for logging is to keep your log messages simple and attach details of the log in the `parameters` field. You can attach key/value pairs of strings to your log messages to provide further debugging data, while keeping your logs easy to scan through in a list of messages.
 
 ```swift
 log("Said hello to user", parameters: ["user_name": user.name])
