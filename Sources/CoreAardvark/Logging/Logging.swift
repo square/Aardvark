@@ -24,7 +24,7 @@ import Foundation
 /// `.screenshot`.
 /// - parameter parameters: A set of key/value pairs that is persisted with the log message.
 /// - parameter userInfo: A set of key/value pairs that is _not_ persisted with the log message, but rather can be
-/// used to control how the message is processed by various log observers.
+///                                      used to control how the message is processed by various log observers.
 public func log(
     _ text: String,
     type: ARKLogType = .`default`,
