@@ -75,7 +75,7 @@ ARKLogDistributor.default().add(coreDataLogStore)
 
 // Set the default log store to exclude log related to Core Data.
 ARKLogDistributor.default().defaultLogStore.logFilterBlock = { message in
-    return message.userInfo?["category"] != "Core Data"
+    return !coreDataLogStore.logFilterBlock(message)
 }
 ```
 
