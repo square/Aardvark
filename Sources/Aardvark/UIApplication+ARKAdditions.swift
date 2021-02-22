@@ -16,104 +16,124 @@
 
 import Foundation
 
-
 extension UIApplication {
+
     @nonobjc
     private static var observingKeyWindowNotifications = false
 
     @nonobjc
     private static let bugReporterToGestureRecognizerMap: NSMapTable<ARKBugReporter, UIGestureRecognizer> = NSMapTable.strongToStrongObjects()
-    
-    /// Creates and returns a gesture recognizer that when triggered will call [bugReporter composeBugReport]. Must be called from the main thread.
+
+    /// Creates and returns a gesture recognizer that when triggered will call `bugReporter.composeBugReport()`. Must be
+    /// called from the main thread.
     @nonobjc
-    func add<GestureRecognizer: UIGestureRecognizer>(bugReporter: ARKBugReporter, triggeringGestureRecognizerClass: GestureRecognizer.Type) -> GestureRecognizer? {
+    func add<GestureRecognizer: UIGestureRecognizer>(
+        bugReporter: ARKBugReporter,
+        triggeringGestureRecognizerClass: GestureRecognizer.Type
+    ) -> GestureRecognizer? {
         guard Thread.isMainThread else {
             noteImproperAPIUse("Must call \(#function) from the main thread!")
             return nil
         }
-        
+
         guard bugReporter.logStores().count > 0 else {
             noteImproperAPIUse("Attempting to add a bug reporter without a log store!")
             return nil
         }
-        
-        let bugReportingGestureRecognizer = triggeringGestureRecognizerClass.init(target: self, action: #selector(UIApplication.didFire(bugReportGestureRecognizer:)))
+
+        let bugReportingGestureRecognizer = triggeringGestureRecognizerClass.init(
+            target: self,
+            action: #selector(UIApplication.didFire(bugReportGestureRecognizer:))
+        )
         keyWindow?.addGestureRecognizer(bugReportingGestureRecognizer)
-        
+
         UIApplication.bugReporterToGestureRecognizerMap.setObject(bugReportingGestureRecognizer, forKey: bugReporter)
-        
+
         if !UIApplication.observingKeyWindowNotifications {
-            NotificationCenter.default.addObserver(self, selector: #selector(windowDidBecomeKey(notification:)), name: UIWindow.didBecomeKeyNotification, object: nil)
-            NotificationCenter.default.addObserver(self, selector: #selector(windowDidResignKey(notification:)), name: UIWindow.didResignKeyNotification, object: nil)
-            
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(windowDidBecomeKey(notification:)),
+                name: UIWindow.didBecomeKeyNotification,
+                object: nil
+            )
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(windowDidResignKey(notification:)),
+                name: UIWindow.didResignKeyNotification,
+                object: nil
+            )
+
             UIApplication.observingKeyWindowNotifications = true
         }
-        
+
         return bugReportingGestureRecognizer
     }
 
     @nonobjc
     func remove(bugReporter: ARKBugReporter) {
-        if let gestureRecognizerToRemove: UIGestureRecognizer = UIApplication.bugReporterToGestureRecognizerMap.object(forKey: bugReporter) {
+        if let gestureRecognizerToRemove = UIApplication.bugReporterToGestureRecognizerMap.object(forKey: bugReporter) {
             gestureRecognizerToRemove.view?.removeGestureRecognizer(gestureRecognizerToRemove)
-            
+
             UIApplication.bugReporterToGestureRecognizerMap.removeObject(forKey: bugReporter)
         }
     }
-    
+
     @objc(ARK_didFireBugReportGestureRecognizer:)
     private func didFire(bugReportGestureRecognizer: UIGestureRecognizer) {
         guard bugReportGestureRecognizer.state == .began else {
             return
         }
-        
+
         var bugReporters = [ARKBugReporter]()
         for bugReporter in UIApplication.bugReporterToGestureRecognizerMap.keyEnumerator() {
-            guard let bugReporter = bugReporter as? ARKBugReporter, !bugReporters.contains(where: { $0 === bugReporter }) else {
+            guard
+                let bugReporter = bugReporter as? ARKBugReporter,
+                !bugReporters.contains(where: { $0 === bugReporter })
+            else {
                 continue
             }
-            
+
             let recognizerForBugReport = UIApplication.bugReporterToGestureRecognizerMap.object(forKey: bugReporter)
             if recognizerForBugReport === bugReportGestureRecognizer {
                 bugReporters.append(bugReporter)
             }
         }
-        
+
         guard bugReporters.count > 0 else {
             return
         }
-        
+
         for bugReporter in bugReporters {
             bugReporter.composeBugReport()
         }
     }
-    
+
     @objc(ARK_windowDidBecomeKeyNotification:)
     private func windowDidBecomeKey(notification: Notification) {
         guard let window = notification.object as? UIWindow else {
             return
         }
-        guard let gestureRecognizersEnumerator = UIApplication.bugReporterToGestureRecognizerMap.objectEnumerator() else {
+        guard let enumerator = UIApplication.bugReporterToGestureRecognizerMap.objectEnumerator() else {
             return
         }
-        
-        for gestureRecognizer in gestureRecognizersEnumerator {
+
+        for gestureRecognizer in enumerator {
             if let gestureRecognizer = gestureRecognizer as? UIGestureRecognizer {
                 window.addGestureRecognizer(gestureRecognizer)
             }
         }
     }
-    
+
     @objc(ARK_windowDidResignKeyNotification:)
     private func windowDidResignKey(notification: Notification) {
         guard let window = notification.object as? UIWindow else {
             return
         }
-        guard let gestureRecognizersEnumerator = UIApplication.bugReporterToGestureRecognizerMap.objectEnumerator() else {
+        guard let enumerator = UIApplication.bugReporterToGestureRecognizerMap.objectEnumerator() else {
             return
         }
-        
-        for gestureRecognizer in gestureRecognizersEnumerator {
+
+        for gestureRecognizer in enumerator {
             if let gestureRecognizer = gestureRecognizer as? UIGestureRecognizer {
                 window.removeGestureRecognizer(gestureRecognizer)
             }
