@@ -53,7 +53,7 @@ func sayHello(to name: String, on logDistributor: ARKLogDistributor) {
 
 By default, all logs are sent to the same log file. If you would prefer to send some logs into separate log files, you can add multiple log stores to the distributor and set each store's `logFilterBlock` to filter incoming logs.
 
-To facilitate this, log messages contain a `userInfo` dictionary that can be used to control behavior in log observers. Unlike the `parameters` dictionary, the `userInfo` is not persisted with the log message.
+To facilitate filtering, log messages contain a `userInfo` dictionary. Unlike the `parameters` dictionary, the `userInfo` is not persisted with the log message.
 
 ```swift
 log("Loaded data", userInfo: ["category": "Core Data"])
