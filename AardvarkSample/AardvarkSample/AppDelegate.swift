@@ -1,8 +1,4 @@
 //
-//  AppDelegate.swift
-//  AardvarkSample
-//
-//  Created by Dan Federman on 9/21/16.
 //  Copyright © 2016 Square, Inc. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +15,7 @@
 //
 
 import Aardvark
+import AardvarkMailUI
 import CoreAardvark
 import UIKit
 

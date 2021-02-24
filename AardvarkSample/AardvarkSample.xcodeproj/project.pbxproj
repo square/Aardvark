@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D046DD8254D5ACB0045A06C /* AardvarkLoggingUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D046DD5254D5ACB0045A06C /* AardvarkLoggingUI.framework */; };
+		3D046DD9254D5ACB0045A06C /* AardvarkLoggingUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D046DD5254D5ACB0045A06C /* AardvarkLoggingUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3DA5BF6C2559D38F00B6D148 /* AardvarkMailUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA5BF692559D38F00B6D148 /* AardvarkMailUI.framework */; };
+		3DA5BF6D2559D38F00B6D148 /* AardvarkMailUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA5BF692559D38F00B6D148 /* AardvarkMailUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EA3C1DDD1D93696D0048C4CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3C1DDC1D93696D0048C4CD /* AppDelegate.swift */; };
 		EA3C1DE21D93696D0048C4CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1DE01D93696D0048C4CD /* Main.storyboard */; };
 		EA3C1DE41D93696D0048C4CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1DE31D93696D0048C4CD /* Assets.xcassets */; };
@@ -20,6 +24,48 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3D046DD4254D5ACB0045A06C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D046DB4254D5A840045A06C;
+			remoteInfo = AardvarkLoggingUI;
+		};
+		3D046DD6254D5ACB0045A06C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D046DBC254D5A840045A06C;
+			remoteInfo = AardvarkLoggingUITests;
+		};
+		3DA5BF682559D38F00B6D148 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3DA5BF372556602000B6D148;
+			remoteInfo = AardvarkMailUI;
+		};
+		3DA5BF6A2559D38F00B6D148 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3DA5BF3F2556602100B6D148;
+			remoteInfo = AardvarkMailUITests;
+		};
+		3DA5BF6E2559D3A300B6D148 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3D046DB3254D5A840045A06C;
+			remoteInfo = AardvarkLoggingUI;
+		};
+		3DA5BF702559D3A700B6D148 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DA5BF362556602000B6D148;
+			remoteInfo = AardvarkMailUI;
+		};
 		EA3C1E201D9375060048C4CD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EA3C1E191D9375060048C4CD /* Aardvark.xcodeproj */;
@@ -72,7 +118,9 @@
 			dstSubfolderSpec = 10;
 			files = (
 				EA3C1E291D93750D0048C4CD /* Aardvark.framework in Embed Frameworks */,
+				3DA5BF6D2559D38F00B6D148 /* AardvarkMailUI.framework in Embed Frameworks */,
 				EA3C1E2D1D93750D0048C4CD /* CoreAardvark.framework in Embed Frameworks */,
+				3D046DD9254D5ACB0045A06C /* AardvarkLoggingUI.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -99,7 +147,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA3C1E281D93750D0048C4CD /* Aardvark.framework in Frameworks */,
+				3DA5BF6C2559D38F00B6D148 /* AardvarkMailUI.framework in Frameworks */,
 				EA3C1E2C1D93750D0048C4CD /* CoreAardvark.framework in Frameworks */,
+				3D046DD8254D5ACB0045A06C /* AardvarkLoggingUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +204,10 @@
 				EA3C1E231D9375060048C4CD /* AardvarkTests.xctest */,
 				EA3C1E251D9375060048C4CD /* CoreAardvark.framework */,
 				EA3C1E271D9375060048C4CD /* CoreAardvarkTests.xctest */,
+				3D046DD5254D5ACB0045A06C /* AardvarkLoggingUI.framework */,
+				3D046DD7254D5ACB0045A06C /* AardvarkLoggingUITests.xctest */,
+				3DA5BF692559D38F00B6D148 /* AardvarkMailUI.framework */,
+				3DA5BF6B2559D38F00B6D148 /* AardvarkMailUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -173,8 +227,10 @@
 			buildRules = (
 			);
 			dependencies = (
-				EA3C1E2B1D93750D0048C4CD /* PBXTargetDependency */,
 				EA3C1E2F1D93750D0048C4CD /* PBXTargetDependency */,
+				EA3C1E2B1D93750D0048C4CD /* PBXTargetDependency */,
+				3DA5BF6F2559D3A300B6D148 /* PBXTargetDependency */,
+				3DA5BF712559D3A700B6D148 /* PBXTargetDependency */,
 			);
 			name = AardvarkSample;
 			productName = AardvarkSample;
@@ -188,7 +244,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "Square, Inc.";
 				TargetAttributes = {
 					EA3C1DD81D93696D0048C4CD = {
@@ -201,10 +257,9 @@
 			};
 			buildConfigurationList = EA3C1DD41D93696D0048C4CD /* Build configuration list for PBXProject "AardvarkSample" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -225,6 +280,34 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		3D046DD5254D5ACB0045A06C /* AardvarkLoggingUI.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AardvarkLoggingUI.framework;
+			remoteRef = 3D046DD4254D5ACB0045A06C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3D046DD7254D5ACB0045A06C /* AardvarkLoggingUITests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AardvarkLoggingUITests.xctest;
+			remoteRef = 3D046DD6254D5ACB0045A06C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3DA5BF692559D38F00B6D148 /* AardvarkMailUI.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AardvarkMailUI.framework;
+			remoteRef = 3DA5BF682559D38F00B6D148 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3DA5BF6B2559D38F00B6D148 /* AardvarkMailUITests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AardvarkMailUITests.xctest;
+			remoteRef = 3DA5BF6A2559D38F00B6D148 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		EA3C1E211D9375060048C4CD /* Aardvark.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -282,6 +365,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3DA5BF6F2559D3A300B6D148 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AardvarkLoggingUI;
+			targetProxy = 3DA5BF6E2559D3A300B6D148 /* PBXContainerItemProxy */;
+		};
+		3DA5BF712559D3A700B6D148 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AardvarkMailUI;
+			targetProxy = 3DA5BF702559D3A700B6D148 /* PBXContainerItemProxy */;
+		};
 		EA3C1E2B1D93750D0048C4CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Aardvark;
@@ -339,6 +432,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -364,12 +458,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -398,6 +493,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -417,10 +513,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -433,6 +530,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = AardvarkSample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -450,6 +548,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = AardvarkSample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.squareup.AardvarkSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";

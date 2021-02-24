@@ -15,11 +15,13 @@ jobs:
         uses: actions/checkout@v2
       - name: Bundle Install
         run: bundle install
-      - name: Build and Test Framework
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
+      - name: Build and Test Frameworks
         run: |
           xcodebuild \
             -project Aardvark.xcodeproj \
-            -scheme Aardvark \
+            -scheme "All Frameworks" \
             -sdk iphonesimulator \
             -destination "platform=iOS Simulator,name=iPhone 11 Pro" \
             test
@@ -36,13 +38,18 @@ jobs:
   pod-lint:
     name: Pod Lint
     runs-on: macOS-latest
-    strategy:
-      matrix:
-        pod: ['Aardvark', 'CoreAardvark']
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Bundle Install
         run: bundle install
-      - name: Lint Podspec
-        run: bundle exec pod lib lint --verbose --fail-fast ${{ matrix.pod }}.podspec
+      - name: Select Xcode Version
+        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
+      - name: Lint CoreAardvark Podspec
+        run: bundle exec pod lib lint --verbose --fail-fast CoreAardvark.podspec
+      - name: Lint Aardvark Podspec
+        run: bundle exec pod lib lint --verbose --fail-fast Aardvark.podspec --include-podspecs=CoreAardvark.podspec
+      - name: Lint AardvarkLoggingUI Podspec
+        run: bundle exec pod lib lint --verbose --fail-fast AardvarkLoggingUI.podspec --include-podspecs=CoreAardvark.podspec
+      - name: Lint AardvarkMailUI Podspec
+        run: bundle exec pod lib lint --verbose --fail-fast AardvarkMailUI.podspec --include-podspecs="{CoreAardvark,Aardvark}.podspec"

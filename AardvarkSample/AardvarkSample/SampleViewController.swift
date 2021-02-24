@@ -1,8 +1,4 @@
 //
-//  SampleViewController.swift
-//  AardvarkSample
-//
-//  Created by Dan Federman on 9/21/16.
 //  Copyright © 2016 Square, Inc. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,6 +15,7 @@
 //
 
 import Aardvark
+import AardvarkLoggingUI
 import CoreAardvark
 import UIKit
 
@@ -144,19 +141,19 @@ class SampleViewController : UIViewController {
     }
     
     @IBAction func blueButtonPressed(_ sender: AnyObject) {
-        log("Blue")
+        log("Tapped button", parameters: ["color": "blue"])
     }
     
     @IBAction func redButtonPressed(_ sender: AnyObject) {
-        log("Red")
+        log("Tapped button", parameters: ["color": "red"])
     }
     
     @IBAction func greenButtonPressed(_ sender: AnyObject) {
-        log("Green")
+        log("Tapped button", parameters: ["color": "green"])
     }
     
     @IBAction func yellowButtonPressed(_ sender: AnyObject) {
-        log("Yellow")
+        log("Tapped button", parameters: ["color": "yellow"])
     }
     
     // MARK: – Private Methods
