@@ -133,7 +133,10 @@
 
     NSMutableString *parametersString = [NSMutableString new];
     for (NSString *key in [[self.parameters allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
-        [parametersString appendFormat:@"\n - %@: %@", key, self.parameters[key]];
+        NSString *const indentation = [@"" stringByPaddingToLength:(key.length + 5) withString:@" " startingAtIndex:0];
+        NSString *const indentedValue = [self.parameters[key] stringByReplacingOccurrencesOfString:@"\n"
+                                                                                        withString:[NSString stringWithFormat:@"\n%@", indentation]];
+        [parametersString appendFormat:@"\n - %@: %@", key, indentedValue];
     }
 
     return [NSString stringWithFormat:@"[%@] %@%@", dateString, self.text, parametersString];
