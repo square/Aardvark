@@ -92,6 +92,7 @@ Want to log with Aardvark but don’t want to use Aardvark’s bug reporting too
 ## Extensions
 
 * [AardvarkReveal](https://github.com/cashapp/AardvarkReveal) provides components for generating a bug report attachment containing a [Reveal](https://revealapp.com/) file, which can be a huge help in debugging UI issues.
+* [AardvarkCrashReport](https://github.com/cashapp/AardvarkCrashReport) provides components for generating a bug report attachment containing a crash report, either from a crash on the prior app launch or a live report showing the current state of each thread.
 
 ## Requirements
 
