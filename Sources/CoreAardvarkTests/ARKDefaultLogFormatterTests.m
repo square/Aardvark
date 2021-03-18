@@ -290,6 +290,31 @@
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
+- (void)test_formattedLogMessage_multilineParameter;
+{
+    ARKLogWithParameters(@{@"Some Key": @"This is a\nparameter value that\nspans multiple lines"}, @"Test message");
+
+    XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
+    [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
+        XCTAssertEqual(logMessages.count, 1);
+
+        ARKLogMessage *const firstLogMessage = logMessages.firstObject;
+        NSString *const formattedSingleLog = [self.logFormatter formattedLogMessage:firstLogMessage];
+        NSArray<NSString *> *const splitLog = [formattedSingleLog componentsSeparatedByString:@"\n"];
+        NSString *const formattedParameters = [[splitLog subarrayWithRange:NSMakeRange(1, splitLog.count - 1)] componentsJoinedByString:@"\n"];
+
+        NSString *const expectedFormattedParameters = @" - Some Key: This is a\n"
+                                                       "             parameter value that\n"
+                                                       "             spans multiple lines";
+
+        XCTAssert([formattedParameters isEqualToString:expectedFormattedParameters]);
+
+        [expectation fulfill];
+    }];
+
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+}
+
 #pragma mark - Performance Tests
 
 - (void)test_formattedLogMessage_performance;
