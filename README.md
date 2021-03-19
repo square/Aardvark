@@ -89,6 +89,10 @@ Want to change how logs are formatted? Or use different log files for different 
 
 Want to log with Aardvark but don’t want to use Aardvark’s bug reporting tool? Change the dependency to be on `Aardvark` and skip step #2 in the Getting Started guide.
 
+## Extensions
+
+* [AardvarkReveal](https://github.com/cashapp/AardvarkReveal) provides components for generating a bug report attachment containing a [Reveal](https://revealapp.com/) file, which can be a huge help in debugging UI issues.
+
 ## Requirements
 
 * Xcode 11.0 or later
