@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '12.0'
 
   s.source_files = 'Sources/AardvarkMailUI/**/*.{h,m,swift}'
-  s.private_header_files = 'Sources/AardvarkMailUI/**/*_Testing.h', 'Sources/AardvarkMailUI/Private Categories/*.h'
+  s.private_header_files = 'Sources/AardvarkMailUI/**/*_Testing.h', 'Sources/AardvarkMailUI/PrivateCategories/*.h'
 
   s.dependency 'Aardvark', '~> 4.0'
 end
