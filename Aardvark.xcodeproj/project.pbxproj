@@ -311,7 +311,7 @@
 			isa = PBXGroup;
 			children = (
 				EAD1446119E21F9D0065A1FF /* Log Viewing */,
-				3D046E09255134360045A06C /* Private Categories */,
+				3D046E09255134360045A06C /* PrivateCategories */,
 				3D046DB6254D5A840045A06C /* AardvarkLoggingUI.h */,
 				3D046DB7254D5A840045A06C /* Info.plist */,
 			);
@@ -329,13 +329,13 @@
 			path = Sources/AardvarkLoggingUITests;
 			sourceTree = "<group>";
 		};
-		3D046E09255134360045A06C /* Private Categories */ = {
+		3D046E09255134360045A06C /* PrivateCategories */ = {
 			isa = PBXGroup;
 			children = (
 				3D404FA72556410500CE4B83 /* UIActivityViewController+ARKAdditions.h */,
 				3D404FA82556410500CE4B83 /* UIActivityViewController+ARKAdditions.m */,
 			);
-			path = "Private Categories";
+			path = " Categories";
 			sourceTree = "<group>";
 		};
 		3D404FAC2556434700CE4B83 /* CoreAardvarkTests */ = {
@@ -494,7 +494,7 @@
 			path = "Log Viewing";
 			sourceTree = "<group>";
 		};
-		EAF2FE761D47151E00931663 /* Private Categories */ = {
+		EAF2FE761D47151E00931663 /* PrivateCategories */ = {
 			isa = PBXGroup;
 			children = (
 				EA98B8BA1D4BE82100B3A390 /* NSFileHandle+ARKAdditions.h */,
@@ -502,14 +502,14 @@
 				EA98B8BC1D4BE82100B3A390 /* NSURL+ARKAdditions.h */,
 				EA98B8BD1D4BE82100B3A390 /* NSURL+ARKAdditions.m */,
 			);
-			path = "Private Categories";
+			path = "PrivateCategories";
 			sourceTree = "<group>";
 		};
 		EAF2FE831D47168100931663 /* CoreAardvark */ = {
 			isa = PBXGroup;
 			children = (
 				EAF2FED71D47198900931663 /* Logging */,
-				EAF2FE761D47151E00931663 /* Private Categories */,
+				EAF2FE761D47151E00931663 /* PrivateCategories */,
 				EAF2FEBB1D47179900931663 /* Other */,
 			);
 			name = CoreAardvark;
