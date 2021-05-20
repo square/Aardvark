@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'Aardvark'
-  s.version  = '3.4.5'
+  s.version  = '3.4.6'
   s.license  = 'Apache License, Version 2.0'
   s.summary  = 'Aardvark is a library that makes it dead simple to create actionable bug reports.'
   s.homepage = 'https://github.com/square/Aardvark'
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.swift_version = '4.0'
   s.ios.deployment_target = '8.0'
   s.source_files = 'Aardvark/**/*.{h,m,swift}'
-  s.private_header_files = 'Aardvark/*_Testing.h', 'Aardvark/Private Categories/*.h'
+  s.private_header_files = 'Aardvark/*_Testing.h', 'Aardvark/PrivateCategories/*.h'
   
   s.dependency 'CoreAardvark', '~> 2.0'
 end
