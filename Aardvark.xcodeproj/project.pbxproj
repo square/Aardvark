@@ -310,7 +310,7 @@
 		3D046DB5254D5A840045A06C /* AardvarkLoggingUI */ = {
 			isa = PBXGroup;
 			children = (
-				EAD1446119E21F9D0065A1FF /* Log Viewing */,
+				EAD1446119E21F9D0065A1FF /* LogViewing */,
 				3D046E09255134360045A06C /* PrivateCategories */,
 				3D046DB6254D5A840045A06C /* AardvarkLoggingUI.h */,
 				3D046DB7254D5A840045A06C /* Info.plist */,
@@ -480,7 +480,7 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		EAD1446119E21F9D0065A1FF /* Log Viewing */ = {
+		EAD1446119E21F9D0065A1FF /* LogViewing */ = {
 			isa = PBXGroup;
 			children = (
 				EA98B8FD1D4BEAFC00B3A390 /* ARKIndividualLogViewController.h */,
@@ -491,7 +491,7 @@
 				EA98B9021D4BEAFC00B3A390 /* ARKScreenshotViewController.h */,
 				EA98B9031D4BEAFC00B3A390 /* ARKScreenshotViewController.m */,
 			);
-			path = "Log Viewing";
+			path = "LogViewing";
 			sourceTree = "<group>";
 		};
 		EAF2FE761D47151E00931663 /* PrivateCategories */ = {
