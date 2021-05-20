@@ -335,7 +335,7 @@
 				3D404FA72556410500CE4B83 /* UIActivityViewController+ARKAdditions.h */,
 				3D404FA82556410500CE4B83 /* UIActivityViewController+ARKAdditions.m */,
 			);
-			path = " Categories";
+			path = "PrivateCategories";
 			sourceTree = "<group>";
 		};
 		3D404FAC2556434700CE4B83 /* CoreAardvarkTests */ = {
