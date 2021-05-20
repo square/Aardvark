@@ -439,7 +439,7 @@
 				EA98B9601D4BFA1700B3A390 /* Aardvark.swift */,
 				EA98B94B1D4BF00600B3A390 /* UIApplication+ARKAdditions.swift */,
 				EAD1443819E074570065A1FF /* Logging */,
-				EAD1443919E074630065A1FF /* Bug Reporting */,
+				EAD1443919E074630065A1FF /* BugReporting */,
 				EAD1444219E0848B0065A1FF /* Other */,
 			);
 			name = Aardvark;
@@ -457,7 +457,7 @@
 			path = Logging;
 			sourceTree = "<group>";
 		};
-		EAD1443919E074630065A1FF /* Bug Reporting */ = {
+		EAD1443919E074630065A1FF /* BugReporting */ = {
 			isa = PBXGroup;
 			children = (
 				EA98B9301D4BEB6E00B3A390 /* ARKBugReporter.h */,
@@ -467,7 +467,7 @@
 				3D81BC4325C50A9800E61A49 /* ViewHierarchyAttachmentGenerator.swift */,
 				3D81BC5725C54A0800E61A49 /* LogStoreAttachmentGenerator.swift */,
 			);
-			path = "Bug Reporting";
+			path = "BugReporting";
 			sourceTree = "<group>";
 		};
 		EAD1444219E0848B0065A1FF /* Other */ = {
