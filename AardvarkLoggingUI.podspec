@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '12.0'
 
   s.source_files = 'Sources/AardvarkLoggingUI/**/*.{h,m,swift}'
-  s.private_header_files = 'Sources/AardvarkLoggingUI/**/*_Testing.h', 'Sources/AardvarkLoggingUI/Private Categories/*.h'
+  s.private_header_files = 'Sources/AardvarkLoggingUI/**/*_Testing.h', 'Sources/AardvarkLoggingUI/PrivateCategories/*.h'
 
   s.dependency 'CoreAardvark', '~> 3.0'
 end

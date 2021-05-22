@@ -310,8 +310,8 @@
 		3D046DB5254D5A840045A06C /* AardvarkLoggingUI */ = {
 			isa = PBXGroup;
 			children = (
-				EAD1446119E21F9D0065A1FF /* Log Viewing */,
-				3D046E09255134360045A06C /* Private Categories */,
+				EAD1446119E21F9D0065A1FF /* LogViewing */,
+				3D046E09255134360045A06C /* PrivateCategories */,
 				3D046DB6254D5A840045A06C /* AardvarkLoggingUI.h */,
 				3D046DB7254D5A840045A06C /* Info.plist */,
 			);
@@ -329,13 +329,13 @@
 			path = Sources/AardvarkLoggingUITests;
 			sourceTree = "<group>";
 		};
-		3D046E09255134360045A06C /* Private Categories */ = {
+		3D046E09255134360045A06C /* PrivateCategories */ = {
 			isa = PBXGroup;
 			children = (
 				3D404FA72556410500CE4B83 /* UIActivityViewController+ARKAdditions.h */,
 				3D404FA82556410500CE4B83 /* UIActivityViewController+ARKAdditions.m */,
 			);
-			path = "Private Categories";
+			path = "PrivateCategories";
 			sourceTree = "<group>";
 		};
 		3D404FAC2556434700CE4B83 /* CoreAardvarkTests */ = {
@@ -439,7 +439,7 @@
 				EA98B9601D4BFA1700B3A390 /* Aardvark.swift */,
 				EA98B94B1D4BF00600B3A390 /* UIApplication+ARKAdditions.swift */,
 				EAD1443819E074570065A1FF /* Logging */,
-				EAD1443919E074630065A1FF /* Bug Reporting */,
+				EAD1443919E074630065A1FF /* BugReporting */,
 				EAD1444219E0848B0065A1FF /* Other */,
 			);
 			name = Aardvark;
@@ -457,7 +457,7 @@
 			path = Logging;
 			sourceTree = "<group>";
 		};
-		EAD1443919E074630065A1FF /* Bug Reporting */ = {
+		EAD1443919E074630065A1FF /* BugReporting */ = {
 			isa = PBXGroup;
 			children = (
 				EA98B9301D4BEB6E00B3A390 /* ARKBugReporter.h */,
@@ -467,7 +467,7 @@
 				3D81BC4325C50A9800E61A49 /* ViewHierarchyAttachmentGenerator.swift */,
 				3D81BC5725C54A0800E61A49 /* LogStoreAttachmentGenerator.swift */,
 			);
-			path = "Bug Reporting";
+			path = "BugReporting";
 			sourceTree = "<group>";
 		};
 		EAD1444219E0848B0065A1FF /* Other */ = {
@@ -480,7 +480,7 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		EAD1446119E21F9D0065A1FF /* Log Viewing */ = {
+		EAD1446119E21F9D0065A1FF /* LogViewing */ = {
 			isa = PBXGroup;
 			children = (
 				EA98B8FD1D4BEAFC00B3A390 /* ARKIndividualLogViewController.h */,
@@ -491,10 +491,10 @@
 				EA98B9021D4BEAFC00B3A390 /* ARKScreenshotViewController.h */,
 				EA98B9031D4BEAFC00B3A390 /* ARKScreenshotViewController.m */,
 			);
-			path = "Log Viewing";
+			path = "LogViewing";
 			sourceTree = "<group>";
 		};
-		EAF2FE761D47151E00931663 /* Private Categories */ = {
+		EAF2FE761D47151E00931663 /* PrivateCategories */ = {
 			isa = PBXGroup;
 			children = (
 				EA98B8BA1D4BE82100B3A390 /* NSFileHandle+ARKAdditions.h */,
@@ -502,14 +502,14 @@
 				EA98B8BC1D4BE82100B3A390 /* NSURL+ARKAdditions.h */,
 				EA98B8BD1D4BE82100B3A390 /* NSURL+ARKAdditions.m */,
 			);
-			path = "Private Categories";
+			path = "PrivateCategories";
 			sourceTree = "<group>";
 		};
 		EAF2FE831D47168100931663 /* CoreAardvark */ = {
 			isa = PBXGroup;
 			children = (
 				EAF2FED71D47198900931663 /* Logging */,
-				EAF2FE761D47151E00931663 /* Private Categories */,
+				EAF2FE761D47151E00931663 /* PrivateCategories */,
 				EAF2FEBB1D47179900931663 /* Other */,
 			);
 			name = CoreAardvark;
