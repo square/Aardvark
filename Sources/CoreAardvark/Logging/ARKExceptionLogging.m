@@ -33,7 +33,7 @@ NSMutableArray *_Nullable ARKUncaughtExceptionLogDistributors = nil;
 ARKUncaughtExceptionHandlerGetter ARKGetUncaughtExceptionHandler = NSGetUncaughtExceptionHandler;
 ARKUncaughtExceptionHandlerSetter ARKSetUncaughtExceptionHandler = NSSetUncaughtExceptionHandler;
 
-NSLock * ARKGetUncaughtExceptionLogDistributorsLock()
+NSLock * ARKGetUncaughtExceptionLogDistributorsLock(void)
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
