@@ -33,7 +33,11 @@ NSMutableArray *_Nullable ARKUncaughtExceptionLogDistributors = nil;
 ARKUncaughtExceptionHandlerGetter ARKGetUncaughtExceptionHandler = NSGetUncaughtExceptionHandler;
 ARKUncaughtExceptionHandlerSetter ARKSetUncaughtExceptionHandler = NSSetUncaughtExceptionHandler;
 
+#if __clang_major__ >= 12
 NSLock * ARKGetUncaughtExceptionLogDistributorsLock(void)
+#else
+NSLock * ARKGetUncaughtExceptionLogDistributorsLock()
+#endif
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
