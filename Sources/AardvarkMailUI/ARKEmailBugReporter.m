@@ -19,7 +19,6 @@
 @import MessageUI;
 
 #import "ARKEmailBugReporter.h"
-#import "ARKEmailBugReporter_Testing.h"
 
 #import "ARKEmailBugReportConfiguration.h"
 #import "ARKEmailBugReportConfiguration_Protected.h"
@@ -171,17 +170,19 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 #pragma mark - Public Methods
 
-- (ARKBugReportAttachment *)attachmentForLogMessages:(NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(NSString *)logStoreName;
+- (ARKBugReportAttachment *)attachmentForLogMessages:(NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(NSString *)logStoreName numberOfErrorsInHighlights:(NSUInteger)numberOfErrorsInHighlights;
 {
     return [ARKLogStoreAttachmentGenerator attachmentForLogMessages:logMessages
                                                   usingLogFormatter:self.logFormatter
-                                                       logStoreName:logStoreName];
+                                                       logStoreName:logStoreName
+                                         numberOfErrorsInHighlights:numberOfErrorsInHighlights];
 }
 
-- (void)attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName completion:(ARKAttachmentGeneratorCompletionBlock _Nonnull)completionHandler {
+- (void)attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName numberOfErrorsInHighlights:(NSUInteger)numberOfErrorsInHighlights completion:(ARKAttachmentGeneratorCompletionBlock _Nonnull)completionHandler {
     [ARKLogStoreAttachmentGenerator attachmentForLogMessages:logMessages
                                            usingLogFormatter:self.logFormatter
                                                 logStoreName:logStoreName
+                                  numberOfErrorsInHighlights:numberOfErrorsInHighlights
                                                   completion:^(ARKBugReportAttachment *attachment) {
         dispatch_async(dispatch_get_main_queue(), ^{
             completionHandler(attachment);
@@ -278,12 +279,17 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             [logStoresToLogMessagesMap setObject:logMessages forKey:logStore];
 
             dispatch_group_enter(logStoreRetrievalDispatchGroup);
-            [self attachmentForLogMessages:logMessages inLogStoreNamed:[logStore name] completion:^(ARKBugReportAttachment * _Nullable attachment) {
-                if (attachment != NULL) {
-                    [logStoresToLogMessagesAttachmentMap setObject:attachment forKey:logStore];
-                }
-                dispatch_group_leave(logStoreRetrievalDispatchGroup);
-            }];
+            [self attachmentForLogMessages:logMessages
+                inLogStoreNamed:[logStore name]
+                numberOfErrorsInHighlights:[MFMailComposeViewController canSendMail]
+                    ? self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable
+                    : self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable
+                completion:^(ARKBugReportAttachment * _Nullable attachment) {
+                    if (attachment != NULL) {
+                        [logStoresToLogMessagesAttachmentMap setObject:attachment forKey:logStore];
+                    }
+                    dispatch_group_leave(logStoreRetrievalDispatchGroup);
+                }];
 
             dispatch_group_leave(logStoreRetrievalDispatchGroup);
         }];
@@ -321,20 +327,15 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                                                              fileName:logsAttachment.fileName];
                 }
 
-                NSMutableString *const emailBodyForLogStore = [NSMutableString new];
-                BOOL appendToEmailBody = NO;
+                if (logsAttachment.highlightsSummary.length) {
+                    NSMutableString *const emailBodyForLogStore = [NSMutableString new];
 
-                if (logStore.name.length) {
-                    [emailBodyForLogStore appendFormat:@"%@:\n", logStore.name];
-                }
+                    if (logStore.name.length) {
+                        [emailBodyForLogStore appendFormat:@"%@:\n", logStore.name];
+                    }
 
-                NSString *const recentErrorLogs = [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable];
-                if (recentErrorLogs.length) {
-                    [emailBodyForLogStore appendFormat:@"%@\n", recentErrorLogs];
-                    appendToEmailBody = YES;
-                }
+                    [emailBodyForLogStore appendFormat:@"%@\n", logsAttachment.highlightsSummary];
 
-                if (appendToEmailBody) {
                     [emailBody appendString:emailBodyForLogStore];
                 }
             }
@@ -348,6 +349,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
             for (ARKBugReportAttachment *attachment in configuration.additionalAttachments) {
                 [self.mailComposeViewController addAttachmentData:attachment.data mimeType:attachment.dataMIMEType fileName:attachment.fileName];
+
+                if (attachment.highlightsSummary.length) {
+                    [emailBody appendFormat:@"\n%@\n", attachment.highlightsSummary];
+                }
             }
 
             [self.mailComposeViewController setMessageBody:emailBody isHTML:NO];
@@ -360,8 +365,11 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             NSMutableString *const emailBody = [self _prefilledEmailBodyWithEmailBodyAdditions:emailBodyAdditions];
             
             for (ARKLogStore *logStore in logStores) {
-                NSArray *const logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
-                [emailBody appendFormat:@"%@\n", [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
+                ARKBugReportAttachment *const logsAttachment = [logStoresToLogMessagesAttachmentMap objectForKey:logStore];
+
+                if (logsAttachment.highlightsSummary.length) {
+                    [emailBody appendFormat:@"%@\n", logsAttachment.highlightsSummary];
+                }
             }
             
             NSURL *const composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:configuration.prefilledEmailSubject body:emailBody];
@@ -418,28 +426,6 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     [prefilledEmailBodyWithEmailBodyAdditions appendString:@"\n"];
 
     return prefilledEmailBodyWithEmailBodyAdditions;
-}
-
-- (NSString *)_recentErrorLogMessagesAsPlainText:(NSArray *)logMessages count:(NSUInteger)errorLogsToInclude;
-{
-    NSMutableString *recentErrorLogs = [NSMutableString new];
-    NSUInteger failuresFound = 0;
-    for (ARKLogMessage *log in [logMessages reverseObjectEnumerator]) {
-        if(log.type == ARKLogTypeError) {
-            [recentErrorLogs appendFormat:@"%@\n", log];
-            
-            if(++failuresFound >= errorLogsToInclude) {
-                break;
-            }
-        }
-    }
-    
-    if (recentErrorLogs.length > 0 ) {
-        // Remove the final newline and create an immutable string.
-        return [recentErrorLogs stringByReplacingCharactersInRange:NSMakeRange(recentErrorLogs.length - 1, 1) withString:@""];
-    } else {
-        return @"";
-    }
 }
 
 - (NSURL *)_emailURLWithRecipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText;

@@ -103,9 +103,9 @@ typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReport
 @property (nonatomic) BOOL attachesViewHierarchyDescription;
 
 /// Returns an attachment containing the log messages. Defaults to a plain text attachment containing each log message formatted using the bug reporter's `logFormatter`.
-- (nullable ARKBugReportAttachment *)attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName __attribute__((deprecated("Use the async version of this method that takes a completion handler: attachmentForLogMessages:inLogStoreNamed:completion: instead.")));
+- (nullable ARKBugReportAttachment *)attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName numberOfErrorsInHighlights:(NSUInteger)numberOfErrorsInHighlights __attribute__((deprecated("Use the async version of this method that takes a completion handler: attachmentForLogMessages:inLogStoreNamed:completion: instead.")));
 
 /// Returns an attachment containing the log messages to a completion handler. Defaults to a plain text attachment containing each log message formatted using the bug reporter's `logFormatter`.
-- (void) attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName completion: (ARKAttachmentGeneratorCompletionBlock _Nonnull) completionHandler;
+- (void) attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName numberOfErrorsInHighlights:(NSUInteger)numberOfErrorsInHighlights completion: (ARKAttachmentGeneratorCompletionBlock _Nonnull) completionHandler;
 
 @end

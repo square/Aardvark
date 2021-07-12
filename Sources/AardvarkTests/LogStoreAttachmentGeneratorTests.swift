@@ -68,6 +68,80 @@ final class LogStoreAttachmentGeneratorTests: XCTestCase {
         )
     }
 
+    func testLogMessageAttachmentHighlightsUseErrorMessages() {
+        let logMessages = [
+            ARKLogMessage(text: "Message A", image: nil, type: .default, parameters: [:], userInfo: nil),
+            ARKLogMessage(text: "Message B", image: nil, type: .error, parameters: [:], userInfo: nil),
+            ARKLogMessage(text: "Message C", image: nil, type: .default, parameters: [:], userInfo: nil),
+            ARKLogMessage(text: "Message D", image: nil, type: .error, parameters: [:], userInfo: nil),
+        ]
+
+        let attachment = LogStoreAttachmentGenerator.attachment(
+            for: logMessages,
+            using: TestFormatter(),
+            logStoreName: nil
+        )
+
+        XCTAssertEqual(
+            attachment?.highlightsSummary,
+            """
+            Message D
+            Message B
+            """
+        )
+    }
+
+    func testLogMessageAttachmentHighlightsCountRespected() {
+        let logMessages = [
+            ARKLogMessage(text: "Message A", image: nil, type: .error, parameters: [:], userInfo: nil),
+            ARKLogMessage(text: "Message B", image: nil, type: .error, parameters: [:], userInfo: nil),
+            ARKLogMessage(text: "Message C", image: nil, type: .error, parameters: [:], userInfo: nil),
+        ]
+
+        let attachment = LogStoreAttachmentGenerator.attachment(
+            for: logMessages,
+            using: TestFormatter(),
+            logStoreName: nil,
+            numberOfErrorsInHighlights: 2
+        )
+
+        XCTAssertEqual(
+            attachment?.highlightsSummary,
+            """
+            Message C
+            Message B
+            """
+        )
+    }
+
+    func testLogMessageAttachmentHighlightsAreNilIfNoErrorLogsPresent() {
+        let logMessages = [
+            ARKLogMessage(text: "Message A", image: nil, type: .default, parameters: [:], userInfo: nil),
+            ARKLogMessage(text: "Message B", image: nil, type: .default, parameters: [:], userInfo: nil),
+            ARKLogMessage(text: "Message C", image: nil, type: .default, parameters: [:], userInfo: nil),
+        ]
+
+        let attachment = LogStoreAttachmentGenerator.attachment(for: logMessages, logStoreName: nil)
+
+        XCTAssertNil(attachment?.highlightsSummary)
+    }
+
+    func testLogMessageAttachmentHighlightsAreNilIfCountIsZero() {
+        let logMessages = [
+            ARKLogMessage(text: "Message A", image: nil, type: .error, parameters: [:], userInfo: nil),
+            ARKLogMessage(text: "Message B", image: nil, type: .error, parameters: [:], userInfo: nil),
+            ARKLogMessage(text: "Message C", image: nil, type: .error, parameters: [:], userInfo: nil),
+        ]
+
+        let attachment = LogStoreAttachmentGenerator.attachment(
+            for: logMessages,
+            logStoreName: nil,
+            numberOfErrorsInHighlights: 0
+        )
+
+        XCTAssertNil(attachment?.highlightsSummary)
+    }
+
     // MARK: - Tests - Screenshot Attachment
 
     func testScreenshotAttachmentName() throws {
