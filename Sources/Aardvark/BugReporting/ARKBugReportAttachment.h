@@ -19,7 +19,14 @@
 
 @interface ARKBugReportAttachment : NSObject
 
-- (nonnull instancetype)initWithFileName:(nonnull NSString *)fileName data:(nonnull NSData *)data dataMIMEType:(nonnull NSString *)dataMIMEType;
+- (nonnull instancetype)initWithFileName:(nonnull NSString *)fileName
+                                    data:(nonnull NSData *)data
+                            dataMIMEType:(nonnull NSString *)dataMIMEType;
+
+- (nonnull instancetype)initWithFileName:(nonnull NSString *)fileName
+                                    data:(nonnull NSData *)data
+                            dataMIMEType:(nonnull NSString *)dataMIMEType
+                       highlightsSummary:(nullable NSString *)highlightsSummary;
 
 - (nonnull instancetype)init NS_UNAVAILABLE;
 + (nonnull instancetype)new NS_UNAVAILABLE;
@@ -32,5 +39,8 @@
 
 /// MIME type of `data` property. MIME types are as specified by the IANA: http://www.iana.org/assignments/media-types/
 @property (nonnull, nonatomic, copy, readonly) NSString *dataMIMEType;
+
+/// A summary of any highlights from the attachment. This summary may be surfaced at the top level of a bug report.
+@property (nullable, nonatomic, copy, readonly) NSString *highlightsSummary;
 
 @end

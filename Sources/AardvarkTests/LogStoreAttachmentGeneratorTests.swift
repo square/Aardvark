@@ -68,6 +68,18 @@ final class LogStoreAttachmentGeneratorTests: XCTestCase {
         )
     }
 
+    func testLogMessageAttachmentHighlightsCountRespected() {
+        // TODO
+    }
+
+    func testLogMessageAttachmentHighlightsAreNilIfNoErrorLogsPresent() {
+        // TODO
+    }
+
+    func testLogMessageAttachmentHighlightsAreNilIfCountIsZero() {
+        // TODO
+    }
+
     // MARK: - Tests - Screenshot Attachment
 
     func testScreenshotAttachmentName() throws {

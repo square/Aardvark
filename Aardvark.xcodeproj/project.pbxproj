@@ -222,7 +222,6 @@
 		EA98B9301D4BEB6E00B3A390 /* ARKBugReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKBugReporter.h; sourceTree = "<group>"; };
 		EA98B9311D4BEB6E00B3A390 /* ARKDefaultLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKDefaultLogFormatter.h; sourceTree = "<group>"; };
 		EA98B9321D4BEB6E00B3A390 /* ARKDefaultLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKDefaultLogFormatter.m; sourceTree = "<group>"; };
-		EA98B9331D4BEB6E00B3A390 /* ARKEmailBugReporter_Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKEmailBugReporter_Testing.h; sourceTree = "<group>"; };
 		EA98B9341D4BEB6E00B3A390 /* ARKEmailBugReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKEmailBugReporter.h; sourceTree = "<group>"; };
 		EA98B9351D4BEB6E00B3A390 /* ARKEmailBugReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKEmailBugReporter.m; sourceTree = "<group>"; };
 		EA98B9361D4BEB6E00B3A390 /* ARKLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKLogFormatter.h; sourceTree = "<group>"; };
@@ -335,7 +334,7 @@
 				3D404FA72556410500CE4B83 /* UIActivityViewController+ARKAdditions.h */,
 				3D404FA82556410500CE4B83 /* UIActivityViewController+ARKAdditions.m */,
 			);
-			path = "PrivateCategories";
+			path = PrivateCategories;
 			sourceTree = "<group>";
 		};
 		3D404FAC2556434700CE4B83 /* CoreAardvarkTests */ = {
@@ -375,7 +374,6 @@
 				3D90DEB720AA9B19006D4924 /* ARKEmailBugReportConfiguration_Protected.h */,
 				3D6E2D0C20868335007B8013 /* ARKEmailBugReportConfiguration.m */,
 				EA98B9341D4BEB6E00B3A390 /* ARKEmailBugReporter.h */,
-				EA98B9331D4BEB6E00B3A390 /* ARKEmailBugReporter_Testing.h */,
 				EA98B9351D4BEB6E00B3A390 /* ARKEmailBugReporter.m */,
 				3DA5BF392556602000B6D148 /* AardvarkMailUI.h */,
 				3DA5BF3A2556602000B6D148 /* Info.plist */,
@@ -467,7 +465,7 @@
 				3D81BC4325C50A9800E61A49 /* ViewHierarchyAttachmentGenerator.swift */,
 				3D81BC5725C54A0800E61A49 /* LogStoreAttachmentGenerator.swift */,
 			);
-			path = "BugReporting";
+			path = BugReporting;
 			sourceTree = "<group>";
 		};
 		EAD1444219E0848B0065A1FF /* Other */ = {
@@ -491,7 +489,7 @@
 				EA98B9021D4BEAFC00B3A390 /* ARKScreenshotViewController.h */,
 				EA98B9031D4BEAFC00B3A390 /* ARKScreenshotViewController.m */,
 			);
-			path = "LogViewing";
+			path = LogViewing;
 			sourceTree = "<group>";
 		};
 		EAF2FE761D47151E00931663 /* PrivateCategories */ = {
@@ -502,7 +500,7 @@
 				EA98B8BC1D4BE82100B3A390 /* NSURL+ARKAdditions.h */,
 				EA98B8BD1D4BE82100B3A390 /* NSURL+ARKAdditions.m */,
 			);
-			path = "PrivateCategories";
+			path = PrivateCategories;
 			sourceTree = "<group>";
 		};
 		EAF2FE831D47168100931663 /* CoreAardvark */ = {
