@@ -43,12 +43,14 @@ public final class LogStoreAttachmentGenerator: NSObject {
     /// - parameter messageFormatter: The formatter used to format messages in the logs attachment.
     /// - parameter includeLatestScreenshot: Whether an attachment should be generated for the last screenshot in the
     /// log store, if one exists.
+    /// - parameter numberOfErrorsInHighlights: The number of errors to include in the highlights for the log store.
     /// - parameter completionQueue: The queue on which the completion should be called.
     /// - parameter completion: The completion to be called once the attachments have been generated.
     public static func attachments(
         for logStore: ARKLogStore,
         messageFormatter: ARKLogFormatter = ARKDefaultLogFormatter(),
         includeLatestScreenshot: Bool,
+        numberOfErrorsInHighlights: Int = 3,
         completionQueue: DispatchQueue,
         completion: @escaping (Attachments) -> Void
     ) {
@@ -63,7 +65,8 @@ public final class LogStoreAttachmentGenerator: NSObject {
             let logsAttachment = attachment(
                 for: logMessages,
                 using: messageFormatter,
-                logStoreName: logStore.name
+                logStoreName: logStore.name,
+                numberOfErrorsInHighlights: numberOfErrorsInHighlights
             )
 
             completionQueue.async {
@@ -107,11 +110,13 @@ public final class LogStoreAttachmentGenerator: NSObject {
     /// - parameter logMessages: The log messages to be included in the attachment.
     /// - parameter logFormatter: The formatter with which to format the log messages.
     /// - parameter logStoreName: The name of the log store from which the logs were collected.
-    @objc(attachmentForLogMessages:usingLogFormatter:logStoreName:)
+    /// - parameter numberOfErrorsInHighlights: The number of errors to include in the highlights for the log store.
+    @objc(attachmentForLogMessages:usingLogFormatter:logStoreName:numberOfErrorsInHighlights:)
     public static func attachment(
         for logMessages: [ARKLogMessage],
         using logFormatter: ARKLogFormatter = ARKDefaultLogFormatter(),
-        logStoreName: String?
+        logStoreName: String?,
+        numberOfErrorsInHighlights: Int = 3
     ) -> ARKBugReportAttachment? {
         guard !logMessages.isEmpty else {
             return nil
@@ -124,10 +129,19 @@ public final class LogStoreAttachmentGenerator: NSObject {
 
         let fileName = logsFileName(for: logStoreName, fileType: "txt")
 
+        let recentErrorSummary = logMessages
+            .reversed()
+            .lazy
+            .filter { $0.type == .error }
+            .prefix(numberOfErrorsInHighlights)
+            .map { $0.text }
+            .joined(separator: "\n")
+
         return ARKBugReportAttachment(
             fileName: fileName,
             data: formattedLogData,
-            dataMIMEType: "text/plain"
+            dataMIMEType: "text/plain",
+            highlightsSummary: recentErrorSummary.isEmpty ? nil : recentErrorSummary
         )
     }
 
