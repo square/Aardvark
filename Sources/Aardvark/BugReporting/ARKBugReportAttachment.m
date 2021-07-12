@@ -21,12 +21,18 @@
 
 - (instancetype)initWithFileName:(NSString *)fileName data:(NSData *)data dataMIMEType:(NSString *)dataMIMEType;
 {
+    return [self initWithFileName:fileName data:data dataMIMEType:dataMIMEType highlightsSummary:nil];
+}
+
+- (instancetype)initWithFileName:(NSString *)fileName data:(NSData *)data dataMIMEType:(NSString *)dataMIMEType highlightsSummary:(nullable NSString *)highlightsSummary;
+{
     self = [super init];
-    
+
     _fileName = [fileName copy];
     _data = [data copy];
     _dataMIMEType = [dataMIMEType copy];
-    
+    _highlightsSummary = [highlightsSummary copy];
+
     return self;
 }
 
