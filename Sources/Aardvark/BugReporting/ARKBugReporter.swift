@@ -26,11 +26,11 @@ import CoreAardvark
 
     /// Add logs from `logStores` to future bug reports.
     @objc(addLogStores:)
-    func add(logStores: [ARKLogStore])
+    func add(_ logStores: [ARKLogStore])
 
     /// Remove logs from `logStores` from future bug reports.
     @objc(removeLogStores:)
-    func remove(logStores: [ARKLogStore])
+    func remove(_ logStores: [ARKLogStore])
 
     /// The log stores used to generate bug reports.
     func logStores() -> [ARKLogStore]
