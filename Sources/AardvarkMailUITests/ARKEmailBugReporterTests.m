@@ -14,6 +14,7 @@
 //  limitations under the License.
 //
 
+@import CoreAardvark;
 @import XCTest;
 
 #import "ARKEmailBugReporter.h"

@@ -17,8 +17,7 @@
 @import MessageUI;
 @import UIKit;
 
-#import <Aardvark/ARKBugReporter.h>
-
+#import <Aardvark/Aardvark-Swift.h>
 
 @class ARKBugReportAttachment;
 @class ARKEmailBugReportConfiguration;

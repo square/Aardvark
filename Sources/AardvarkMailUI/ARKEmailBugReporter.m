@@ -16,7 +16,6 @@
 
 @import MessageUI;
 
-#import <Aardvark/ARKBugReportAttachment.h>
 #import <Aardvark/ARKScreenshotLogging.h>
 #import <CoreAardvark/AardvarkDefines.h>
 #import <CoreAardvark/ARKDefaultLogFormatter.h>
