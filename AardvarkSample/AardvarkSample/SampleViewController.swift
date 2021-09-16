@@ -94,6 +94,8 @@ class SampleViewController : UIViewController {
         } catch let error {
             print(error)
         }
+
+        writeSampleDataToUserDefaults()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -201,4 +203,13 @@ class SampleViewController : UIViewController {
 
         try sampleData.write(to: sampleDirectory.appendingPathComponent("test.txt"))
     }
+
+    private func writeSampleDataToUserDefaults() {
+        let userDefaults = UserDefaults.standard
+
+        userDefaults.set(true, forKey: "com.squareup.AardvarkSample.SampleBooleanKey")
+        userDefaults.set(5, forKey: "com.squareup.AardvarkSample.SampleIntegerKey")
+        userDefaults.set("Testing", forKey: "com.squareup.AardvarkSample.SampleStringKey")
+    }
+
 }
