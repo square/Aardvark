@@ -88,6 +88,12 @@ class SampleViewController : UIViewController {
         
         // Add our log store to the bug reporter.
         bugReporter.add([tapGestureLogStore])
+
+        do {
+            try writeSampleDataToDisk()
+        } catch let error {
+            print(error)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -172,5 +178,27 @@ class SampleViewController : UIViewController {
         }
         
         NSException(name: NSExceptionName.genericException, reason: "Debug Exception", userInfo: nil).raise()
+    }
+
+    private func writeSampleDataToDisk() throws {
+        enum Error: Swift.Error {
+            case missingApplicationSupport
+        }
+
+        let sampleData = "This is a sample text file.".data(using: .utf8)!
+
+        let fileManager = FileManager.default
+        guard
+            let applicationSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+        else {
+            throw Error.missingApplicationSupport
+        }
+
+        let sampleDirectory = applicationSupport.appendingPathComponent("test_files")
+        if !fileManager.fileExists(atPath: sampleDirectory.path) {
+            try fileManager.createDirectory(at: sampleDirectory, withIntermediateDirectories: true, attributes: nil)
+        }
+
+        try sampleData.write(to: sampleDirectory.appendingPathComponent("test.txt"))
     }
 }
