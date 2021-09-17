@@ -72,6 +72,8 @@ public final class FileSystemAttachmentGenerator: NSObject {
         fileSizeFormatter.formattingContext = .listItem
         fileSizeFormatter.isAdaptive = true
 
+        /// The maximum padded file size character length is the longest formatted byte count string (three digit number
+        /// plus " bytes" is nine characters) plus the minimum three spaces of padding between columns.
         let maxPaddedFileSizeCharacterLength = 12
 
         let dateFormatter = ISO8601DateFormatter()
