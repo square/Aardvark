@@ -14,10 +14,9 @@
 //  limitations under the License.
 //
 
+@import Aardvark;
 @import MessageUI;
 @import UIKit;
-
-#import <Aardvark/Aardvark-Swift.h>
 
 @class ARKBugReportAttachment;
 @class ARKEmailBugReportConfiguration;
