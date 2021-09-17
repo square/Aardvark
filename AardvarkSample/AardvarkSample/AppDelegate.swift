@@ -29,8 +29,9 @@ class SampleAppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         // This line is all you'll need to get started.
-        bugReporter = Aardvark.addDefaultBugReportingGestureWithEmailBugReporter(withRecipient: "fake-email@aardvarkbugreporting.src")
-        
+        let bugReporter = Aardvark.addDefaultBugReportingGestureWithEmailBugReporter(withRecipient: "fake-email@aardvarkbugreporting.src")
+        self.bugReporter = bugReporter
+
         // Log all log messages to Crashlytics to help debug crashes.
         ARKLogDistributor.default().add(SampleCrashlyticsLogObserver())
         
@@ -39,6 +40,9 @@ class SampleAppDelegate: UIResponder, UIApplicationDelegate {
         NSSetUncaughtExceptionHandler(existingUncaughtExceptionHandler)
         
         ARKEnableLogOnUncaughtException()
+
+        // You can optionally provide an attachment additions delegate to include custom attachments.
+        bugReporter.emailAttachmentAdditionsDelegate = self
         
         return true
     }
@@ -61,4 +65,25 @@ class SampleAppDelegate: UIResponder, UIApplicationDelegate {
 
 func existingUncaughtExceptionHandler(exception: NSException) {
     print("Existing uncaught exception handler got called for exception: \(exception)")
+}
+
+// MARK: - Attachment Additions
+
+extension SampleAppDelegate: ARKEmailBugReporterEmailAttachmentAdditionsDelegate {
+
+    func emailBugReporter(
+        _ emailBugReporter: ARKEmailBugReporter,
+        shouldIncludeLogStoreInBugReport logStore: ARKLogStore
+    ) -> Bool {
+        return true
+    }
+
+    func additionalEmailAttachments(
+        for emailBugReporter: ARKEmailBugReporter
+    ) -> [ARKBugReportAttachment]? {
+        return [
+            try? FileSystemAttachmentGenerator.attachment(),
+        ].compactMap { $0 }
+    }
+
 }
