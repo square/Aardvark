@@ -36,12 +36,28 @@ public final class FileSystemAttachmentGenerator: NSObject {
             .cachesDirectory,
         ]
     ) throws -> ARKBugReportAttachment {
+        return try attachment(
+            searchPathDirectories: searchPathDirectories,
+            fileManager: FileManager.default,
+            timeZone: .current
+        )
+    }
+
+    // MARK: - Internal Static Methods
+
+    internal static func attachment(
+        searchPathDirectories: [FileManager.SearchPathDirectory] = [
+            .documentDirectory,
+            .applicationSupportDirectory,
+            .cachesDirectory,
+        ],
+        fileManager: FileManaging,
+        timeZone: TimeZone
+    ) throws -> ARKBugReportAttachment {
         enum Error: Swift.Error {
             case missingDocumentDirectory
             case missingVolumeResourceValues
         }
-
-        let fileManager = FileManager.default
 
         let urls = searchPathDirectories.reduce([]) {
             $0 + fileManager.urls(for: $1, in: .userDomainMask)
@@ -77,12 +93,14 @@ public final class FileSystemAttachmentGenerator: NSObject {
         let maxPaddedFileSizeCharacterLength = 12
 
         let dateFormatter = ISO8601DateFormatter()
-        dateFormatter.timeZone = .current
+        dateFormatter.timeZone = timeZone
 
         for directoryURL in urls {
             guard let enumerator = fileManager.enumerator(
                 at: directoryURL,
-                includingPropertiesForKeys: propertyKeys
+                includingPropertiesForKeys: propertyKeys,
+                options: [],
+                errorHandler: nil
             ) else {
                 continue
             }
@@ -135,30 +153,14 @@ public final class FileSystemAttachmentGenerator: NSObject {
             description += "\n"
         }
 
-        let volumeKeys: Set<URLResourceKey> = [
-            .volumeAvailableCapacityKey,
-            .volumeAvailableCapacityForImportantUsageKey,
-            .volumeAvailableCapacityForOpportunisticUsageKey,
-            .volumeTotalCapacityKey,
-        ]
-
-        let resourceValues = try volumeURL.resourceValues(forKeys: volumeKeys)
-
-        guard
-            let availableCapacity = resourceValues.volumeAvailableCapacity,
-            let importantAvailableCapacity = resourceValues.volumeAvailableCapacityForImportantUsage,
-            let opportunisticAvailableCapacity = resourceValues.volumeAvailableCapacityForOpportunisticUsage,
-            let totalCapacity = resourceValues.volumeTotalCapacity
-        else {
-            throw Error.missingVolumeResourceValues
-        }
+        let resourceValues = try fileManager.volumeResourceValues(for: volumeURL)
 
         description += """
 
-            Available Capacity:         \(fileSizeFormatter.string(fromByteCount: Int64(availableCapacity)))
-              for Important Usage:      \(fileSizeFormatter.string(fromByteCount: Int64(importantAvailableCapacity)))
-              for Opportunistic Usage:  \(fileSizeFormatter.string(fromByteCount: Int64(opportunisticAvailableCapacity)))
-            Total Capacity:             \(fileSizeFormatter.string(fromByteCount: Int64(totalCapacity)))
+            Available Capacity:         \(fileSizeFormatter.string(fromByteCount: resourceValues.availableCapacity))
+              for Important Usage:      \(fileSizeFormatter.string(fromByteCount: resourceValues.importantAvailableCapacity))
+              for Opportunistic Usage:  \(fileSizeFormatter.string(fromByteCount: resourceValues.opportunisticAvailableCapacity))
+            Total Capacity:             \(fileSizeFormatter.string(fromByteCount: resourceValues.totalCapacity))
 
             """
 
@@ -215,7 +217,91 @@ public final class FileSystemAttachmentGenerator: NSObject {
             ]
         }
 
+        let unitTestRegex = try NSRegularExpression(
+            pattern: "/Users/([^/]+)/Library/Developer/CoreSimulator/Devices/(\(uuidPattern))/data/tmp"
+        )
+
+        if let match = unitTestRegex.firstMatch(in: path, options: [], range: NSRange(location: 0, length: path.count)) {
+            guard
+                let usernameRange = Range(match.range(at: 1), in: path),
+                let deviceIDRange = Range(match.range(at: 2), in: path)
+            else {
+                return []
+            }
+
+            let username = String(path[usernameRange])
+            let deviceID = String(path[deviceIDRange])
+
+            return [
+                "/Users/\(username)/Library/Developer/CoreSimulator/Devices/\(deviceID)/data/tmp",
+            ]
+        }
+
         return []
+    }
+
+}
+
+// MARK: -
+
+internal struct VolumeResourceValues {
+
+    var availableCapacity: Int64
+
+    var importantAvailableCapacity: Int64
+
+    var opportunisticAvailableCapacity: Int64
+
+    var totalCapacity: Int64
+
+}
+
+internal protocol FileManaging {
+
+    func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL]
+
+    func enumerator(
+        at url: URL,
+        includingPropertiesForKeys keys: [URLResourceKey]?,
+        options mask: FileManager.DirectoryEnumerationOptions,
+        errorHandler handler: ((URL, Error) -> Bool)?
+    ) -> FileManager.DirectoryEnumerator?
+
+    func volumeResourceValues(for url: URL) throws -> VolumeResourceValues
+
+}
+
+extension FileManager: FileManaging {
+
+    func volumeResourceValues(for url: URL) throws -> VolumeResourceValues {
+        enum Error: Swift.Error {
+            case missingResourceValues
+        }
+
+        let volumeKeys: Set<URLResourceKey> = [
+            .volumeAvailableCapacityKey,
+            .volumeAvailableCapacityForImportantUsageKey,
+            .volumeAvailableCapacityForOpportunisticUsageKey,
+            .volumeTotalCapacityKey,
+        ]
+
+        let resourceValues = try url.resourceValues(forKeys: volumeKeys)
+
+        guard
+            let availableCapacity = resourceValues.volumeAvailableCapacity,
+            let importantAvailableCapacity = resourceValues.volumeAvailableCapacityForImportantUsage,
+            let opportunisticAvailableCapacity = resourceValues.volumeAvailableCapacityForOpportunisticUsage,
+            let totalCapacity = resourceValues.volumeTotalCapacity
+        else {
+            throw Error.missingResourceValues
+        }
+
+        return VolumeResourceValues(
+            availableCapacity: Int64(availableCapacity),
+            importantAvailableCapacity: importantAvailableCapacity,
+            opportunisticAvailableCapacity: opportunisticAvailableCapacity,
+            totalCapacity: Int64(totalCapacity)
+        )
     }
 
 }
