@@ -142,6 +142,27 @@ final class LogStoreAttachmentGeneratorTests: XCTestCase {
         XCTAssertNil(attachment?.highlightsSummary)
     }
 
+    func testLogMessageAttachmentHighlightsAreFilteredByAge() {
+        let logMessages = [
+            ARKLogMessage(text: "Message A", image: nil, type: .error, parameters: [:], userInfo: nil, date: Date().addingTimeInterval(-10)),
+            ARKLogMessage(text: "Message B", image: nil, type: .error, parameters: [:], userInfo: nil, date: Date().addingTimeInterval(-80)),
+        ]
+
+        let attachment = LogStoreAttachmentGenerator.attachment(
+            for: logMessages,
+            logStoreName: nil,
+            numberOfErrorsInHighlights: 3,
+            highlightedErrorMaxAge: 60
+        )
+
+        XCTAssertEqual(
+            attachment?.highlightsSummary,
+            """
+            Message A
+            """
+        )
+    }
+
     // MARK: - Tests - Screenshot Attachment
 
     func testScreenshotAttachmentName() throws {

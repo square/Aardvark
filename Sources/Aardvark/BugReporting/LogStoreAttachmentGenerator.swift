@@ -44,6 +44,7 @@ public final class LogStoreAttachmentGenerator: NSObject {
     /// - parameter includeLatestScreenshot: Whether an attachment should be generated for the last screenshot in the
     /// log store, if one exists.
     /// - parameter numberOfErrorsInHighlights: The number of errors to include in the highlights for the log store.
+    /// - parameter highlightedErrorMaxAge: The cutoff for showing recent errors in the highlights. Defaults to 1 hour.
     /// - parameter completionQueue: The queue on which the completion should be called.
     /// - parameter completion: The completion to be called once the attachments have been generated.
     public static func attachments(
@@ -51,6 +52,7 @@ public final class LogStoreAttachmentGenerator: NSObject {
         messageFormatter: ARKLogFormatter = ARKDefaultLogFormatter(),
         includeLatestScreenshot: Bool,
         numberOfErrorsInHighlights: Int = 3,
+        highlightedErrorMaxAge: TimeInterval = 3600,
         completionQueue: DispatchQueue,
         completion: @escaping (Attachments) -> Void
     ) {
@@ -111,12 +113,14 @@ public final class LogStoreAttachmentGenerator: NSObject {
     /// - parameter logFormatter: The formatter with which to format the log messages.
     /// - parameter logStoreName: The name of the log store from which the logs were collected.
     /// - parameter numberOfErrorsInHighlights: The number of errors to include in the highlights for the log store.
-    @objc(attachmentForLogMessages:usingLogFormatter:logStoreName:numberOfErrorsInHighlights:)
+    /// - parameter highlightedErrorMaxAge: The cutoff for showing recent errors in the highlights. Defaults to 1 hour.
+    @objc(attachmentForLogMessages:usingLogFormatter:logStoreName:numberOfErrorsInHighlights:highlightedErrorMaxAge:)
     public static func attachment(
         for logMessages: [ARKLogMessage],
         using logFormatter: ARKLogFormatter = ARKDefaultLogFormatter(),
         logStoreName: String?,
-        numberOfErrorsInHighlights: Int = 3
+        numberOfErrorsInHighlights: Int = 3,
+        highlightedErrorMaxAge: TimeInterval = 3600
     ) -> ARKBugReportAttachment? {
         guard !logMessages.isEmpty else {
             return nil
@@ -129,11 +133,14 @@ public final class LogStoreAttachmentGenerator: NSObject {
 
         let fileName = logsFileName(for: logStoreName, fileType: "txt")
 
+        let now = Date()
+
         let recentErrorSummary = logMessages
             .reversed()
             .lazy
             .filter { $0.type == .error }
             .prefix(numberOfErrorsInHighlights)
+            .filter { now.timeIntervalSince($0.date) <= highlightedErrorMaxAge }
             .map { $0.text }
             .joined(separator: "\n")
 

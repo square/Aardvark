@@ -72,6 +72,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     _logFormatter = [ARKDefaultLogFormatter new];
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable = 3;
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable = 15;
+    _maximumAgeForErrorLogsToIncludeInEmailBody = 3600;
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
     _attachesViewHierarchyDescription = YES;
     
@@ -170,7 +171,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     return [ARKLogStoreAttachmentGenerator attachmentForLogMessages:logMessages
                                                   usingLogFormatter:self.logFormatter
                                                        logStoreName:logStoreName
-                                         numberOfErrorsInHighlights:numberOfErrorsInHighlights];
+                                         numberOfErrorsInHighlights:numberOfErrorsInHighlights
+                                             highlightedErrorMaxAge:self.maximumAgeForErrorLogsToIncludeInEmailBody];
 }
 
 #pragma mark - CAAnimationDelegate
