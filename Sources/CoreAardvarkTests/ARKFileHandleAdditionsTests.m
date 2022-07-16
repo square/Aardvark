@@ -21,6 +21,25 @@
 #import "NSURL+ARKAdditions.h"
 
 
+@interface ARKFileHandle : NSFileHandle
+
+@property (nonatomic, copy) dispatch_block_t writeDataBlock;
+
+@end
+
+@implementation ARKFileHandle
+
+- (void)writeData:(NSData *)data
+{
+    if (self.writeDataBlock != nil) {
+        self.writeDataBlock();
+    } else {
+        [super writeData:data];
+    }
+}
+
+@end
+
 @interface ARKFileHandleAdditionsTests : XCTestCase
 
 @property (nonatomic) NSFileHandle *fileHandle;
@@ -367,6 +386,16 @@
     [self _test_truncateFileWithData:sampleData toOffset:(sampleData.length - 1)];
     [self _test_truncateFileWithData:sampleData toOffset:sampleData.length];
     [self _test_truncateFileWithData:sampleData toOffset:(sampleData.length + 1)];
+}
+
+- (void)test_throwingExceptionDuringWrite_doesNotCrash
+{
+    ARKFileHandle *handle = [[ARKFileHandle alloc] init];
+    handle.writeDataBlock = ^{
+        @throw [NSException exceptionWithName:NSFileHandleOperationException reason:@"out of space" userInfo:nil];
+    };
+    NSData *data = [@"hello" dataUsingEncoding:NSUTF8StringEncoding];
+    [handle ARK_writeDataBlock:data];
 }
 
 #pragma mark - Private Methods
