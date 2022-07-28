@@ -29,7 +29,7 @@
 
 @implementation ARKFileHandle
 
-- (void)writeData:(NSData *)data
+- (void)writeData:(NSData *)data;
 {
     if (self.writeDataBlock != nil) {
         self.writeDataBlock();
@@ -388,7 +388,7 @@
     [self _test_truncateFileWithData:sampleData toOffset:(sampleData.length + 1)];
 }
 
-- (void)test_throwingExceptionDuringWrite_doesNotCrash
+- (void)test_throwingExceptionDuringWrite_doesNotCrash;
 {
     ARKFileHandle *handle = [[ARKFileHandle alloc] init];
     handle.writeDataBlock = ^{
