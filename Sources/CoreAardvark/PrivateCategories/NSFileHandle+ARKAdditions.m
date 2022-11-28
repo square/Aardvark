@@ -42,10 +42,15 @@ typedef unsigned long long ARKFileOffset;
     uint8_t dataLengthBytes[ARKBlockLengthBytes] = { };
     ARKWriteBigEndianBlockLength(dataLengthBytes, 0, dataBlockLength);
     NSData *dataLengthData = [NSData dataWithBytes:dataLengthBytes length:ARKBlockLengthBytes];
-    
+
+    NSMutableData *combinedData = [dataLengthData mutableCopy];
+    [combinedData appendData:dataBlock];
+
+    __weak NSData *weakCombinedData = combinedData;
     @try {
-        [self writeData:dataLengthData];
-        [self writeData:dataBlock];
+        @autoreleasepool {
+            [self writeData:weakCombinedData];
+        }
     } @catch (NSException *exception) {
         NSLog(@"ERROR: -[%@ %@] Unable to write data block (%@ bytes) to disk",
               NSStringFromClass([self class]), NSStringFromSelector(_cmd),
