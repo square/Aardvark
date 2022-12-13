@@ -9,7 +9,7 @@ on:
 jobs:
   xcode-build:
     name: Xcode Build
-    runs-on: macOS-latest
+    runs-on: macOS-11
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -37,7 +37,7 @@ jobs:
             build
   pod-lint:
     name: Pod Lint
-    runs-on: macOS-latest
+    runs-on: macOS-11
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
