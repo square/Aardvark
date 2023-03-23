@@ -47,6 +47,7 @@
 
 @end
 
+typedef void (^ARKAttachmentGeneratorCompletionBlock)(ARKBugReportAttachment * _Nullable attachment);
 
 typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReportConfiguration *_Nullable configuration);
 
@@ -101,6 +102,9 @@ typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReport
 @property (nonatomic) BOOL attachesViewHierarchyDescription;
 
 /// Returns an attachment containing the log messages. Defaults to a plain text attachment containing each log message formatted using the bug reporter's `logFormatter`.
-- (nullable ARKBugReportAttachment *)attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName;
+- (nullable ARKBugReportAttachment *)attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName __attribute__((deprecated("Use the async version of this method that takes a completion handler: attachmentForLogMessages:inLogStoreNamed:completion: instead.")));
+
+/// Returns an attachment containing the log messages to a completion handler. Defaults to a plain text attachment containing each log message formatted using the bug reporter's `logFormatter`.
+- (void) attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName completion: (ARKAttachmentGeneratorCompletionBlock _Nonnull) completionHandler;
 
 @end
