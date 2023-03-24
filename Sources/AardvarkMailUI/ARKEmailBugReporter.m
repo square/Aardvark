@@ -24,6 +24,7 @@
 #import "ARKEmailBugReportConfiguration.h"
 #import "ARKEmailBugReportConfiguration_Protected.h"
 
+#import <Aardvark/Aardvark-Swift.h>
 
 NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
@@ -173,6 +174,17 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                                                        logStoreName:logStoreName];
 }
 
+- (void)attachmentForLogMessages:(nonnull NSArray<ARKLogMessage *> *)logMessages inLogStoreNamed:(nonnull NSString *)logStoreName completion:(ARKAttachmentGeneratorCompletionBlock _Nonnull)completionHandler {
+    [ARKLogStoreAttachmentGenerator attachmentForLogMessages:logMessages
+                                           usingLogFormatter:self.logFormatter
+                                                logStoreName:logStoreName
+                                                  completion:^(ARKBugReportAttachment *attachment) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionHandler(attachment);
+        });
+    }];
+}
+
 #pragma mark - CAAnimationDelegate
 
 - (void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished;
@@ -251,6 +263,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (void)_createBugReportWithConfiguration:(ARKEmailBugReportConfiguration *)configuration;
 {
     NSMapTable *logStoresToLogMessagesMap = [NSMapTable new];
+    NSMapTable *logStoresToLogMessagesAttachmentMap = [NSMapTable new];
     NSDictionary *emailBodyAdditions = [self.emailBodyAdditionsDelegate emailBodyAdditionsForEmailBugReporter:self];
     
     dispatch_group_t logStoreRetrievalDispatchGroup = dispatch_group_create();
@@ -261,6 +274,15 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         dispatch_group_enter(logStoreRetrievalDispatchGroup);
         [logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
             [logStoresToLogMessagesMap setObject:logMessages forKey:logStore];
+
+            dispatch_group_enter(logStoreRetrievalDispatchGroup);
+            [self attachmentForLogMessages:logMessages inLogStoreNamed:[logStore name] completion:^(ARKBugReportAttachment * _Nullable attachment) {
+                if (attachment != NULL) {
+                    [logStoresToLogMessagesAttachmentMap setObject:attachment forKey:logStore];
+                }
+                dispatch_group_leave(logStoreRetrievalDispatchGroup);
+            }];
+
             dispatch_group_leave(logStoreRetrievalDispatchGroup);
         }];
     }
@@ -289,7 +311,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                     }
                 }
 
-                ARKBugReportAttachment *const logsAttachment = [self attachmentForLogMessages:logMessages inLogStoreNamed:[logStore name]];
+                ARKBugReportAttachment *logsAttachment = [logStoresToLogMessagesAttachmentMap objectForKey:logStore];
 
                 if (logsAttachment != nil) {
                     [self.mailComposeViewController addAttachmentData:logsAttachment.data

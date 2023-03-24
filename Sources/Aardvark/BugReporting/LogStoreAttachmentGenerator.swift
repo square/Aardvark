@@ -131,6 +131,48 @@ public final class LogStoreAttachmentGenerator: NSObject {
         )
     }
 
+    /// Generates an attachment containing the log messages formatted using the specified formatter and return the results asynchronously via a completion handler.
+    ///
+    ///
+    /// - parameter logMessages: The log messages to be included in the attachment.
+    /// - parameter logFormatter: The formatter with which to format the log messages.
+    /// - parameter logStoreName: The name of the log store from which the logs were collected.
+    /// - parameter completion: A completion handler that retuns void, and is passed an optional attachment.
+    @objc(attachmentForLogMessages:usingLogFormatter:logStoreName:completion:)
+    public static func attachment(
+        for logMessages: [ARKLogMessage],
+        using logFormatter: ARKLogFormatter = ARKDefaultLogFormatter(),
+        logStoreName: String?,
+        completion: @escaping @convention(block)(ARKBugReportAttachment?) -> Void
+    ) -> Void {
+        guard !logMessages.isEmpty else {
+            DispatchQueue.main.async {
+                completion(nil)
+            }
+            return
+        }
+
+        DispatchQueue.global(qos: .userInitiated).async {
+            let formattedLogData = logMessages
+                .map(logFormatter.formattedLogMessage(_:))
+                .joined(separator: "\n")
+                .data(using: .utf8)!
+
+            let fileName = logsFileName(for: logStoreName, fileType: "txt")
+
+            let attachment = ARKBugReportAttachment(
+                fileName: fileName,
+                data: formattedLogData,
+                dataMIMEType: "text/plain"
+            )
+
+            DispatchQueue.main.async {
+                completion(attachment)
+            }
+        }
+    }
+
+
     // MARK: - Private Static Methods
 
     private static func screenshotFileName(for logStoreName: String?) -> String {
