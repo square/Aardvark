@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AardvarkMailUI'
-  s.version  = '1.0.0'
+  s.version  = '1.1'
   s.license  = 'Apache License, Version 2.0'
   s.summary  = 'Aardvark components for submitting a bug report via an email composer.'
   s.homepage = 'https://github.com/square/Aardvark'
@@ -13,5 +13,5 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/AardvarkMailUI/**/*.{h,m,swift}'
   s.private_header_files = 'Sources/AardvarkMailUI/**/*_Testing.h', 'Sources/AardvarkMailUI/PrivateCategories/*.h'
 
-  s.dependency 'Aardvark', '~> 4.0'
+  s.dependency 'Aardvark', '~> 4.1.0'
 end
