@@ -9,21 +9,21 @@ on:
 jobs:
   xcode-build:
     name: Xcode Build
-    runs-on: macOS-11
+    runs-on: macOS-12
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_13.1.app/Contents/Developer
       - name: Build and Test Frameworks
         run: |
           xcodebuild \
             -project Aardvark.xcodeproj \
             -scheme "All Frameworks" \
             -sdk iphonesimulator \
-            -destination "platform=iOS Simulator,name=iPhone 11 Pro" \
+            -destination "platform=iOS Simulator,name=iPhone 13 Pro" \
             test
       - name: Build Sample App
         run: |
@@ -44,7 +44,7 @@ jobs:
       - name: Bundle Install
         run: bundle install
       - name: Select Xcode Version
-        run: sudo xcode-select --switch /Applications/Xcode_11.7.app/Contents/Developer
+        run: sudo xcode-select --switch /Applications/Xcode_13.1.app/Contents/Developer
       - name: Lint CoreAardvark Podspec
         run: bundle exec pod lib lint --verbose --fail-fast CoreAardvark.podspec
       - name: Lint Aardvark Podspec
