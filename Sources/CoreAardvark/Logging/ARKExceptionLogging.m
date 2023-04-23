@@ -81,7 +81,7 @@ void ARKHandleUncaughtException(NSException *_Nonnull exception)
     }
 }
 
-void ARKEnableLogOnUncaughtException()
+void ARKEnableLogOnUncaughtException(void)
 {
     ARKEnableLogOnUncaughtExceptionToLogDistributor([ARKLogDistributor defaultDistributor]);
 }
@@ -105,7 +105,7 @@ void ARKEnableLogOnUncaughtExceptionToLogDistributor(ARKLogDistributor *_Nonnull
     [logDistributorsLock unlock];
 }
 
-void ARKDisableLogOnUncaughtException()
+void ARKDisableLogOnUncaughtException(void)
 {
     ARKDisableLogOnUncaughtExceptionToLogDistributor([ARKLogDistributor defaultDistributor]);
 }
