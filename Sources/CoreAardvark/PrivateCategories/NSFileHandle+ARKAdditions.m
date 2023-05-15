@@ -64,10 +64,12 @@ typedef unsigned long long ARKFileOffset;
 
 - (void)ARK_writeDataBlock:(NSData *)dataBlock;
 {
-    bool hasEncounteredException = atomic_load(&__ARKHasEncounteredDiskSizeException);
     bool preventWritesAfterException = atomic_load(&__ARKPreventsWritesAfterException);
-    if (hasEncounteredException && preventWritesAfterException) {
-        return;
+    if (preventWritesAfterException) {
+        bool hasEncounteredException = atomic_load(&__ARKHasEncounteredDiskSizeException);
+        if (hasEncounteredException) {
+            return;
+        }
     }
 
     NSUInteger dataBlockLength = dataBlock.length;
