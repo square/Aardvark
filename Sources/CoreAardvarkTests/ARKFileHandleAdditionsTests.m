@@ -106,6 +106,8 @@
     [self.fileHandle closeFile];
     self.fileHandle = nil;
     
+    [NSFileHandle ARK_setPreventWritesAfterException:NO];
+
     [super tearDown];
 }
 
@@ -396,6 +398,54 @@
     };
     NSData *data = [@"hello" dataUsingEncoding:NSUTF8StringEncoding];
     [handle ARK_writeDataBlock:data];
+}
+
+- (void)test_throwingExceptionDuringWrite_preventsSubsequentWrites;
+{
+    [ARKFileHandle ARK_setPreventWritesAfterException:YES];
+
+    XCTestExpectation *expectation = [self expectationWithDescription:@"data was written"];
+    ARKFileHandle *handle = [[ARKFileHandle alloc] init];
+
+    __block BOOL hasWrittenDataAtLeastOnce = NO;
+    handle.writeDataBlock = ^{
+        [expectation fulfill];
+
+        if (hasWrittenDataAtLeastOnce) {
+            @throw [NSException exceptionWithName:NSFileHandleOperationException reason:@"out of space" userInfo:nil];
+        } else {
+            hasWrittenDataAtLeastOnce = YES;
+        }
+    };
+
+    NSData *data = [@"hello" dataUsingEncoding:NSUTF8StringEncoding];
+    [handle ARK_writeDataBlock:data];
+    [handle ARK_writeDataBlock:data];
+    [handle ARK_writeDataBlock:data];
+
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+
+    XCTAssertTrue(hasWrittenDataAtLeastOnce);
+}
+
+- (void)test_throwingExceptionDuringWrite_doesNotPreventSubsequentWrites_whenNotEnabled;
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"data was written"];
+    expectation.expectedFulfillmentCount = 3;
+
+    ARKFileHandle *handle = [[ARKFileHandle alloc] init];
+    handle.writeDataBlock = ^{
+        [expectation fulfill];
+
+        @throw [NSException exceptionWithName:NSFileHandleOperationException reason:@"out of space" userInfo:nil];
+    };
+
+    NSData *data = [@"hello" dataUsingEncoding:NSUTF8StringEncoding];
+    [handle ARK_writeDataBlock:data];
+    [handle ARK_writeDataBlock:data];
+    [handle ARK_writeDataBlock:data];
+
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 #pragma mark - Private Methods

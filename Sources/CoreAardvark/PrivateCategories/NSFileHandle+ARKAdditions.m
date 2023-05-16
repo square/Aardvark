@@ -18,8 +18,22 @@
 
 #import "AardvarkDefines.h"
 
+#import <stdatomic.h>
+#import <stdbool.h>
+
 
 NSUInteger const ARKInvalidDataBlockLength = NSUIntegerMax;
+
+
+// If any thread hits an exception, stop all future logging to all threads:
+// 1. @throw'n exceptions are in Objective-C are not expected to be recoverable;
+//    it is preferred to halt all action that could result in further bad behavior.
+// 2. Any exception caught by an @catch block will leak its contents, and
+//    leaking memory every time we fail to log (for example: due to being out
+//    of disk space) is almost as bad as crashing.
+static _Atomic bool __ARKHasEncounteredDiskSizeException = false;
+static _Atomic bool __ARKPreventsWritesAfterException = false;
+
 
 /// Type convenience.
 typedef unsigned long long ARKFileOffset;
@@ -32,8 +46,32 @@ typedef unsigned long long ARKFileOffset;
 
 @implementation NSFileHandle (ARKAdditions)
 
++ (void)ARK_setPreventWritesAfterException:(BOOL)preventWritesAfterException
+{
+    // convert from ObjC BOOL (a `char` on some platforms) to stdbool
+    // see: Special Considerations on https://developer.apple.com/documentation/objectivec/bool
+    bool stdboolPreventWritesAfterException = !!preventWritesAfterException;
+    atomic_store(&__ARKPreventsWritesAfterException, stdboolPreventWritesAfterException);
+
+    if (!stdboolPreventWritesAfterException) {
+        // if we are re-enabling logging, reset state that could prevent writes,
+        // in case we previously encountered an error
+        atomic_store(&__ARKHasEncounteredDiskSizeException, false);
+    }
+}
+
+#pragma mark -
+
 - (void)ARK_writeDataBlock:(NSData *)dataBlock;
 {
+    bool preventWritesAfterException = atomic_load(&__ARKPreventsWritesAfterException);
+    if (preventWritesAfterException) {
+        bool hasEncounteredException = atomic_load(&__ARKHasEncounteredDiskSizeException);
+        if (hasEncounteredException) {
+            return;
+        }
+    }
+
     NSUInteger dataBlockLength = dataBlock.length;
     
     ARKCheckCondition(dataBlockLength > 0, , @"Can't write data block %@", dataBlock);
@@ -47,9 +85,13 @@ typedef unsigned long long ARKFileOffset;
         [self writeData:dataLengthData];
         [self writeData:dataBlock];
     } @catch (NSException *exception) {
-        NSLog(@"ERROR: -[%@ %@] Unable to write data block (%@ bytes) to disk",
+        NSLog(@"ERROR: -[%@ %@] Unable to write data block (%@ bytes) to disk: %@",
               NSStringFromClass([self class]), NSStringFromSelector(_cmd),
-              @(dataBlockLength));
+              @(dataBlockLength), exception);
+
+        if ([exception.name isEqualToString:NSFileHandleOperationException]) {
+            atomic_store(&__ARKHasEncounteredDiskSizeException, true);
+        }
     }
 }
 
