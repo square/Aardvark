@@ -96,9 +96,9 @@ Want to log with Aardvark but don’t want to use Aardvark’s bug reporting too
 
 ## Requirements
 
-* Xcode 11.0 or later
-* iOS 12.0 or later
-* watchOS 4.0 or later
+* Xcode 14.0 or later
+* iOS 14.0 or later
+* watchOS 7.0 or later
 
 ## Contributing
 
