@@ -113,7 +113,11 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         ARKLogScreenshot();
         
         // Flash the screen to simulate a screenshot being taken.
-        UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+        UIWindow *keyWindow = [ARKEmailBugReporter _keyWindow];
+        if (keyWindow == nil) {
+            return;
+        }
+
         self.screenFlashView = [[UIView alloc] initWithFrame:keyWindow.frame];
         self.screenFlashView.layer.opacity = 0.0f;
         self.screenFlashView.layer.backgroundColor = [[UIColor whiteColor] CGColor];
@@ -209,12 +213,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (UIWindow *)emailComposeWindow;
 {
     if (!_emailComposeWindow) {
-        if (@available(iOS 13.0, *)) {
-            UIWindowScene *activeWindowScene = [[self class] _activeWindowScene];
-            if (activeWindowScene != nil) {
-                _emailComposeWindow = [[UIWindow alloc] initWithWindowScene:activeWindowScene];
-                return _emailComposeWindow;
-            }
+        UIWindowScene *activeWindowScene = [[self class] _activeWindowScene];
+        if (activeWindowScene != nil) {
+            _emailComposeWindow = [[UIWindow alloc] initWithWindowScene:activeWindowScene];
+            return _emailComposeWindow;
         }
 
         _emailComposeWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -374,8 +376,8 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 - (void)_showEmailComposeWindow;
 {
-    self.previousKeyWindow = [UIApplication sharedApplication].keyWindow;
-    
+    self.previousKeyWindow = [ARKEmailBugReporter _keyWindow];
+
     [self.mailComposeViewController beginAppearanceTransition:YES animated:YES];
     
     self.emailComposeWindow.rootViewController = self.mailComposeViewController;
@@ -481,12 +483,28 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 #pragma mark - Private Static Methods
 
-+ (UIWindowScene *)_activeWindowScene API_AVAILABLE(ios(13.0));
++ (UIWindowScene *)_activeWindowScene;
 {
     NSSet<UIScene *> *scenes = [[UIApplication sharedApplication] connectedScenes];
     for (UIScene *scene in scenes) {
         if ([scene isKindOfClass:[UIWindowScene class]] && scene.activationState == UISceneActivationStateForegroundActive) {
             return (UIWindowScene *)scene;
+        }
+    }
+    return nil;
+}
+
++ (UIWindow * _Nullable)_keyWindow;
+{
+    NSSet<UIScene *> *scenes = [[UIApplication sharedApplication] connectedScenes];
+    for (UIScene *scene in scenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]]) {
+            NSArray<UIWindow *> *windows = [(UIWindowScene *)scene windows];
+            for (UIWindow *window in windows) {
+                if (window.isKeyWindow) {
+                    return window;
+                }
+            }
         }
     }
     return nil;
@@ -535,7 +553,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         [self _configureAlertTextfield:textField];
     }];
     
-    UIViewController *viewControllerToPresentAlertController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *viewControllerToPresentAlertController = [ARKEmailBugReporter _keyWindow].rootViewController;
     while (viewControllerToPresentAlertController.presentedViewController != nil) {
         viewControllerToPresentAlertController = viewControllerToPresentAlertController.presentedViewController;
     }
@@ -550,7 +568,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     ARKInvisibleView *invisibleView = [ARKInvisibleView new];
     invisibleView.layer.opacity = 0.0;
-    [[UIApplication sharedApplication].keyWindow addSubview:invisibleView];
+    [[ARKEmailBugReporter _keyWindow] addSubview:invisibleView];
     [invisibleView becomeFirstResponder];
     [invisibleView removeFromSuperview];
 }

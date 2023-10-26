@@ -41,6 +41,10 @@ extension UIApplication {
             return nil
         }
 
+        let keyWindow = connectedScenes
+            .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
+            .last { $0.isKeyWindow }
+
         let bugReportingGestureRecognizer = triggeringGestureRecognizerClass.init(
             target: self,
             action: #selector(UIApplication.didFire(bugReportGestureRecognizer:))
