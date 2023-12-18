@@ -1,5 +1,5 @@
 //
-//  Copyright 2021 Square, Inc.
+//  Copyright 2023 Block, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,25 +16,33 @@
 
 import Foundation
 
-@objc(ARKUserDefaultsAttachmentGenerator)
-public final class UserDefaultsAttachmentGenerator: NSObject {
+@objc(ARKDictionaryrAttachmentGenerator)
+public final class DictionaryAttachmentGenerator: NSObject {
 
-    /// Generates an attachment containing a representation of the data in the specified user defaults store.
+    /// Generates a plist attachment containing key-value pairs.
     ///
-    /// - parameter userDefaults: The user defaults store from which to pull data.
+    /// - parameter keyValueStore: A dictionary representing the key-value store from which the attachment will be created.
+    /// - parameter includedKeys: An optional list of keys. If provided, only the key-value pairs with keys in this list will be included in the attachment. If not, all key-value pairs from the `keyValueStore` will be included.
     /// - parameter fileName: An optional file name for the attachment, without the file extension.
     public static func attachment(
-        for userDefaults: UserDefaults = .standard,
-        named fileName: String? = nil
+        for keyValueStore: [String: Any],
+        includedKeys keys: [String]? = nil,
+        named fileName: String
     ) throws -> ARKBugReportAttachment {
-        let userDefaultsDictionary = userDefaults.dictionaryRepresentation()
+        let plistDictionary: [String: Any]
+        if let keys = keys {
+            // If a list of keys was provided, filter the dictionary to only include those keys.
+            plistDictionary = keyValueStore.filter { keys.contains($0.key) }
+        } else {
+            plistDictionary = keyValueStore
+        }
 
         // Write the dictionary to disk in order to get a Plist representation.
         let temporaryURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
-        try (userDefaultsDictionary as NSDictionary).write(to: temporaryURL)
+        try (plistDictionary as NSDictionary).write(to: temporaryURL)
 
         return ARKBugReportAttachment(
-            fileName: (fileName ?? "user_defaults") + ".plist",
+            fileName: "\(fileName).plist",
             data: try Data(contentsOf: temporaryURL),
             dataMIMEType: "text/xml"
         )

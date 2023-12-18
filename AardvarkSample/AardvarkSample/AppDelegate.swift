@@ -83,7 +83,11 @@ extension SampleAppDelegate: ARKEmailBugReporterEmailAttachmentAdditionsDelegate
     ) -> [ARKBugReportAttachment]? {
         return [
             try? FileSystemAttachmentGenerator.attachment(),
-            try? UserDefaultsAttachmentGenerator.attachment(),
+            try? DictionaryAttachmentGenerator.attachment(
+                for: UserDefaults.standard.dictionaryRepresentation(),
+                includedKeys: SampleUserDefaultsKeys.allCases.map { $0.rawValue },
+                named: "user_defaults"
+            )
         ].compactMap { $0 }
     }
 

@@ -11,6 +11,7 @@
 		3D046DD9254D5ACB0045A06C /* AardvarkLoggingUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3D046DD5254D5ACB0045A06C /* AardvarkLoggingUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3DA5BF6C2559D38F00B6D148 /* AardvarkMailUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA5BF692559D38F00B6D148 /* AardvarkMailUI.framework */; };
 		3DA5BF6D2559D38F00B6D148 /* AardvarkMailUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA5BF692559D38F00B6D148 /* AardvarkMailUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		BD1CA8D32B30EFC7007A0FBF /* SampleUserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1CA8D22B30EFC7007A0FBF /* SampleUserDefaultsKeys.swift */; };
 		EA3C1DDD1D93696D0048C4CD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3C1DDC1D93696D0048C4CD /* AppDelegate.swift */; };
 		EA3C1DE21D93696D0048C4CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1DE01D93696D0048C4CD /* Main.storyboard */; };
 		EA3C1DE41D93696D0048C4CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EA3C1DE31D93696D0048C4CD /* Assets.xcassets */; };
@@ -128,6 +129,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BD1CA8D22B30EFC7007A0FBF /* SampleUserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleUserDefaultsKeys.swift; sourceTree = "<group>"; };
 		EA3C1DD91D93696D0048C4CD /* AardvarkSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AardvarkSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA3C1DDC1D93696D0048C4CD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EA3C1DE11D93696D0048C4CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				EA3C1E071D936A1C0048C4CD /* LaunchScreen.xib */,
 				EA3C1DE81D93696D0048C4CD /* Info.plist */,
 				EA3C1E0A1D936B7B0048C4CD /* SampleViewController.swift */,
+				BD1CA8D22B30EFC7007A0FBF /* SampleUserDefaultsKeys.swift */,
 				EA3C1E121D93744A0048C4CD /* SampleCrashlyticsLogObserver.h */,
 				EA3C1E131D93744A0048C4CD /* SampleCrashlyticsLogObserver.m */,
 			);
@@ -356,6 +359,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD1CA8D32B30EFC7007A0FBF /* SampleUserDefaultsKeys.swift in Sources */,
 				EA3C1E141D93744A0048C4CD /* SampleCrashlyticsLogObserver.m in Sources */,
 				EA3C1DDD1D93696D0048C4CD /* AppDelegate.swift in Sources */,
 				EA3C1E0B1D936B7B0048C4CD /* SampleViewController.swift in Sources */,
