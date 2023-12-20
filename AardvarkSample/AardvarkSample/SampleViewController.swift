@@ -207,9 +207,9 @@ class SampleViewController : UIViewController {
     private func writeSampleDataToUserDefaults() {
         let userDefaults = UserDefaults.standard
 
-        userDefaults.set(true, forKey: "com.squareup.AardvarkSample.SampleBooleanKey")
-        userDefaults.set(5, forKey: "com.squareup.AardvarkSample.SampleIntegerKey")
-        userDefaults.set("Testing", forKey: "com.squareup.AardvarkSample.SampleStringKey")
+        userDefaults.set(true, forKey: SampleUserDefaultsKeys.boolean.rawValue)
+        userDefaults.set(5, forKey: SampleUserDefaultsKeys.integer.rawValue)
+        userDefaults.set("Testing", forKey: SampleUserDefaultsKeys.string.rawValue)
     }
 
 }
