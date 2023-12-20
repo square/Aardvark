@@ -184,6 +184,7 @@
 		4551A3071BDAF93A00F216D0 /* ARKScreenshotLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ARKScreenshotLogging.h; sourceTree = "<group>"; };
 		4551A3081BDAF93A00F216D0 /* ARKScreenshotLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKScreenshotLogging.m; sourceTree = "<group>"; };
 		BDC3E4A62B30F29500766280 /* DictionaryAttachmentGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryAttachmentGenerator.swift; sourceTree = "<group>"; };
+		BDB50C1E2B2B72F500C134FC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Aardvark/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D04D47EC1AB8A0BA00A342E9 /* ARKDataArchiveTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKDataArchiveTests.m; sourceTree = "<group>"; };
 		D04D48041AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKFileHandleAdditionsTests.m; sourceTree = "<group>"; };
 		EA09D3C41A2E6D2F004C1125 /* ARKDefineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKDefineTests.m; sourceTree = "<group>"; };
@@ -481,6 +482,7 @@
 			children = (
 				EAD1442419E073FB0065A1FF /* Aardvark.h */,
 				EA90BF9F1D49570F00BA9640 /* Info.plist */,
+				BDB50C1E2B2B72F500C134FC /* PrivacyInfo.xcprivacy */,
 			);
 			name = Other;
 			path = ..;
