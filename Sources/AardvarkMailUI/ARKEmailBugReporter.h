@@ -22,6 +22,7 @@
 @class ARKEmailBugReportConfiguration;
 @class ARKEmailBugReporter;
 @class ARKLogStore;
+@protocol ARKBugReporter;
 @protocol ARKLogFormatter;
 
 
