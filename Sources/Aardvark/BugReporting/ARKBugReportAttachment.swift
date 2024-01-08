@@ -20,10 +20,16 @@ public final class ARKBugReportAttachment: NSObject {
 
     // MARK: - Life Cycle
 
-    @objc public init(fileName: String, data: Data, dataMIMEType: String) {
+    @objc public init(
+        fileName: String,
+        data: Data,
+        dataMIMEType: String,
+        highlightsSummary: String? = nil
+    ) {
         self.fileName = fileName
         self.data = data
         self.dataMIMEType = dataMIMEType
+        self.highlightsSummary = highlightsSummary
     }
 
     // MARK: - Public Properties
@@ -42,5 +48,7 @@ public final class ARKBugReportAttachment: NSObject {
     ///
     /// MIME types are as specified by the IANA: <http://www.iana.org/assignments/media-types/>.
     @objc public let dataMIMEType: String
+
+    @objc public let highlightsSummary: String?
 
 }
