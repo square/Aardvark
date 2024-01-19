@@ -1,0 +1,63 @@
+load(
+    "@rules_apple//apple:ios.bzl",
+    "ios_framework",
+    "ios_unit_test",
+)
+load(
+    "@rules_apple//apple:apple.bzl",
+    "experimental_mixed_language_library",
+)
+load(
+    "@rules_swift//swift:swift.bzl",
+    "swift_library",
+)
+
+## CoreAardvark
+
+experimental_mixed_language_library(
+    name = "CoreAardvark.lib",
+    srcs = glob(
+        ["Sources/CoreAardvark/**/*.m", "Sources/CoreAardvark/**/*.swift"],
+        allow_empty = False,
+    ),
+    hdrs = glob(
+        ["Sources/CoreAardvark/**/*.h"],
+        allow_empty = False,
+    ),
+    module_name = "CoreAardvark",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = [],
+    enable_modules = True,
+)
+
+experimental_mixed_language_library(
+    name = "CoreAardvarkTests.lib",
+    testonly = True,
+    srcs = glob(["Sources/CoreAardvarkTests/**/*"]),
+    module_name = "CoreAardvarkTests",
+    tags = ["manual"],
+    deps = [":CoreAardvark.lib"],
+    enable_modules = True,
+)
+
+ios_framework(
+    name = "CoreAardvark",
+    bundle_id = "com.squareup.CoreAardvark",
+    families = [
+        "iphone",
+        "ipad",
+    ],
+    infoplists = ["Sources/CoreAardvark/Info.plist"],
+    minimum_os_version = "14.0",
+    visibility = ["//visibility:public"],
+    deps = [":CoreAardvark.lib"],
+)
+
+ios_unit_test(
+    name = "CoreAardvarkTests",
+    bundle_name = "CoreAardvarkTests",
+    minimum_os_version = "14.0",
+    runner = "@rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+    deps = [":CoreAardvarkTests.lib"],
+)
