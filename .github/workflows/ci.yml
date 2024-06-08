@@ -49,3 +49,11 @@ jobs:
         run: bundle exec pod lib lint --verbose --fail-fast AardvarkLoggingUI.podspec --include-podspecs=CoreAardvark.podspec
       - name: Lint AardvarkMailUI Podspec
         run: bundle exec pod lib lint --verbose --fail-fast AardvarkMailUI.podspec --include-podspecs="{CoreAardvark,Aardvark}.podspec"
+  bazel:
+    name: Bazel
+    runs-on: macOS-12
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Build and Test
+        run: bazel test //...
