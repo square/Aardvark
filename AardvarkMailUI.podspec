@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AardvarkMailUI'
-  s.version  = '2.0.0'
+  s.version  = '2.0.1'
   s.license  = 'Apache License, Version 2.0'
   s.summary  = 'Aardvark components for submitting a bug report via an email composer.'
   s.homepage = 'https://github.com/square/Aardvark'
