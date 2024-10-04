@@ -22,7 +22,7 @@ let package = Package(
             targets: ["AardvarkMailUI", "AardvarkMailUISwift"]
         ),
 		.library(
-			name: "CoreAardvark",
+            name: "CoreAardvark",
 			targets: ["CoreAardvark", "CoreAardvarkSwift"]
 		),
 	],
@@ -68,7 +68,7 @@ let package = Package(
             ]
         ),
 		.target(
-			name: "CoreAardvark",
+            name: "CoreAardvark",
             resources: [
                 .process("Resources/en.lproj"),
             ],
