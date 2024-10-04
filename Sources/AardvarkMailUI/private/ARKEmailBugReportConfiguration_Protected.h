@@ -16,7 +16,11 @@
 
 @import Foundation;
 
+#if SWIFT_PACKAGE
 #import "ARKEmailBugReportConfiguration.h"
+#else
+#import <AardvarkMailUI/ARKEmailBugReportConfiguration.h>
+#endif
 
 
 @interface ARKEmailBugReportConfiguration (Protected)

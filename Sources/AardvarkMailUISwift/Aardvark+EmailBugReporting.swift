@@ -16,6 +16,11 @@
 
 import Aardvark
 
+#if SWIFT_PACKAGE
+import AardvarkSwift
+import AardvarkMailUI
+#endif
+
 extension Aardvark {
 
     /// Sets up a two finger press-and-hold gesture recognizer to trigger email bug reports that will be sent to

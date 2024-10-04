@@ -1,5 +1,5 @@
 //
-//  Copyright © 2020 Square, Inc. All rights reserved.
+//  Copyright 2014 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -14,16 +14,17 @@
 //  limitations under the License.
 //
 
-#import <Foundation/Foundation.h>
+@import Foundation;
 
-//! Project version number for AardvarkMailUI.
-FOUNDATION_EXPORT double AardvarkMailUIVersionNumber;
-
-//! Project version string for AardvarkMailUI.
-FOUNDATION_EXPORT const unsigned char AardvarkMailUIVersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <AardvarkMailUI/PublicHeader.h>
-
-
+#if SWIFT_PACKAGE
+#import "ARKEmailBugReporter.h"
+#else
 #import <AardvarkMailUI/ARKEmailBugReporter.h>
-#import <AardvarkMailUI/ARKEmailBugReportConfiguration.h>
+#endif
+
+
+@interface ARKEmailBugReporter ()
+
+- (nonnull NSString *)_recentErrorLogMessagesAsPlainText:(nonnull NSArray *)logMessages count:(NSUInteger)errorLogsToInclude;
+
+@end
