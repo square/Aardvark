@@ -31,7 +31,7 @@
 @required
 
 /// Called on the main thread when a bug is filed. The key/value pairs in the returned dictionary will be appended to the bug report below the prefilledEmailBody.
-- (nullable NSDictionary *)emailBodyAdditionsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter;
+- (nullable NSDictionary *)emailBodyAdditionsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter NS_SWIFT_UI_ACTOR;
 
 @end
 
@@ -41,16 +41,16 @@
 @required
 
 /// Called on the main thread when a bug is filed. When not implemented, all log stores added to the bug reporter will be included.
-- (BOOL)emailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter shouldIncludeLogStoreInBugReport:(nonnull ARKLogStore *)logStore;
+- (BOOL)emailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter shouldIncludeLogStoreInBugReport:(nonnull ARKLogStore *)logStore NS_SWIFT_UI_ACTOR;
 
 /// Called on the main thread when a bug is filed. The attachments in the returned array will be attached to the bug report email.
-- (nullable NSArray<ARKBugReportAttachment *> *)additionalEmailAttachmentsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter;
+- (nullable NSArray<ARKBugReportAttachment *> *)additionalEmailAttachmentsForEmailBugReporter:(nonnull ARKEmailBugReporter *)emailBugReporter NS_SWIFT_UI_ACTOR;
 
 @end
 
-typedef void (^ARKAttachmentGeneratorCompletionBlock)(ARKBugReportAttachment * _Nullable attachment);
+typedef void (^ARKAttachmentGeneratorCompletionBlock)(ARKBugReportAttachment * _Nullable attachment) NS_SWIFT_UI_ACTOR;
 
-typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReportConfiguration *_Nullable configuration);
+typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReportConfiguration *_Nullable configuration) NS_SWIFT_UI_ACTOR;
 
 @protocol ARKEmailBugReporterPromptingDelegate <NSObject>
 
@@ -59,7 +59,7 @@ typedef void (^ARKEmailBugReporterCustomPromptCompletionBlock)(ARKEmailBugReport
 /// Called on the main thread when a bug is filed to signal that a bug report prompt should be presented to the user.
 /// The `completion` should be called on the main thread with either an updated configuration to present the email dialog, or `nil` to signal that the prompt was cancelled.
 /// When the initial `configuration` has `includesScreenshot` or `includesViewHierarchyDescription` false, setting the field to true will have no effect.
-- (void)showBugReportingPromptForConfiguration:(ARKEmailBugReportConfiguration *_Nonnull)configuration completion:(ARKEmailBugReporterCustomPromptCompletionBlock _Nonnull)completion;
+- (void)showBugReportingPromptForConfiguration:(ARKEmailBugReportConfiguration *_Nonnull)configuration completion:(ARKEmailBugReporterCustomPromptCompletionBlock _Nonnull)completion NS_SWIFT_UI_ACTOR;
 
 @end
 
