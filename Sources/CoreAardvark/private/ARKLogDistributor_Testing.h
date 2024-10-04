@@ -1,5 +1,5 @@
 //
-//  Copyright 2015 Square, Inc.
+//  Copyright 2014 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
 
 @import Foundation;
 
+#if SWIFT_PACKAGE
+#import "ARKLogDistributor.h"
+#else
 #import <CoreAardvark/ARKLogDistributor.h>
+#endif
 
 
-@interface ARKLogDistributor (Protected)
+@interface ARKLogDistributor (Private)
 
-- (void)waitUntilAllPendingLogsHaveBeenDistributed;
-
-@property (copy, readonly) NSArray *logObservers;
+- (NSUInteger)internalQueueOperationCount;
 
 @end

@@ -16,6 +16,10 @@
 
 import Foundation
 
+#if SWIFT_PACKAGE
+import CoreAardvark
+#endif
+
 /// Logs a new messages to the default Aardvark log distributor.
 ///
 /// - parameter text: The text of the log message.

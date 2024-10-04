@@ -14,7 +14,11 @@
 //  limitations under the License.
 //
 
+#if SWIFT_PACKAGE
+#import "ARKLogging.h"
+#else
 #import <CoreAardvark/ARKLogging.h>
+#endif
 
 #import "ARKLogDistributor.h"
 

@@ -1,5 +1,5 @@
 //
-//  Copyright 2014 Square, Inc.
+//  Copyright 2015 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,11 +16,17 @@
 
 @import Foundation;
 
-#import <CoreAardvark/ARKLogDistributor.h>
+#if SWIFT_PACKAGE
+#import "ARKDataArchive.h"
+#else
+#import <CoreAardvark/ARKDataArchive.h>
+#endif
 
 
-@interface ARKLogDistributor (Private)
+@interface ARKDataArchive (Private)
 
-- (NSUInteger)internalQueueOperationCount;
+@property (nonatomic, readonly) NSFileHandle *fileHandle;
+
+- (void)waitUntilAllOperationsAreFinished;
 
 @end

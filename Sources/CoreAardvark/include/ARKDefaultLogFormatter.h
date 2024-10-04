@@ -1,5 +1,5 @@
 //
-//  Copyright 2015 Square, Inc.
+//  Copyright 2014 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,13 +16,19 @@
 
 @import Foundation;
 
-#import <CoreAardvark/ARKDataArchive.h>
+#if SWIFT_PACKAGE
+#import "ARKLogFormatter.h"
+#else
+#import <CoreAardvark/ARKLogFormatter.h>
+#endif
 
 
-@interface ARKDataArchive (Private)
+@interface ARKDefaultLogFormatter : NSObject <ARKLogFormatter>
 
-@property (nonatomic, readonly) NSFileHandle *fileHandle;
+/// The string that is prepended to error logs.
+@property (nonnull, nonatomic, copy) NSString *errorLogPrefix;
 
-- (void)waitUntilAllOperationsAreFinished;
+/// The string that is prepended to separator logs.
+@property (nonnull, nonatomic, copy) NSString *separatorLogPrefix;
 
 @end

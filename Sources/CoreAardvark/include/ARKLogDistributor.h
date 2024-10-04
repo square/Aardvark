@@ -16,7 +16,11 @@
 
 @import UIKit;
 
+#if SWIFT_PACKAGE
+#import "ARKLogTypes.h"
+#else
 #import <CoreAardvark/ARKLogTypes.h>
+#endif
 
 
 @protocol ARKLogObserver;
