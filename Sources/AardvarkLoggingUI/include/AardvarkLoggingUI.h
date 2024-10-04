@@ -24,7 +24,12 @@ FOUNDATION_EXPORT const unsigned char AardvarkLoggingUIVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <AardvarkLoggingUI/PublicHeader.h>
 
-
+#if SWIFT_PACKAGE
+#import "ARKIndividualLogViewController.h"
+#import "ARKLogTableViewController.h"
+#import "ARKScreenshotViewController.h"
+#else
 #import <AardvarkLoggingUI/ARKIndividualLogViewController.h>
 #import <AardvarkLoggingUI/ARKLogTableViewController.h>
 #import <AardvarkLoggingUI/ARKScreenshotViewController.h>
+#endif

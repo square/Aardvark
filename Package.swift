@@ -13,6 +13,10 @@ let package = Package(
             name: "Aardvark",
             targets: ["Aardvark", "AardvarkSwift"]
         ),
+        .library(
+            name: "AardvarkLoggingUI",
+            targets: ["AardvarkLoggingUI"]
+        ),
 		.library(
 			name: "CoreAardvark",
 			targets: ["CoreAardvark", "CoreAardvarkSwift"]
@@ -34,6 +38,14 @@ let package = Package(
             dependencies: ["Aardvark"],
             cSettings: [
                 .define("SWIFT_PACKAGE"),
+            ]
+        ),
+        .target(
+            name: "AardvarkLoggingUI",
+            dependencies: ["CoreAardvark"],
+            cSettings: [
+                .define("SWIFT_PACKAGE"),
+                .headerSearchPath("private"),
             ]
         ),
 		.target(
