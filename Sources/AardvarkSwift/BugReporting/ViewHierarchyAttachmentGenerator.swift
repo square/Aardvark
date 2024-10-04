@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import UIKit
 
 @objc(ARKViewHierarchyAttachmentGenerator)
 public final class ViewHierarchyAttachmentGenerator: NSObject {

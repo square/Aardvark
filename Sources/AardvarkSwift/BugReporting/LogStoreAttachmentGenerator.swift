@@ -16,6 +16,10 @@
 
 import Foundation
 
+#if SWIFT_PACKAGE
+import Aardvark
+#endif
+
 @objc(ARKLogStoreAttachmentGenerator)
 public final class LogStoreAttachmentGenerator: NSObject {
 

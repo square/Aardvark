@@ -9,12 +9,33 @@ let package = Package(
 		.iOS(.v14),
 	],
 	products: [
+        .library(
+            name: "Aardvark",
+            targets: ["Aardvark", "AardvarkSwift"]
+        ),
 		.library(
 			name: "CoreAardvark",
 			targets: ["CoreAardvark", "CoreAardvarkSwift"]
 		),
 	],
 	targets: [
+        .target(
+            name: "Aardvark",
+            dependencies: ["CoreAardvark"],
+            resources: [
+                .process("PrivacyInfo.xcprivacy"),
+            ],
+            cSettings: [
+                .define("SWIFT_PACKAGE"),
+            ]
+        ),
+        .target(
+            name: "AardvarkSwift",
+            dependencies: ["Aardvark"],
+            cSettings: [
+                .define("SWIFT_PACKAGE"),
+            ]
+        ),
 		.target(
 			name: "CoreAardvark",
             resources: [

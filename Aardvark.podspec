@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.swift_version = '5.0'
   s.ios.deployment_target = '14.0'
 
-  s.source_files = 'Sources/Aardvark/**/*.{h,m,swift}'
+  s.source_files = 'Sources/Aardvark/**/*.{h,m}', 'Sources/AardvarkSwift/**/*.{swift}'
   s.resource_bundle = {'Aardvark' => ['Sources/Aardvark/PrivacyInfo.xcprivacy']}
 
   s.dependency 'CoreAardvark', '~> 4.0'
