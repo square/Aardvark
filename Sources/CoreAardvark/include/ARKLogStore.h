@@ -14,7 +14,11 @@
 //  limitations under the License.
 //
 
+#if SWIFT_PACKAGE
+#import "ARKLogObserver.h"
+#else
 #import <CoreAardvark/ARKLogObserver.h>
+#endif
 
 
 /// Stores log messages locally for use in bug reports. All methods and properties on this class are threadsafe.

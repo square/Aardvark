@@ -1,5 +1,5 @@
 //
-//  Copyright 2014 Square, Inc.
+//  Copyright 2018 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -14,15 +14,17 @@
 //  limitations under the License.
 //
 
-@import UIKit;
+@import Foundation;
+
+#if SWIFT_PACKAGE
+#import "ARKEmailBugReportConfiguration.h"
+#else
+#import <AardvarkMailUI/ARKEmailBugReportConfiguration.h>
+#endif
 
 
-//! Project version number for Aardvark-iOS.
-FOUNDATION_EXPORT double Aardvark_iOSVersionNumber;
+@interface ARKEmailBugReportConfiguration (Protected)
 
-//! Project version string for Aardvark-iOS.
-FOUNDATION_EXPORT const unsigned char Aardvark_iOSVersionString[];
+- (nonnull instancetype)initWithScreenshot:(BOOL)includesScreenshot viewHierarchyDescription:(BOOL)includesViewHierarchyDescription;
 
-
-#import <Aardvark/ARKLogDistributor+UIAdditions.h>
-#import <Aardvark/ARKScreenshotLogging.h>
+@end

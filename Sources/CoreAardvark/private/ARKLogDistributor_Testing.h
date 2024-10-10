@@ -16,15 +16,15 @@
 
 @import Foundation;
 
-#import <CoreAardvark/ARKLogFormatter.h>
+#if SWIFT_PACKAGE
+#import "ARKLogDistributor.h"
+#else
+#import <CoreAardvark/ARKLogDistributor.h>
+#endif
 
 
-@interface ARKDefaultLogFormatter : NSObject <ARKLogFormatter>
+@interface ARKLogDistributor (Private)
 
-/// The string that is prepended to error logs.
-@property (nonnull, nonatomic, copy) NSString *errorLogPrefix;
-
-/// The string that is prepended to separator logs.
-@property (nonnull, nonatomic, copy) NSString *separatorLogPrefix;
+- (NSUInteger)internalQueueOperationCount;
 
 @end

@@ -16,7 +16,11 @@
 
 @import Foundation;
 
+#if SWIFT_PACKAGE
+#import "ARKDataArchive.h"
+#else
 #import <CoreAardvark/ARKDataArchive.h>
+#endif
 
 
 @interface ARKDataArchive (Private)

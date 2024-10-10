@@ -14,7 +14,11 @@
 //  limitations under the License.
 //
 
+#if SWIFT_PACKAGE
+#import "ARKLogTypes.h"
+#else
 #import <CoreAardvark/ARKLogTypes.h>
+#endif
 
 
 /// Logs a log with default type to the default log distributor.

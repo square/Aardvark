@@ -18,6 +18,10 @@
 @import MessageUI;
 @import UIKit;
 
+#if SWIFT_PACKAGE
+@import AardvarkSwift;
+#endif
+
 @class ARKBugReportAttachment;
 @class ARKEmailBugReportConfiguration;
 @class ARKEmailBugReporter;

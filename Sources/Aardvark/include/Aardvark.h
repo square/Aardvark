@@ -1,5 +1,5 @@
 //
-//  Copyright 2015 Square, Inc.
+//  Copyright 2014 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -14,15 +14,19 @@
 //  limitations under the License.
 //
 
-@import Foundation;
-
-#import <CoreAardvark/ARKLogDistributor.h>
+@import UIKit;
 
 
-@interface ARKLogDistributor (Protected)
+//! Project version number for Aardvark-iOS.
+FOUNDATION_EXPORT double Aardvark_iOSVersionNumber;
 
-- (void)waitUntilAllPendingLogsHaveBeenDistributed;
+//! Project version string for Aardvark-iOS.
+FOUNDATION_EXPORT const unsigned char Aardvark_iOSVersionString[];
 
-@property (copy, readonly) NSArray *logObservers;
-
-@end
+#if SWIFT_PACKAGE
+#import "ARKLogDistributor+UIAdditions.h"
+#import "ARKScreenshotLogging.h"
+#else
+#import <Aardvark/ARKLogDistributor+UIAdditions.h>
+#import <Aardvark/ARKScreenshotLogging.h>
+#endif

@@ -24,8 +24,6 @@
 #import "ARKEmailBugReportConfiguration.h"
 #import "ARKEmailBugReportConfiguration_Protected.h"
 
-#import <Aardvark/Aardvark-Swift.h>
-
 NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 
 
@@ -63,25 +61,25 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (instancetype)initWithEmailAddress:(NSString *)emailAddress logStore:(ARKLogStore *)logStore;
 {
     self = [super init];
-    
+
     _prefilledEmailBody = [NSString stringWithFormat:@"Reproduction Steps:\n"
                            @"1. \n"
                            @"2. \n"
                            @"3. \n"
                            @"\n"
                            @"System: %@", [[NSProcessInfo processInfo] operatingSystemVersionString]];
-    
+
     _logFormatter = [ARKDefaultLogFormatter new];
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreAvailable = 3;
     _numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable = 15;
     _emailComposeWindowLevel = UIWindowLevelStatusBar + 3.0;
     _attachesViewHierarchyDescription = YES;
-    
+
     _mutableLogStores = [NSMutableArray new];
-    
+
     _bugReportRecipientEmailAddress = [emailAddress copy];
     [self addLogStores:@[logStore]];
-    
+
     return self;
 }
 
@@ -101,7 +99,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     ARKCheckCondition(self.bugReportRecipientEmailAddress.length > 0, , @"Attempting to compose a bug report without a recipient email address.");
     ARKCheckCondition(self.mutableLogStores.count > 0, , @"Attempting to compose a bug report without logs.");
-    
+
     self.attachScreenshotToNextBugReport = attachScreenshot;
 
     if (self.attachesViewHierarchyDescription) {
@@ -111,7 +109,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     if (attachScreenshot && !self.screenFlashView) {
         // Take a screenshot.
         ARKLogScreenshot();
-        
+
         // Flash the screen to simulate a screenshot being taken.
         UIWindow *keyWindow = [ARKEmailBugReporter _keyWindow];
         if (keyWindow == nil) {
@@ -122,13 +120,13 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         self.screenFlashView.layer.opacity = 0.0f;
         self.screenFlashView.layer.backgroundColor = [[UIColor whiteColor] CGColor];
         [keyWindow addSubview:self.screenFlashView];
-        
+
         CAKeyframeAnimation *screenFlash = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
         screenFlash.duration = 0.8;
         screenFlash.values = @[@0.0, @0.8, @1.0, @0.9, @0.8, @0.7, @0.6, @0.5, @0.4, @0.3, @0.2, @0.1, @0.0];
         screenFlash.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
         screenFlash.delegate = self;
-        
+
         // Start the screen flash animation. Once this is done we'll fire up the bug reporter.
         [self.screenFlashView.layer addAnimation:screenFlash forKey:ARKScreenshotFlashAnimationKey];
     }
@@ -140,13 +138,13 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (void)addLogStores:(NSArray *)logStores;
 {
     ARKCheckCondition(self.mailComposeViewController == nil, , @"Can not add a log store while a bug is being composed.");
-    
+
     for (ARKLogStore *logStore in logStores) {
         ARKCheckCondition([logStore isKindOfClass:[ARKLogStore class]], , @"Can not add a log store of class %@", NSStringFromClass([logStore class]));
         if ([self.mutableLogStores containsObject:logStore]) {
             [self.mutableLogStores removeObject:logStore];
         }
-        
+
         [self.mutableLogStores addObject:logStore];
     }
 }
@@ -154,11 +152,11 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (void)removeLogStores:(NSArray *)logStores;
 {
     ARKCheckCondition(self.mailComposeViewController == nil, , @"Can not add a remove a controller while a bug is being composed.");
-    
+
     for (ARKLogStore *logStore in logStores) {
         ARKCheckCondition([logStore isKindOfClass:[ARKLogStore class]], , @"Can not remove a log store of class %@", NSStringFromClass([logStore class]));
     }
-    
+
     for (ARKLogStore *logStore in logStores) {
         [self.mutableLogStores removeObject:logStore];
     }
@@ -195,7 +193,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     [self.screenFlashView removeFromSuperview];
     self.screenFlashView = nil;
-    
+
     [self _showBugReportPrompt];
 }
 
@@ -222,7 +220,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
         _emailComposeWindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
         _emailComposeWindow.windowLevel = self.emailComposeWindowLevel;
     }
-    
+
     return _emailComposeWindow;
 }
 
@@ -243,7 +241,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     ARKEmailBugReportConfiguration *const configuration = [[ARKEmailBugReportConfiguration alloc] initWithScreenshot:self.attachScreenshotToNextBugReport
                                                                                             viewHierarchyDescription:self.attachesViewHierarchyDescription];
-    
+
     if (self.emailAttachmentAdditionsDelegate != nil) {
         NSMutableArray *const filteredLogStores = [NSMutableArray arrayWithCapacity:self.logStores.count];
         for (ARKLogStore *logStore in self.logStores) {
@@ -252,13 +250,13 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             }
         }
         configuration.logStores = filteredLogStores;
-        
+
         configuration.additionalAttachments = [self.emailAttachmentAdditionsDelegate additionalEmailAttachmentsForEmailBugReporter:self] ?: @[];
-        
+
     } else {
         configuration.logStores = [self.logStores copy];
     }
-    
+
     return configuration;
 }
 
@@ -267,10 +265,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     NSMapTable *logStoresToLogMessagesMap = [NSMapTable new];
     NSMapTable *logStoresToLogMessagesAttachmentMap = [NSMapTable new];
     NSDictionary *emailBodyAdditions = [self.emailBodyAdditionsDelegate emailBodyAdditionsForEmailBugReporter:self];
-    
+
     dispatch_group_t logStoreRetrievalDispatchGroup = dispatch_group_create();
     dispatch_group_enter(logStoreRetrievalDispatchGroup);
-    
+
     NSArray<ARKLogStore *> *const logStores = configuration.logStores;
     for (ARKLogStore *logStore in logStores) {
         dispatch_group_enter(logStoreRetrievalDispatchGroup);
@@ -288,7 +286,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
             dispatch_group_leave(logStoreRetrievalDispatchGroup);
         }];
     }
-    
+
     if ([MFMailComposeViewController canSendMail]) {
         self.mailComposeViewController = [MFMailComposeViewController new];
 
@@ -358,19 +356,19 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     } else {
         dispatch_group_notify(logStoreRetrievalDispatchGroup, dispatch_get_main_queue(), ^{
             NSMutableString *const emailBody = [self _prefilledEmailBodyWithEmailBodyAdditions:emailBodyAdditions];
-            
+
             for (ARKLogStore *logStore in logStores) {
                 NSArray *const logMessages = [logStoresToLogMessagesMap objectForKey:logStore];
                 [emailBody appendFormat:@"%@\n", [self _recentErrorLogMessagesAsPlainText:logMessages count:self.numberOfRecentErrorLogsToIncludeInEmailBodyWhenAttachmentsAreUnavailable]];
             }
-            
+
             NSURL *const composeEmailURL = [self _emailURLWithRecipients:@[self.bugReportRecipientEmailAddress] CC:@"" subject:configuration.prefilledEmailSubject body:emailBody];
             if (composeEmailURL != nil) {
                 [[UIApplication sharedApplication] openURL:composeEmailURL options:@{} completionHandler:NULL];
             }
         });
     }
-    
+
     dispatch_group_leave(logStoreRetrievalDispatchGroup);
 }
 
@@ -379,10 +377,10 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     self.previousKeyWindow = [ARKEmailBugReporter _keyWindow];
 
     [self.mailComposeViewController beginAppearanceTransition:YES animated:YES];
-    
+
     self.emailComposeWindow.rootViewController = self.mailComposeViewController;
     [self.emailComposeWindow makeKeyAndVisible];
-    
+
     [self.mailComposeViewController endAppearanceTransition];
 }
 
@@ -390,15 +388,15 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     // Actually dismiss the mail compose view controller.
     [self.mailComposeViewController beginAppearanceTransition:NO animated:YES];
-    
+
     [self.mailComposeViewController.view removeFromSuperview];
     self.emailComposeWindow.rootViewController = nil;
     // Manually hide the window so that UIKit stops retaining it
     self.emailComposeWindow.hidden = YES;
     self.emailComposeWindow = nil;
-    
+
     [self.mailComposeViewController endAppearanceTransition];
-    
+
     // Work around a bug introduced in iOS 9 where we don't get UIWindowDidBecomeKeyNotification when the mail compose view controller dismisses.
     [self.previousKeyWindow makeKeyAndVisible];
     self.previousKeyWindow = nil;
@@ -407,13 +405,13 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 - (NSMutableString *)_prefilledEmailBodyWithEmailBodyAdditions:(nullable NSDictionary *)emailBodyAdditions;
 {
     NSMutableString *prefilledEmailBodyWithEmailBodyAdditions = [NSMutableString stringWithFormat:@"%@\n", self.prefilledEmailBody];
-    
+
     if (emailBodyAdditions.count > 0) {
         for (NSString *emailBodyAdditionKey in emailBodyAdditions.allKeys) {
             [prefilledEmailBodyWithEmailBodyAdditions appendFormat:@"%@: %@\n", emailBodyAdditionKey, emailBodyAdditions[emailBodyAdditionKey]];
         }
     }
-    
+
     // Add a newline to separate prefill email body and additions from what comes after.
     [prefilledEmailBodyWithEmailBodyAdditions appendString:@"\n"];
 
@@ -427,13 +425,13 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
     for (ARKLogMessage *log in [logMessages reverseObjectEnumerator]) {
         if(log.type == ARKLogTypeError) {
             [recentErrorLogs appendFormat:@"%@\n", log];
-            
+
             if(++failuresFound >= errorLogsToInclude) {
                 break;
             }
         }
     }
-    
+
     if (recentErrorLogs.length > 0 ) {
         // Remove the final newline and create an immutable string.
         return [recentErrorLogs stringByReplacingCharactersInRange:NSMakeRange(recentErrorLogs.length - 1, 1) withString:@""];
@@ -446,25 +444,25 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
 {
     NSString *const defaultPrefix = @"mailto:";
     NSArray *const prefixes = @[@"inbox-gmail://co", @"sparrow://", @"googlegmail:///co", defaultPrefix];
-    
+
     NSURL *URL = nil;
     for (NSString *prefix in prefixes) {
         URL = [self _emailURLWithPrefix:prefix recipients:recipients CC:CCLine subject:subjectLine body:bodyText shouldCheckCanOpenURL:YES];
-        
+
         if (URL != nil) {
             break;
         }
     }
-    
+
     ARKCheckCondition(URL != nil, [self _emailURLWithPrefix:defaultPrefix recipients:recipients CC:CCLine subject:subjectLine body:bodyText shouldCheckCanOpenURL:NO], @"iOS prevented us from querying for URLs with %@. Defaulting to %@", prefixes, defaultPrefix);
-    
+
     return URL;
 }
 
 - (NSURL *)_emailURLWithPrefix:(NSString *)prefix recipients:(NSArray *)recipients CC:(NSString *)CCLine subject:(NSString *)subjectLine body:(NSString *)bodyText shouldCheckCanOpenURL:(BOOL)shouldCheckCanOpenURL;
 {
     NSString *const recipientsEscapedString = [[recipients componentsJoinedByString:@","] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet];
-    
+
     NSString *const toArgument = (recipients.count > 0) ? [NSString stringWithFormat:@"to=%@&", recipientsEscapedString] : @"";
     NSString *const URLString = [NSString stringWithFormat:@"%@?%@cc=%@&subject=%@&body=%@",
                                  prefix,
@@ -472,7 +470,7 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
                                  [CCLine stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet],
                                  [subjectLine stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet],
                                  [bodyText stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
-    
+
     NSURL *const URL = [NSURL URLWithString:URLString];
     if (shouldCheckCanOpenURL) {
         return [[UIApplication sharedApplication] canOpenURL:URL] ? URL : nil;
@@ -531,33 +529,33 @@ NSString *const ARKScreenshotFlashAnimationKey = @"ScreenshotFlashAnimation";
      Transfer first responder to an invisible view when a debug screenshot is captured to make bug filing itself bug-free.
      */
     [self _stealFirstResponder];
-    
+
     NSString * const title = NSLocalizedString(@"What Went Wrong?", @"Title text for alert asking user to describe a bug they just encountered");
     NSString * const message = NSLocalizedString(@"Please briefly summarize the issue you just encountered. You’ll be asked for more details later.", @"Subtitle text for alert asking user to describe a bug they just encountered");
     NSString * const composeReportButtonTitle = NSLocalizedString(@"Compose Report", @"Button title to compose bug report");
     NSString * const cancelButtonTitle = NSLocalizedString(@"Cancel", @"Button title to not compose a bug report");
-    
+
     UIAlertController *const alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    
+
     [alertController addAction:[UIAlertAction actionWithTitle:composeReportButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         UITextField *textfield = [alertController.textFields firstObject];
         configuration.prefilledEmailSubject = textfield.text ?: @"";
         completion(configuration);
     }]];
-    
+
     [alertController addAction:[UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         completion(nil);
     }]];
-    
+
     [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         [self _configureAlertTextfield:textField];
     }];
-    
+
     UIViewController *viewControllerToPresentAlertController = [ARKEmailBugReporter _keyWindow].rootViewController;
     while (viewControllerToPresentAlertController.presentedViewController != nil) {
         viewControllerToPresentAlertController = viewControllerToPresentAlertController.presentedViewController;
     }
-    
+
     /*
      Disabling animations here to avoid potential crashes resulting from unexpected view state in UIKit
      */

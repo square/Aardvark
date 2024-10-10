@@ -17,6 +17,10 @@
 import CoreAardvark
 import Foundation
 
+#if SWIFT_PACKAGE
+import Aardvark
+#endif
+
 @objc
 public class Aardvark : NSObject {
 

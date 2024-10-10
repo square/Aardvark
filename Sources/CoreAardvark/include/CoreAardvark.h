@@ -23,7 +23,19 @@ FOUNDATION_EXPORT double CoreAardvark_iOSVersionNumber;
 //! Project version string for CoreAardvark-iOS.
 FOUNDATION_EXPORT const unsigned char CoreAardvark_iOSVersionString[];
 
-
+#if SWIFT_PACKAGE
+#import "AardvarkDefines.h"
+#import "ARKDataArchive.h"
+#import "ARKDefaultLogFormatter.h"
+#import "ARKLogDistributor.h"
+#import "ARKLogging.h"
+#import "ARKLogFormatter.h"
+#import "ARKLogMessage.h"
+#import "ARKLogObserver.h"
+#import "ARKLogStore.h"
+#import "ARKLogTypes.h"
+#import "ARKExceptionLogging.h"
+#else
 #import <CoreAardvark/AardvarkDefines.h>
 #import <CoreAardvark/ARKDataArchive.h>
 #import <CoreAardvark/ARKDefaultLogFormatter.h>
@@ -35,3 +47,4 @@ FOUNDATION_EXPORT const unsigned char CoreAardvark_iOSVersionString[];
 #import <CoreAardvark/ARKLogStore.h>
 #import <CoreAardvark/ARKLogTypes.h>
 #import <CoreAardvark/ARKExceptionLogging.h>
+#endif

@@ -16,6 +16,10 @@
 
 import Foundation
 
+#if SWIFT_PACKAGE
+import CoreAardvark
+#endif
+
 extension ARKLogDistributor {
 
     /// Creates a log message and distributes it to the log observers. This is a convenience wrapper for Swift usage

@@ -1,5 +1,5 @@
 //
-//  Copyright 2018 Square, Inc.
+//  Copyright 2015 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,11 +16,17 @@
 
 @import Foundation;
 
-#import "ARKEmailBugReportConfiguration.h"
+#if SWIFT_PACKAGE
+#import "ARKLogDistributor.h"
+#else
+#import <CoreAardvark/ARKLogDistributor.h>
+#endif
 
 
-@interface ARKEmailBugReportConfiguration (Protected)
+@interface ARKLogDistributor (Protected)
 
-- (nonnull instancetype)initWithScreenshot:(BOOL)includesScreenshot viewHierarchyDescription:(BOOL)includesViewHierarchyDescription;
+- (void)waitUntilAllPendingLogsHaveBeenDistributed;
+
+@property (copy, readonly) NSArray *logObservers;
 
 @end

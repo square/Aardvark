@@ -14,7 +14,11 @@
 //  limitations under the License.
 //
 
+#if SWIFT_PACKAGE
+#import "ARKLogMessage.h"
+#else
 #import <CoreAardvark/ARKLogMessage.h>
+#endif
 
 #import "AardvarkDefines.h"
 
@@ -46,14 +50,14 @@
 - (instancetype)initWithText:(NSString *)text image:(UIImage *)image type:(ARKLogType)type parameters:(NSDictionary *)parameters userInfo:(NSDictionary *)userInfo date:(nonnull NSDate *)date;
 {
     self = [super init];
-    
+
     _text = [text copy];
     _image = image;
     _type = type;
     _parameters = [parameters copy] ?: @{};
     _userInfo = [userInfo copy] ?: @{};
     _date = date;
-	
+
     return self;
 }
 
@@ -69,7 +73,7 @@
     NSDate *const date = [([aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(date)] ?: [aDecoder decodeObjectOfClass:[NSDate class] forKey:ARKSelfKeyPath(creationDate)]) copy];
 #pragma clang diagnostic pop
     NSDictionary<NSString *, NSString*> *const parameters = [aDecoder decodeObjectOfClass:[NSDictionary class] forKey:ARKSelfKeyPath(parameters)];
-    
+
     return [self initWithText:text image:image type:type parameters:parameters userInfo:nil date:date];
 }
 
@@ -97,16 +101,16 @@
     if (![self isMemberOfClass:[object class]]) {
         return NO;
     }
-    
+
     ARKLogMessage *otherMessage = (ARKLogMessage *)object;
     if (!(self.text == otherMessage.text || [self.text isEqualToString:otherMessage.text])) {
         return NO;
     }
-    
+
     if (!(self.image == otherMessage.image || [self.image isEqual:otherMessage.image])) {
         return NO;
     }
-    
+
     if (self.type != otherMessage.type) {
         return NO;
     }
@@ -118,7 +122,7 @@
     if (![self.parameters isEqualToDictionary:otherMessage.parameters]) {
         return NO;
     }
-    
+
     return YES;
 }
 
