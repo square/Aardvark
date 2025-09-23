@@ -9,10 +9,10 @@ on:
 jobs:
   xcode-build:
     name: Xcode Build
-    runs-on: macOS-12
+    runs-on: macOS-15
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
       - name: Bundle Install
         run: bundle install
       - name: Build and Test Frameworks
@@ -21,7 +21,7 @@ jobs:
             -project Aardvark.xcodeproj \
             -scheme "All Frameworks" \
             -sdk iphonesimulator \
-            -destination "platform=iOS Simulator,name=iPhone 14 Pro" \
+            -destination "platform=iOS Simulator,name=iPhone 16 Pro" \
             test
       - name: Build Sample App
         run: |
@@ -35,10 +35,10 @@ jobs:
             build
   pod-lint:
     name: Pod Lint
-    runs-on: macOS-12
+    runs-on: macOS-15
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
       - name: Bundle Install
         run: bundle install
       - name: Lint CoreAardvark Podspec
@@ -54,6 +54,6 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Swift Build
-        run: swift build --sdk "$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk" --triple "arm64-apple-ios14.0-simulator"
+        run: swift build --sdk "$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk" --triple "arm64-apple-ios18.0-simulator"

@@ -1,3 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'cocoapods', '~> 1.14'
+gem 'cocoapods', '~> 1.16'
