@@ -56,4 +56,4 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v5
       - name: Swift Build
-        run: swift build --sdk "$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk" --triple "arm64-apple-ios14.0-simulator"
+        run: swift build --sdk "$(xcode-select -p)/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk" --triple "arm64-apple-ios18.0-simulator"
