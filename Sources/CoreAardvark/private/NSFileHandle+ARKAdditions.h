@@ -16,15 +16,12 @@
 
 @import Foundation;
 
+#import "../include/NSFileHandle+ARKAdditions.h"
 
 extern NSUInteger const ARKInvalidDataBlockLength;
 
 
-@interface NSFileHandle (ARKAdditions)
-
-/// Should Aardvark stop logging after catching a `NSException`?
-/// Default: `NO` to avoid changing API behavior within the same major (as in major.minor.patch versioning) version
-+ (void)ARK_setPreventWritesAfterException:(BOOL)preventWritesAfterException;
+@interface NSFileHandle (ARKAdditions_Private)
 
 /// Writes the length of dataBlock, and then its contents. Note: this writes (or over-writes) at the current offsetInFile.
 - (void)ARK_writeDataBlock:(nonnull NSData *)dataBlock;

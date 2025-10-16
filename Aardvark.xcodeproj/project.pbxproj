@@ -60,6 +60,7 @@
 		3DFD7B5226F551C8000CE4B8 /* FileSystemAttachmentGeneratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFD7B5026F5519D000CE4B8 /* FileSystemAttachmentGeneratorTests.swift */; };
 		4551A2D91BDAD10E00F216D0 /* Aardvark.h in Headers */ = {isa = PBXBuildFile; fileRef = EAD1442419E073FB0065A1FF /* Aardvark.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4551A30A1BDAF93A00F216D0 /* ARKScreenshotLogging.h in Headers */ = {isa = PBXBuildFile; fileRef = 4551A3071BDAF93A00F216D0 /* ARKScreenshotLogging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E12EBD572EA0FD5000402892 /* NSFileHandle+ARKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = E12EBD562EA0FD5000402892 /* NSFileHandle+ARKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EA3C1D961D934A210048C4CD /* CoreAardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAF2FEA01D47172400931663 /* CoreAardvark.framework */; };
 		EA3C1DA51D934A260048C4CD /* Aardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4551A2C21BDACF9000F216D0 /* Aardvark.framework */; };
 		EA3C1DAC1D934B1D0048C4CD /* ARKDataArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D04D47EC1AB8A0BA00A342E9 /* ARKDataArchiveTests.m */; };
@@ -190,6 +191,7 @@
 		BDB50C1E2B2B72F500C134FC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Aardvark/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		D04D47EC1AB8A0BA00A342E9 /* ARKDataArchiveTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKDataArchiveTests.m; sourceTree = "<group>"; };
 		D04D48041AB9196B00A342E9 /* ARKFileHandleAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKFileHandleAdditionsTests.m; sourceTree = "<group>"; };
+		E12EBD562EA0FD5000402892 /* NSFileHandle+ARKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileHandle+ARKAdditions.h"; sourceTree = "<group>"; };
 		EA09D3C41A2E6D2F004C1125 /* ARKDefineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ARKDefineTests.m; sourceTree = "<group>"; };
 		EA3C1D911D934A210048C4CD /* CoreAardvarkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreAardvarkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA3C1DA01D934A260048C4CD /* AardvarkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AardvarkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -408,6 +410,7 @@
 		25BD1B3C2CB073C00059ACDA /* include */ = {
 			isa = PBXGroup;
 			children = (
+				E12EBD562EA0FD5000402892 /* NSFileHandle+ARKAdditions.h */,
 				EA98B8B31D4BE80F00B3A390 /* ARKLogTypes.h */,
 				EA98B8C71D4BE83300B3A390 /* ARKDataArchive.h */,
 				EA98B9551D4BF88600B3A390 /* ARKLogging.h */,
@@ -696,6 +699,7 @@
 				EA98B8DC1D4BE83300B3A390 /* ARKLogDistributor_Testing.h in Headers */,
 				3D850497215EF21100B3957C /* ARKExceptionLogging_Testing.h in Headers */,
 				EA98B8E61D4BE83300B3A390 /* ARKLogObserver.h in Headers */,
+				E12EBD572EA0FD5000402892 /* NSFileHandle+ARKAdditions.h in Headers */,
 				EA98B8EA1D4BE83300B3A390 /* ARKLogStore.h in Headers */,
 				EA98B8B91D4BE80F00B3A390 /* ARKLogTypes.h in Headers */,
 				EA98B8BF1D4BE82100B3A390 /* NSFileHandle+ARKAdditions.h in Headers */,
