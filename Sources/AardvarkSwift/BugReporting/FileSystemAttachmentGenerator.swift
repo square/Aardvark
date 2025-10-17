@@ -14,6 +14,10 @@
 //  limitations under the License.
 //
 
+#if SWIFT_PACKAGE
+import Aardvark
+#endif
+
 import Foundation
 
 @objc(ARKFileSystemAttachmentGenerator)

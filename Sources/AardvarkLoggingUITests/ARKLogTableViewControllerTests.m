@@ -50,7 +50,7 @@
     if (!self) {
         return nil;
     }
-    
+
     return self;
 }
 
@@ -73,21 +73,21 @@
 - (void)setUp;
 {
     [super setUp];
-    
+
     ARKLogStore *const logStore = [[ARKLogStore alloc] initWithPersistedLogFileName:NSStringFromSelector(_cmd)];
-    
+
     self.logDistributor = [ARKLogDistributor new];
     [self.logDistributor addLogObserver:logStore];
     self.logTableViewController = [[ARKLogTableViewController alloc] initWithLogStore:logStore logFormatter:[ARKDefaultLogFormatter new]];
-    
+
     self.logStore = logStore;
-    
+
     XCTestExpectation *const expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
     [logStore clearLogsWithCompletionHandler:^{
         [expectation fulfill];
     }];
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
-    
+
 }
 
 #pragma mark - Behavior Tests
@@ -95,35 +95,35 @@
 - (void)test_logMessagesWithMinuteSeparators_insertsTimestampsBetweenLogs;
 {
     XCTestExpectation *expectation = [self expectationWithDescription:NSStringFromSelector(_cmd)];
-    
+
     NSDate *now = [NSDate date];
     NSDate *threeMinutesFiveSecondsAgo = [NSDate dateWithTimeInterval:(NSTimeInterval)-185.0 sinceDate:now];
     NSDate *twoMinutesFiftyFiveSecondsAgo = [NSDate dateWithTimeInterval:(NSTimeInterval)-175.0 sinceDate:now];
-    
+
     [self.logStore observeLogMessage:[[ARKFakeLogMessage alloc] initWithDate:threeMinutesFiveSecondsAgo]];
     [self.logStore observeLogMessage:[[ARKFakeLogMessage alloc] initWithDate:twoMinutesFiftyFiveSecondsAgo]];
     [self.logStore observeLogMessage:[[ARKFakeLogMessage alloc] initWithDate:now]];
-    
+
     [self.logTableViewController _reloadLogs];
-    
+
     [self.logStore retrieveAllLogMessagesWithCompletionHandler:^(NSArray *logMessages) {
         XCTAssertEqual(self.logTableViewController.logMessages.count, 5);
         XCTAssertEqual([self.logTableViewController.logMessages[0] class], [ARKTimestampLogMessage class]);
-        
+
         XCTAssertEqual([self.logTableViewController.logMessages[1] class], [ARKFakeLogMessage class]);
         XCTAssertEqualObjects([self.logTableViewController.logMessages[1] date], threeMinutesFiveSecondsAgo);
-        
+
         XCTAssertEqual([self.logTableViewController.logMessages[2] class], [ARKFakeLogMessage class]);
         XCTAssertEqualObjects([self.logTableViewController.logMessages[2] date], twoMinutesFiftyFiveSecondsAgo);
-        
+
         XCTAssertEqual([self.logTableViewController.logMessages[3] class], [ARKTimestampLogMessage class]);
-        
+
         XCTAssertEqual([self.logTableViewController.logMessages[4] class], [ARKFakeLogMessage class]);
         XCTAssertEqualObjects([self.logTableViewController.logMessages[4] date], now);
-        
+
         [expectation fulfill];
     }];
-    
+
     [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 

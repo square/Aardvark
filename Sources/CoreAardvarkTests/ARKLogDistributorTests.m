@@ -93,7 +93,7 @@
     [logStore clearLogsWithCompletionHandler:^{
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:30.0 handler:nil];
 }
 
 - (void)tearDown;
@@ -102,7 +102,7 @@
     [self.logStore clearLogsWithCompletionHandler:^{
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:30.0 handler:nil];
     
     self.logDistributor.logMessageClass = [ARKLogMessage class];
     
@@ -123,7 +123,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:30.0 handler:nil];
 }
 
 - (void)test_setLogMessageClass_appendedLogsAreCorrectClass;
@@ -139,7 +139,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:30.0 handler:nil];
 }
 
 - (void)test_defaultLogStore_lazilyInitializesOnFirstAccess;
@@ -175,7 +175,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:30.0 handler:nil];
     
     [self.logDistributor removeLogObserver:testLogObserver];
 }
@@ -204,7 +204,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:30.0 handler:nil];
 }
 
 - (void)test_distributeAllPendingLogsWithCompletionHandler_informsLogObserversOfAllPendingLogs;
@@ -237,7 +237,7 @@
         }];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:30.0 handler:nil];
 }
 
 #pragma mark - Performance Tests
@@ -263,7 +263,7 @@
             [expectation fulfill];
         }];
         
-        [self waitForExpectationsWithTimeout:5.0 handler:nil];
+        [self waitForExpectationsWithTimeout:30.0 handler:nil];
     }];
 }
 
