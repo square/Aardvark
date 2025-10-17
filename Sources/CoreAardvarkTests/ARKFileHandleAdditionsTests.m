@@ -17,6 +17,7 @@
 @import XCTest;
 
 #import "../CoreAardvark/private/NSFileHandle+ARKAdditions.h"
+#import "../CoreAardvark/include/NSFileHandle+ARKAdditions.h"
 
 #import "NSURL+ARKAdditions.h"
 

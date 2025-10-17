@@ -20,7 +20,7 @@
 #import "ARKDataArchive_Testing.h"
 
 #import "ARKLogMessage.h"
-#import "../CoreAardvark/private/NSFileHandle+ARKAdditions.h"
+#import "NSFileHandle+ARKAdditions.h"
 #import "NSURL+ARKAdditions.h"
 
 

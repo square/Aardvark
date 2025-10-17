@@ -14,7 +14,7 @@
 //  limitations under the License.
 //
 
-#import "../private/NSFileHandle+ARKAdditions.h"
+#import "NSFileHandle+ARKAdditions.h"
 
 #import "AardvarkDefines.h"
 

@@ -16,8 +16,6 @@
 
 @import Foundation;
 
-#import "../include/NSFileHandle+ARKAdditions.h"
-
 extern NSUInteger const ARKInvalidDataBlockLength;
 
 
