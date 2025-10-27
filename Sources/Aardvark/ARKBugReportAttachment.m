@@ -1,11 +1,11 @@
 //
-//  Copyright 2020 Square, Inc.
+//  Copyright 2021 Square, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
 //
-//    http://www.apache.org/licenses/LICENSE-2.0
+//    http://www.apache.org/licenses/LICENSE-2.0
 //
 //  Unless required by applicable law or agreed to in writing, software
 //  distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +14,20 @@
 //  limitations under the License.
 //
 
-#if SWIFT_PACKAGE
-import Aardvark
-#endif
+#import "ARKBugReportAttachment.h"
 
-import Foundation
 
-@available(*, unavailable, renamed: "ARKBugReportAttachment")
-public typealias ARKEmailAttachment = ARKBugReportAttachment
+@implementation ARKBugReportAttachment
+
+- (instancetype)initWithFileName:(NSString *)fileName data:(NSData *)data dataMIMEType:(NSString *)dataMIMEType
+{
+    self = [super init];
+    if (self) {
+        _fileName = [fileName copy];
+        _data = [data copy];
+        _dataMIMEType = [dataMIMEType copy];
+    }
+    return self;
+}
+
+@end

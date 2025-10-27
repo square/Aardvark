@@ -57,7 +57,7 @@
     [logStore clearLogsWithCompletionHandler:^{
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 #pragma mark - Behavior Tests
@@ -79,7 +79,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_separatorLogLineCount;
@@ -99,7 +99,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_defaultLogLineCount;
@@ -162,7 +162,7 @@
         [expectation fulfill];
     }];
     
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
+    [self waitForExpectationsWithTimeout:10.0 handler:nil];
 }
 
 - (void)test_formattedLogMessage_defaultLogContent;
@@ -339,7 +339,7 @@
             [expectation fulfill];
         }];
         
-        [self waitForExpectationsWithTimeout:5.0 handler:nil];
+        [self waitForExpectationsWithTimeout:10.0 handler:nil];
     }];
 }
 

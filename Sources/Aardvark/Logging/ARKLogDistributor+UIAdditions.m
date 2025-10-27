@@ -28,8 +28,10 @@
     @try {
         CGRect const screenBounds = [UIScreen mainScreen].bounds;
         UIGraphicsBeginImageContextWithOptions(screenBounds.size, NO, 0.0);
-        for (UIWindow *const window in [UIApplication sharedApplication].windows) {
-            [window drawViewHierarchyInRect:screenBounds afterScreenUpdates:NO];
+        for (UIWindowScene *const scene in [UIApplication sharedApplication].connectedScenes) {
+            for (UIWindow *const window in scene.windows) {
+                [window drawViewHierarchyInRect:screenBounds afterScreenUpdates:NO];
+            }
         }
         
         screenshot = UIGraphicsGetImageFromCurrentImageContext();

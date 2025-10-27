@@ -14,6 +14,10 @@
 //  limitations under the License.
 //
 
+#if SWIFT_PACKAGE
+import Aardvark
+#endif
+
 import Foundation
 import UIKit
 
@@ -26,7 +30,7 @@ public final class ViewHierarchyAttachmentGenerator: NSObject {
     /// plain text data for that representation.
     @objc
     public static func captureCurrentHierarchy() -> ARKBugReportAttachment {
-        generateAttachment(for: UIApplication.shared.windows)
+        generateAttachment(for: UIApplication.shared.connectedScenes.flatMap { ($0 as? UIWindowScene)?.windows ?? [] })
     }
 
     // MARK: - Internal Static Methods

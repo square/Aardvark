@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		251ED2012CB074A000B8AD4B /* ARKBugReportAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251ED1F62CB074A000B8AD4B /* ARKBugReportAttachment.swift */; };
-		251ED2022CB074A000B8AD4B /* ARKBugReporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251ED1F72CB074A000B8AD4B /* ARKBugReporter.swift */; };
+		251794182EA32D2600CB82F3 /* ARKBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = 251794172EA32D2600CB82F3 /* ARKBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		251ED2032CB074A000B8AD4B /* ARKEmailAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251ED1F82CB074A000B8AD4B /* ARKEmailAttachment.swift */; };
 		251ED2042CB074A000B8AD4B /* DictionaryAttachmentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251ED1F92CB074A000B8AD4B /* DictionaryAttachmentGenerator.swift */; };
 		251ED2052CB074A000B8AD4B /* FileSystemAttachmentGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251ED1FA2CB074A000B8AD4B /* FileSystemAttachmentGenerator.swift */; };
@@ -19,6 +18,8 @@
 		251ED20F2CB074BD00B8AD4B /* ARKLogDistributor+SwiftAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251ED20A2CB074B100B8AD4B /* ARKLogDistributor+SwiftAdditions.swift */; };
 		251ED2102CB074BD00B8AD4B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251ED20B2CB074B100B8AD4B /* Logging.swift */; };
 		251ED2172CB076A100B8AD4B /* Aardvark+EmailBugReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 251ED2152CB076A100B8AD4B /* Aardvark+EmailBugReporting.swift */; };
+		255D534F2EAABDD900791148 /* ARKBugReportAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 255D534E2EAABDD900791148 /* ARKBugReportAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		255D53512EAABDEB00791148 /* ARKBugReportAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 255D53502EAABDEB00791148 /* ARKBugReportAttachment.m */; };
 		3D046DBD254D5A840045A06C /* AardvarkLoggingUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D046DB4254D5A840045A06C /* AardvarkLoggingUI.framework */; };
 		3D046DC4254D5A850045A06C /* AardvarkLoggingUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D046DB6254D5A840045A06C /* AardvarkLoggingUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3D046DCB254D5AA70045A06C /* CoreAardvark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAF2FEA01D47172400931663 /* CoreAardvark.framework */; };
@@ -147,8 +148,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		251ED1F62CB074A000B8AD4B /* ARKBugReportAttachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKBugReportAttachment.swift; sourceTree = "<group>"; };
-		251ED1F72CB074A000B8AD4B /* ARKBugReporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKBugReporter.swift; sourceTree = "<group>"; };
+		251794172EA32D2600CB82F3 /* ARKBugReporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKBugReporter.h; sourceTree = "<group>"; };
 		251ED1F82CB074A000B8AD4B /* ARKEmailAttachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARKEmailAttachment.swift; sourceTree = "<group>"; };
 		251ED1F92CB074A000B8AD4B /* DictionaryAttachmentGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryAttachmentGenerator.swift; sourceTree = "<group>"; };
 		251ED1FA2CB074A000B8AD4B /* FileSystemAttachmentGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileSystemAttachmentGenerator.swift; sourceTree = "<group>"; };
@@ -159,6 +159,8 @@
 		251ED20A2CB074B100B8AD4B /* ARKLogDistributor+SwiftAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARKLogDistributor+SwiftAdditions.swift"; sourceTree = "<group>"; };
 		251ED20B2CB074B100B8AD4B /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		251ED2152CB076A100B8AD4B /* Aardvark+EmailBugReporting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Aardvark+EmailBugReporting.swift"; sourceTree = "<group>"; };
+		255D534E2EAABDD900791148 /* ARKBugReportAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ARKBugReportAttachment.h; sourceTree = "<group>"; };
+		255D53502EAABDEB00791148 /* ARKBugReportAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ARKBugReportAttachment.m; sourceTree = "<group>"; };
 		3D046DB4254D5A840045A06C /* AardvarkLoggingUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AardvarkLoggingUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D046DB6254D5A840045A06C /* AardvarkLoggingUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AardvarkLoggingUI.h; sourceTree = "<group>"; };
 		3D046DB7254D5A840045A06C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -315,8 +317,6 @@
 		251ED1FD2CB074A000B8AD4B /* BugReporting */ = {
 			isa = PBXGroup;
 			children = (
-				251ED1F62CB074A000B8AD4B /* ARKBugReportAttachment.swift */,
-				251ED1F72CB074A000B8AD4B /* ARKBugReporter.swift */,
 				251ED1F82CB074A000B8AD4B /* ARKEmailAttachment.swift */,
 				251ED1F92CB074A000B8AD4B /* DictionaryAttachmentGenerator.swift */,
 				251ED1FA2CB074A000B8AD4B /* FileSystemAttachmentGenerator.swift */,
@@ -399,6 +399,8 @@
 			isa = PBXGroup;
 			children = (
 				EAD1442419E073FB0065A1FF /* Aardvark.h */,
+				255D534E2EAABDD900791148 /* ARKBugReportAttachment.h */,
+				251794172EA32D2600CB82F3 /* ARKBugReporter.h */,
 				4551A3071BDAF93A00F216D0 /* ARKScreenshotLogging.h */,
 				EA98B8F71D4BEADF00B3A390 /* ARKLogDistributor+UIAdditions.h */,
 			);
@@ -568,6 +570,7 @@
 			isa = PBXGroup;
 			children = (
 				25BD1B3B2CB073AE0059ACDA /* include */,
+				255D53502EAABDEB00791148 /* ARKBugReportAttachment.m */,
 				EAD1443819E074570065A1FF /* Logging */,
 				EAD1444219E0848B0065A1FF /* Other */,
 			);
@@ -680,7 +683,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				255D534F2EAABDD900791148 /* ARKBugReportAttachment.h in Headers */,
 				4551A2D91BDAD10E00F216D0 /* Aardvark.h in Headers */,
+				251794182EA32D2600CB82F3 /* ARKBugReporter.h in Headers */,
 				4551A30A1BDAF93A00F216D0 /* ARKScreenshotLogging.h in Headers */,
 				EA98B9141D4BEB4100B3A390 /* ARKLogDistributor+UIAdditions.h in Headers */,
 			);
@@ -1037,13 +1042,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				255D53512EAABDEB00791148 /* ARKBugReportAttachment.m in Sources */,
 				251ED2052CB074A000B8AD4B /* FileSystemAttachmentGenerator.swift in Sources */,
 				251ED2062CB074A000B8AD4B /* LogStoreAttachmentGenerator.swift in Sources */,
 				EA98B9531D4BF43400B3A390 /* ARKScreenshotLogging.m in Sources */,
 				251ED2092CB074A000B8AD4B /* UIApplication+ARKAdditions.swift in Sources */,
-				251ED2012CB074A000B8AD4B /* ARKBugReportAttachment.swift in Sources */,
 				251ED2032CB074A000B8AD4B /* ARKEmailAttachment.swift in Sources */,
-				251ED2022CB074A000B8AD4B /* ARKBugReporter.swift in Sources */,
 				251ED2072CB074A000B8AD4B /* ViewHierarchyAttachmentGenerator.swift in Sources */,
 				251ED2082CB074A000B8AD4B /* Aardvark.swift in Sources */,
 				251ED2042CB074A000B8AD4B /* DictionaryAttachmentGenerator.swift in Sources */,
@@ -1165,7 +1169,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Sources/AardvarkLoggingUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1203,7 +1207,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Sources/AardvarkLoggingUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1231,7 +1235,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Sources/AardvarkLoggingUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1260,7 +1264,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Sources/AardvarkLoggingUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1292,7 +1296,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Sources/AardvarkMailUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1331,7 +1335,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Sources/AardvarkMailUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1360,7 +1364,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Sources/AardvarkMailUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1390,7 +1394,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Sources/AardvarkMailUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1419,7 +1423,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Aardvark/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1451,7 +1455,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Aardvark/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1481,7 +1485,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = Sources/CoreAardvarkTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1509,7 +1513,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = Sources/CoreAardvarkTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1535,7 +1539,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = Sources/AardvarkTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1562,7 +1566,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = EYF346PHUG;
 				INFOPLIST_FILE = Sources/AardvarkTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1627,7 +1631,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1680,7 +1684,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -1706,7 +1710,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/CoreAardvark/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1742,7 +1746,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/CoreAardvark/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
