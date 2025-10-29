@@ -18,6 +18,10 @@
 @import CoreAardvark;
 @import MessageUI;
 
+#if SWIFT_PACKAGE
+@import AardvarkSwift;
+#endif
+
 #import "ARKEmailBugReporter.h"
 #import "ARKEmailBugReporter_Testing.h"
 

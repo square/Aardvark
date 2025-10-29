@@ -24,9 +24,13 @@ FOUNDATION_EXPORT double Aardvark_iOSVersionNumber;
 FOUNDATION_EXPORT const unsigned char Aardvark_iOSVersionString[];
 
 #if SWIFT_PACKAGE
+#import "ARKBugReporter.h"
+#import "ARKBugReportAttachment.h"
 #import "ARKLogDistributor+UIAdditions.h"
 #import "ARKScreenshotLogging.h"
 #else
+#import <Aardvark/ARKBugReporter.h>
+#import <Aardvark/ARKBugReportAttachment.h>
 #import <Aardvark/ARKLogDistributor+UIAdditions.h>
 #import <Aardvark/ARKScreenshotLogging.h>
 #endif
