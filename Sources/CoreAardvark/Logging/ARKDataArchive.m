@@ -18,7 +18,7 @@
 #import "ARKDataArchive_Testing.h"
 
 #import "AardvarkDefines.h"
-#import "NSFileHandle+ARKAdditions.h"
+#import "../private/NSFileHandle+ARKAdditions.h"
 
 
 NSUInteger const ARKMaximumChunkSizeForTrimOperation = (1024 * 1024);
