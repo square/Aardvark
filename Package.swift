@@ -14,12 +14,20 @@ let package = Package(
             targets: ["Aardvark", "AardvarkSwift"]
         ),
         .library(
+            name: "AardvarkSwift",
+            targets: ["AardvarkSwift"]
+        ),
+        .library(
             name: "AardvarkLoggingUI",
             targets: ["AardvarkLoggingUI"]
         ),
         .library(
             name: "AardvarkMailUI",
             targets: ["AardvarkMailUI", "AardvarkMailUISwift"]
+        ),
+        .library(
+            name: "AardvarkMailUISwift",
+            targets: ["AardvarkMailUISwift"]
         ),
 		.library(
             name: "CoreAardvark",

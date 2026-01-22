@@ -19,6 +19,9 @@ import Aardvark
 #if SWIFT_PACKAGE
 import AardvarkSwift
 import AardvarkMailUI
+
+/// Re-export the Aardvark class so consumers can use `Aardvark.methodName()` syntax
+public typealias Aardvark = AardvarkSwift.Aardvark
 #endif
 
 extension Aardvark {
@@ -32,7 +35,7 @@ extension Aardvark {
         let logStore = ARKLogDistributor.default().defaultLogStore
         let bugReporter = ARKEmailBugReporter(emailAddress: emailAddress, logStore: logStore)
 
-        let gestureRecognizer = Aardvark.add(
+        let gestureRecognizer = Self.add(
             bugReporter: bugReporter,
             triggeringGestureRecognizerClass: UILongPressGestureRecognizer.self
         )
